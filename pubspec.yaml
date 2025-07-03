@@ -1,0 +1,78 @@
+name: flutter_app_template
+description: "A new Flutter project."
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.6.0"
+
+workspace: []
+#  - plugins/wifi_info
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+
+  melos: ^7.0.0-dev.8
+  dependency_validator: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+
+melos:
+  name: flutter_app_template
+  command:
+    version:
+      # Only allow versioning to happen on main branch.
+      branch: main
+      # Generates a link to a prefilled GitHub release creation page.
+      releaseUrl: true
+
+  scripts:
+    lint:all:
+      run: melos run analyze && melos run format
+      description: Run all static analysis checks.
+
+    analyze:
+      run: |
+        melos exec --order-dependents flutter analyze --fatal-infos
+      description: Run `flutter analyze` for all packages.
+
+    fix:
+      run: melos exec --order-dependents dart fix . --apply
+      description: Run `dart fix` for all packages.
+
+    fix-dry-run:
+      run: melos exec --order-dependents dart fix . --dry-run
+      description: Run `dart fix` in dry-run mode for all packages.
+
+    format:
+      run: melos exec --order-dependents dart format .
+      description: Run `dart format` for all packages.
+
+    format-check:
+      run: melos exec --order-dependents dart format . --set-exit-if-changed
+      description: Run `dart format` checks for all packages.
+
+    upgrade:
+      run: melos exec --order-dependents dart pub upgrade --major-versions
+      description: Run `flutter pub upgrade` update dependencies in all packages.
+
+    outdated:
+      run: melos exec --order-dependents dart pub outdated
+      description: Run `flutter pub outdated` check outdated dependencies in all packages.
+
+    validate-dependencies:
+      run: dart run dependency_validator 
+      description: Run `dart run dependency_validator` check dependencies usage.
+
