@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:app_locale/app_locale.dart';
+import 'package:app_artwork/logo/gsmlg_dev.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/screens/home/home_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -31,24 +31,20 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
-          child: SizedBox(
-        width: w * 0.618,
-        height: w * 0.618,
-        child: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          child: Center(
-            child: Text(
-              context.l10n.appName,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                  ),
+        child: SizedBox(
+          width: w * 0.618,
+          height: w * 0.618,
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            child: Center(
+              child: LogoGSMLGDEV(),
             ),
           ),
         ),
-      )),
+      ),
     );
   }
 }

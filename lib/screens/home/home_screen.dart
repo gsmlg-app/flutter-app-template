@@ -1,3 +1,4 @@
+import 'package:app_artwork/app_artwork.dart';
 import 'package:app_locale/app_locale.dart';
 import 'package:flutter/material.dart';
 
@@ -28,11 +29,16 @@ class HomeScreen extends StatelessWidget {
             color: Theme.of(context).colorScheme.secondary,
           ),
           child: Center(
-            child: Text(
-              context.l10n.welcomeHome,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                  ),
+            child: Column(
+              children: [
+                LaddingPageLottie(width: w * 0.382, height: w * 0.382),
+                Text(
+                  context.l10n.welcomeHome,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                      ),
+                ),
+              ],
             ),
           ),
         ),

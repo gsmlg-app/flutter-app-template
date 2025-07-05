@@ -12,6 +12,7 @@ workspace:
   - app_lib/locale
   - app_lib/provider
   - app_bloc/theme
+  - app_widget/artwork
   - third_party/form_bloc
   - third_party/flutter_form_bloc
 
@@ -40,6 +41,7 @@ dependencies:
   app_locale: any
   app_provider: any
   theme_bloc: any
+  app_artwork: any
 
 dev_dependencies:
   flutter_test:
