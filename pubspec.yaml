@@ -7,27 +7,47 @@ version: 1.0.0+1
 environment:
   sdk: ">=3.6.0"
 
-workspace: []
-#  - plugins/wifi_info
+workspace:
+  - app_lib/theme
+  - app_lib/locale
 
 dependencies:
   flutter:
     sdk: flutter
 
+  logging: ^1.2.0
+
+  go_router: ^16.0.0
+
+  bloc: ^9.0.0
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.5
+
+  shared_preferences: ^2.0.17
+  path_provider: ^2.1.3
+
   cupertino_icons: ^1.0.8
+  flutter_svg: ^2.0.5
+  lottie: ^3.3.1
+  google_fonts: ^6.2.1
+
+  # workspace packages
+  app_theme: any
+  app_locale: any
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
+
+  build_runner: ^2.4.2
 
   melos: ^7.0.0-dev.8
   dependency_validator: ^5.0.0
 
 flutter:
   uses-material-design: true
-
 
 melos:
   name: flutter_app_template
@@ -73,6 +93,5 @@ melos:
       description: Run `flutter pub outdated` check outdated dependencies in all packages.
 
     validate-dependencies:
-      run: dart run dependency_validator 
+      run: dart run dependency_validator
       description: Run `dart run dependency_validator` check dependencies usage.
-
