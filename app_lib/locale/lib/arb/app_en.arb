@@ -1,0 +1,8 @@
+{
+    "@@locale": "en",
+    "appName": "App Name",
+    "errorOccurred": "Error Occurred",
+    "backToHome": "Back to Home",
+    "welcomeHome": "Wellcom to my app",
+    "@@description": "App description"
+}
