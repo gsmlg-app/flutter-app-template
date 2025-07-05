@@ -57,6 +57,18 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+# generate icon with `dart run flutter_launcher_icons:main``
+flutter_launcher_icons:
+  image_path: "app_widget/artwork/assets/icon/app-icon.png"
+  android: true
+  ios: true
+  min_sdk_android: 21
+  windows:
+    generate: true
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+
 melos:
   name: flutter_app_template
   command:
