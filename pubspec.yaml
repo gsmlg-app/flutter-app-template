@@ -10,8 +10,10 @@ environment:
 workspace:
   - app_lib/theme
   - app_lib/locale
-  - app_bloc/form_bloc
-  - app_widget/form_bloc
+  - app_lib/provider
+  - app_bloc/theme
+  - third_party/form_bloc
+  - third_party/flutter_form_bloc
 
 dependencies:
   flutter:
@@ -36,6 +38,8 @@ dependencies:
   # workspace packages
   app_theme: any
   app_locale: any
+  app_provider: any
+  theme_bloc: any
 
 dev_dependencies:
   flutter_test:

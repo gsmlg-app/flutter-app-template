@@ -1,7 +1,6 @@
 import 'package:app_locale/app_locale.dart';
-import 'package:app_theme/app_theme.dart';
+import 'package:app_provider/app_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart' as logging;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,19 +14,13 @@ void main(List<String> args) async {
   final sharedPrefs = await SharedPreferences.getInstance();
   // final applicationSupportDirectory = await getApplicationSupportDirectory();
 
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider<ThemeBloc>(
-          create: (BuildContext context) => ThemeBloc(sharedPrefs),
-        ),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: AppLocale.localizationsDelegates,
-        supportedLocales: AppLocale.supportedLocales,
-        home: const App(),
-      ),
+  runApp(MainProvider(
+    sharedPrefs: sharedPrefs,
+    child: MaterialApp(
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: AppLocale.localizationsDelegates,
+      supportedLocales: AppLocale.supportedLocales,
+      home: const App(),
     ),
-  );
+  ));
 }
