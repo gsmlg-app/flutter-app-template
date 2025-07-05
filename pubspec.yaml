@@ -10,6 +10,8 @@ environment:
 workspace:
   - app_lib/theme
   - app_lib/locale
+  - app_bloc/form_bloc
+  - app_widget/form_bloc
 
 dependencies:
   flutter:
