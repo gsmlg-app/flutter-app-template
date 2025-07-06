@@ -165,6 +165,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Setting'**
   String get navSetting;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Setting'**
+  String get settingsTitle;
+
+  /// No description provided for @smenuTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get smenuTheme;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @accentColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Accent Color'**
+  String get accentColor;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
 }
 
 class _AppLocalizationsDelegate

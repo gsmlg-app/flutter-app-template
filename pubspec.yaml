@@ -18,6 +18,7 @@ workspace:
   - third_party/form_bloc
   - third_party/flutter_form_bloc
   - third_party/flutter_adaptive_scaffold
+  - third_party/settings_ui
 
 dependencies:
   flutter:
@@ -47,6 +48,7 @@ dependencies:
   app_artwork: any
   app_feedback: any
   app_adaptive_widgets: any
+  settings_ui: any
 
 dev_dependencies:
   flutter_test:

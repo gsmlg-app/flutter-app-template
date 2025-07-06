@@ -12,5 +12,10 @@
   "undo": "Undo",
   "navHome": "Home",
   "navSetting": "Setting",
+  "settingsTitle": "Setting",
+  "smenuTheme": "Theme",
+  "appearance": "Appearance",
+  "accentColor": "Accent Color",
+  "language": "Language",
   "@@description": "App description"
 }
