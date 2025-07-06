@@ -12,10 +12,12 @@ workspace:
   - app_lib/locale
   - app_lib/provider
   - app_bloc/theme
+  - app_widget/adaptive
   - app_widget/artwork
   - app_widget/feedback
   - third_party/form_bloc
   - third_party/flutter_form_bloc
+  - third_party/flutter_adaptive_scaffold
 
 dependencies:
   flutter:
@@ -44,6 +46,7 @@ dependencies:
   theme_bloc: any
   app_artwork: any
   app_feedback: any
+  app_adaptive_widgets: any
 
 dev_dependencies:
   flutter_test:

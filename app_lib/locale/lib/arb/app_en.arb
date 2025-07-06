@@ -1,14 +1,16 @@
 {
-    "@@locale": "en",
-    "appName": "Flutter App Template",
-    "errorOccurred": "Error Occurred",
-    "backToHome": "Back to Home",
-    "welcomeHome": "Wellcom to my app",
-    "ok": "OK",
-    "cancel": "Cancel",
-    "loading": "Loading",
-    "success": "Success",
-    "error": "Error",
-    "undo": "Undo",
-    "@@description": "App description"
+  "@@locale": "en",
+  "appName": "Flutter App Template",
+  "errorOccurred": "Error Occurred",
+  "backToHome": "Back to Home",
+  "welcomeHome": "Wellcom to my app",
+  "ok": "OK",
+  "cancel": "Cancel",
+  "loading": "Loading",
+  "success": "Success",
+  "error": "Error",
+  "undo": "Undo",
+  "navHome": "Home",
+  "navSetting": "Setting",
+  "@@description": "App description"
 }

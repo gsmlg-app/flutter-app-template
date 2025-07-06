@@ -153,6 +153,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Undo'**
   String get undo;
+
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navSetting.
+  ///
+  /// In en, this message translates to:
+  /// **'Setting'**
+  String get navSetting;
 }
 
 class _AppLocalizationsDelegate
