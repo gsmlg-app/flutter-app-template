@@ -43,4 +43,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navSetting => 'Setting';
+
+  @override
+  String get settingsTitle => 'Setting';
+
+  @override
+  String get smenuTheme => 'Theme';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get accentColor => 'Accent Color';
+
+  @override
+  String get language => 'Language';
 }

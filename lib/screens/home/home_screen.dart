@@ -22,6 +22,10 @@ class HomeScreen extends StatelessWidget {
 
     return AppAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(const Key(HomeScreen.name), context),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(
+        idx,
+        context,
+      ),
       destinations: Destinations.navs(context),
       appBar: AppBar(
         title: Text(context.l10n.appName),
