@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'App Name';
+  String get appName => 'Flutter App Template';
 
   @override
   String get errorOccurred => 'Error Occurred';
@@ -19,4 +19,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeHome => 'Wellcom to my app';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get loading => 'Loading';
+
+  @override
+  String get success => 'Success';
+
+  @override
+  String get error => 'Error';
+
+  @override
+  String get undo => 'Undo';
 }

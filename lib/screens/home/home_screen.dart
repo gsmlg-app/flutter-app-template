@@ -1,4 +1,5 @@
 import 'package:app_artwork/app_artwork.dart';
+import 'package:app_feedback/app_feedback.dart';
 import 'package:app_locale/app_locale.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,47 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+      appBar: AppBar(
+        title: Text(context.l10n.appName),
+        centerTitle: true,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(40),
+          child: Row(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  showAppDialog(
+                    context: context,
+                    title: Text(context.l10n.appName),
+                    content: Text(context.l10n.welcomeHome),
+                    actions: [
+                      AppDialogAction(
+                        onPressed: (context) {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          context.l10n.ok,
+                        ),
+                      ),
+                      AppDialogAction(
+                        onPressed: (context) {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          context.l10n.cancel,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+                child: Text('Show Dialog'),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: Center(
           child: SizedBox(
         width: w * 0.618,
