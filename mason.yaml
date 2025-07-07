@@ -1,3 +1,5 @@
 bricks:
   api_gen:
     path: bricks/api_gen
+  simple_bloc:
+    path: bricks/simple_bloc
