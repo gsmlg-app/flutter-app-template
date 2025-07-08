@@ -16,7 +16,7 @@ part 'add_owner_request.g.dart';
 class AddOwnerRequest {
   /// Returns a new [AddOwnerRequest] instance.
   AddOwnerRequest({
-    this.level = const AddOwnerRequestLevelEnum._('maintainer'),
+    this.level = AddOwnerRequestLevelEnum.maintainer,
   });
 
   @JsonKey(

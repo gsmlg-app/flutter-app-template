@@ -20,6 +20,9 @@ then
    exit 1; 
 fi
 
+rm -rf "$OUT_DIR"
+mkdir -p "$OUT_DIR"
+
 $GEN_CMD generate \
     -i "$INPUT_FILE" \
     -g dart-dio \
