@@ -65,30 +65,41 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: (context) => Center(
-        child: SizedBox(
-          width: w * 0.618,
-          height: w * 0.618,
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            child: Center(
-              child: Column(
-                children: [
-                  LaddingPageLottie(
-                    width: w * 0.382,
-                    height: w * 0.382,
-                  ),
-                  Text(
-                    context.l10n.welcomeHome,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                        ),
-                  ),
-                ],
+      body: (context) => SafeArea(
+        child: Center(
+          child: SizedBox(
+            width: w * 0.618,
+            height: w * 0.618,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              child: Center(
+                child: Column(
+                  children: [
+                    LaddingPageLottie(
+                      width: w * 0.382,
+                      height: w * 0.382,
+                    ),
+                    Text(
+                      context.l10n.welcomeHome,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                          ),
+                    ),
+                    Text(
+                      '$screenWidth x $screenHeight',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
