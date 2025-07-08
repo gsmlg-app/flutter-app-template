@@ -19,6 +19,7 @@ workspace:
   - third_party/flutter_form_bloc
   - third_party/flutter_adaptive_scaffold
   - third_party/settings_ui
+  - app_api/hex_api
 
 dependencies:
   flutter:
@@ -49,6 +50,7 @@ dependencies:
   app_feedback: any
   app_adaptive_widgets: any
   settings_ui: any
+  hex_api: any
 
 dev_dependencies:
   flutter_test:
