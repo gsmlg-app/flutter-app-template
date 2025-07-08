@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_template/screens/app/error_screen.dart';
 import 'package:flutter_app_template/screens/app/splash_screen.dart';
 import 'package:flutter_app_template/screens/home/home_screen.dart';
+import 'package:flutter_app_template/screens/settings/hex_settings_screen.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -52,6 +53,19 @@ class AppRouter {
           child: const SettingsScreen(),
         );
       },
+      routes: [
+        GoRoute(
+          name: HexSettingsScreen.name,
+          path: HexSettingsScreen.path,
+          pageBuilder: (context, state) {
+            return NoTransitionPage<void>(
+              key: state.pageKey,
+              restorationId: state.pageKey.value,
+              child: const HexSettingsScreen(),
+            );
+          },
+        ),
+      ],
     ),
   ];
 }

@@ -1,0 +1,40 @@
+{
+    // Exclude from File Explorer, Quick Open (Ctrl+P), and general file operations
+    "files.exclude": {
+        "**/.mason/": true, // Mason's internal directory (cache, etc.)
+        "**/bricks/": true, // If your templates are in a 'bricks' folder
+        "**/generated/**": true, // Example: If generated code goes into a 'generated' folder
+        "**/*.g.dart": true, // Common pattern for generated Dart files (e.g., json_serializable, freezed)
+        "**/*.freezed.dart": true, // Common pattern for Freezed generated files
+        // You might also have specific directories for your Mason templates:
+        // "lib/mason_templates/": true,
+        // "features/**/*.generated.dart": true // Example for feature-specific generated files
+    },
+    // Exclude from VS Code's search (Ctrl+Shift+F)
+    "search.exclude": {
+        "**/.mason/": true,
+        "**/bricks/": true,
+        "**/generated/**": true,
+        "**/*.g.dart": true,
+        "**/*.freezed.dart": true,
+        // Add other common exclusions like node_modules if you have web dependencies
+        "**/node_modules": true
+    },
+    // Exclude from file watching (improves performance for large directories)
+    "files.watcherExclude": {
+        "**/.mason/": true,
+        "**/bricks/": true,
+        "**/generated/**": true,
+        "**/*.g.dart": true,
+        "**/*.freezed.dart": true
+    },
+    // Optional: Configure file nesting for generated files
+    // This makes generated files appear "nested" under their source files in the explorer
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false, // Keep them collapsed by default
+    "explorer.fileNesting.patterns": {
+        "*.dart": "$(capture).g.dart, $(capture).freezed.dart"
+        // You can add more patterns based on your Mason generation
+        // "my_template_file.dart": "my_generated_code.dart" // If you have specific generated files
+    }
+}
