@@ -8,7 +8,7 @@ void main() async {
   final String? token = Platform.environment['HEX_API_KEY'];
   hexApi.setBearerAuth('user', token ?? 'N/A');
   final userApi = hexApi.getUsersApi();
-  final resp = await userApi.getCurrentUser();
+  final resp = await userApi.getCurrentUser(headers: {'Authorization': token});
   final UserWithOrgs? instance = resp.data;
 
   group(User, () {
