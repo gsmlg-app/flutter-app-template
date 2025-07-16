@@ -1,9 +1,0 @@
-pubAuthor: Jonathan Gao
-pubAuthorEmail: gsmlg.com@gmail.com
-pubLibrary: "hex_api"
-pubName: "hex_api"
-pubDescription: "hex_api - OpenAPI spec"
-pubHomepage: https://swagger.io/
-pubVersion: 1.0.0
-serializationLibrary: json_serializable
-useEnumExtension: true

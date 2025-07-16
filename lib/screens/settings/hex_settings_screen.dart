@@ -1,7 +1,5 @@
 import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
-import 'package:app_feedback/app_feedback.dart';
 import 'package:app_locale/app_locale.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';

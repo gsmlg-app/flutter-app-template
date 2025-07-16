@@ -1,9 +1,0 @@
-pubAuthor: Jonathan Gao
-pubAuthorEmail: gsmlg.com@gmail.com
-pubLibrary: "{{package_name}}"
-pubName: "{{package_name}}"
-pubDescription: "{{package_name}} - OpenAPI spec"
-pubHomepage: https://swagger.io/
-pubVersion: 1.0.0
-serializationLibrary: json_serializable
-useEnumExtension: true
