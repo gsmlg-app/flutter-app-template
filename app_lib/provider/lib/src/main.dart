@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hex_api/hex_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_bloc/theme_bloc.dart';
 
@@ -20,9 +19,6 @@ class MainProvider extends StatelessWidget {
       providers: [
         RepositoryProvider<SharedPreferences>(
           create: (BuildContext context) => sharedPrefs,
-        ),
-        RepositoryProvider<HexApi>(
-          create: (BuildContext context) => HexApi(),
         ),
       ],
       child: MultiBlocProvider(

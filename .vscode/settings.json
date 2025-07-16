@@ -2,7 +2,7 @@
     // Exclude from File Explorer, Quick Open (Ctrl+P), and general file operations
     "files.exclude": {
         "**/.mason/": true, // Mason's internal directory (cache, etc.)
-        "**/bricks/": true, // If your templates are in a 'bricks' folder
+        // "**/bricks/": true, // If your templates are in a 'bricks' folder
         "**/generated/**": true, // Example: If generated code goes into a 'generated' folder
         "**/*.g.dart": true, // Common pattern for generated Dart files (e.g., json_serializable, freezed)
         "**/*.freezed.dart": true, // Common pattern for Freezed generated files

@@ -100,7 +100,7 @@ class SettingsTile extends AbstractSettingsTile {
   late final bool enabled;
   late final bool? checked;
 
-  addCheckedTrailing(BuildContext context) {
+  Widget? addCheckedTrailing(BuildContext context) {
     if (checked != null) {
       return checked!
           ? const Icon(
