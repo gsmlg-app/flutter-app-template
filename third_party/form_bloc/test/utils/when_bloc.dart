@@ -34,7 +34,7 @@ void expectState<TState>(TState actual, TState expected) {
   }
 }
 
-Future expectBloc<State>(
+Future<void> expectBloc<State>(
   BlocBase<State> bloc, {
   State? initalState,
   FutureOr<void> Function()? act,
@@ -49,7 +49,7 @@ Future expectBloc<State>(
         expectLater(bloc.stream.doOnData(states.add), emitsInOrder(stream));
     final actDone = act?.call();
     // ignore: void_checks
-    return await Future.wait<void>([
+    await Future.wait<void>([
       expectDone,
       Future.value(actDone),
     ]).timeout(Duration(seconds: 5), onTimeout: () {

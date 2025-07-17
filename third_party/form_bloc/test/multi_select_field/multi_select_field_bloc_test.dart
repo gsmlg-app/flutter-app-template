@@ -52,8 +52,8 @@ void main() {
     });
 
     test('initial state.', () {
-      MultiSelectFieldBloc fieldBloc;
-      MultiSelectFieldBlocState initialState;
+      MultiSelectFieldBloc<dynamic, dynamic> fieldBloc;
+      MultiSelectFieldBlocState<dynamic, dynamic> initialState;
 
       fieldBloc = MultiSelectFieldBloc<bool, dynamic>(
         name: 'name',
@@ -101,8 +101,8 @@ void main() {
       );
     });
     test('if the initialValue is null, it will be an empty list', () {
-      MultiSelectFieldBloc fieldBloc;
-      MultiSelectFieldBlocState initialState;
+      MultiSelectFieldBloc<dynamic, dynamic> fieldBloc;
+      MultiSelectFieldBlocState<dynamic, dynamic> initialState;
 
       fieldBloc = MultiSelectFieldBloc<bool, dynamic>(name: 'name');
 

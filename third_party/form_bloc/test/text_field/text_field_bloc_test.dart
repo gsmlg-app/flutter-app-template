@@ -53,8 +53,8 @@ void main() {
     });
 
     test('initial state.', () {
-      TextFieldBloc fieldBloc;
-      TextFieldBlocState initialState;
+      TextFieldBloc<dynamic> fieldBloc;
+      TextFieldBlocState<dynamic> initialState;
 
       fieldBloc = TextFieldBloc<dynamic>(
         name: 'name',

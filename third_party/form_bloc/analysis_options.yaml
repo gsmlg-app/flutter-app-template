@@ -12,3 +12,4 @@ analyzer:
 linter:
   rules:
     always_use_package_imports: true
+    unintended_html_in_doc_comment: false

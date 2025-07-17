@@ -22,6 +22,9 @@ class FormBlocImpl extends FormBloc<dynamic, dynamic> {
   void onSubmitting() {}
 }
 
+typedef AnySingleFieldBloc = SingleFieldBloc<dynamic, dynamic,
+    FieldBlocState<dynamic, dynamic, dynamic>, dynamic>;
+
 void main() {
   group('FormBlocUtils:', () {
     group('getAllSingleFieldBlocs:', () {
@@ -168,7 +171,7 @@ void main() {
           fieldBlocListWithAll3,
         ];
 
-        final expectedSingleFieldBlocs = <SingleFieldBloc>[
+        final expectedSingleFieldBlocs = <AnySingleFieldBloc>[
           textFieldBloc1,
           textFieldBloc2,
           /* groupFieldWithSingleFieldBlocs1 */
@@ -238,7 +241,7 @@ void main() {
         final fieldBlocs = <FieldBloc>[
           fieldBlocList21,
         ];
-        final expectedSingleFieldBlocs = <SingleFieldBloc>[];
+        final expectedSingleFieldBlocs = <AnySingleFieldBloc>[];
 
         final singleFieldBlocs =
             FormBlocUtils.getAllSingleFieldBlocs(fieldBlocs);
@@ -262,7 +265,7 @@ void main() {
         final fieldBlocs = <FieldBloc>[
           fieldBlocList21,
         ];
-        final expectedSingleFieldBlocs = <SingleFieldBloc>[
+        final expectedSingleFieldBlocs = <AnySingleFieldBloc>[
           textFieldBloc1,
           booleanFieldBloc1,
           multiSelectFieldBloc3
@@ -281,7 +284,7 @@ void main() {
         final fieldBlocs = <FieldBloc>[
           groupFieldBlocWithAll1,
         ];
-        final expectedSingleFieldBlocs = <SingleFieldBloc>[
+        final expectedSingleFieldBlocs = <AnySingleFieldBloc>[
           selectFieldBloc1,
           multiSelectFieldBloc1,
           multiSelectFieldBloc3,
@@ -305,7 +308,7 @@ void main() {
         final fieldBlocs = <FieldBloc>[
           groupFieldWithSingleFieldBlocs1,
         ];
-        final expectedSingleFieldBlocs = <SingleFieldBloc>[
+        final expectedSingleFieldBlocs = <AnySingleFieldBloc>[
           textFieldBloc3,
           textFieldBloc4,
         ];
@@ -330,7 +333,7 @@ void main() {
         final fieldBlocs = <FieldBloc>[
           fieldBlocList21,
         ];
-        final expectedSingleFieldBlocs = <SingleFieldBloc>[
+        final expectedSingleFieldBlocs = <AnySingleFieldBloc>[
           textFieldBloc3,
           textFieldBloc4,
         ];
