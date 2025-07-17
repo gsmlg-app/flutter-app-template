@@ -2,13 +2,13 @@ import 'package:bloc/bloc.dart';
 
 class MyBlocObserver extends BlocObserver {
   @override
-  void onChange(BlocBase bloc, Change change) {
+  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
     super.onChange(bloc, change);
     _printWrapped('bloc: ${bloc.runtimeType}, change: $change');
   }
 
   @override
-  void onError(BlocBase cubit, Object error, StackTrace stacktrace) {
+  void onError(BlocBase<dynamic> cubit, Object error, StackTrace stacktrace) {
     super.onError(cubit, error, stacktrace);
     _printWrapped('bloc: ${cubit.runtimeType}, error: $error');
   }

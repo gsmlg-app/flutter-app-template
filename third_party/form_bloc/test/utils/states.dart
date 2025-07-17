@@ -1,7 +1,7 @@
 import 'package:form_bloc/form_bloc.dart';
 
 BooleanFieldBlocState<ExtraData> createBooleanState<ExtraData>({
-  FormBloc? formBloc,
+  FormBloc<dynamic, dynamic>? formBloc,
   String name = 'fieldName',
   bool value = false,
   Object? error,
@@ -26,7 +26,7 @@ BooleanFieldBlocState<ExtraData> createBooleanState<ExtraData>({
 }
 
 TextFieldBlocState<ExtraData> createTextState<ExtraData>({
-  FormBloc? formBloc,
+  FormBloc<dynamic, dynamic>? formBloc,
   String name = 'fieldName',
   String value = '',
   Object? error,
@@ -51,7 +51,7 @@ TextFieldBlocState<ExtraData> createTextState<ExtraData>({
 }
 
 SelectFieldBlocState<Value, ExtraData> createSelectState<Value, ExtraData>({
-  FormBloc? formBloc,
+  FormBloc<dynamic, dynamic>? formBloc,
   String name = 'fieldName',
   Value? value,
   List<Value>? items,
@@ -79,7 +79,7 @@ SelectFieldBlocState<Value, ExtraData> createSelectState<Value, ExtraData>({
 
 MultiSelectFieldBlocState<Value, ExtraData>
     createMultiSelectState<Value, ExtraData>({
-  FormBloc? formBloc,
+  FormBloc<dynamic, dynamic>? formBloc,
   String name = 'fieldName',
   List<Value>? value,
   List<Value>? items,
@@ -106,7 +106,7 @@ MultiSelectFieldBlocState<Value, ExtraData>
 }
 
 InputFieldBlocState<Value, ExtraData> createInputState<Value, ExtraData>({
-  FormBloc? formBloc,
+  FormBloc<dynamic, dynamic>? formBloc,
   String name = 'fieldName',
   required Value value,
   Object? error,
@@ -132,7 +132,7 @@ InputFieldBlocState<Value, ExtraData> createInputState<Value, ExtraData>({
 
 ListFieldBlocState<T, ExtraData>
     createListState<T extends FieldBloc, ExtraData>({
-  FormBloc? formBloc,
+  FormBloc<dynamic, dynamic>? formBloc,
   required String name,
   bool isValidating = false,
   bool isValid = true,
@@ -151,7 +151,7 @@ ListFieldBlocState<T, ExtraData>
 
 GroupFieldBlocState<T, ExtraData>
     createGroupState<T extends FieldBloc, ExtraData>({
-  FormBloc? formBloc,
+  FormBloc<dynamic, dynamic>? formBloc,
   required String name,
   bool isValidating = false,
   bool isValid = true,
