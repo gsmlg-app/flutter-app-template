@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: flutter-actions/setup-flutter@v3
+
+      - name: Install tools
+        run: dart pub global activate melos
+        
+      - name: Install dependencies
+        run: melos run prepare
+
+      - name: Analyze project source
+        run: melos run analyze
