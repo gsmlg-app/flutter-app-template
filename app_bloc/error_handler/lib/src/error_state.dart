@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 import 'error_severity.dart';
 
 class ErrorState extends Equatable {
@@ -29,10 +30,12 @@ class ErrorState extends Equatable {
   }
 
   bool get hasErrors => activeErrors.isNotEmpty;
-  bool get hasCriticalErrors => activeErrors.any((e) => e.severity == ErrorSeverity.critical);
+  bool get hasCriticalErrors =>
+      activeErrors.any((e) => e.severity == ErrorSeverity.critical);
 
   @override
-  List<Object?> get props => [activeErrors, resolvedErrors, isLoading, lastErrorMessage];
+  List<Object?> get props =>
+      [activeErrors, resolvedErrors, isLoading, lastErrorMessage];
 }
 
 class AppError extends Equatable {
@@ -87,6 +90,6 @@ class AppError extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, error, stackTrace, context, severity, timestamp, isResolved];
+  List<Object?> get props =>
+      [id, error, stackTrace, context, severity, timestamp, isResolved];
 }
-
