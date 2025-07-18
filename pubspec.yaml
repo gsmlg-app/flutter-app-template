@@ -8,6 +8,7 @@ environment:
   sdk: ">=3.6.0"
 
 workspace:
+  - app_lib/database
   - app_lib/theme
   - app_lib/locale
   - app_lib/provider
@@ -41,6 +42,7 @@ dependencies:
   google_fonts: ^6.2.1
 
   # workspace packages
+  app_database: any
   app_theme: any
   app_locale: any
   app_provider: any
