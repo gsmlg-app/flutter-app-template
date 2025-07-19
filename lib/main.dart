@@ -21,6 +21,13 @@ void main(List<String> args) async {
   logger.initialize(
     level: LogLevel.debug,
   );
+  final directory = Directory(
+    path.join(
+      applicationSupportDirectory.path,
+      'appName',
+    ),
+  );
+  await directory.create(recursive: true);
   final logFile = File(
     path.join(
       applicationSupportDirectory.path,
