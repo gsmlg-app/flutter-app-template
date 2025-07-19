@@ -1,6 +1,5 @@
 import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
 import 'package:app_artwork/app_artwork.dart';
-import 'package:app_feedback/app_feedback.dart';
 import 'package:app_locale/app_locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
@@ -32,38 +31,6 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
-      trailingNavRail: Wrap(
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              showAppDialog(
-                context: context,
-                title: Text(context.l10n.appName),
-                content: Text(context.l10n.welcomeHome),
-                actions: [
-                  AppDialogAction(
-                    onPressed: (context) {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      context.l10n.ok,
-                    ),
-                  ),
-                  AppDialogAction(
-                    onPressed: (context) {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      context.l10n.cancel,
-                    ),
-                  ),
-                ],
-              );
-            },
-            child: Text('Show Dialog'),
-          ),
-        ],
       ),
       body: (context) => SafeArea(
         child: Center(

@@ -4,7 +4,7 @@ import 'package:app_locale/app_locale.dart';
 import 'package:app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
-import 'package:flutter_app_template/screens/settings/hex_settings_screen.dart';
+import 'package:flutter_app_template/screens/settings/app_settings_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -43,15 +43,15 @@ class SettingsScreen extends StatelessWidget {
                     return SettingsList(
                       sections: [
                         SettingsSection(
-                          title: Text('Hex API'),
+                          title: Text('App Setting'),
                           tiles: <SettingsTile>[
                             SettingsTile.navigation(
                               leading: const Icon(Icons.api),
-                              title: Text('Hex API'),
+                              title: Text('App Setting'),
                               onPressed: (context) {
-                                context.goNamed(HexSettingsScreen.name);
+                                context.goNamed(AppSettingsScreen.name);
                               },
-                            )
+                            ),
                           ],
                         ),
                         SettingsSection(

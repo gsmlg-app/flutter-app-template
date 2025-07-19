@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'error_reporting_service.dart';
@@ -114,17 +115,19 @@ class ErrorScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: onRetry ?? () {
-                      // Restart app or navigate to home
-                    },
+                    onPressed: onRetry ??
+                        () {
+                          // Restart app or navigate to home
+                        },
                     child: const Text('Retry'),
                   ),
                   const SizedBox(width: 16),
                   OutlinedButton(
-                    onPressed: onReport ?? () {
-                      // Open error reporting dialog
-                      _showReportDialog(context);
-                    },
+                    onPressed: onReport ??
+                        () {
+                          // Open error reporting dialog
+                          _showReportDialog(context);
+                        },
                     child: const Text('Report Error'),
                   ),
                 ],
@@ -233,7 +236,7 @@ class _ErrorBoundaryWidgetState extends State<_ErrorBoundaryWidget> {
       return widget.errorBuilder?.call(_lastError!) ??
           ErrorScreen(errorDetails: _lastError!);
     }
-    
+
     return widget.child;
   }
 

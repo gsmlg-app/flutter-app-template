@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:logging/logging.dart' as logging;
 import 'package:stack_trace/stack_trace.dart';
 
@@ -10,9 +11,9 @@ class AppLogger {
   factory AppLogger() => _instance;
   AppLogger._internal();
 
-  final StreamController<LogRecord> _logController = 
+  final StreamController<LogRecord> _logController =
       StreamController<LogRecord>.broadcast();
-  
+
   LogLevel _currentLevel = LogLevel.info;
   bool _includeStackTrace = true;
 
@@ -24,7 +25,9 @@ class AppLogger {
   }) {
     _currentLevel = level;
     _includeStackTrace = includeStackTrace;
-    
+
+    logging.hierarchicalLoggingEnabled = true;
+
     logging.Logger.root.level = logging.Level.ALL;
     logging.Logger.root.onRecord.listen(_handleLogRecord);
   }
@@ -39,34 +42,35 @@ class AppLogger {
       time: record.time,
       zone: record.zone,
     );
-    
+
     _logController.add(logRecord);
   }
 
-  void v(String message, [Object? error, StackTrace? stackTrace]) => 
+  void v(String message, [Object? error, StackTrace? stackTrace]) =>
       _log(LogLevel.verbose, message, error, stackTrace);
 
-  void d(String message, [Object? error, StackTrace? stackTrace]) => 
+  void d(String message, [Object? error, StackTrace? stackTrace]) =>
       _log(LogLevel.debug, message, error, stackTrace);
 
-  void i(String message, [Object? error, StackTrace? stackTrace]) => 
+  void i(String message, [Object? error, StackTrace? stackTrace]) =>
       _log(LogLevel.info, message, error, stackTrace);
 
-  void w(String message, [Object? error, StackTrace? stackTrace]) => 
+  void w(String message, [Object? error, StackTrace? stackTrace]) =>
       _log(LogLevel.warning, message, error, stackTrace);
 
-  void e(String message, [Object? error, StackTrace? stackTrace]) => 
+  void e(String message, [Object? error, StackTrace? stackTrace]) =>
       _log(LogLevel.error, message, error, stackTrace);
 
-  void f(String message, [Object? error, StackTrace? stackTrace]) => 
+  void f(String message, [Object? error, StackTrace? stackTrace]) =>
       _log(LogLevel.fatal, message, error, stackTrace);
 
-  void _log(LogLevel level, String message, [Object? error, StackTrace? stackTrace]) {
+  void _log(LogLevel level, String message,
+      [Object? error, StackTrace? stackTrace]) {
     if (level < _currentLevel) return;
 
     final logger = logging.Logger('AppLogger');
     final loggingLevel = _mapToLoggingLevel(level);
-    
+
     logger.log(
       loggingLevel,
       message,

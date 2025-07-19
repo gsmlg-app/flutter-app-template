@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:meta/meta.dart';
 
 import 'log_level.dart';
@@ -46,7 +47,7 @@ class LogRecord {
   @override
   String toString() {
     return 'LogRecord(level: ${level.name}, message: $message, error: $error, '
-           'loggerName: $loggerName, time: $time)';
+        'loggerName: $loggerName, time: $time)';
   }
 
   @override
