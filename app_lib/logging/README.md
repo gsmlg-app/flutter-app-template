@@ -29,14 +29,11 @@ import 'package:app_logging/app_logging.dart';
 
 void main() {
   // Initialize logging
-  AppLogger.init(
+  final logger = AppLogger();
+  logger.initialize(
     level: LogLevel.debug,
-    enableConsoleOutput: true,
-    enableFileOutput: true,
   );
   
-  // Use logger
-  final logger = AppLogger('MyApp');
   logger.info('App started');
   logger.error('Something went wrong', error: exception);
 }

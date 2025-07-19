@@ -1,4 +1,5 @@
 import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
+import 'package:app_feedback/app_feedback.dart';
 import 'package:app_locale/app_locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
@@ -8,11 +9,12 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_bloc/theme_bloc.dart';
 
-class HexSettingsScreen extends StatelessWidget {
-  static const name = 'Hex Settings';
-  static const path = '/settings/hex';
+class AppSettingsScreen extends StatelessWidget {
+  static const name = 'App Settings';
+  static const path = 'app';
+  static const fullPath = '${SettingsScreen.path}/$name';
 
-  const HexSettingsScreen({super.key});
+  const AppSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class HexSettingsScreen extends StatelessWidget {
       destinations: Destinations.navs(context),
       body: (context) {
         final sharedPrefs = context.read<SharedPreferences>();
-        final token = sharedPrefs.getString('HEX_API_KEY');
+        final appName = sharedPrefs.getString('APP_NAME');
 
         return SafeArea(
           child: CustomScrollView(
@@ -42,20 +44,43 @@ class HexSettingsScreen extends StatelessWidget {
                     return SettingsList(
                       sections: [
                         SettingsSection(
-                          title: Text('Hex API'),
+                          title: Text('APP_NAME'),
                           tiles: <SettingsTile>[
                             SettingsTile(
                               leading: const Icon(Icons.api),
                               title: Center(
                                 child: Text(
-                                  'HEX_API_KEY',
+                                  'APP_NAME',
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              trailing: token == null
-                                  ? Text('Not set')
-                                  : Text('******'),
-                              onPressed: (context) {},
+                              trailing:
+                                  appName == null ? Text('N/A') : Text(appName),
+                              onPressed: (context) {
+                                showAppDialog(
+                                  context: context,
+                                  title: Text(context.l10n.appName),
+                                  content: Text(context.l10n.welcomeHome),
+                                  actions: [
+                                    AppDialogAction(
+                                      onPressed: (context) {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        context.l10n.ok,
+                                      ),
+                                    ),
+                                    AppDialogAction(
+                                      onPressed: (context) {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        context.l10n.cancel,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
                           ],
                         ),
