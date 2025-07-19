@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:app_database/app_database.dart';
 import 'package:app_locale/app_locale.dart';
 import 'package:app_logging/app_logging.dart';
 import 'package:app_provider/app_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
@@ -10,21 +14,33 @@ import 'app.dart';
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  final applicationSupportDirectory = await getApplicationSupportDirectory();
+
   // Initialize logging
   final logger = AppLogger();
   logger.initialize(
     level: LogLevel.debug,
   );
+  final logFile = File(
+    path.join(
+      applicationSupportDirectory.path,
+      'appName',
+      'app.log',
+    ),
+  );
   logger.logStream.listen((record) {
-    print(
-        '${record.loggerName} ${record.level.name} [${record.time}]: ${record.message}');
+    final log =
+        '${record.loggerName} ${record.level.name} [${record.time}]: ${record.message}';
+    logFile.writeAsString(
+      log,
+      mode: FileMode.append,
+    );
   });
   // Use logger
   logger.i('App started');
 
   final sharedPrefs = await SharedPreferences.getInstance();
   final database = AppDatabase();
-  // final applicationSupportDirectory = await getApplicationSupportDirectory();
 
   runApp(
     MainProvider(
