@@ -65,6 +65,17 @@ class HomeScreen extends StatelessWidget {
                                 .secondaryContainer,
                           ),
                     ),
+                    TextButton(
+                      onPressed: () {
+                        throw Exception('This is a crash!');
+                      },
+                      child: Text(
+                        'Throw Error',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                      ),
+                    ),
                   ],
                 ),
               ),
