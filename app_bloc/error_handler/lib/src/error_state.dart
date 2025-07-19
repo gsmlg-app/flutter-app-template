@@ -48,7 +48,7 @@ class AppError extends Equatable {
   final bool isResolved;
   final String? userMessage;
 
-  const AppError({
+  AppError({
     required this.id,
     required this.error,
     this.stackTrace,
