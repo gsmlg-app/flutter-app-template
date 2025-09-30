@@ -1,29 +1,52 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/app.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+import 'package:app_logging/app_logging.dart';
+import 'package:app_locale/gen_l10n/app_localizations.dart';
+import 'package:app_locale/app_locale.dart';
+import 'package:app_database/app_database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:app_provider/app_provider.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Test app can be initialized.', (WidgetTester tester) async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    final database = AppDatabase();
+
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const App());
+    final appMain = MainProvider(
+       sharedPrefs: sharedPrefs,
+       database: database,
+       child: MaterialApp(
+         debugShowCheckedModeBanner: false,
+         localizationsDelegates: AppLocale.localizationsDelegates,
+         supportedLocales: AppLocale.supportedLocales,
+         home: CrashReportingWidget(
+           child: const App(),
+         ),
+       ),
+     );
+    await tester.pumpWidget(appMain);
+    // Wait for the app to settle
+    await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Get the localized app name using AppLocalizations
+    final BuildContext context = tester.element(find.byType(MaterialApp).first);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    context.go('/home');
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    final appName = AppLocalizations.of(context)!.appName;
+    
+    // Navigate to /home page (assuming there's a way to trigger navigation)
+    // If you need to tap a button or widget to navigate, use:
+    // await tester.tap(find.byKey(Key('homeButton')));
+    // await tester.pumpAndSettle();
+    
+    // Verify that the localized app name is displayed
+    expect(find.text(appName), findsOneWidget);
+
+    await tester.pumpAndSettle(); 
   });
 }

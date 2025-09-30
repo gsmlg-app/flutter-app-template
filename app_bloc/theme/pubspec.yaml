@@ -8,10 +8,10 @@ resolution: workspace
 
 dependencies:
   bloc: ^9.0.0
-  equatable: ^2.0.5
+  equatable: ^2.0.7
   flutter:
     sdk: flutter
-  shared_preferences: ^2.0.17
+  shared_preferences: ^2.3.5
 
   app_theme: any
 
