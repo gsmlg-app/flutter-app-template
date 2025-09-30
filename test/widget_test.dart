@@ -44,27 +44,22 @@ void main() {
     );
 
     await tester.pumpWidget(appMain);
-    await tester.pumpAndSettle();
+
+    // Initial pump to show splash screen
+    await tester.pump();
+
+    // Wait for navigation to complete (1 second for splash screen)
+    await tester.pump(const Duration(milliseconds: 1_200));
+
+    // Pump one more time to ensure the home screen is rendered
+    await tester.pump();
 
     // Find a widget that's definitely rendered and get its context
     final BuildContext context = tester.element(find.byType(Scaffold).first);
-    // Or use any other widget type that you know exists in your app
 
     final textOnScreen = AppLocalizations.of(context)!.welcomeHome;
 
-    await Timer(
-      const Duration(milliseconds: 1_100),
-      () {},
-    );
-
-    // Navigate to /home page (assuming there's a way to trigger navigation)
-    // If you need to tap a button or widget to navigate, use:
-    // await tester.tap(find.byKey(Key('homeButton')));
-    // await tester.pumpAndSettle();
-
-    // Verify that the localized app name is displayed
+    // Verify that the welcome text is displayed on the home screen
     expect(find.text(textOnScreen), findsOneWidget);
-
-    await tester.pumpAndSettle();
   });
 }
