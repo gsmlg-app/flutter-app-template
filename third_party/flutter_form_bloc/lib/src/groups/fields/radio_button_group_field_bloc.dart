@@ -200,8 +200,10 @@ class RadioButtonGroupFieldBlocBuilder<Value> extends StatelessWidget {
               fillColor: fieldTheme.radioTheme?.fillColor,
               overlayColor: fieldTheme.radioTheme?.overlayColor,
               splashRadius: fieldTheme.radioTheme?.splashRadius,
+              // ignore: deprecated_member_use
               groupValue: state.value,
               toggleable: fieldTheme.canDeselect,
+              // ignore: deprecated_member_use
               onChanged: onChanged,
             ),
             content: fieldItem,

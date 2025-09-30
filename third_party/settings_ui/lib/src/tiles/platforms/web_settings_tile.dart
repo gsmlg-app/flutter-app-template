@@ -131,7 +131,7 @@ class WebSettingsTile extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsetsDirectional.only(end: 8),
                         child: Switch(
-                          activeColor: activeSwitchColor ??
+                          activeThumbColor: activeSwitchColor ??
                               Color.fromRGBO(138, 180, 248, 1.0),
                           value: initialValue,
                           onChanged: onToggle,
@@ -145,7 +145,7 @@ class WebSettingsTile extends StatelessWidget {
                         const EdgeInsetsDirectional.only(start: 16, end: 8),
                     child: Switch(
                       value: initialValue,
-                      activeColor: activeSwitchColor ??
+                      activeThumbColor: activeSwitchColor ??
                           Color.fromRGBO(138, 180, 248, 1.0),
                       onChanged: onToggle,
                     ),
