@@ -115,7 +115,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeHome.
   ///
   /// In en, this message translates to:
-  /// **'Wellcom to my app'**
+  /// **'Welcome to my app'**
   String get welcomeHome;
 
   /// No description provided for @ok.

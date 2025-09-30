@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -10,6 +11,11 @@ class AppDatabase extends _$AppDatabase {
   // and a constructor telling drift where the database should be stored.
   // These are described in the getting started guide: https://drift.simonbinder.eu/setup/
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
+
+  // Add this factory for tests
+  factory AppDatabase.forTesting() {
+    return AppDatabase(NativeDatabase.memory());
+  }
 
   @override
   int get schemaVersion => 1;
