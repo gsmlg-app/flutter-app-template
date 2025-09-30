@@ -1,13 +1,49 @@
 # Flutter App Template
 
-A feature-rich Flutter application template.
+A comprehensive Flutter application template with monorepo architecture, providing a robust foundation for building scalable Flutter applications with clean architecture principles.
+
+## Features
+
+- 🏗️ **Monorepo Architecture** - Managed by Melos for modular development
+- 🎨 **Theme Management** - Multiple color schemes (fire, green, violet, wheat) with dynamic switching
+- 🌍 **Internationalization** - Full i18n support with ARB files
+- 🔄 **State Management** - BLoC pattern implementation
+- 📱 **Responsive Design** - Adaptive widgets for multiple platforms
+- 🔧 **Code Generation** - Mason templates for scaffolding
+- 🧪 **Testing** - Comprehensive test setup
+- 📦 **Dependency Injection** - Clean architecture with separation of concerns
+
+## Architecture Overview
+
+This project follows clean architecture principles with a monorepo structure managed by Melos, providing separation of concerns across multiple specialized packages.
+
+### Monorepo Organization
+
+- **Main App**: `lib/` - Entry point and main application code
+- **API Layer**: `app_api/` - Generated API client code (OpenAPI/Swagger based)
+- **State Management**: `app_bloc/` - BLoC pattern implementations for business logic
+- **Shared Libraries**: `app_lib/` - Core utilities, themes, localization
+- **UI Components**: `app_widget/` - Reusable widgets and UI elements
+- **Code Generation**: `bricks/` - Mason templates for scaffolding
+- **Third-party**: `third_party/` - Modified/custom third-party packages
+
+### Key Packages
+
+- **app_theme**: Theme management with multiple color schemes
+- **app_locale**: Internationalization support with ARB files
+- **app_provider**: Dependency injection and app-level providers
+- **theme_bloc**: State management for theme switching
+- **app_adaptive_widgets**: Responsive/adaptive UI components
+- **app_artwork**: Asset management (icons, lottie animations)
+- **app_feedback**: User feedback mechanisms (snackbars, dialogs, toasts)
 
 ## Getting Started
 
 ### Prerequisites
 
-- Flutter SDK
-- Melos
+- Flutter SDK (latest stable version)
+- Dart SDK
+- Git
 
 ### Installation
 
@@ -18,10 +54,11 @@ A feature-rich Flutter application template.
     cd flutter-app-template
     ```
 
-2.  **Install Melos:**
+2.  **Install global dependencies:**
 
     ```bash
     dart pub global activate melos
+    dart pub global activate mason_cli
     ```
 
 3.  **Bootstrap the project:**
@@ -32,74 +69,165 @@ A feature-rich Flutter application template.
     melos bootstrap
     ```
 
-## Project Structure
+4.  **Initialize Mason:**
 
-This project is a monorepo managed by [Melos](https://melos.invertase.dev/). The project is divided into several packages, each with a specific purpose.
+    ```bash
+    mason get
+    ```
 
--   `lib/`: Main application source code.
--   `app_api/`: Contains the generated API client.
--   `app_bloc/`: BLoC (Business Logic Component) packages for state management.
--   `app_lib/`: Shared libraries for theme, localization, and providers.
--   `app_widget/`: Reusable widgets.
--   `bricks/`: Mason bricks for code generation.
--   `third_party/`: Third-party packages that are not available on pub.dev or are modified.
+## Development Workflow
 
-## Development
+### Setup & Code Generation
 
-### Available Melos Scripts
+```bash
+# Install global dependencies
+dart pub global activate melos
+dart pub global activate mason_cli
+
+# Bootstrap the project
+melos bootstrap
+
+# Initialize mason
+mason get
+```
+
+### Development Commands
+
+```bash
+# Run all static analysis
+melos run lint:all
+
+# Format all code
+melos run format
+
+# Run tests across all packages
+flutter test
+melos exec flutter test
+
+# Generate code (build_runner, l10n)
+melos run prepare
+melos run build-all
+```
+
+### Individual Package Commands
+
+```bash
+# Run tests for specific package
+cd app_lib/theme && flutter test
+
+# Analyze specific package
+cd app_widget/adaptive && flutter analyze
+
+# Build specific package
+cd app_lib/theme && dart run build_runner build --delete-conflicting-outputs
+```
+
+## Key Files & Entry Points
+
+- **Main Entry**: `lib/main.dart` - App initialization with providers
+- **App Shell**: `lib/app.dart` - Root widget with theme management
+- **Routing**: `lib/router.dart` - GoRouter configuration with declarative routing
+- **Screens**: `lib/screens/` - Feature screens organized by domain
+
+## Configuration Files
+
+- **Melos**: `pubspec.yaml` (workspace configuration)
+- **Mason**: `mason.yaml` (code generation templates)
+- **Analysis**: `analysis_options.yaml` (linting rules)
+- **Localization**: `app_lib/locale/l10n.yaml` (i18n configuration)
+
+## Available Melos Scripts
 
 This project uses Melos to manage the monorepo. Here are some of the available scripts:
 
--   `melos run lint:all`: Run all static analysis checks.
--   `melos run analyze`: Run `flutter analyze` for all packages.
--   `melos run fix`: Run `dart fix` for all packages.
--   `melos run format`: Run `dart format` for all packages.
--   `melos run upgrade`: Upgrade dependencies in all packages.
--   `melos run outdated`: Check for outdated dependencies in all packages.
--   `melos run validate-dependencies`: Validate dependencies usage.
+-   `melos run lint:all`: Run all static analysis checks
+-   `melos run analyze`: Run `flutter analyze` for all packages
+-   `melos run fix`: Run `dart fix` for all packages
+-   `melos run format`: Run `dart format` for all packages
+-   `melos run upgrade`: Upgrade dependencies in all packages
+-   `melos run outdated`: Check for outdated dependencies in all packages
+-   `melos run validate-dependencies`: Validate dependencies usage
+-   `melos run prepare`: Generate code (build_runner, l10n)
+-   `melos run build-all`: Build all packages
 
-## App Scaffold (mason bricks)
- 
-Init mason cli
- 
-```shell
+## Code Generation with Mason
+
+### Initialize Mason
+
+```bash
 dart pub global activate mason_cli
 mason get
 ```
- 
-### Create API brick
 
-Create `api` generator code, run `mason` command.
- 
-```shell
+### Generate API Client
+
+Create API client code from OpenAPI specification:
+
+```bash
 mason make api_client -o app_api/app_api --package_name=app_api
-# then add openapi spect to `app_api/app_api/openapi.yaml`
+# Then add OpenAPI spec to `app_api/app_api/openapi.yaml`
 ```
 
-### Create Bloc brick
+### Generate BLoC
 
-Create a simple `bloc` package in this app.
+Create a simple BLoC package:
 
-```shell
-mason make simple_bloc -o app_bloc/hex --name=hex
+```bash
+mason make simple_bloc -o app_bloc/feature_name --name=feature_name
 ```
 
 ### Running the App
 
 ```bash
+# Development
 flutter run
+
+# Specific platform
+flutter run -d chrome
+flutter run -d android
+flutter run -d ios
 ```
 
 ### Running Tests
 
 ```bash
+# Run all tests
 flutter test
+
+# Run tests for all packages
+melos exec flutter test
+
+# Run tests for specific package
+cd app_lib/theme && flutter test
 ```
+
+## Testing Structure
+
+Tests are co-located with their respective packages:
+- **Unit tests**: `test/` directory in each package
+- **Widget tests**: `test/` directory in main app
+- **Integration tests**: Use `flutter test` at root level
+
+## Package Dependencies
+
+The workspace uses path-based dependencies for internal packages (marked as `any` in pubspec.yaml). All packages are managed through Melos workspace configuration, ensuring consistent versioning and dependency resolution across the monorepo.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a pull request.
+Contributions are welcome! Please feel free to submit a pull request. For major changes, please open an issue first to discuss what you would like to change.
+
+### Development Guidelines
+
+1. Follow the existing code style and architecture patterns
+2. Write tests for new features
+3. Update documentation as needed
+4. Run `melos run lint:all` before submitting PRs
+5. Ensure all tests pass with `melos exec flutter test`
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+If you encounter any issues or have questions, please file an issue on the GitHub repository.
