@@ -1,0 +1,6 @@
+name: simple_bloc_hooks
+dependency_overrides:
+  mason:
+    path: /Users/gao/Workspace/gsmlg-app/flutter-app-template/.dart_tool/mason
+dependencies:
+  mason: any

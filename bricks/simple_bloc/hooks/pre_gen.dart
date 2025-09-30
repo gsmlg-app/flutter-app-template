@@ -1,51 +1,42 @@
 import 'package:mason/mason.dart';
 
 void run(HookContext context) {
-  final packageName = context.vars['package_name'];
+  final name = context.vars['name'];
 
-  // Validate package name parameter
-  if (packageName == null || packageName.isEmpty) {
-    throw ArgumentError('❌ Package name parameter is required');
+  // Validate name parameter
+  if (name == null || name.isEmpty) {
+    throw ArgumentError('❌ Name parameter is required');
   }
 
-  // Validate package naming conventions
-  if (!_isValidPackageName(packageName)) {
+  // Validate naming conventions
+  if (!_isValidDartIdentifier(name)) {
     throw ArgumentError(
-      '❌ Invalid package name: "$packageName". '
-      'Must be a valid Dart package name (lowercase letters, numbers, underscores only)'
+      '❌ Invalid name: "$name". '
+      'Must be a valid Dart identifier (letters, numbers, underscores only, cannot start with number)'
     );
   }
 
   // Check for reserved keywords
-  if (_isDartReservedKeyword(packageName)) {
-    throw ArgumentError('❌ Package name "$packageName" is a Dart reserved keyword');
+  if (_isDartReservedKeyword(name)) {
+    throw ArgumentError('❌ Name "$name" is a Dart reserved keyword');
   }
 
   // Convert to different cases for template usage
-  context.vars['pascalCase'] = _toPascalCase(packageName);
-  context.vars['camelCase'] = _toCamelCase(packageName);
-  context.vars['snakeCase'] = _toSnakeCase(packageName);
+  context.vars['pascalCase'] = _toPascalCase(name);
+  context.vars['camelCase'] = _toCamelCase(name);
+  context.vars['snakeCase'] = _toSnakeCase(name);
+  context.vars['sentenceCase'] = _toSentenceCase(name);
 
-  logger.info('✅ Validating API client package name: $packageName');
+  logger.info('✅ Validating BLoC name: $name');
   logger.info('  - PascalCase: ${context.vars["pascalCase"]}');
   logger.info('  - camelCase: ${context.vars["camelCase"]}');
   logger.info('  - snake_case: ${context.vars["snakeCase"]}');
-
-  // Add configuration suggestions
-  logger.info('''
-📋 API Client Configuration Tips:
-  1. Update openapi.yaml with your OpenAPI 3.0 specification
-  2. Configure swagger_parser.yaml for your needs
-  3. Add authentication interceptors if needed
-  4. Configure base URL and timeouts
-  5. Add custom headers and interceptors
-''');
 }
 
-bool _isValidPackageName(String name) {
-  // Dart package name rules: lowercase letters, numbers, underscores only
-  final packageNameRegex = RegExp(r'^[a-z][a-z0-9_]*$');
-  return packageNameRegex.hasMatch(name);
+bool _isValidDartIdentifier(String name) {
+  // Dart identifier rules: letters, digits, underscore, cannot start with digit
+  final identifierRegex = RegExp(r'^[a-zA-Z_][a-zA-Z0-9_]*$');
+  return identifierRegex.hasMatch(name);
 }
 
 bool _isDartReservedKeyword(String name) {
@@ -85,4 +76,10 @@ String _toSnakeCase(String input) {
     RegExp(r'([A-Z])'),
     (match) => '_${match.group(0)!.toLowerCase()}',
   ).replaceFirst('_', '');
+}
+
+String _toSentenceCase(String input) {
+  if (input.isEmpty) return input;
+  final snakeCase = _toSnakeCase(input);
+  return snakeCase.split('_').join(' ');
 }
