@@ -6,7 +6,7 @@ import 'app_logger.dart';
 class ApiLoggingInterceptor {
   static final logging.Logger _logger = logging.Logger('API');
   final AppLogger _appLogger = AppLogger();
-  
+
   static const int _maxBodyLength = 1000;
 
   // Request logging
@@ -19,20 +19,20 @@ class ApiLoggingInterceptor {
   }) {
     final logMessage = StringBuffer();
     logMessage.writeln('→ $method $url');
-    
+
     if (tag != null) {
       logMessage.writeln('Tag: $tag');
     }
-    
+
     if (headers != null && headers.isNotEmpty) {
       logMessage.writeln('Headers: ${_formatMap(headers)}');
     }
-    
+
     if (body != null) {
       final bodyStr = jsonEncode(body);
       logMessage.writeln('Body: ${_truncateBody(bodyStr)}');
     }
-    
+
     _appLogger.d(logMessage.toString().trim());
     _logger.info(logMessage.toString().trim());
   }
@@ -50,24 +50,24 @@ class ApiLoggingInterceptor {
     final logMessage = StringBuffer();
     logMessage.writeln('← $method $url');
     logMessage.writeln('Status: $statusCode');
-    
+
     if (tag != null) {
       logMessage.writeln('Tag: $tag');
     }
-    
+
     if (responseTimeMs != null) {
       logMessage.writeln('Time: ${responseTimeMs}ms');
     }
-    
+
     if (headers != null && headers.isNotEmpty) {
       logMessage.writeln('Headers: ${_formatMap(headers)}');
     }
-    
+
     if (body != null) {
       final bodyStr = jsonEncode(body);
       logMessage.writeln('Body: ${_truncateBody(bodyStr)}');
     }
-    
+
     if (statusCode >= 200 && statusCode < 300) {
       _appLogger.d(logMessage.toString().trim());
       _logger.info(logMessage.toString().trim());
@@ -92,24 +92,22 @@ class ApiLoggingInterceptor {
     final logMessage = StringBuffer();
     logMessage.writeln('✗ $method $url');
     logMessage.writeln('Error: $error');
-    
+
     if (tag != null) {
       logMessage.writeln('Tag: $tag');
     }
-    
+
     if (requestBody != null) {
       final bodyStr = jsonEncode(requestBody);
       logMessage.writeln('Request Body: ${_truncateBody(bodyStr)}');
     }
-    
+
     _appLogger.e(logMessage.toString().trim(), error, stackTrace);
     _logger.severe(logMessage.toString().trim(), error, stackTrace);
   }
 
   String _formatMap(Map<String, dynamic> map) {
-    return map.entries
-        .map((e) => '${e.key}: ${e.value}')
-        .join(', ');
+    return map.entries.map((e) => '${e.key}: ${e.value}').join(', ');
   }
 
   String _truncateBody(String body) {
@@ -126,7 +124,7 @@ class ApiLoggingInterceptor {
   }) {
     final level = _getPerformanceLevel(durationMs);
     final message = '⚡ $method $url took ${durationMs}ms';
-    
+
     switch (level) {
       case 'slow':
         _appLogger.w(message);
@@ -156,7 +154,7 @@ class ApiLoggingInterceptor {
     final message = isConnected
         ? 'Network connected${networkType != null ? ' ($networkType)' : ''}'
         : 'Network disconnected';
-    
+
     if (isConnected) {
       _appLogger.i(message);
       _logger.info(message);
@@ -185,7 +183,7 @@ class ApiLoggingInterceptor {
     String? error,
   }) {
     final message = 'Auth $action: ${success ? 'success' : 'failed'}';
-    
+
     if (success) {
       _appLogger.i('$message${userId != null ? ' for $userId' : ''}');
       _logger.info('$message${userId != null ? ' for $userId' : ''}');
