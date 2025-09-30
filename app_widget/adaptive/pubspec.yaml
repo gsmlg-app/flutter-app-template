@@ -16,7 +16,7 @@ dependencies:
   intl: any
 
   flutter_adaptive_scaffold: any
-  flutter_bloc: ^9.1.1
+  flutter_bloc: ^9.0.0
 
 dev_dependencies:
   flutter_test:
