@@ -9,7 +9,7 @@ class ErrorDisplay {
     VoidCallback? onDismiss,
   }) {
     final theme = Theme.of(context);
-    
+
     switch (severity) {
       case ErrorSeverity.low:
         _showSnackBar(context, message, theme, duration: 2, onRetry: onRetry);

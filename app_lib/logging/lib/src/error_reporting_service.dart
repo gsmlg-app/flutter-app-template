@@ -7,13 +7,14 @@ import 'app_logger.dart';
 import 'log_level.dart';
 
 class ErrorReportingService {
-  static final ErrorReportingService _instance = ErrorReportingService._internal();
+  static final ErrorReportingService _instance =
+      ErrorReportingService._internal();
   factory ErrorReportingService() => _instance;
   ErrorReportingService._internal();
 
   final AppLogger _logger = AppLogger();
   final logging.Logger _systemLogger = logging.Logger('ErrorReporting');
-  
+
   static const String _errorLogKey = 'error_logs';
   static const int _maxStoredErrors = 100;
 
@@ -84,7 +85,7 @@ class ErrorReportingService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final errorData = prefs.getStringList(_errorLogKey) ?? [];
-      
+
       return errorData
           .map((json) => _decodeErrorRecord(json))
           .where((error) => error != null)
@@ -130,15 +131,15 @@ class ErrorReportingService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final existingErrors = prefs.getStringList(_errorLogKey) ?? [];
-      
+
       final json = _encodeErrorRecord(errorRecord);
       existingErrors.add(json);
-      
+
       // Keep only the most recent errors
       if (existingErrors.length > _maxStoredErrors) {
         existingErrors.removeRange(0, existingErrors.length - _maxStoredErrors);
       }
-      
+
       await prefs.setStringList(_errorLogKey, existingErrors);
     } catch (e) {
       _systemLogger.warning('Failed to store error: $e');
@@ -149,10 +150,10 @@ class ErrorReportingService {
     try {
       // TODO: Implement actual backend integration
       _systemLogger.info('Sending error to backend: ${errorRecord['message']}');
-      
+
       // Simulate network delay
       await Future.delayed(const Duration(milliseconds: 100));
-      
+
       // TODO: Replace with actual HTTP call
       _systemLogger.info('Error sent to backend successfully');
     } catch (e) {
