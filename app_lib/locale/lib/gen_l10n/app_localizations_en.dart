@@ -18,7 +18,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get backToHome => 'Back to Home';
 
   @override
-  String get welcomeHome => 'Wellcom to my app';
+  String get welcomeHome => 'Welcome to my app';
 
   @override
   String get ok => 'OK';
