@@ -3,3 +3,5 @@ bricks:
     path: bricks/api_client
   simple_bloc:
     path: bricks/simple_bloc
+  repository:
+    path: bricks/repository

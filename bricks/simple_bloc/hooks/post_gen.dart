@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:mason/mason.dart';
 
+final logger = Logger();
+
 void run(HookContext context) {
   final name = context.vars['name'];
   final packageName = '${name}_bloc';

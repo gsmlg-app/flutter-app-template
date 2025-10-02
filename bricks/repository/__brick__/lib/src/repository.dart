@@ -132,7 +132,7 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
       if (enableCache) {
         final cached{{model_name.pascalCase()}} = await localDataSource.getCached{{model_name.pascalCase()}}(id);
         if (cached{{model_name.pascalCase()}} != null) {
-          return cached{{model_name.pascalCase]}};
+          return cached{{model_name.pascalCase()}};
         }
       }
 {{/has_local_data_source}}
@@ -141,97 +141,97 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
 {{/has_remote_data_source}}
 {{^has_remote_data_source}}
 {{#has_local_data_source}}
-    final cached{{model_name.pascalCase]}} = await localDataSource.getCached{{model_name.pascalCase]}}(id);
-    if (cached{{model_name.pascalCase]}} != null) {
-      return cached{{model_name.pascalCase]}};
+    final cached{{model_name.pascalCase()}} = await localDataSource.getCached{{model_name.pascalCase()}}(id);
+    if (cached{{model_name.pascalCase()}} != null) {
+      return cached{{model_name.pascalCase()}};
     }
-    throw {{model_name.pascalCase}}NotFoundException(id);
+    throw {{model_name.pascalCase()}}NotFoundException(id);
 {{/has_local_data_source}}
 {{^has_local_data_source}}
-    throw {{model_name.pascalCase}}NetworkException('No data sources available');
+    throw {{model_name.pascalCase()}}NetworkException('No data sources available');
 {{/has_local_data_source}}
 {{/has_remote_data_source}}
   }
 
   /// Cache-first strategy: Try cache first, fallback to network
-  Future<{{model_name.pascalCase}}Model> _get{{model_name.pascalCase}}CacheFirst(String id) async {
+  Future<{{model_name.pascalCase()}}Model> _get{{model_name.pascalCase()}}CacheFirst(String id) async {
 {{#has_local_data_source}}
     if (enableCache) {
-      final cached{{model_name.pascalCase}} = await localDataSource.getCached{{model_name.pascalCase}}(id);
-      if (cached{{model_name.pascalCase}} != null) {
-        return cached{{model_name.pascalCase}};
+      final cached{{model_name.pascalCase()}} = await localDataSource.getCached{{model_name.pascalCase()}}(id);
+      if (cached{{model_name.pascalCase()}} != null) {
+        return cached{{model_name.pascalCase()}};
       }
     }
 {{/has_local_data_source}}
 
 {{#has_remote_data_source}}
-    final {{name.camelCase}} = await remoteDataSource.get{{model_name.pascalCase}}(id);
+    final {{name.camelCase}} = await remoteDataSource.get{{model_name.pascalCase()}}(id);
 {{#has_local_data_source}}
     if (enableCache) {
-      await localDataSource.cache{{model_name.pascalCase}}({{name.camelCase}});
+      await localDataSource.cache{{model_name.pascalCase()}}({{name.camelCase}});
     }
 {{/has_local_data_source}}
     return {{name.camelCase}};
 {{/has_remote_data_source}}
 {{^has_remote_data_source}}
-    throw {{model_name.pascalCase}}NotFoundException(id);
+    throw {{model_name.pascalCase()}}NotFoundException(id);
 {{/has_remote_data_source}}
   }
 
   /// Network-only strategy: Only use network, no caching
-  Future<{{model_name.pascalCase}}Model> _get{{model_name.pascalCase}}NetworkOnly(String id) async {
+  Future<{{model_name.pascalCase()}}Model> _get{{model_name.pascalCase()}}NetworkOnly(String id) async {
 {{#has_remote_data_source}}
-    return await remoteDataSource.get{{model_name.pascalCase}}(id);
+    return await remoteDataSource.get{{model_name.pascalCase()}}(id);
 {{/has_remote_data_source}}
 {{^has_remote_data_source}}
-    throw {{model_name.pascalCase}}NetworkException('Network data source not available');
+    throw {{model_name.pascalCase()}}NetworkException('Network data source not available');
 {{/has_remote_data_source}}
   }
 
   /// Cache-only strategy: Only use cache
-  Future<{{model_name.pascalCase}}Model> _get{{model_name.pascalCase}}CacheOnly(String id) async {
+  Future<{{model_name.pascalCase()}}Model> _get{{model_name.pascalCase()}}CacheOnly(String id) async {
 {{#has_local_data_source}}
     if (enableCache) {
-      final cached{{model_name.pascalCase}} = await localDataSource.getCached{{model_name.pascalCase}}(id);
-      if (cached{{model_name.pascalCase}} != null) {
-        return cached{{model_name.pascalCase}};
+      final cached{{model_name.pascalCase()}} = await localDataSource.getCached{{model_name.pascalCase()}}(id);
+      if (cached{{model_name.pascalCase()}} != null) {
+        return cached{{model_name.pascalCase()}};
       }
     }
 {{/has_local_data_source}}
-    throw {{model_name.pascalCase}}NotFoundException(id);
+    throw {{model_name.pascalCase()}}NotFoundException(id);
   }
 
   @override
-  Future<List<{{model_name.pascalCase}}Model>> getAll{{model_name.pascalCase}}s() async {
+  Future<List<{{model_name.pascalCase()}}Model>> getAll{{model_name.pascalCase()}}s() async {
     try {
 {{#has_remote_data_source}}
-      final {{name.camelCase}}s = await remoteDataSource.getAll{{model_name.pascalCase}}s();
+      final {{name.camelCase}}s = await remoteDataSource.getAll{{model_name.pascalCase()}}s();
 {{#has_local_data_source}}
       if (enableCache) {
-        await localDataSource.cache{{model_name.pascalCase}}s({{name.camelCase}}s);
+        await localDataSource.cache{{model_name.pascalCase()}}s({{name.camelCase}}s);
       }
 {{/has_local_data_source}}
       return {{name.camelCase}}s;
 {{/has_remote_data_source}}
 {{^has_remote_data_source}}
 {{#has_local_data_source}}
-      final cached{{model_name.pascalCase}}s = await localDataSource.getCached{{model_name.pascalCase}}s();
-      if (cached{{model_name.pascalCase}}s != null) {
-        return cached{{model_name.pascalCase}}s;
+      final cached{{model_name.pascalCase()}}s = await localDataSource.getCached{{model_name.pascalCase()}}s();
+      if (cached{{model_name.pascalCase()}}s != null) {
+        return cached{{model_name.pascalCase()}}s;
       }
-      return <{{model_name.pascalCase}}Model>[];
+      return <{{model_name.pascalCase()}}Model>[];
 {{/has_local_data_source}}
 {{^has_local_data_source}}
-      return <{{model_name.pascalCase}}Model>[];
+      return <{{model_name.pascalCase()}}Model>[];
 {{/has_local_data_source}}
 {{/has_remote_data_source}}
     } catch (e) {
 {{#has_local_data_source}}
       if (enableCache) {
         try {
-          final cached{{model_name.pascalCase}}s = await localDataSource.getCached{{model_name.pascalCase}}s();
-          if (cached{{model_name.pascalCase}}s != null) {
-            return cached{{model_name.pascalCase}}s;
+          final cached{{model_name.pascalCase()}}s = await localDataSource.getCached{{model_name.pascalCase()}}s();
+          if (cached{{model_name.pascalCase()}}s != null) {
+            return cached{{model_name.pascalCase()}}s;
           }
         } catch (cacheError) {
           // Cache also failed, ignore
@@ -239,10 +239,10 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
       }
 {{/has_local_data_source}}
 
-      if (e is {{model_name.pascalCase}}Exception) {
+      if (e is {{model_name.pascalCase()}}Exception) {
         rethrow;
       } else {
-        throw {{model_name.pascalCase}}NetworkException(
+        throw {{model_name.pascalCase()}}NetworkException(
           'Failed to get {{name.sentenceCase}}s: ${e.toString()}',
           e,
         );
@@ -251,36 +251,36 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
   }
 
   @override
-  Future<{{model_name.pascalCase}}Model> create{{model_name.pascalCase}}({{model_name.pascalCase}}Model {{name.camelCase}}) async {
+  Future<{{model_name.pascalCase()}}Model> create{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase}}) async {
     try {
       // Validate input
       if ({{name.camelCase}}.id.isEmpty) {
-        throw {{model_name.pascalCase}}ValidationException('{{model_name.pascalCase()}} ID cannot be empty');
+        throw {{model_name.pascalCase()}}ValidationException('{{model_name.pascalCase()}} ID cannot be empty');
       }
 
 {{#has_remote_data_source}}
-      final created{{model_name.pascalCase}} = await remoteDataSource.create{{model_name.pascalCase}}({{name.camelCase}});
+      final created{{model_name.pascalCase()}} = await remoteDataSource.create{{model_name.pascalCase()}}({{name.camelCase}});
 {{#has_local_data_source}}
       if (enableCache) {
-        await localDataSource.cache{{model_name.pascalCase}}(created{{model_name.pascalCase}});
+        await localDataSource.cache{{model_name.pascalCase()}}(created{{model_name.pascalCase()}});
       }
 {{/has_local_data_source}}
-      return created{{model_name.pascalCase}};
+      return created{{model_name.pascalCase()}};
 {{/has_remote_data_source}}
 {{^has_remote_data_source}}
 {{#has_local_data_source}}
-      await localDataSource.cache{{model_name.pascalCase}}({{name.camelCase}});
+      await localDataSource.cache{{model_name.pascalCase()}}({{name.camelCase}});
       return {{name.camelCase}};
 {{/has_local_data_source}}
 {{^has_local_data_source}}
-      throw {{model_name.pascalCase}}NetworkException('No data sources available');
+      throw {{model_name.pascalCase()}}NetworkException('No data sources available');
 {{/has_local_data_source}}
 {{/has_remote_data_source}}
     } catch (e) {
-      if (e is {{model_name.pascalCase}}Exception) {
+      if (e is {{model_name.pascalCase()}}Exception) {
         rethrow;
       } else {
-        throw {{model_name.pascalCase}}NetworkException(
+        throw {{model_name.pascalCase()}}NetworkException(
           'Failed to create {{name.sentenceCase}}: ${e.toString()}',
           e,
         );
@@ -289,36 +289,36 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
   }
 
   @override
-  Future<{{model_name.pascalCase}}Model> update{{model_name.pascalCase}}({{model_name.pascalCase}}Model {{name.camelCase}}) async {
+  Future<{{model_name.pascalCase()}}Model> update{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase}}) async {
     try {
       // Validate input
       if ({{name.camelCase}}.id.isEmpty) {
-        throw {{model_name.pascalCase}}ValidationException('{{model_name.pascalCase()}} ID cannot be empty');
+        throw {{model_name.pascalCase()}}ValidationException('{{model_name.pascalCase()}} ID cannot be empty');
       }
 
 {{#has_remote_data_source}}
-      final updated{{model_name.pascalCase}} = await remoteDataSource.update{{model_name.pascalCase}}({{name.camelCase}});
+      final updated{{model_name.pascalCase()}} = await remoteDataSource.update{{model_name.pascalCase()}}({{name.camelCase}});
 {{#has_local_data_source}}
       if (enableCache) {
-        await localDataSource.cache{{model_name.pascalCase}}(updated{{model_name.pascalCase}});
+        await localDataSource.cache{{model_name.pascalCase()}}(updated{{model_name.pascalCase()}});
       }
 {{/has_local_data_source}}
-      return updated{{model_name.pascalCase}};
+      return updated{{model_name.pascalCase()}};
 {{/has_remote_data_source}}
 {{^has_remote_data_source}}
 {{#has_local_data_source}}
-      await localDataSource.cache{{model_name.pascalCase}}({{name.camelCase}});
+      await localDataSource.cache{{model_name.pascalCase()}}({{name.camelCase}});
       return {{name.camelCase}};
 {{/has_local_data_source}}
 {{^has_local_data_source}}
-      throw {{model_name.pascalCase}}NetworkException('No data sources available');
+      throw {{model_name.pascalCase()}}NetworkException('No data sources available');
 {{/has_local_data_source}}
 {{/has_remote_data_source}}
     } catch (e) {
-      if (e is {{model_name.pascalCase}}Exception) {
+      if (e is {{model_name.pascalCase()}}Exception) {
         rethrow;
       } else {
-        throw {{model_name.pascalCase}}NetworkException(
+        throw {{model_name.pascalCase()}}NetworkException(
           'Failed to update {{name.sentenceCase}}: ${e.toString()}',
           e,
         );
@@ -327,14 +327,14 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
   }
 
   @override
-  Future<void> delete{{model_name.pascalCase}}(String id) async {
+  Future<void> delete{{model_name.pascalCase()}}(String id) async {
     try {
       if (id.isEmpty) {
-        throw {{model_name.pascalCase}}ValidationException('{{model_name.pascalCase}} ID cannot be empty');
+        throw {{model_name.pascalCase()}}ValidationException('{{model_name.pascalCase()}} ID cannot be empty');
       }
 
 {{#has_remote_data_source}}
-      await remoteDataSource.delete{{model_name.pascalCase}}(id);
+      await remoteDataSource.delete{{model_name.pascalCase()}}(id);
 {{/has_remote_data_source}}
 {{#has_local_data_source}}
       if (enableCache) {
@@ -342,10 +342,10 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
       }
 {{/has_local_data_source}}
     } catch (e) {
-      if (e is {{model_name.pascalCase}}Exception) {
+      if (e is {{model_name.pascalCase()}}Exception) {
         rethrow;
       } else {
-        throw {{model_name.pascalCase}}NetworkException(
+        throw {{model_name.pascalCase()}}NetworkException(
           'Failed to delete {{name.sentenceCase}}: ${e.toString()}',
           e,
         );
@@ -354,17 +354,17 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
   }
 
   @override
-  Future<void> sync{{model_name.pascalCase}}s() async {
+  Future<void> sync{{model_name.pascalCase()}}s() async {
 {{#has_remote_data_source}}
 {{#has_local_data_source}}
     if (!enableCache) return;
 
     try {
       // Fetch from remote
-      final remote{{model_name.pascalCase}}s = await remoteDataSource.getAll{{model_name.pascalCase}}s();
+      final remote{{model_name.pascalCase()}}s = await remoteDataSource.getAll{{model_name.pascalCase()}}s();
 
       // Update local cache
-      await localDataSource.cache{{model_name.pascalCase}}s(remote{{model_name.pascalCase}}s);
+      await localDataSource.cache{{model_name.pascalCase()}}s(remote{{model_name.pascalCase()}}s);
     } catch (e) {
       // Sync failed, but don't throw - just log
       // TODO: Add proper logging
@@ -409,9 +409,9 @@ enum CachePolicy {
 }
 
 /// Factory for creating repository instances
-class {{model_name.pascalCase}}RepositoryFactory {
+class {{model_name.pascalCase()}}RepositoryFactory {
   /// Creates a production repository with real data sources
-  static Future<{{model_name.pascalCase}}Repository> create({
+  static Future<{{model_name.pascalCase()}}Repository> create({
 {{#has_remote_data_source}}
     String? baseUrl,
     Duration? timeout,
@@ -429,7 +429,7 @@ class {{model_name.pascalCase}}RepositoryFactory {
 
     final connectivity = Connectivity();
 
-    final remoteDataSource = {{model_name.pascalCase}}RemoteDataSourceFactory.create(
+    final remoteDataSource = {{model_name.pascalCase()}}RemoteDataSourceFactory.create(
       dio: dio,
       connectivity: connectivity,
       baseUrl: baseUrl,
@@ -439,13 +439,13 @@ class {{model_name.pascalCase}}RepositoryFactory {
 {{#has_local_data_source}}
     final sharedPreferences = await SharedPreferences.getInstance();
 
-    final localDataSource = {{model_name.pascalCase}}LocalDataSourceFactory.create(
+    final localDataSource = {{model_name.pascalCase()}}LocalDataSourceFactory.create(
       sharedPreferences: sharedPreferences,
       cacheMaxAge: cacheMaxAge,
     );
 {{/has_local_data_source}}
 
-    return {{model_name.pascalCase}}RepositoryImpl(
+    return {{model_name.pascalCase()}}RepositoryImpl(
 {{#has_remote_data_source}}
       remoteDataSource: remoteDataSource,
 {{/has_remote_data_source}}
@@ -458,19 +458,19 @@ class {{model_name.pascalCase}}RepositoryFactory {
   }
 
   /// Creates a mock repository for testing
-  static {{model_name.pascalCase}}Repository createMock({
+  static {{model_name.pascalCase()}}Repository createMock({
     CachePolicy? cachePolicy,
     bool? enableCache,
   }) {
 {{#has_remote_data_source}}
-    final remoteDataSource = {{model_name.pascalCase}}RemoteDataSourceFactory.createMock();
+    final remoteDataSource = {{model_name.pascalCase()}}RemoteDataSourceFactory.createMock();
 {{/has_remote_data_source}}
 
 {{#has_local_data_source}}
-    final localDataSource = {{model_name.pascalCase}}LocalDataSourceFactory.createMock();
+    final localDataSource = {{model_name.pascalCase()}}LocalDataSourceFactory.createMock();
 {{/has_local_data_source}}
 
-    return {{model_name.pascalCase}}RepositoryImpl(
+    return {{model_name.pascalCase()}}RepositoryImpl(
 {{#has_remote_data_source}}
       remoteDataSource: remoteDataSource,
 {{/has_remote_data_source}}

@@ -1,5 +1,7 @@
 import 'package:mason/mason.dart';
 
+final logger = Logger();
+
 void run(HookContext context) {
   final packageName = context.vars['package_name'];
 
