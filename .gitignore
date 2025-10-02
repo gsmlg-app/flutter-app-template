@@ -48,4 +48,6 @@ app.*.map.json
 /.mason
 mason-lock.json
 
+/.devenv*
+/local.properties
 
