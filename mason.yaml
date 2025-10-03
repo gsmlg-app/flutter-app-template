@@ -3,6 +3,8 @@ bricks:
     path: bricks/api_client
   simple_bloc:
     path: bricks/simple_bloc
+  form_bloc:
+    path: bricks/form_bloc
   repository:
     path: bricks/repository
   screen:
