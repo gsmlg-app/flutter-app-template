@@ -122,7 +122,104 @@ mason make simple_bloc --name BlocName
 
 ---
 
-### 4. Repository Brick (`repository`)
+### 4. Form BLoC Brick (`form_bloc`)
+Creates a complete form BLoC package with validation and submission logic using the existing `form_bloc` and `flutter_form_bloc` packages.
+
+**Usage:**
+```bash
+mason make form_bloc --name FormName [options]
+```
+
+**Variables:**
+- `name` (required): Form name (e.g., "Login", "Registration", "Profile")
+- `output_directory` (default: "app_bloc"): Where to create the bloc package
+- `field_names` (default: ["email", "password"]): List of form field names (comma-separated)
+- `has_submission` (default: true): Include form submission logic
+- `has_validation` (default: true): Include field validation
+
+**Examples:**
+```bash
+# Basic login form with email and password
+mason make form_bloc --name Login
+
+# Registration form with additional fields
+mason make form_bloc --name Registration --field_names "email,password,confirmPassword,firstName,lastName"
+
+# Contact form without submission logic (just validation)
+mason make form_bloc --name Contact --field_names "name,email,message" --has_submission false
+```
+
+**Generated Structure:**
+```
+{output_directory}/{name}_form_bloc/
+├── lib/
+│   ├── src/
+│   │   ├── bloc.dart (main FormBloc implementation)
+│   │   ├── event.dart (form events: submit, reset, field changes)
+│   │   └── state.dart (form state and status enum)
+│   └── {name}_form_bloc.dart (export file)
+├── test/
+│   └── {name}_form_bloc_test.dart (comprehensive test suite)
+├── hooks/
+│   └── post_gen.dart (post-generation hook)
+├── README.md (usage documentation)
+├── pubspec.yaml (dependencies include form_bloc, flutter_form_bloc)
+└── brick.yaml
+```
+
+**Features:**
+- **Field Validation**: Built-in validators for common field types (email, password, required)
+- **Form Submission**: Async submission with loading, success, and error states
+- **Field Management**: Dynamic field addition with proper type handling
+- **Error Handling**: Comprehensive error handling with user-friendly messages
+- **Test Coverage**: Full test suite covering validation, submission, and error scenarios
+- **Integration Ready**: Works seamlessly with existing `flutter_form_bloc` widgets
+
+**Smart Field Detection:**
+- `email` fields get email validation
+- `password` fields get password length validation
+- All fields get required field validation by default
+- Custom validators can be added after generation
+
+**Usage in UI:**
+```dart
+BlocProvider(
+  create: (context) => LoginFormBloc(),
+  child: Builder(
+    builder: (context) {
+      final formBloc = context.read<LoginFormBloc>();
+
+      return FormBlocListener(
+        formBloc: formBloc,
+        onSubmitting: () => showLoadingDialog(),
+        onSuccess: () => showSuccessMessage(),
+        onFailure: (error) => showErrorMessage(error),
+        child: Column(
+          children: [
+            TextFieldBlocBuilder(
+              textFieldBloc: formBloc.emailFieldBloc,
+              decoration: InputDecoration(labelText: 'Email'),
+            ),
+            TextFieldBlocBuilder(
+              textFieldBloc: formBloc.passwordFieldBloc,
+              decoration: InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
+            ElevatedButton(
+              onPressed: () => formBloc.add(LoginFormEventSubmitted()),
+              child: Text('Submit'),
+            ),
+          ],
+        ),
+      );
+    },
+  ),
+)
+```
+
+---
+
+### 5. Repository Brick (`repository`)
 Creates a complete repository pattern implementation with data sources and models.
 
 **Usage:**
@@ -138,7 +235,7 @@ mason make repository --name RepositoryName [options]
 
 ---
 
-### 5. API Client Brick (`api_client`)
+### 6. API Client Brick (`api_client`)
 Generates a complete API client package from OpenAPI/Swagger specifications.
 
 **Usage:**

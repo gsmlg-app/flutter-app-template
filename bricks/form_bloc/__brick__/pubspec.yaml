@@ -1,0 +1,33 @@
+name: {{name.snakeCase()}}_form_bloc
+description: Form BLoC for {{name.sentenceCase()}} functionality.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.0.0"
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Form management
+  form_bloc: any
+  flutter_form_bloc: any
+
+  # State management
+  bloc: any
+  flutter_bloc: any
+
+  # Utilities
+  equatable: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  bloc_test: ^10.0.0
+  mocktail: ^1.0.3
+
+flutter:
