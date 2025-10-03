@@ -152,6 +152,8 @@ This project uses Melos to manage the monorepo. Here are some of the available s
 
 ## Code Generation with Mason
 
+This project uses Mason for code generation to maintain consistency and speed up development. For a complete guide to all available bricks and their usage, see [BRICKS.md](./BRICKS.md).
+
 ### Initialize Mason
 
 ```bash
@@ -175,6 +177,20 @@ Create a simple BLoC package:
 ```bash
 mason make simple_bloc -o app_bloc/feature_name --name=feature_name
 ```
+
+### Generate Form BLoC
+
+Create a complete form BLoC with validation and submission logic:
+
+```bash
+mason make form_bloc --name Login --field_names "email,password"
+```
+
+## 📚 Additional Documentation
+
+- **[🧱 Mason Bricks Guide](./BRICKS.md)** - Complete guide to all available Mason bricks for code generation
+- **[📝 Form BLoC Guide](./FORM_BLOC.md)** - Comprehensive documentation for form validation and submission
+- **[📋 CLAUDE.md](./CLAUDE.md)** - Development guidance and project architecture for AI assistants
 
 ### Running the App
 
