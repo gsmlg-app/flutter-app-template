@@ -1,5 +1,5 @@
 name: api_client
-description: A new brick created with the Mason CLI.
+description: Generate a complete API client package from OpenAPI/Swagger specifications with Dio, Retrofit, and JSON serialization support.
 
 # The following defines the brick repository url.
 # Uncomment and update the following line before publishing the brick.
