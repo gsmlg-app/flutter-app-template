@@ -148,11 +148,16 @@ This project uses Melos to manage the monorepo. Here are some of the available s
 -   `melos run outdated`: Check for outdated dependencies in all packages
 -   `melos run validate-dependencies`: Validate dependencies usage
 -   `melos run prepare`: Generate code (build_runner, l10n)
+-   `melos run test:bricks`: Run Mason brick tests (see [BRICK_TESTING.md](BRICK_TESTING.md))
 -   `melos run build-all`: Build all packages
 
 ## Code Generation with Mason
 
 This project uses Mason for code generation to maintain consistency and speed up development. For a complete guide to all available bricks and their usage, see [BRICKS.md](./BRICKS.md).
+
+### Testing Mason Bricks
+
+For comprehensive documentation on testing Mason bricks, including test structure, running tests, and writing new tests, see [BRICK_TESTING.md](./BRICK_TESTING.md).
 
 ### Initialize Mason
 
