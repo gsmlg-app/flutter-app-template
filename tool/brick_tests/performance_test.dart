@@ -21,7 +21,7 @@ void main() {
       final stopwatch = Stopwatch()..start();
       
       final brick = await BrickTestUtils.loadBrick(
-        path.join('bricks', 'api_client', 'brick.yaml'),
+        path.join('..', '..', 'bricks', 'api_client'),
       );
       
       await BrickTestUtils.generateBrick(
@@ -43,7 +43,7 @@ void main() {
       final stopwatch = Stopwatch()..start();
       
       final brick = await BrickTestUtils.loadBrick(
-        path.join('bricks', 'simple_bloc', 'brick.yaml'),
+        path.join('..', '..', 'bricks', 'simple_bloc'),
       );
       
       await BrickTestUtils.generateBrick(
@@ -65,7 +65,7 @@ void main() {
       final stopwatch = Stopwatch()..start();
       
       final brick = await BrickTestUtils.loadBrick(
-        path.join('bricks', 'repository', 'brick.yaml'),
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       await BrickTestUtils.generateBrick(
@@ -93,19 +93,19 @@ void main() {
       
       try {
         final futures = [
-          BrickTestUtils.loadBrick(path.join('bricks', 'api_client', 'brick.yaml'))
+          BrickTestUtils.loadBrick(path.join('..', '..', 'bricks', 'api_client'))
               .then((brick) => BrickTestUtils.generateBrick(
                     brick,
                     tempDirs[0],
                     BrickTestConfig.apiClientVars,
                   )),
-          BrickTestUtils.loadBrick(path.join('bricks', 'simple_bloc', 'brick.yaml'))
+          BrickTestUtils.loadBrick(path.join('..', '..', 'bricks', 'simple_bloc'))
               .then((brick) => BrickTestUtils.generateBrick(
                     brick,
                     tempDirs[1],
                     BrickTestConfig.simpleBlocVars,
                   )),
-          BrickTestUtils.loadBrick(path.join('bricks', 'repository', 'brick.yaml'))
+          BrickTestUtils.loadBrick(path.join('..', '..', 'bricks', 'repository'))
               .then((brick) => BrickTestUtils.generateBrick(
                     brick,
                     tempDirs[2],
@@ -131,12 +131,12 @@ void main() {
 
     test('memory usage during generation', () async {
       // Get initial memory usage
-      final initialMemory = ProcessInfo.currentRss;
+      final initialMemory = ProcessInfoUtil.currentRss;
       
       // Generate multiple bricks to test memory usage
       for (int i = 0; i < 5; i++) {
         final brick = await BrickTestUtils.loadBrick(
-          path.join('bricks', 'simple_bloc', 'brick.yaml'),
+          path.join('..', '..', 'bricks', 'simple_bloc'),
         );
         
         await BrickTestUtils.generateBrick(
@@ -150,7 +150,7 @@ void main() {
         tempDir = await BrickTestUtils.createTempDir('performance');
       }
       
-      final finalMemory = ProcessInfo.currentRss;
+      final finalMemory = ProcessInfoUtil.currentRss;
       final memoryIncrease = finalMemory - initialMemory;
       
       // Memory increase should be reasonable (less than 50MB)
@@ -165,7 +165,7 @@ void main() {
       final stopwatch = Stopwatch()..start();
       
       final brick = await BrickTestUtils.loadBrick(
-        path.join('bricks', 'repository', 'brick.yaml'),
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       await BrickTestUtils.generateBrick(
@@ -185,8 +185,8 @@ void main() {
   });
 }
 
-/// Extension to get current RSS memory usage
-extension ProcessInfo on ProcessInfo {
+/// Utility class for process information
+class ProcessInfoUtil {
   static int get currentRss {
     // This is a simplified version - in a real implementation
     // you might want to use platform-specific methods

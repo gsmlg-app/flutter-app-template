@@ -16,9 +16,9 @@ class BrickTestUtils {
     }
   }
 
-  /// Loads a brick from its YAML file
+  /// Loads a brick from its directory path
   static Future<Brick> loadBrick(String brickPath) async {
-    return Brick.fromBrickYaml(brickPath);
+    return Brick.path(brickPath);
   }
 
   /// Generates files from a brick with given variables

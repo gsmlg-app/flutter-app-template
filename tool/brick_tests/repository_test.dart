@@ -18,8 +18,8 @@ void main() {
     });
 
     test('generates repository package with correct structure', () async {
-      final brick = Brick.fromBrickYaml(
-        path.join('bricks', 'repository', 'brick.yaml'),
+      final brick = Brick.path(
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       final generator = await MasonGenerator.fromBrick(brick);
@@ -51,8 +51,8 @@ void main() {
     });
 
     test('generates valid pubspec.yaml with correct dependencies', () async {
-      final brick = Brick.fromBrickYaml(
-        path.join('bricks', 'repository', 'brick.yaml'),
+      final brick = Brick.path(
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       final generator = await MasonGenerator.fromBrick(brick);
@@ -87,8 +87,8 @@ void main() {
     });
 
     test('generates repository with only remote data source', () async {
-      final brick = Brick.fromBrickYaml(
-        path.join('bricks', 'repository', 'brick.yaml'),
+      final brick = Brick.path(
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       final generator = await MasonGenerator.fromBrick(brick);
@@ -115,8 +115,8 @@ void main() {
     });
 
     test('generates repository with only local data source', () async {
-      final brick = Brick.fromBrickYaml(
-        path.join('bricks', 'repository', 'brick.yaml'),
+      final brick = Brick.path(
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       final generator = await MasonGenerator.fromBrick(brick);
@@ -143,8 +143,8 @@ void main() {
     });
 
     test('generates correct repository interface', () async {
-      final brick = Brick.fromBrickYaml(
-        path.join('bricks', 'repository', 'brick.yaml'),
+      final brick = Brick.path(
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       final generator = await MasonGenerator.fromBrick(brick);
@@ -175,8 +175,8 @@ void main() {
     });
 
     test('generates correct repository implementation', () async {
-      final brick = Brick.fromBrickYaml(
-        path.join('bricks', 'repository', 'brick.yaml'),
+      final brick = Brick.path(
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       final generator = await MasonGenerator.fromBrick(brick);
@@ -209,8 +209,8 @@ void main() {
     });
 
     test('generates correct model structure', () async {
-      final brick = Brick.fromBrickYaml(
-        path.join('bricks', 'repository', 'brick.yaml'),
+      final brick = Brick.path(
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       final generator = await MasonGenerator.fromBrick(brick);
@@ -240,8 +240,8 @@ void main() {
     });
 
     test('generates correct exceptions', () async {
-      final brick = Brick.fromBrickYaml(
-        path.join('bricks', 'repository', 'brick.yaml'),
+      final brick = Brick.path(
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       final generator = await MasonGenerator.fromBrick(brick);
@@ -269,8 +269,8 @@ void main() {
     });
 
     test('generates correct data sources', () async {
-      final brick = Brick.fromBrickYaml(
-        path.join('bricks', 'repository', 'brick.yaml'),
+      final brick = Brick.path(
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       final generator = await MasonGenerator.fromBrick(brick);
@@ -304,8 +304,8 @@ void main() {
     });
 
     test('generates correct main export file', () async {
-      final brick = Brick.fromBrickYaml(
-        path.join('bricks', 'repository', 'brick.yaml'),
+      final brick = Brick.path(
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       final generator = await MasonGenerator.fromBrick(brick);
@@ -329,8 +329,8 @@ void main() {
     });
 
     test('handles different repository names correctly', () async {
-      final brick = Brick.fromBrickYaml(
-        path.join('bricks', 'repository', 'brick.yaml'),
+      final brick = Brick.path(
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       final generator = await MasonGenerator.fromBrick(brick);
@@ -355,8 +355,8 @@ void main() {
     });
 
     test('validates name parameter', () async {
-      final brick = Brick.fromBrickYaml(
-        path.join('bricks', 'repository', 'brick.yaml'),
+      final brick = Brick.path(
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       final generator = await MasonGenerator.fromBrick(brick);
@@ -372,8 +372,8 @@ void main() {
     });
 
     test('uses default model name when not provided', () async {
-      final brick = Brick.fromBrickYaml(
-        path.join('bricks', 'repository', 'brick.yaml'),
+      final brick = Brick.path(
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       final generator = await MasonGenerator.fromBrick(brick);
