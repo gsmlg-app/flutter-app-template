@@ -142,5 +142,5 @@ melos:
       description: Run `dart run dependency_validator` check dependencies usage.
 
     test:bricks:
-      run: cd tool/brick_tests && dart pub get && dart test
+      run: cd tool/brick_tests && dart pub get && dart test *.dart
       description: Run Mason brick tests separately from Flutter tests.

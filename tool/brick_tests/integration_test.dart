@@ -23,7 +23,7 @@ void main() {
       await apiClientDir.create(recursive: true);
       
       final apiClientBrick = await BrickTestUtils.loadBrick(
-        path.join('bricks', 'api_client', 'brick.yaml'),
+        path.join('..', '..', 'bricks', 'api_client'),
       );
       
       await BrickTestUtils.generateBrick(
@@ -37,7 +37,7 @@ void main() {
       await repositoryDir.create(recursive: true);
       
       final repositoryBrick = await BrickTestUtils.loadBrick(
-        path.join('bricks', 'repository', 'brick.yaml'),
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       await BrickTestUtils.generateBrick(
@@ -56,7 +56,7 @@ void main() {
       await blocDir.create(recursive: true);
       
       final blocBrick = await BrickTestUtils.loadBrick(
-        path.join('bricks', 'simple_bloc', 'brick.yaml'),
+        path.join('..', '..', 'bricks', 'simple_bloc'),
       );
       
       await BrickTestUtils.generateBrick(
@@ -87,7 +87,7 @@ void main() {
         {
           'name': 'api_client',
           'brick': await BrickTestUtils.loadBrick(
-            path.join('bricks', 'api_client', 'brick.yaml'),
+            path.join('..', '..', 'bricks', 'api_client'),
           ),
           'vars': {'package_name': 'test_api'},
           'dir': Directory(path.join(projectDir.path, 'api_client')),
@@ -95,7 +95,7 @@ void main() {
         {
           'name': 'repository',
           'brick': await BrickTestUtils.loadBrick(
-            path.join('bricks', 'repository', 'brick.yaml'),
+            path.join('..', '..', 'bricks', 'repository'),
           ),
           'vars': BrickTestConfig.repositoryVars,
           'dir': Directory(path.join(projectDir.path, 'repository')),
@@ -103,7 +103,7 @@ void main() {
         {
           'name': 'simple_bloc',
           'brick': await BrickTestUtils.loadBrick(
-            path.join('bricks', 'simple_bloc', 'brick.yaml'),
+            path.join('..', '..', 'bricks', 'simple_bloc'),
           ),
           'vars': {'name': 'test'},
           'dir': Directory(path.join(projectDir.path, 'bloc')),
@@ -112,11 +112,15 @@ void main() {
 
       // Generate all bricks
       for (final brickConfig in bricks) {
-        await brickConfig['dir'].create(recursive: true);
+        final dir = brickConfig['dir'] as Directory;
+        final brick = brickConfig['brick'] as Brick;
+        final vars = brickConfig['vars'] as Map<String, dynamic>;
+        
+        await dir.create(recursive: true);
         await BrickTestUtils.generateBrick(
-          brickConfig['brick'],
-          brickConfig['dir'],
-          brickConfig['vars'],
+          brick,
+          dir,
+          vars,
         );
       }
 
@@ -125,7 +129,7 @@ void main() {
       
       for (final brickConfig in bricks) {
         final pubspecContent = await BrickTestUtils.getFileContent(
-          brickConfig['dir'],
+          brickConfig['dir'] as Directory,
           'pubspec.yaml',
         );
         
@@ -173,7 +177,7 @@ dependencies:
       // Generate bricks in appropriate packages
       // API Client in 'api' package
       final apiClientBrick = await BrickTestUtils.loadBrick(
-        path.join('bricks', 'api_client', 'brick.yaml'),
+        path.join('..', '..', 'bricks', 'api_client'),
       );
       
       await BrickTestUtils.generateBrick(
@@ -184,7 +188,7 @@ dependencies:
 
       // Repository in 'data' package
       final repositoryBrick = await BrickTestUtils.loadBrick(
-        path.join('bricks', 'repository', 'brick.yaml'),
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       await BrickTestUtils.generateBrick(
@@ -200,7 +204,7 @@ dependencies:
 
       // BLoC in 'ui' package
       final blocBrick = await BrickTestUtils.loadBrick(
-        path.join('bricks', 'simple_bloc', 'brick.yaml'),
+        path.join('..', '..', 'bricks', 'simple_bloc'),
       );
       
       await BrickTestUtils.generateBrick(
@@ -233,7 +237,7 @@ dependencies:
       await repositoryDir.create(recursive: true);
       
       final repositoryBrick = await BrickTestUtils.loadBrick(
-        path.join('bricks', 'repository', 'brick.yaml'),
+        path.join('..', '..', 'bricks', 'repository'),
       );
       
       await BrickTestUtils.generateBrick(
@@ -252,7 +256,7 @@ dependencies:
       await blocDir.create(recursive: true);
       
       final blocBrick = await BrickTestUtils.loadBrick(
-        path.join('bricks', 'simple_bloc', 'brick.yaml'),
+        path.join('..', '..', 'bricks', 'simple_bloc'),
       );
       
       await BrickTestUtils.generateBrick(
@@ -304,20 +308,20 @@ dependencies:
       ];
 
       for (final testCase in testCases) {
-        final testDir = Directory(path.join(projectDir.path, testCase['name']));
+        final testDir = Directory(path.join(projectDir.path, testCase['name'] as String));
         await testDir.create(recursive: true);
         
         final brick = await BrickTestUtils.loadBrick(
-          path.join('bricks', testCase['brick'], 'brick.yaml'),
+          path.join('..', '..', 'bricks', testCase['brick'] as String),
         );
 
         if (testCase['should_fail'] == true) {
           expect(
-            () => BrickTestUtils.generateBrick(
-              brick,
-              testDir,
-              testCase['vars'],
-            ),
+          () => BrickTestUtils.generateBrick(
+            brick,
+            testDir,
+            testCase['vars'] as Map<String, dynamic>,
+          ),
             throwsA(isA<ArgumentError>()),
             reason: '${testCase['name']} should fail with ArgumentError',
           );
