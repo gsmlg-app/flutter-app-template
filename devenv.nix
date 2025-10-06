@@ -15,13 +15,10 @@ in
     pkgs-stable.inotify-tools
   ];
 
-  languages.dart = {
-    enable = true;
-  };
-
   android = {
     enable = true;
     flutter.enable = true;
+    flutter.package = pkgs-unstable.flutter;
   };
 
   scripts.hello.exec = ''
