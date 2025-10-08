@@ -26,21 +26,17 @@ class {{name.pascalCase()}}FieldChanged extends {{name.pascalCase()}}FormEvent {
   List<Object?> get props => [field, value];
 }
 
-{{#if has_submission}}
 /// Event triggered when the form is submitted
 class {{name.pascalCase()}}FormSubmitted extends {{name.pascalCase()}}FormEvent {
   /// {@macro {{name.snakeCase()}}_form_submitted}
   const {{name.pascalCase()}}FormSubmitted();
 }
-{{/if}}
 
-{{#if has_validation}}
 /// Event triggered when form validation should be performed
 class {{name.pascalCase()}}FormValidated extends {{name.pascalCase()}}FormEvent {
   /// {@macro {{name.snakeCase()}}_form_validated}
   const {{name.pascalCase()}}FormValidated();
 }
-{{/if}}
 
 /// Event triggered when the form is reset
 class {{name.pascalCase()}}FormReset extends {{name.pascalCase()}}FormEvent {
