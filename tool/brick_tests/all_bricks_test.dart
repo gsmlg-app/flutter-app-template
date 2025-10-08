@@ -1,4 +1,5 @@
 import 'api_client_test.dart' as api_client_tests;
+import 'form_bloc_test.dart' as form_bloc_tests;
 import 'repository_test.dart' as repository_tests;
 import 'simple_bloc_test.dart' as simple_bloc_tests;
 import 'performance_test.dart' as performance_tests;
@@ -25,6 +26,10 @@ void main() {
   api_client_tests.main();
   print('✅ API Client Brick tests completed\n');
 
+  print('📝 Testing Form BLoC Brick...');
+  form_bloc_tests.main();
+  print('✅ Form BLoC Brick tests completed\n');
+
   print('📦 Testing Repository Brick...');
   repository_tests.main();
   print('✅ Repository Brick tests completed\n');
@@ -45,7 +50,7 @@ void main() {
 
   print('🎉 All mason brick tests completed successfully!');
   print('\n📊 Test Summary:');
-  print('   • Unit Tests: API Client, Repository, Simple BLoC');
+  print('   • Unit Tests: API Client, Form BLoC, Repository, Simple BLoC');
   print('   • Performance Tests: Generation speed, memory usage');
   print('   • Integration Tests: Cross-brick compatibility, workflow');
   print('\n✨ All bricks are working correctly and efficiently!');

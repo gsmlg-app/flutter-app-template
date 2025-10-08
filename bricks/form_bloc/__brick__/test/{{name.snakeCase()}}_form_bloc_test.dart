@@ -41,7 +41,6 @@ void main() {
       );
     });
 
-    {{#if has_validation}}
     group('form validation', () {
       blocTest<{{name.pascalCase()}}FormBloc, {{name.pascalCase()}}FormState>(
         'emits validating state when validation is triggered',
@@ -53,9 +52,7 @@ void main() {
         ],
       );
     });
-    {{/if}}
 
-    {{#if has_submission}}
     group('form submission', () {
       blocTest<{{name.pascalCase()}}FormBloc, {{name.pascalCase()}}FormState>(
         'emits inProgress and success when form is submitted successfully',
@@ -67,7 +64,6 @@ void main() {
         ],
       );
     });
-    {{/if}}
 
     group('form reset', () {
       blocTest<{{name.pascalCase()}}FormBloc, {{name.pascalCase()}}FormState>(

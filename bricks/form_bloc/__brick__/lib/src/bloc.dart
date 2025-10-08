@@ -11,12 +11,8 @@ class {{name.pascalCase()}}FormBloc extends Bloc<{{name.pascalCase()}}FormEvent,
   /// {@macro {{name.snakeCase()}}_form_bloc}
   {{name.pascalCase()}}FormBloc() : super(const {{name.pascalCase()}}FormState()) {
     on<{{name.pascalCase()}}FieldChanged>(_onFieldChanged);
-    {{#if has_submission}}
     on<{{name.pascalCase()}}FormSubmitted>(_onFormSubmitted);
-    {{/if}}
-    {{#if has_validation}}
     on<{{name.pascalCase()}}FormValidated>(_onFormValidated);
-    {{/if}}
     on<{{name.pascalCase()}}FormReset>(_onFormReset);
   }
 
@@ -35,13 +31,10 @@ class {{name.pascalCase()}}FormBloc extends Bloc<{{name.pascalCase()}}FormEvent,
         emit(state);
     }
     
-    {{#if has_validation}}
     // Trigger validation after field change
     add(const {{name.pascalCase()}}FormValidated());
-    {{/if}}
   }
 
-  {{#if has_submission}}
   void _onFormSubmitted(
     {{name.pascalCase()}}FormSubmitted event,
     Emitter<{{name.pascalCase()}}FormState> emit,
@@ -60,9 +53,7 @@ class {{name.pascalCase()}}FormBloc extends Bloc<{{name.pascalCase()}}FormEvent,
       ));
     }
   }
-  {{/if}}
 
-  {{#if has_validation}}
   void _onFormValidated(
     {{name.pascalCase()}}FormValidated event,
     Emitter<{{name.pascalCase()}}FormState> emit,
@@ -74,7 +65,6 @@ class {{name.pascalCase()}}FormBloc extends Bloc<{{name.pascalCase()}}FormEvent,
     
     emit(state.copyWith(status: FormBlocStatus.initial));
   }
-  {{/if}}
 
   void _onFormReset(
     {{name.pascalCase()}}FormReset event,
@@ -83,7 +73,6 @@ class {{name.pascalCase()}}FormBloc extends Bloc<{{name.pascalCase()}}FormEvent,
     emit(const {{name.pascalCase()}}FormState());
   }
 
-  {{#if has_submission}}
   /// Helper method to get form data as a map
   Map<String, String?> getFormData() {
     return {
@@ -91,5 +80,4 @@ class {{name.pascalCase()}}FormBloc extends Bloc<{{name.pascalCase()}}FormEvent,
       'password': state.password,
     };
   }
-  {{/if}}
 }

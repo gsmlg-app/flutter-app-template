@@ -17,13 +17,3 @@ vars:
     description: Output directory for the form bloc
     default: app_bloc
     prompt: Where should the form bloc be created?
-  has_submission:
-    type: boolean
-    description: Include form submission logic
-    default: true
-    prompt: Include form submission logic?
-  has_validation:
-    type: boolean
-    description: Include field validation
-    default: true
-    prompt: Include field validation?
