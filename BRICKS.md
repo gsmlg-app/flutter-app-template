@@ -122,7 +122,98 @@ mason make simple_bloc --name BlocName
 
 ---
 
-### 4. Form BLoC Brick (`form_bloc`)
+### 4. List BLoC Brick (`list_bloc`)
+Creates a comprehensive list BLoC package with advanced features including schema management, pagination, search, filtering, reordering, and individual item state tracking.
+
+**Usage:**
+```bash
+mason make list_bloc --name ListName [options]
+```
+
+**Variables:**
+- `name` (required): List name (e.g., "Users", "Products", "Tasks")
+- `item_type` (default: "User"): Type of items in the list (singular form)
+- `has_pagination` (default: true): Include pagination support
+- `has_search` (default: true): Include search functionality
+- `has_filters` (default: true): Include advanced filtering
+- `has_reorder` (default: false): Include drag & drop reordering
+- `has_crud` (default: true): Include CRUD operations
+- `filter_types` (default: ["category", "status"]): Types of filters to include
+- `sort_options` (default: ["name", "date"]): Available sort options
+- `output_directory` (default: "app_bloc"): Where to create the bloc package
+
+**Examples:**
+```bash
+# Complete feature list for users
+mason make list_bloc --name Users --item_type User --has_pagination true --has_search true --has_filters true --has_reorder true
+
+# Simple product list without pagination
+mason make list_bloc --name Products --item_type Product --has_pagination false --has_search false --has_filters false
+
+# Task list with basic features
+mason make list_bloc --name Tasks --item_type Task --has_crud true --filter_types "status,priority"
+```
+
+**Generated Structure:**
+```
+{output_directory}/{name}_list_bloc/
+├── lib/
+│   ├── src/
+│   │   ├── bloc.dart (main BLoC implementation)
+│   │   ├── event.dart (comprehensive event definitions)
+│   │   ├── state.dart (enhanced state with schema and item tracking)
+│   │   ├── schema.dart (field and list schema models)
+│   │   └── item_state.dart (individual item state tracking)
+│   └── {name}_list_bloc.dart (export file)
+├── test/
+│   └── {name}_list_bloc_test.dart (comprehensive test suite)
+├── hooks/
+│   └── post_gen.dart (post-generation hook)
+├── README.md (detailed usage documentation)
+├── pubspec.yaml (dependencies include bloc, flutter_bloc, equatable)
+└── brick.yaml
+```
+
+**Features:**
+- **Schema Management**: Dynamic field configuration with visibility, sorting, and filtering
+- **Individual Item States**: Track updating, removing, selecting, expanding, editing per item
+- **Optimistic Updates**: Immediate UI feedback during CRUD operations
+- **Pagination Support**: Efficient loading of large datasets
+- **Real-time Search**: Debounced search with loading states
+- **Advanced Filtering**: Multiple filter types with AND/OR logic
+- **Drag & Drop Reordering**: Manual item reordering with position persistence
+- **Batch Operations**: Multi-select with batch delete/update capabilities
+- **Multiple Display Modes**: List, grid, table, and card layouts
+- **Comprehensive Error Handling**: Per-item error states with recovery
+- **Full Test Coverage**: Complete test suite for all functionality
+
+**Usage in UI:**
+```dart
+// Create and provide the BLoC
+BlocProvider(
+  create: (context) => UserListBloc(),
+  child: UserListView(),
+)
+
+// Initialize the list
+context.read<UserListBloc>().add(UserListEventInitialize());
+
+// Search functionality
+context.read<UserListBloc>().add(UserListEventSearch('john'));
+
+// Filter items
+context.read<UserListBloc>().add(UserListEventSetFilter('status', 'active'));
+
+// Select items
+context.read<UserListBloc>().add(UserListEventSelectItem('user-123', true));
+
+// Batch operations
+context.read<UserListBloc>().add(UserListEventBatchDelete(['user-1', 'user-2']));
+```
+
+---
+
+### 5. Form BLoC Brick (`form_bloc`)
 Creates a complete form BLoC package with validation and submission logic using the existing `form_bloc` and `flutter_form_bloc` packages.
 
 **Usage:**
@@ -219,7 +310,108 @@ BlocProvider(
 
 ---
 
-### 5. Repository Brick (`repository`)
+### 6. List BLoC Brick (`list_bloc`)
+Creates a comprehensive list management BLoC with advanced features like pagination, search, filtering, and individual item state tracking.
+
+**Usage:**
+```bash
+mason make list_bloc --name ListName [options]
+```
+
+**Variables:**
+- `name` (required): List name (e.g., "Users", "Products", "Tasks")
+- `item_type` (required): Type of items in the list (e.g., "User", "Product", "Task")
+- `has_pagination` (default: false): Enable pagination support
+- `has_search` (default: false): Enable search functionality
+- `has_filters` (default: false): Enable filtering capabilities
+- `has_reorder` (default: false): Enable drag-and-drop reordering
+- `has_crud` (default: false): Enable create/update/delete operations
+- `has_batch_operations` (default: false): Enable batch operations
+- `has_multi_select` (default: false): Enable multi-selection mode
+
+**Generated Structure:**
+```
+{output_directory}/{name}_list_bloc/
+├── lib/
+│   ├── src/
+│   │   ├── bloc.dart (main BLoC implementation)
+│   │   ├── event.dart (event definitions)
+│   │   ├── state.dart (state management)
+│   │   ├── schema.dart (field and list schema)
+│   │   └── item_state.dart (individual item tracking)
+│   └── {name}_list_bloc.dart (export file)
+├── test/
+│   └── {name}_list_bloc_test.dart (comprehensive test suite)
+├── hooks/
+│   └── post_gen.dart (post-generation hook)
+├── README.md (usage documentation)
+├── pubspec.yaml (dependencies include bloc, flutter_bloc, equatable)
+└── brick.yaml
+```
+
+**Features:**
+- **Schema Management**: Dynamic field configuration with visibility, sorting, and filtering
+- **Individual Item States**: Track updating/removing/selecting/expanding/editing per item
+- **Optional Features**: Pagination, search, filters, reordering, CRUD operations (all configurable)
+- **Advanced Operations**: Batch operations, multi-select, optimistic updates
+- **State Management**: Comprehensive states (initial, loading, loaded, error)
+- **Error Handling**: Per-item error states with recovery options
+
+**Usage Example:**
+```dart
+// Create the BLoC
+BlocProvider(
+  create: (context) => UsersListBloc(
+    repository: context.read<UserRepository>(),
+  ),
+  child: Builder(
+    builder: (context) {
+      final listBloc = context.read<UsersListBloc>();
+      
+      return BlocBuilder<UsersListBloc, UsersListState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              // Search bar (if enabled)
+              if (listBloc.schema.hasSearch)
+                TextField(
+                  onChanged: (query) => listBloc.add(
+                    UsersListEventSearchQueryChanged(query),
+                  ),
+                ),
+              
+              // Items list
+              ListView.builder(
+                itemCount: state.items.length,
+                itemBuilder: (context, index) {
+                  final item = state.items[index];
+                  final itemState = state.itemStates[item.id] ?? ItemState();
+                  
+                  return ListTile(
+                    title: Text(item.name),
+                    trailing: itemState.isUpdating
+                        ? CircularProgressIndicator()
+                        : IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () => listBloc.add(
+                              UsersListEventItemRemoved(item.id),
+                            ),
+                          ),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      );
+    },
+  ),
+)
+```
+
+---
+
+### 7. Repository Brick (`repository`)
 Creates a complete repository pattern implementation with data sources and models.
 
 **Usage:**
@@ -235,7 +427,7 @@ mason make repository --name RepositoryName [options]
 
 ---
 
-### 6. API Client Brick (`api_client`)
+### 8. API Client Brick (`api_client`)
 Generates a complete API client package from OpenAPI/Swagger specifications.
 
 **Usage:**
