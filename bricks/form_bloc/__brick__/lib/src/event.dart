@@ -1,40 +1,49 @@
 part of 'bloc.dart';
 
 /// {@template {{name.snakeCase()}}_form_event}
-/// Base class for all {{name.pascalCase()}} form events.
+/// {{name.pascalCase()}}FormEvent represents events that can occur in the {{name.sentenceCase()}} form.
 /// {@endtemplate}
-sealed class {{name.pascalCase()}}FormEvent {
+abstract class {{name.pascalCase()}}FormEvent extends Equatable {
   /// {@macro {{name.snakeCase()}}_form_event}
   const {{name.pascalCase()}}FormEvent();
+
+  @override
+  List<Object?> get props => [];
 }
 
-{% if has_submission %}
-/// {@template {{name.snakeCase()}}_form_event_submitted}
-/// Event to submit the {{name.pascalCase()}} form.
-/// {@endtemplate}
-final class {{name.pascalCase()}}FormEventSubmitted extends {{name.pascalCase()}}FormEvent {
-  /// {@macro {{name.snakeCase()}}_form_event_submitted}
-  const {{name.pascalCase()}}FormEventSubmitted();
-}
-{% endif %}
+/// Event triggered when a form field value changes
+class {{name.pascalCase()}}FieldChanged extends {{name.pascalCase()}}FormEvent {
+  /// {@macro {{name.snakeCase()}}_field_changed}
+  const {{name.pascalCase()}}FieldChanged(this.field, this.value);
 
-/// {@template {{name.snakeCase()}}_form_event_reset}
-/// Event to reset the {{name.pascalCase()}} form.
-/// {@endtemplate}
-final class {{name.pascalCase()}}FormEventReset extends {{name.pascalCase()}}FormEvent {
-  /// {@macro {{name.snakeCase()}}_form_event_reset}
-  const {{name.pascalCase()}}FormEventReset();
+  /// The field name that changed
+  final String field;
+
+  /// The new value for the field
+  final String value;
+
+  @override
+  List<Object?> get props => [field, value];
 }
 
-{% for field in field_names %}
-/// {@template {{name.snakeCase()}}_form_event_{{field.snakeCase()}}_changed}
-/// Event when {{field}} field value changes.
-/// {@endtemplate}
-final class {{name.pascalCase()}}FormEvent{{field.pascalCase()}}Changed extends {{name.pascalCase()}}FormEvent {
-  /// {@macro {{name.snakeCase()}}_form_event_{{field.snakeCase()}}_changed}
-  const {{name.pascalCase()}}FormEvent{{field.pascalCase()}}Changed(this.{{field}});
-
-  /// The new {{field}} value
-  final String {{field}};
+{{#if has_submission}}
+/// Event triggered when the form is submitted
+class {{name.pascalCase()}}FormSubmitted extends {{name.pascalCase()}}FormEvent {
+  /// {@macro {{name.snakeCase()}}_form_submitted}
+  const {{name.pascalCase()}}FormSubmitted();
 }
-{% endfor %}
+{{/if}}
+
+{{#if has_validation}}
+/// Event triggered when form validation should be performed
+class {{name.pascalCase()}}FormValidated extends {{name.pascalCase()}}FormEvent {
+  /// {@macro {{name.snakeCase()}}_form_validated}
+  const {{name.pascalCase()}}FormValidated();
+}
+{{/if}}
+
+/// Event triggered when the form is reset
+class {{name.pascalCase()}}FormReset extends {{name.pascalCase()}}FormEvent {
+  /// {@macro {{name.snakeCase()}}_form_reset}
+  const {{name.pascalCase()}}FormReset();
+}

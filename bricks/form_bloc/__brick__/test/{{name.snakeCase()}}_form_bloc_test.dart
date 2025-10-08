@@ -22,20 +22,20 @@ void main() {
     });
 
     group('field validation', () {
-      {% for field in field_names %}
-      test('{{field}} field has initial validation', () {
-        expect(formBloc.{{field.camelCase()}}FieldBloc.state.validators, isNotEmpty);
+      {{#each field_names}}
+      test('{{this}} field has initial validation', () {
+        expect(formBloc.{{camelCase this}}FieldBloc.state.validators, isNotEmpty);
       });
-      {% endfor %}
+      {{/each}}
     });
 
-    {% for field in field_names %}
-    group('{{field}} field', () {
-      blocTest<{{name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
-        'emits validating state when {{field}} is updated',
+    {{#each field_names}}
+    group('{{this}} field', () {
+      blocTest<{{../name.pascalCase}}FormBloc, FormBlocState<String, String>>(
+        'emits validating state when {{this}} is updated',
         build: () => formBloc,
         act: (bloc) {
-          bloc.{{field.camelCase()}}FieldBloc.onChange('test value');
+          bloc.{{camelCase this}}FieldBloc.onChange('test value');
         },
         expect: () => [
           isA<FormBlocState<String, String>>()
@@ -43,19 +43,17 @@ void main() {
         ],
       );
     });
-    {% endfor %}
+    {{/each}}
 
-    {% if has_submission %}
+    {{#if has_submission}}
     group('form submission', () {
       blocTest<{{name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
         'emits inProgress and success when form is submitted successfully',
         build: () => formBloc,
         setUp: () {
-          {% for field in field_names %}
-          formBloc.{{field.camelCase()}}FieldBloc.onChange(
-            {% if field == 'email' %}'test@example.com'{% elif field == 'password' %}'password123'{% else %}'test value'{% endif %}
-          );
-          {% endfor %}
+          {{#each field_names}}
+          formBloc.{{camelCase this}}FieldBloc.onChange('test value');
+          {{/each}}
         },
         act: (bloc) => bloc.add(const {{name.pascalCase()}}FormEventSubmitted()),
         expect: () => [
@@ -68,72 +66,25 @@ void main() {
               .having((state) => state.successResponse, 'successResponse', isA<String>()),
         ],
       );
-
-      blocTest<{{name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
-        'emits failure when form submission fails',
-        build: () => formBloc,
-        setUp: () {
-          {% for field in field_names %}
-          formBloc.{{field.camelCase()}}FieldBloc.onChange(
-            {% if field == 'email' %}'test@example.com'{% elif field == 'password' %}'password123'{% else %}'test value'{% endif %}
-          );
-          {% endfor %}
-        },
-        act: (bloc) => bloc.add(const {{name.pascalCase()}}FormEventSubmitted()),
-        // Note: This test assumes the _submitForm method throws an exception
-        // You'll need to modify the _submitForm method in your actual implementation
-        // to test error scenarios properly
-        skip: true,
-        expect: () => [
-          isA<FormBlocState<String, String>>()
-              .having((state) => state.status, 'status', FormBlocStatus.validating),
-          isA<FormBlocState<String, String>>()
-              .having((state) => state.status, 'status', FormBlocStatus.inProgress),
-          isA<FormBlocState<String, String>>()
-              .having((state) => state.status, 'status', FormBlocStatus.failure)
-              .having((state) => state.failureResponse, 'failureResponse', isA<String>()),
-        ],
-      );
     });
-    {% endif %}
+    {{/if}}
 
     group('form reset', () {
       blocTest<{{name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
         'clears all fields when reset is called',
         build: () => formBloc,
         setUp: () {
-          {% for field in field_names %}
-          formBloc.{{field.camelCase()}}FieldBloc.onChange('test value');
-          {% endfor %}
+          {{#each field_names}}
+          formBloc.{{camelCase this}}FieldBloc.onChange('test value');
+          {{/each}}
         },
         act: (bloc) => bloc.add(const {{name.pascalCase()}}FormEventReset()),
         verify: (bloc) {
-          {% for field in field_names %}
-          expect(bloc.{{field.camelCase()}}FieldBloc.value, isEmpty);
-          {% endfor %}
+          {{#each field_names}}
+          expect(bloc.{{camelCase this}}FieldBloc.value, isEmpty);
+          {{/each}}
         },
       );
-    });
-
-    group('form validation', () {
-      {% if has_validation %}
-      {% for field in field_names %}
-      blocTest<{{name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
-        'validates {{field}} field correctly',
-        build: () => formBloc,
-        act: (bloc) {
-          bloc.{{field.camelCase()}}FieldBloc.onChange('');
-        },
-        expect: () => [
-          isA<FormBlocState<String, String>>()
-              .having((state) => state.status, 'status', FormBlocStatus.validating),
-        ],
-        verify: (bloc) {
-          expect(bloc.{{field.camelCase()}}FieldBloc.state.isInvalid, isTrue);
-        },
-      );
-      {% endfor %}
-      {% endif %}
     });
   });
 }

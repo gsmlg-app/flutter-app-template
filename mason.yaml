@@ -1,6 +1,8 @@
 bricks:
   api_client:
     path: bricks/api_client
+  form_bloc:
+    path: bricks/form_bloc
   simple_bloc:
     path: bricks/simple_bloc
   list_bloc:

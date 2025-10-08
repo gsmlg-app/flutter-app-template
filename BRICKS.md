@@ -214,7 +214,7 @@ context.read<UserListBloc>().add(UserListEventBatchDelete(['user-1', 'user-2']))
 ---
 
 ### 5. Form BLoC Brick (`form_bloc`)
-Creates a complete form BLoC package with validation and submission logic using the existing `form_bloc` and `flutter_form_bloc` packages.
+Creates a form BLoC package with validation and submission logic for managing form state.
 
 **Usage:**
 ```bash
@@ -224,20 +224,16 @@ mason make form_bloc --name FormName [options]
 **Variables:**
 - `name` (required): Form name (e.g., "Login", "Registration", "Profile")
 - `output_directory` (default: "app_bloc"): Where to create the bloc package
-- `field_names` (default: ["email", "password"]): List of form field names (comma-separated)
 - `has_submission` (default: true): Include form submission logic
 - `has_validation` (default: true): Include field validation
 
 **Examples:**
 ```bash
-# Basic login form with email and password
+# Basic login form with email and password fields
 mason make form_bloc --name Login
 
-# Registration form with additional fields
-mason make form_bloc --name Registration --field_names "email,password,confirmPassword,firstName,lastName"
-
-# Contact form without submission logic (just validation)
-mason make form_bloc --name Contact --field_names "name,email,message" --has_submission false
+# Form with only validation (no submission logic)
+mason make form_bloc --name Contact --has_submission false
 ```
 
 **Generated Structure:**
@@ -245,32 +241,30 @@ mason make form_bloc --name Contact --field_names "name,email,message" --has_sub
 {output_directory}/{name}_form_bloc/
 ├── lib/
 │   ├── src/
-│   │   ├── bloc.dart (main FormBloc implementation)
-│   │   ├── event.dart (form events: submit, reset, field changes)
-│   │   └── state.dart (form state and status enum)
+│   │   ├── bloc.dart (main BLoC implementation)
+│   │   ├── event.dart (form events: field changes, submit, reset, validate)
+│   │   └── state.dart (form state with email/password fields and status enum)
 │   └── {name}_form_bloc.dart (export file)
 ├── test/
-│   └── {name}_form_bloc_test.dart (comprehensive test suite)
-├── hooks/
-│   └── post_gen.dart (post-generation hook)
-├── README.md (usage documentation)
-├── pubspec.yaml (dependencies include form_bloc, flutter_form_bloc)
+│   └── {name}_form_bloc_test.dart (test suite)
+├── pubspec.yaml (dependencies include bloc, equatable)
 └── brick.yaml
 ```
 
 **Features:**
-- **Field Validation**: Built-in validators for common field types (email, password, required)
-- **Form Submission**: Async submission with loading, success, and error states
-- **Field Management**: Dynamic field addition with proper type handling
-- **Error Handling**: Comprehensive error handling with user-friendly messages
-- **Test Coverage**: Full test suite covering validation, submission, and error scenarios
-- **Integration Ready**: Works seamlessly with existing `flutter_form_bloc` widgets
+- **Form State Management**: Manages email and password field states
+- **Event Handling**: Field changes, form submission, validation, and reset events
+- **Status Tracking**: Initial, validating, inProgress, success, and failure states
+- **Error Handling**: Error state management for failed submissions
+- **Conditional Logic**: Optional submission and validation based on configuration
+- **Test Ready**: Includes test file structure for comprehensive testing
 
-**Smart Field Detection:**
-- `email` fields get email validation
-- `password` fields get password length validation
-- All fields get required field validation by default
-- Custom validators can be added after generation
+**Default Fields:**
+- `email`: Email field with nullable string type
+- `password`: Password field with nullable string type
+
+**Usage in UI:**
+```dart
 
 **Usage in UI:**
 ```dart
