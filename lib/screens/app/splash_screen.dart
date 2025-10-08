@@ -20,12 +20,9 @@ class SplashScreen extends StatelessWidget {
       w = screenHeight;
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Timer(
-        const Duration(milliseconds: 1_000),
-        () {
-          context.goNamed(HomeScreen.name);
-        },
-      );
+      Timer(const Duration(milliseconds: 1_000), () {
+        context.goNamed(HomeScreen.name);
+      });
     });
 
     return Scaffold(
@@ -39,9 +36,7 @@ class SplashScreen extends StatelessWidget {
               shape: BoxShape.rectangle,
               color: Theme.of(context).colorScheme.primary,
             ),
-            child: Center(
-              child: LogoGSMLGDEV(),
-            ),
+            child: Center(child: LogoGSMLGDEV()),
           ),
         ),
       ),

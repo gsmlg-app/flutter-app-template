@@ -7,8 +7,9 @@ import 'package:flutter_app_template/screens/settings/settings_screen.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
-  static final GlobalKey<NavigatorState> key =
-      GlobalKey<NavigatorState>(debugLabel: 'routerKey');
+  static final GlobalKey<NavigatorState> key = GlobalKey<NavigatorState>(
+    debugLabel: 'routerKey',
+  );
 
   static GoRouter router = GoRouter(
     navigatorKey: key,

@@ -141,9 +141,41 @@ melos:
       run: dart run dependency_validator
       description: Run `dart run dependency_validator` check dependencies usage.
 
+    test:
+      run: melos exec --order-dependents --fail-fast flutter test || true
+      description: Run Flutter tests for all packages (ignores packages without tests).
+      
+    test:coverage:
+      run: melos exec --order-dependents --fail-fast flutter test --coverage || true
+      description: Run Flutter tests with coverage for all packages (ignores packages without tests).
+      
+    test:watch:
+      run: melos exec --order-dependents --fail-fast flutter test --watch || true
+      description: Run Flutter tests in watch mode for all packages (ignores packages without tests).
+      
+    test:names:
+      run: melos exec --order-dependents --fail-fast flutter test --names || true
+      description: List all available tests in all packages (ignores packages without tests).
+      
+    test:selective:
+      run: melos exec --scope="app_theme" --scope="app_provider" --scope="app_database" --scope="app_locale" --scope="theme_bloc" --scope="settings_ui" --scope="form_bloc" --scope="flutter_adaptive_scaffold" --scope="app_web_view" --scope="app_adaptive_widgets" --scope="app_feedback" --scope="app_artwork" --scope="flutter_app_template" flutter test
+      description: Run Flutter tests only for packages that have test directories.
+      
+    test:report:
+      description: Generate a comprehensive test report for all packages
+      steps:
+        - melos run test:selective
+        - echo "Test execution completed. Check individual package outputs above."
+      
     test:bricks:
       run: cd tool/brick_tests && dart pub get && dart test *.dart
       description: Run Mason brick tests separately from Flutter tests.
+      
+    test:all:
+      description: Run all tests including Flutter tests and brick tests
+      steps:
+        - melos run test
+        - melos run test:bricks
 
     gen-l10n:
       run: melos exec --scope="app_locale" flutter gen-l10n

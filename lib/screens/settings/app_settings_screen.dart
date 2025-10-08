@@ -23,10 +23,7 @@ class AppSettingsScreen extends StatelessWidget {
         const Key(SettingsScreen.name),
         context,
       ),
-      onSelectedIndexChange: (idx) => Destinations.changeHandler(
-        idx,
-        context,
-      ),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs(context),
       body: (context) {
         final sharedPrefs = context.read<SharedPreferences>();
@@ -35,9 +32,7 @@ class AppSettingsScreen extends StatelessWidget {
         return SafeArea(
           child: CustomScrollView(
             slivers: <Widget>[
-              SliverAppBar(
-                title: Text(context.l10n.settingsTitle),
-              ),
+              SliverAppBar(title: Text(context.l10n.settingsTitle)),
               SliverFillRemaining(
                 child: BlocBuilder<ThemeBloc, ThemeState>(
                   builder: (context, state) {
@@ -54,8 +49,9 @@ class AppSettingsScreen extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              trailing:
-                                  appName == null ? Text('N/A') : Text(appName),
+                              trailing: appName == null
+                                  ? Text('N/A')
+                                  : Text(appName),
                               onPressed: (context) {
                                 showAppDialog(
                                   context: context,
@@ -66,17 +62,13 @@ class AppSettingsScreen extends StatelessWidget {
                                       onPressed: (context) {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text(
-                                        context.l10n.ok,
-                                      ),
+                                      child: Text(context.l10n.ok),
                                     ),
                                     AppDialogAction(
                                       onPressed: (context) {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text(
-                                        context.l10n.cancel,
-                                      ),
+                                      child: Text(context.l10n.cancel),
                                     ),
                                   ],
                                 );

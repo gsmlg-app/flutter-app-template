@@ -18,30 +18,18 @@ void main(List<String> args) async {
 
   // Initialize logging
   final logger = AppLogger();
-  logger.initialize(
-    level: LogLevel.debug,
-  );
+  logger.initialize(level: LogLevel.debug);
   final directory = Directory(
-    path.join(
-      applicationSupportDirectory.path,
-      'appName',
-    ),
+    path.join(applicationSupportDirectory.path, 'appName'),
   );
   await directory.create(recursive: true);
   final logFile = File(
-    path.join(
-      applicationSupportDirectory.path,
-      'appName',
-      'app.log',
-    ),
+    path.join(applicationSupportDirectory.path, 'appName', 'app.log'),
   );
   logger.logStream.listen((record) {
     final log =
         '${record.loggerName} ${record.level.name} [${record.time}]: ${record.message}';
-    logFile.writeAsString(
-      log,
-      mode: FileMode.append,
-    );
+    logFile.writeAsString(log, mode: FileMode.append);
   });
   // Use logger
   logger.i('App started');
@@ -57,9 +45,7 @@ void main(List<String> args) async {
         debugShowCheckedModeBanner: false,
         localizationsDelegates: AppLocale.localizationsDelegates,
         supportedLocales: AppLocale.supportedLocales,
-        home: CrashReportingWidget(
-          child: const App(),
-        ),
+        home: CrashReportingWidget(child: const App()),
       ),
     ),
   );

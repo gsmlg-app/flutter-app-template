@@ -21,49 +21,39 @@ void main() {
       // 1. Generate API Client
       final apiClientDir = Directory(path.join(projectDir.path, 'api_client'));
       await apiClientDir.create(recursive: true);
-      
+
       final apiClientBrick = await BrickTestUtils.loadBrick(
         path.join('..', '..', 'bricks', 'api_client'),
       );
-      
-      await BrickTestUtils.generateBrick(
-        apiClientBrick,
-        apiClientDir,
-        {'package_name': 'user_api'},
-      );
+
+      await BrickTestUtils.generateBrick(apiClientBrick, apiClientDir, {
+        'package_name': 'user_api',
+      });
 
       // 2. Generate Repository
       final repositoryDir = Directory(path.join(projectDir.path, 'repository'));
       await repositoryDir.create(recursive: true);
-      
+
       final repositoryBrick = await BrickTestUtils.loadBrick(
         path.join('..', '..', 'bricks', 'repository'),
       );
-      
-      await BrickTestUtils.generateBrick(
-        repositoryBrick,
-        repositoryDir,
-        {
-          'name': 'user',
-          'has_remote_data_source': true,
-          'has_local_data_source': true,
-          'model_name': 'User',
-        },
-      );
+
+      await BrickTestUtils.generateBrick(repositoryBrick, repositoryDir, {
+        'name': 'user',
+        'has_remote_data_source': true,
+        'has_local_data_source': true,
+        'model_name': 'User',
+      });
 
       // 3. Generate BLoC
       final blocDir = Directory(path.join(projectDir.path, 'bloc'));
       await blocDir.create(recursive: true);
-      
+
       final blocBrick = await BrickTestUtils.loadBrick(
         path.join('..', '..', 'bricks', 'simple_bloc'),
       );
-      
-      await BrickTestUtils.generateBrick(
-        blocBrick,
-        blocDir,
-        {'name': 'user'},
-      );
+
+      await BrickTestUtils.generateBrick(blocBrick, blocDir, {'name': 'user'});
 
       // Verify all components exist
       final expectedComponents = [
@@ -115,24 +105,20 @@ void main() {
         final dir = brickConfig['dir'] as Directory;
         final brick = brickConfig['brick'] as Brick;
         final vars = brickConfig['vars'] as Map<String, dynamic>;
-        
+
         await dir.create(recursive: true);
-        await BrickTestUtils.generateBrick(
-          brick,
-          dir,
-          vars,
-        );
+        await BrickTestUtils.generateBrick(brick, dir, vars);
       }
 
       // Check for common dependencies that should be compatible
       final commonDeps = <String>{};
-      
+
       for (final brickConfig in bricks) {
         final pubspecContent = await BrickTestUtils.getFileContent(
           brickConfig['dir'] as Directory,
           'pubspec.yaml',
         );
-        
+
         // Extract dependency names (simplified)
         final depMatches = RegExp(r'^\s+\w+:').allMatches(pubspecContent);
         for (final match in depMatches) {
@@ -142,21 +128,26 @@ void main() {
       }
 
       // Verify no obvious conflicts (this is a simplified check)
-      expect(commonDeps.isNotEmpty, isTrue, reason: 'Should have common dependencies');
-      
+      expect(
+        commonDeps.isNotEmpty,
+        isTrue,
+        reason: 'Should have common dependencies',
+      );
+
       print('Common dependencies found: ${commonDeps.join(', ')}');
     });
 
     test('workspace integration simulation', () async {
       // Simulate a Melos workspace with multiple packages
       final workspacePackages = ['api', 'data', 'ui'];
-      
+
       for (final package in workspacePackages) {
         final packageDir = Directory(path.join(projectDir.path, package));
         await packageDir.create(recursive: true);
-        
+
         // Create a basic pubspec.yaml for the workspace package
-        final pubspecContent = '''
+        final pubspecContent =
+            '''
 name: ${package}_package
 version: 1.0.0
 publish_to: "none"
@@ -169,9 +160,10 @@ dependencies:
   flutter:
     sdk: flutter
 ''';
-        
-        await File(path.join(packageDir.path, 'pubspec.yaml'))
-            .writeAsString(pubspecContent);
+
+        await File(
+          path.join(packageDir.path, 'pubspec.yaml'),
+        ).writeAsString(pubspecContent);
       }
 
       // Generate bricks in appropriate packages
@@ -179,7 +171,7 @@ dependencies:
       final apiClientBrick = await BrickTestUtils.loadBrick(
         path.join('..', '..', 'bricks', 'api_client'),
       );
-      
+
       await BrickTestUtils.generateBrick(
         apiClientBrick,
         Directory(path.join(projectDir.path, 'api')),
@@ -190,7 +182,7 @@ dependencies:
       final repositoryBrick = await BrickTestUtils.loadBrick(
         path.join('..', '..', 'bricks', 'repository'),
       );
-      
+
       await BrickTestUtils.generateBrick(
         repositoryBrick,
         Directory(path.join(projectDir.path, 'data')),
@@ -206,7 +198,7 @@ dependencies:
       final blocBrick = await BrickTestUtils.loadBrick(
         path.join('..', '..', 'bricks', 'simple_bloc'),
       );
-      
+
       await BrickTestUtils.generateBrick(
         blocBrick,
         Directory(path.join(projectDir.path, 'ui')),
@@ -225,52 +217,48 @@ dependencies:
 
       for (final file in workspaceFiles) {
         final filePath = File(path.join(projectDir.path, file));
-        expect(await filePath.exists(), isTrue, reason: 'Workspace file $file should exist');
+        expect(
+          await filePath.exists(),
+          isTrue,
+          reason: 'Workspace file $file should exist',
+        );
       }
     });
 
     test('cross-brick type compatibility', () async {
       // Test that types from different bricks can work together
-      
+
       // Generate repository with User model
       final repositoryDir = Directory(path.join(projectDir.path, 'repository'));
       await repositoryDir.create(recursive: true);
-      
+
       final repositoryBrick = await BrickTestUtils.loadBrick(
         path.join('..', '..', 'bricks', 'repository'),
       );
-      
-      await BrickTestUtils.generateBrick(
-        repositoryBrick,
-        repositoryDir,
-        {
-          'name': 'user',
-          'has_remote_data_source': true,
-          'has_local_data_source': true,
-          'model_name': 'User',
-        },
-      );
+
+      await BrickTestUtils.generateBrick(repositoryBrick, repositoryDir, {
+        'name': 'user',
+        'has_remote_data_source': true,
+        'has_local_data_source': true,
+        'model_name': 'User',
+      });
 
       // Generate BLoC that could use the User model
       final blocDir = Directory(path.join(projectDir.path, 'bloc'));
       await blocDir.create(recursive: true);
-      
+
       final blocBrick = await BrickTestUtils.loadBrick(
         path.join('..', '..', 'bricks', 'simple_bloc'),
       );
-      
-      await BrickTestUtils.generateBrick(
-        blocBrick,
-        blocDir,
-        {'name': 'user'},
-      );
+
+      await BrickTestUtils.generateBrick(blocBrick, blocDir, {'name': 'user'});
 
       // Verify that the generated types are compatible
       final userModelContent = await BrickTestUtils.getFileContent(
         repositoryDir,
         'lib/src/models/user_model.dart',
       );
-      
+
       final blocStateContent = await BrickTestUtils.getFileContent(
         blocDir,
         'lib/src/state.dart',
@@ -279,13 +267,13 @@ dependencies:
       // Check that both use Equatable (for compatibility)
       expect(userModelContent, contains('extends Equatable'));
       expect(blocStateContent, contains('extends Equatable'));
-      
+
       print('✅ Cross-brick type compatibility verified');
     });
 
     test('error handling integration', () async {
       // Test that error handling is consistent across bricks
-      
+
       final testCases = [
         {
           'name': 'empty_api_name',
@@ -308,20 +296,22 @@ dependencies:
       ];
 
       for (final testCase in testCases) {
-        final testDir = Directory(path.join(projectDir.path, testCase['name'] as String));
+        final testDir = Directory(
+          path.join(projectDir.path, testCase['name'] as String),
+        );
         await testDir.create(recursive: true);
-        
+
         final brick = await BrickTestUtils.loadBrick(
           path.join('..', '..', 'bricks', testCase['brick'] as String),
         );
 
         if (testCase['should_fail'] == true) {
           expect(
-          () => BrickTestUtils.generateBrick(
-            brick,
-            testDir,
-            testCase['vars'] as Map<String, dynamic>,
-          ),
+            () => BrickTestUtils.generateBrick(
+              brick,
+              testDir,
+              testCase['vars'] as Map<String, dynamic>,
+            ),
             throwsA(isA<ArgumentError>()),
             reason: '${testCase['name']} should fail with ArgumentError',
           );

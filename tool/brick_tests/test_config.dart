@@ -1,5 +1,5 @@
 /// Configuration for mason brick testing
-/// 
+///
 /// This file contains test configurations and expected values
 /// for validating generated brick output.
 
@@ -32,9 +32,7 @@ class BrickTestConfig {
   ];
 
   // Simple BLoC Brick Configuration
-  static const Map<String, dynamic> simpleBlocVars = {
-    'name': 'counter',
-  };
+  static const Map<String, dynamic> simpleBlocVars = {'name': 'counter'};
 
   static const List<String> simpleBlocExpectedFiles = [
     'pubspec.yaml',

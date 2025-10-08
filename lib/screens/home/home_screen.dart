@@ -21,10 +21,7 @@ class HomeScreen extends StatelessWidget {
 
     return AppAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(const Key(HomeScreen.name), context),
-      onSelectedIndexChange: (idx) => Destinations.changeHandler(
-        idx,
-        context,
-      ),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs(context),
       appBar: AppBar(
         title: Text(context.l10n.appName),
@@ -45,25 +42,18 @@ class HomeScreen extends StatelessWidget {
               child: Center(
                 child: Column(
                   children: [
-                    LaddingPageLottie(
-                      width: w * 0.382,
-                      height: w * 0.382,
-                    ),
+                    LaddingPageLottie(width: w * 0.382, height: w * 0.382),
                     Text(
                       context.l10n.welcomeHome,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer,
-                          ),
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                      ),
                     ),
                     Text(
                       '$screenWidth x $screenHeight',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer,
-                          ),
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                      ),
                     ),
                     TextButton(
                       onPressed: () {
@@ -72,8 +62,8 @@ class HomeScreen extends StatelessWidget {
                       child: Text(
                         'Throw Error',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: Theme.of(context).colorScheme.error,
-                            ),
+                          color: Theme.of(context).colorScheme.error,
+                        ),
                       ),
                     ),
                   ],
