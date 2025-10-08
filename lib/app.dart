@@ -25,20 +25,21 @@ class _AppState extends State<App> {
     final themeBloc = context.read<ThemeBloc>();
 
     return BlocBuilder<ThemeBloc, ThemeState>(
-        bloc: themeBloc,
-        builder: (context, state) {
-          final router = AppRouter.router;
-          return MaterialApp.router(
-            key: const Key('app'),
-            debugShowCheckedModeBanner: false,
-            routerConfig: router,
-            onGenerateTitle: (context) => context.l10n.appName,
-            theme: state.theme.lightTheme,
-            darkTheme: state.theme.darkTheme,
-            themeMode: state.themeMode,
-            localizationsDelegates: AppLocale.localizationsDelegates,
-            supportedLocales: AppLocale.supportedLocales,
-          );
-        });
+      bloc: themeBloc,
+      builder: (context, state) {
+        final router = AppRouter.router;
+        return MaterialApp.router(
+          key: const Key('app'),
+          debugShowCheckedModeBanner: false,
+          routerConfig: router,
+          onGenerateTitle: (context) => context.l10n.appName,
+          theme: state.theme.lightTheme,
+          darkTheme: state.theme.darkTheme,
+          themeMode: state.themeMode,
+          localizationsDelegates: AppLocale.localizationsDelegates,
+          supportedLocales: AppLocale.supportedLocales,
+        );
+      },
+    );
   }
 }

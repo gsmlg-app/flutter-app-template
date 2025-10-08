@@ -1,6 +1,1 @@
-enum ErrorSeverity {
-  low,
-  medium,
-  high,
-  critical,
-}
+enum ErrorSeverity { low, medium, high, critical }

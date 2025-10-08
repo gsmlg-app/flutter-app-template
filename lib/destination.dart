@@ -8,10 +8,11 @@ class Destinations {
   static List<NavigationDestination> navs(BuildContext context) =>
       <NavigationDestination>[
         NavigationDestination(
-            key: const Key(HomeScreen.name),
-            icon: const Icon(Icons.home_outlined),
-            selectedIcon: const Icon(Icons.home),
-            label: context.l10n.navHome),
+          key: const Key(HomeScreen.name),
+          icon: const Icon(Icons.home_outlined),
+          selectedIcon: const Icon(Icons.home),
+          label: context.l10n.navHome,
+        ),
         NavigationDestination(
           key: const Key(SettingsScreen.name),
           icon: const Icon(Icons.settings_outlined),

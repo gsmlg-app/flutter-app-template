@@ -13,10 +13,10 @@ class ErrorHandler {
 
   void initialize() {
     _logger = logging.Logger('AppErrorHandler');
-    
+
     // Set up global error handling
     _errorService.setupGlobalErrorHandler();
-    
+
     // Configure logging levels
     logging.Logger.root.level = logging.Level.ALL;
     logging.Logger.root.onRecord.listen((record) {

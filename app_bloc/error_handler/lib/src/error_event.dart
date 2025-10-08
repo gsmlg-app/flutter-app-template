@@ -48,4 +48,3 @@ class ErrorRecovered extends ErrorEvent {
   @override
   List<Object?> get props => [errorId];
 }
-

@@ -20,8 +20,9 @@ void main(List<String> args) async {
   }
 
   final brickPath = '../../bricks/$brickName';
-  
-  final testContent = '''import 'package:test/test.dart';
+
+  final testContent =
+      '''import 'package:test/test.dart';
 import 'package:mason/mason.dart';
 import 'dart:io';
 import 'test_utils.dart';

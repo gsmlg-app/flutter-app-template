@@ -20,10 +20,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(const Key(name), context),
-      onSelectedIndexChange: (idx) => Destinations.changeHandler(
-        idx,
-        context,
-      ),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs(context),
       body: (context) {
         final themeBloc = context.read<ThemeBloc>();
@@ -33,9 +30,7 @@ class SettingsScreen extends StatelessWidget {
         return SafeArea(
           child: CustomScrollView(
             slivers: <Widget>[
-              SliverAppBar(
-                title: Text(context.l10n.settingsTitle),
-              ),
+              SliverAppBar(title: Text(context.l10n.settingsTitle)),
               SliverFillRemaining(
                 child: BlocBuilder<ThemeBloc, ThemeState>(
                   bloc: themeBloc,
@@ -69,30 +64,28 @@ class SettingsScreen extends StatelessWidget {
                                       title: ThemeMode.light.icon,
                                       onTap: () {
                                         context.read<ThemeBloc>().add(
-                                              const ChangeThemeMode(
-                                                ThemeMode.light,
-                                              ),
-                                            );
+                                          const ChangeThemeMode(
+                                            ThemeMode.light,
+                                          ),
+                                        );
                                       },
                                     ),
                                     BottomSheetAction(
                                       title: ThemeMode.dark.icon,
                                       onTap: () {
                                         context.read<ThemeBloc>().add(
-                                              const ChangeThemeMode(
-                                                ThemeMode.dark,
-                                              ),
-                                            );
+                                          const ChangeThemeMode(ThemeMode.dark),
+                                        );
                                       },
                                     ),
                                     BottomSheetAction(
                                       title: ThemeMode.system.icon,
                                       onTap: () {
                                         context.read<ThemeBloc>().add(
-                                              const ChangeThemeMode(
-                                                ThemeMode.system,
-                                              ),
-                                            );
+                                          const ChangeThemeMode(
+                                            ThemeMode.system,
+                                          ),
+                                        );
                                       },
                                     ),
                                   ],
@@ -103,86 +96,91 @@ class SettingsScreen extends StatelessWidget {
                               leading: const Icon(Icons.format_paint),
                               title: Text(context.l10n.accentColor),
                               value: SizedBox(
-                                width: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .fontSize! *
+                                width:
+                                    Theme.of(
+                                      context,
+                                    ).textTheme.bodyLarge!.fontSize! *
                                     6,
-                                height: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .fontSize,
+                                height: Theme.of(
+                                  context,
+                                ).textTheme.bodyLarge!.fontSize,
                                 child: Row(
                                   children: [
                                     Expanded(
                                       child: Container(
-                                        height: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge!
-                                            .fontSize,
+                                        height: Theme.of(
+                                          context,
+                                        ).textTheme.bodyLarge!.fontSize,
                                         decoration: BoxDecoration(
                                           color: isLight
-                                              ? theme.lightTheme.colorScheme
-                                                  .primary
-                                              : theme.darkTheme.colorScheme
-                                                  .primary,
+                                              ? theme
+                                                    .lightTheme
+                                                    .colorScheme
+                                                    .primary
+                                              : theme
+                                                    .darkTheme
+                                                    .colorScheme
+                                                    .primary,
                                         ),
                                       ),
                                     ),
                                     Expanded(
                                       child: Container(
-                                        height: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge!
-                                            .fontSize,
+                                        height: Theme.of(
+                                          context,
+                                        ).textTheme.bodyLarge!.fontSize,
                                         decoration: BoxDecoration(
                                           color: isLight
-                                              ? theme.lightTheme.colorScheme
-                                                  .secondary
-                                              : theme.darkTheme.colorScheme
-                                                  .secondary,
+                                              ? theme
+                                                    .lightTheme
+                                                    .colorScheme
+                                                    .secondary
+                                              : theme
+                                                    .darkTheme
+                                                    .colorScheme
+                                                    .secondary,
                                         ),
                                       ),
                                     ),
                                     Expanded(
                                       child: Container(
-                                        height: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge!
-                                            .fontSize,
+                                        height: Theme.of(
+                                          context,
+                                        ).textTheme.bodyLarge!.fontSize,
                                         decoration: BoxDecoration(
                                           color: isLight
-                                              ? theme.lightTheme.colorScheme
-                                                  .tertiary
-                                              : theme.darkTheme.colorScheme
-                                                  .tertiary,
+                                              ? theme
+                                                    .lightTheme
+                                                    .colorScheme
+                                                    .tertiary
+                                              : theme
+                                                    .darkTheme
+                                                    .colorScheme
+                                                    .tertiary,
                                         ),
                                       ),
                                     ),
                                     SizedBox(
-                                      width: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge!
-                                          .fontSize,
-                                    )
+                                      width: Theme.of(
+                                        context,
+                                      ).textTheme.bodyLarge!.fontSize,
+                                    ),
                                   ],
                                 ),
                               ),
                               onPressed: (context) {
                                 showBottomSheetActionList(
                                   context: context,
-                                  actions: themeList.map<BottomSheetAction>(
-                                    (theme) {
-                                      return BottomSheetAction(
-                                        title: Text(theme.name),
-                                        onTap: () {
-                                          themeBloc.add(
-                                            ChangeTheme(theme),
-                                          );
-                                        },
-                                      );
-                                    },
-                                  ).toList(),
+                                  actions: themeList.map<BottomSheetAction>((
+                                    theme,
+                                  ) {
+                                    return BottomSheetAction(
+                                      title: Text(theme.name),
+                                      onTap: () {
+                                        themeBloc.add(ChangeTheme(theme));
+                                      },
+                                    );
+                                  }).toList(),
                                 );
                               },
                             ),

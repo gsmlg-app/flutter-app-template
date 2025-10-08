@@ -12,15 +12,14 @@ void run(HookContext context) {
 
   // Validate package naming conventions
   if (!_isValidPackageName(packageName)) {
-    throw ArgumentError(
-      '❌ Invalid package name: "$packageName". '
-      'Must be a valid Dart package name (lowercase letters, numbers, underscores only)'
-    );
+    throw ArgumentError('❌ Invalid package name: "$packageName". '
+        'Must be a valid Dart package name (lowercase letters, numbers, underscores only)');
   }
 
   // Check for reserved keywords
   if (_isDartReservedKeyword(packageName)) {
-    throw ArgumentError('❌ Package name "$packageName" is a Dart reserved keyword');
+    throw ArgumentError(
+        '❌ Package name "$packageName" is a Dart reserved keyword');
   }
 
   // Convert to different cases for template usage
@@ -52,14 +51,69 @@ bool _isValidPackageName(String name) {
 
 bool _isDartReservedKeyword(String name) {
   const reservedKeywords = {
-    'abstract', 'else', 'import', 'show', 'as', 'enum', 'in', 'static',
-    'assert', 'export', 'interface', 'super', 'async', 'extends', 'is', 'switch',
-    'await', 'extension', 'late', 'sync', 'break', 'external', 'library', 'this',
-    'case', 'factory', 'mixin', 'throw', 'catch', 'false', 'new', 'true', 'class',
-    'final', 'null', 'try', 'const', 'finally', 'on', 'typedef', 'continue',
-    'for', 'operator', 'var', 'covariant', 'Function', 'part', 'void', 'default',
-    'get', 'required', 'while', 'deferred', 'hide', 'rethrow', 'with', 'do', 'if',
-    'return', 'yield', 'dynamic', 'implements', 'set'
+    'abstract',
+    'else',
+    'import',
+    'show',
+    'as',
+    'enum',
+    'in',
+    'static',
+    'assert',
+    'export',
+    'interface',
+    'super',
+    'async',
+    'extends',
+    'is',
+    'switch',
+    'await',
+    'extension',
+    'late',
+    'sync',
+    'break',
+    'external',
+    'library',
+    'this',
+    'case',
+    'factory',
+    'mixin',
+    'throw',
+    'catch',
+    'false',
+    'new',
+    'true',
+    'class',
+    'final',
+    'null',
+    'try',
+    'const',
+    'finally',
+    'on',
+    'typedef',
+    'continue',
+    'for',
+    'operator',
+    'var',
+    'covariant',
+    'Function',
+    'part',
+    'void',
+    'default',
+    'get',
+    'required',
+    'while',
+    'deferred',
+    'hide',
+    'rethrow',
+    'with',
+    'do',
+    'if',
+    'return',
+    'yield',
+    'dynamic',
+    'implements',
+    'set'
   };
   return reservedKeywords.contains(name.toLowerCase());
 }
@@ -83,8 +137,10 @@ String _toSnakeCase(String input) {
   // Already snake_case
   if (input.contains('_')) return input.toLowerCase();
   // camelCase or PascalCase
-  return input.replaceAllMapped(
-    RegExp(r'([A-Z])'),
-    (match) => '_${match.group(0)!.toLowerCase()}',
-  ).replaceFirst('_', '');
+  return input
+      .replaceAllMapped(
+        RegExp(r'([A-Z])'),
+        (match) => '_${match.group(0)!.toLowerCase()}',
+      )
+      .replaceFirst('_', '');
 }

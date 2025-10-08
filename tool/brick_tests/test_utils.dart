@@ -42,7 +42,7 @@ class BrickTestUtils {
   ) async {
     final file = File(path.join(dir.path, relativePath));
     if (!await file.exists()) return false;
-    
+
     final content = await file.readAsString();
     return content.contains(expectedContent);
   }
@@ -60,7 +60,10 @@ class BrickTestUtils {
   }
 
   /// Lists all generated files in a directory
-  static Future<List<String>> listFiles(Directory dir, {bool recursive = true}) async {
+  static Future<List<String>> listFiles(
+    Directory dir, {
+    bool recursive = true,
+  }) async {
     final files = <String>[];
     await for (final entity in dir.list(recursive: recursive)) {
       if (entity is File) {
@@ -95,13 +98,13 @@ class BrickTestUtils {
   ) async {
     try {
       final content = await getFileContent(dir, 'pubspec.yaml');
-      
+
       // Check package name
       if (!content.contains('name: $expectedPackageName')) {
         print('Missing package name: $expectedPackageName');
         return false;
       }
-      
+
       // Check dependencies
       for (final dep in expectedDependencies) {
         if (!content.contains(dep)) {
@@ -109,7 +112,7 @@ class BrickTestUtils {
           return false;
         }
       }
-      
+
       // Check dev dependencies
       for (final dep in expectedDevDependencies) {
         if (!content.contains('dev_dependencies:') && content.contains(dep)) {
@@ -117,7 +120,7 @@ class BrickTestUtils {
           return false;
         }
       }
-      
+
       return true;
     } catch (e) {
       print('Error validating pubspec.yaml: $e');
@@ -135,7 +138,7 @@ class BrickTestUtils {
   }) async {
     try {
       final content = await getFileContent(dir, relativePath);
-      
+
       // Check imports
       for (final import in expectedImports) {
         if (!content.contains(import)) {
@@ -143,15 +146,16 @@ class BrickTestUtils {
           return false;
         }
       }
-      
+
       // Check classes
       for (final className in expectedClasses) {
-        if (!content.contains('class $className') && !content.contains('abstract class $className')) {
+        if (!content.contains('class $className') &&
+            !content.contains('abstract class $className')) {
           print('Missing class: $className');
           return false;
         }
       }
-      
+
       // Check methods
       for (final method in expectedMethods) {
         if (!content.contains(method)) {
@@ -159,7 +163,7 @@ class BrickTestUtils {
           return false;
         }
       }
-      
+
       return true;
     } catch (e) {
       print('Error validating Dart file $relativePath: $e');
@@ -195,9 +199,9 @@ class BrickTestUtils {
 class BrickTestException implements Exception {
   final String message;
   final String? brickName;
-  
+
   const BrickTestException(this.message, [this.brickName]);
-  
+
   @override
   String toString() {
     if (brickName != null) {
