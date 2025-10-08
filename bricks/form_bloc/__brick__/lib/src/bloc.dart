@@ -1,98 +1,95 @@
-import 'package:form_bloc/form_bloc.dart';
+import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import 'event.dart';
-import 'state.dart';
+part 'event.dart';
+part 'state.dart';
 
 /// {@template {{name.snakeCase()}}_form_bloc}
-/// {{name.pascalCase()}}FormBloc handles {{name.sentenceCase()}} form validation and submission.
+/// {{name.pascalCase()}}FormBloc manages the state and events for the {{name.sentenceCase()}} form.
 /// {@endtemplate}
-class {{name.pascalCase()}}FormBloc extends FormBloc<String, String> {
+class {{name.pascalCase()}}FormBloc extends Bloc<{{name.pascalCase()}}FormEvent, {{name.pascalCase()}}FormState> {
   /// {@macro {{name.snakeCase()}}_form_bloc}
-  {{name.pascalCase()}}FormBloc() : super() {
-    {% for field in field_names %}
-    addFieldBloc(
-      {{field.camelCase()}}FieldBloc,
-    );
-    {% endfor %}
-
-    {% if has_submission %}
-    on<{{name.pascalCase()}}FormEventSubmitted>(_onSubmitted);
-    {% endif %}
-    on<{{name.pascalCase()}}FormEventReset>(_onReset);
+  {{name.pascalCase()}}FormBloc() : super(const {{name.pascalCase()}}FormState()) {
+    on<{{name.pascalCase()}}FieldChanged>(_onFieldChanged);
+    {{#if has_submission}}
+    on<{{name.pascalCase()}}FormSubmitted>(_onFormSubmitted);
+    {{/if}}
+    {{#if has_validation}}
+    on<{{name.pascalCase()}}FormValidated>(_onFormValidated);
+    {{/if}}
+    on<{{name.pascalCase()}}FormReset>(_onFormReset);
   }
 
-  {% for field in field_names %}
-  /// {{field.pascalCase()}} field bloc
-  late final {{field.camelCase()}}FieldBloc = TextFieldBloc(
-    name: '{{field}}',
-    {% if has_validation %}
-    validators: [
-      {% if field == 'email' %}
-      FieldBlocValidators.required,
-      FieldBlocValidators.email,
-      {% elif field == 'password' %}
-      FieldBlocValidators.required,
-      FieldBlocValidators.passwordMinLength6,
-      {% else %}
-      FieldBlocValidators.required,
-      {% endif %}
-    ],
-    {% endif %}
-  );
-  {% endfor %}
+  void _onFieldChanged(
+    {{name.pascalCase()}}FieldChanged event,
+    Emitter<{{name.pascalCase()}}FormState> emit,
+  ) {
+    switch (event.field) {
+      case 'email':
+        emit(state.copyWith(email: event.value));
+        break;
+      case 'password':
+        emit(state.copyWith(password: event.value));
+        break;
+      default:
+        emit(state);
+    }
+    
+    {{#if has_validation}}
+    // Trigger validation after field change
+    add(const {{name.pascalCase()}}FormValidated());
+    {{/if}}
+  }
 
-  {% if has_submission %}
-  /// Handles form submission
-  Future<void> _onSubmitted(
-    {{name.pascalCase()}}FormEventSubmitted event,
-    Emitter<FormBlocState<String, String>> emitter,
+  {{#if has_submission}}
+  void _onFormSubmitted(
+    {{name.pascalCase()}}FormSubmitted event,
+    Emitter<{{name.pascalCase()}}FormState> emit,
   ) async {
+    emit(state.copyWith(status: FormBlocStatus.inProgress));
+    
     try {
-      emitter(state.copyWith(status: FormBlocStatus.inProgress));
-
       // TODO: Implement your form submission logic here
-      // Example: API call, database operation, etc.
-      await _submitForm();
-
-      emitter(state.copyWith(
-        status: FormBlocStatus.success,
-        successResponse: '{{name.pascalCase()}} form submitted successfully',
-      ));
-    } catch (error, stackTrace) {
-      emitter(state.copyWith(
+      // Example: await _repository.submitForm(_getFormData());
+      
+      emit(state.copyWith(status: FormBlocStatus.success));
+    } catch (e) {
+      emit(state.copyWith(
         status: FormBlocStatus.failure,
-        failureResponse: error.toString(),
+        error: e.toString(),
       ));
-      addError(error, stackTrace);
     }
   }
+  {{/if}}
 
-  /// Implement your form submission logic here
-  Future<void> _submitForm() async {
-    // TODO: Replace with actual submission logic
-    // Example:
-    // final result = await apiService.submit{{name.pascalCase()}}Form(
-    //   {% for field in field_names %}
-    //   {{field}}: {{field.camelCase()}}FieldBloc.value,
-    //   {% endfor %}
-    // );
-
-    // Simulate async operation
-    await Future.delayed(const Duration(seconds: 1));
-
-    // Throw exception if there's an error
-    // throw Exception('Submission failed');
+  {{#if has_validation}}
+  void _onFormValidated(
+    {{name.pascalCase()}}FormValidated event,
+    Emitter<{{name.pascalCase()}}FormState> emit,
+  ) {
+    emit(state.copyWith(status: FormBlocStatus.validating));
+    
+    // TODO: Implement your validation logic here
+    // Example: final isValid = _validateForm();
+    
+    emit(state.copyWith(status: FormBlocStatus.initial));
   }
-  {% endif %}
+  {{/if}}
 
-  /// Handles form reset
-  Future<void> _onReset(
-    {{name.pascalCase()}}FormEventReset event,
-    Emitter<FormBlocState<String, String>> emitter,
-  ) async {
-    {% for field in field_names %}
-    {{field.camelCase()}}FieldBloc.clear();
-    {% endfor %}
+  void _onFormReset(
+    {{name.pascalCase()}}FormReset event,
+    Emitter<{{name.pascalCase()}}FormState> emit,
+  ) {
+    emit(const {{name.pascalCase()}}FormState());
   }
+
+  {{#if has_submission}}
+  /// Helper method to get form data as a map
+  Map<String, String?> getFormData() {
+    return {
+      'email': state.email,
+      'password': state.password,
+    };
+  }
+  {{/if}}
 }
