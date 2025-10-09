@@ -16,15 +16,64 @@ class ClearFormEvent extends {{name.pascalCase()}}FormEvent {
 class PopulateFormEvent extends {{name.pascalCase()}}FormEvent {
   /// {@macro {{name.snakeCase()}}_form_populate_event}
   const PopulateFormEvent({
-    required this.email,
-    required this.password,
+{{#each fields}}
+    {{#if (eq (split this ":").[1] "text")}}
+    required this.{{split this ":".[0]}},
+    {{else if (eq (split this ":").[1] "email")}}
+    required this.{{split this ":".[0]}},
+    {{else if (eq (split this ":").[1] "password")}}
+    required this.{{split this ":".[0]}},
+    {{else if (eq (split this ":").[1] "number")}}
+    required this.{{split this ":".[0]}},
+    {{else if (eq (split this ":").[1] "boolean")}}
+    required this.{{split this ":".[0]}},
+    {{else if (eq (split this ":").[1] "select")}}
+    required this.{{split this ":".[0]}},
+    {{else if (eq (split this ":").[1] "multiselect")}}
+    required this.{{split this ":".[0]}},
+    {{else if (eq (split this ":").[1] "date")}}
+    required this.{{split this ":".[0]}},
+    {{else if (eq (split this ":").[1] "file")}}
+    this.{{split this ":".[0]}},
+    {{else}}
+    required this.{{split this ":".[0]}},
+    {{/if}}
+{{/each}}
   });
 
-  /// Initial email value
-  final String email;
-  
-  /// Initial password value
-  final String password;
+{{#each fields}}
+  {{#if (eq (split this ":").[1] "text")}}
+  /// Initial {{split this ":".[0]}} value
+  final String {{split this ":".[0]}};
+  {{else if (eq (split this ":").[1] "email")}}
+  /// Initial {{split this ":".[0]}} value
+  final String {{split this ":".[0]}};
+  {{else if (eq (split this ":").[1] "password")}}
+  /// Initial {{split this ":".[0]}} value
+  final String {{split this ":".[0]}};
+  {{else if (eq (split this ":").[1] "number")}}
+  /// Initial {{split this ":".[0]}} value
+  final String {{split this ":".[0]}};
+  {{else if (eq (split this ":").[1] "boolean")}}
+  /// Initial {{split this ":".[0]}} value
+  final bool {{split this ":".[0]}};
+  {{else if (eq (split this ":").[1] "select")}}
+  /// Initial {{split this ":".[0]}} value
+  final String? {{split this ":".[0]}};
+  {{else if (eq (split this ":").[1] "multiselect")}}
+  /// Initial {{split this ":".[0]}} value
+  final List<String> {{split this ":".[0]}};
+  {{else if (eq (split this ":").[1] "date")}}
+  /// Initial {{split this ":".[0]}} value
+  final DateTime {{split this ":".[0]}};
+  {{else if (eq (split this ":").[1] "file")}}
+  /// Initial {{split this ":".[0]}} value
+  final dynamic {{split this ":".[0]}};
+  {{else}}
+  /// Initial {{split this ":".[0]}} value
+  final String {{split this ":".[0]}};
+  {{/if}}
+{{/each}}
 }
 
 /// Event to validate specific field
