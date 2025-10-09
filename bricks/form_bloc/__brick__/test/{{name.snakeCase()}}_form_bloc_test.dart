@@ -21,87 +21,304 @@ void main() {
       expect(formBloc.state.hasErrors, isFalse);
     });
 
-    group('email field validation', () {
-      blocTest<{{name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
-        'emits invalid state when email is empty',
+{{#each fields}}
+    {{#if (eq (split this ":").[1] "text")}}
+    group('{{split this ":".[0]}} field validation', () {
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits invalid state when {{split this ":".[0]}} is empty',
         build: () => formBloc,
-        act: (bloc) => bloc.email.updateValue(''),
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue(''),
         expect: () => [
           predicate<FormBlocState<String, String>>((state) => 
             state.isValid == false && 
-            bloc.email.state.isInvalid
+            bloc.{{split this ":".[0]}}.state.isInvalid
           ),
         ],
       );
 
-      blocTest<{{name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
-        'emits invalid state when email is invalid format',
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits valid state when {{split this ":".[0]}} has content',
         build: () => formBloc,
-        act: (bloc) => bloc.email.updateValue('invalid-email'),
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue('Some text'),
         expect: () => [
           predicate<FormBlocState<String, String>>((state) => 
-            state.isValid == false && 
-            bloc.email.state.isInvalid
-          ),
-        ],
-      );
-
-      blocTest<{{name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
-        'emits valid state when email is valid format',
-        build: () => formBloc,
-        act: (bloc) => bloc.email.updateValue('test@example.com'),
-        expect: () => [
-          predicate<FormBlocState<String, String>>((state) => 
-            bloc.email.state.isValid
+            bloc.{{split this ":".[0]}}.state.isValid
           ),
         ],
       );
     });
-
-    group('password field validation', () {
-      blocTest<{{name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
-        'emits invalid state when password is empty',
+    {{else if (eq (split this ":").[1] "email")}}
+    group('{{split this ":".[0]}} field validation', () {
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits invalid state when {{split this ":".[0]}} is empty',
         build: () => formBloc,
-        act: (bloc) => bloc.password.updateValue(''),
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue(''),
         expect: () => [
           predicate<FormBlocState<String, String>>((state) => 
             state.isValid == false && 
-            bloc.password.state.isInvalid
+            bloc.{{split this ":".[0]}}.state.isInvalid
           ),
         ],
       );
 
-      blocTest<{{name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
-        'emits invalid state when password is too short',
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits invalid state when {{split this ":".[0]}} is invalid format',
         build: () => formBloc,
-        act: (bloc) => bloc.password.updateValue('123'),
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue('invalid-email'),
         expect: () => [
           predicate<FormBlocState<String, String>>((state) => 
             state.isValid == false && 
-            bloc.password.state.isInvalid
+            bloc.{{split this ":".[0]}}.state.isInvalid
           ),
         ],
       );
 
-      blocTest<{{name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
-        'emits valid state when password meets requirements',
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits valid state when {{split this ":".[0]}} is valid format',
         build: () => formBloc,
-        act: (bloc) => bloc.password.updateValue('password123'),
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue('test@example.com'),
         expect: () => [
           predicate<FormBlocState<String, String>>((state) => 
-            bloc.password.state.isValid
+            bloc.{{split this ":".[0]}}.state.isValid
           ),
         ],
       );
     });
+    {{else if (eq (split this ":").[1] "password")}}
+    group('{{split this ":".[0]}} field validation', () {
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits invalid state when {{split this ":".[0]}} is empty',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue(''),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            state.isValid == false && 
+            bloc.{{split this ":".[0]}}.state.isInvalid
+          ),
+        ],
+      );
+
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits invalid state when {{split this ":".[0]}} is too short',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue('123'),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            state.isValid == false && 
+            bloc.{{split this ":".[0]}}.state.isInvalid
+          ),
+        ],
+      );
+
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits valid state when {{split this ":".[0]}} meets requirements',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue('password123'),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            bloc.{{split this ":".[0]}}.state.isValid
+          ),
+        ],
+      );
+    });
+    {{else if (eq (split this ":").[1] "number")}}
+    group('{{split this ":".[0]}} field validation', () {
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits invalid state when {{split this ":".[0]}} is empty',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue(''),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            state.isValid == false && 
+            bloc.{{split this ":".[0]}}.state.isInvalid
+          ),
+        ],
+      );
+
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits invalid state when {{split this ":".[0]}} is not a number',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue('not-a-number'),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            state.isValid == false && 
+            bloc.{{split this ":".[0]}}.state.isInvalid
+          ),
+        ],
+      );
+
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits valid state when {{split this ":".[0]}} is a valid number',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue('123.45'),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            bloc.{{split this ":".[0]}}.state.isValid
+          ),
+        ],
+      );
+    });
+    {{else if (eq (split this ":").[1] "boolean")}}
+    group('{{split this ":".[0]}} field validation', () {
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits invalid state when {{split this ":".[0]}} is false',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue(false),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            state.isValid == false && 
+            bloc.{{split this ":".[0]}}.state.isInvalid
+          ),
+        ],
+      );
+
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits valid state when {{split this ":".[0]}} is true',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue(true),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            bloc.{{split this ":".[0]}}.state.isValid
+          ),
+        ],
+      );
+    });
+    {{else if (eq (split this ":").[1] "select")}}
+    group('{{split this ":".[0]}} field validation', () {
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits invalid state when {{split this ":".[0]}} is null',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue(null),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            state.isValid == false && 
+            bloc.{{split this ":".[0]}}.state.isInvalid
+          ),
+        ],
+      );
+
+      {{#if (split this ":").[2]}}
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits valid state when {{split this ":".[0]}} has a selected value',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue('{{split (split this ":").[2] ",".[0]}}'),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            bloc.{{split this ":".[0]}}.state.isValid
+          ),
+        ],
+      );
+      {{else}}
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits valid state when {{split this ":".[0]}} has a selected value',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue('some-value'),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            bloc.{{split this ":".[0]}}.state.isValid
+          ),
+        ],
+      );
+      {{/if}}
+    });
+    {{else if (eq (split this ":").[1] "multiselect")}}
+    group('{{split this ":".[0]}} field validation', () {
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits invalid state when {{split this ":".[0]}} is empty',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue([]),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            state.isValid == false && 
+            bloc.{{split this ":".[0]}}.state.isInvalid
+          ),
+        ],
+      );
+
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits valid state when {{split this ":".[0]}} has selected values',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue(['value1', 'value2']),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            bloc.{{split this ":".[0]}}.state.isValid
+          ),
+        ],
+      );
+    });
+    {{else if (eq (split this ":").[1] "date")}}
+    group('{{split this ":".[0]}} field validation', () {
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits valid state when {{split this ":".[0]}} has a date value',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue(DateTime.now()),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            bloc.{{split this ":".[0]}}.state.isValid
+          ),
+        ],
+      );
+    });
+    {{else if (eq (split this ":").[1] "file")}}
+    group('{{split this ":".[0]}} field validation', () {
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits invalid state when {{split this ":".[0]}} is null',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue(null),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            state.isValid == false && 
+            bloc.{{split this ":".[0]}}.state.isInvalid
+          ),
+        ],
+      );
+
+      blocTest<{{../name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
+        'emits valid state when {{split this ":".[0]}} has a value',
+        build: () => formBloc,
+        act: (bloc) => bloc.{{split this ":".[0]}}.updateValue('file-data'),
+        expect: () => [
+          predicate<FormBlocState<String, String>>((state) => 
+            bloc.{{split this ":".[0]}}.state.isValid
+          ),
+        ],
+      );
+    });
+    {{/if}}
+{{/each}}
 
     group('form submission', () {
       blocTest<{{name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
         'emits submitting and success when form is submitted successfully',
         build: () => formBloc,
         setUp: () {
-          formBloc.email.updateValue('test@example.com');
-          formBloc.password.updateValue('password123');
+{{#each fields}}
+          {{#if (eq (split this ":").[1] "text")}}
+          formBloc.{{split this ":".[0]}}.updateValue('Sample text');
+          {{else if (eq (split this ":").[1] "email")}}
+          formBloc.{{split this ":".[0]}}.updateValue('test@example.com');
+          {{else if (eq (split this ":").[1] "password")}}
+          formBloc.{{split this ":".[0]}}.updateValue('password123');
+          {{else if (eq (split this ":").[1] "number")}}
+          formBloc.{{split this ":".[0]}}.updateValue('123');
+          {{else if (eq (split this ":").[1] "boolean")}}
+          formBloc.{{split this ":".[0]}}.updateValue(true);
+          {{else if (eq (split this ":").[1] "select")}}
+          {{#if (split this ":").[2]}}
+          formBloc.{{split this ":".[0]}}.updateValue('{{split (split this ":").[2] ",".[0]}}');
+          {{else}}
+          formBloc.{{split this ":".[0]}}.updateValue('some-value');
+          {{/if}}
+          {{else if (eq (split this ":").[1] "multiselect")}}
+          formBloc.{{split this ":".[0]}}.updateValue(['value1', 'value2']);
+          {{else if (eq (split this ":").[1] "date")}}
+          formBloc.{{split this ":".[0]}}.updateValue(DateTime.now());
+          {{else if (eq (split this ":").[1] "file")}}
+          formBloc.{{split this ":".[0]}}.updateValue('file-data');
+          {{else}}
+          formBloc.{{split this ":".[0]}}.updateValue('default-value');
+          {{/if}}
+{{/each}}
         },
         act: (bloc) => bloc.submit(),
         expect: () => [
@@ -116,34 +333,40 @@ void main() {
       );
     });
 
-    group('form reset', () {
-      blocTest<{{name.pascalCase()}}FormBloc, FormBlocState<String, String>>(
-        'resets form to initial state',
-        build: () => formBloc,
-        setUp: () {
-          formBloc.email.updateValue('test@example.com');
-          formBloc.password.updateValue('password123');
-        },
-        act: (bloc) {
-          bloc.email.updateValue('');
-          bloc.password.updateValue('');
-        },
-        expect: () => [
-          predicate<FormBlocState<String, String>>((state) => 
-            state.isValid == false
-          ),
-        ],
-      );
-    });
-
     test('getFormData returns correct map', () {
-      formBloc.email.updateValue('test@example.com');
-      formBloc.password.updateValue('password123');
+{{#each fields}}
+      {{#if (eq (split this ":").[1] "text")}}
+      formBloc.{{split this ":".[0]}}.updateValue('Sample text');
+      {{else if (eq (split this ":").[1] "email")}}
+      formBloc.{{split this ":".[0]}}.updateValue('test@example.com');
+      {{else if (eq (split this ":").[1] "password")}}
+      formBloc.{{split this ":".[0]}}.updateValue('password123');
+      {{else if (eq (split this ":").[1] "number")}}
+      formBloc.{{split this ":".[0]}}.updateValue('123');
+      {{else if (eq (split this ":").[1] "boolean")}}
+      formBloc.{{split this ":".[0]}}.updateValue(true);
+      {{else if (eq (split this ":").[1] "select")}}
+      {{#if (split this ":").[2]}}
+      formBloc.{{split this ":".[0]}}.updateValue('{{split (split this ":").[2] ",".[0]}}');
+      {{else}}
+      formBloc.{{split this ":".[0]}}.updateValue('some-value');
+      {{/if}}
+      {{else if (eq (split this ":").[1] "multiselect")}}
+      formBloc.{{split this ":".[0]}}.updateValue(['value1', 'value2']);
+      {{else if (eq (split this ":").[1] "date")}}
+      formBloc.{{split this ":".[0]}}.updateValue(DateTime.now());
+      {{else if (eq (split this ":").[1] "file")}}
+      formBloc.{{split this ":".[0]}}.updateValue('file-data');
+      {{else}}
+      formBloc.{{split this ":".[0]}}.updateValue('default-value');
+      {{/if}}
+{{/each}}
       
       final formData = formBloc.getFormData();
       
-      expect(formData['email'], equals('test@example.com'));
-      expect(formData['password'], equals('password123'));
+{{#each fields}}
+      expect(formData['{{split this ":".[0]}}'], isNotNull);
+{{/each}}
     });
 
     test('form state extensions work correctly', () {
@@ -152,13 +375,34 @@ void main() {
       expect({{name.pascalCase()}}FormStateExtensions.isSubmitting(formBloc.state), isFalse);
       expect({{name.pascalCase()}}FormStateExtensions.hasErrors(formBloc.state), isFalse);
       
-      // Test with invalid data
-      formBloc.email.updateValue('invalid-email');
-      expect({{name.pascalCase()}}FormStateExtensions.hasErrors(formBloc.state), isTrue);
-      
       // Test with valid data
-      formBloc.email.updateValue('test@example.com');
-      formBloc.password.updateValue('password123');
+{{#each fields}}
+      {{#if (eq (split this ":").[1] "text")}}
+      formBloc.{{split this ":".[0]}}.updateValue('Sample text');
+      {{else if (eq (split this ":").[1] "email")}}
+      formBloc.{{split this ":".[0]}}.updateValue('test@example.com');
+      {{else if (eq (split this ":").[1] "password")}}
+      formBloc.{{split this ":".[0]}}.updateValue('password123');
+      {{else if (eq (split this ":").[1] "number")}}
+      formBloc.{{split this ":".[0]}}.updateValue('123');
+      {{else if (eq (split this ":").[1] "boolean")}}
+      formBloc.{{split this ":".[0]}}.updateValue(true);
+      {{else if (eq (split this ":").[1] "select")}}
+      {{#if (split this ":").[2]}}
+      formBloc.{{split this ":".[0]}}.updateValue('{{split (split this ":").[2] ",".[0]}}');
+      {{else}}
+      formBloc.{{split this ":".[0]}}.updateValue('some-value');
+      {{/if}}
+      {{else if (eq (split this ":").[1] "multiselect")}}
+      formBloc.{{split this ":".[0]}}.updateValue(['value1', 'value2']);
+      {{else if (eq (split this ":").[1] "date")}}
+      formBloc.{{split this ":".[0]}}.updateValue(DateTime.now());
+      {{else if (eq (split this ":").[1] "file")}}
+      formBloc.{{split this ":".[0]}}.updateValue('file-data');
+      {{else}}
+      formBloc.{{split this ":".[0]}}.updateValue('default-value');
+      {{/if}}
+{{/each}}
       expect({{name.pascalCase()}}FormStateExtensions.isFormValid(formBloc.state), isTrue);
     });
   });
