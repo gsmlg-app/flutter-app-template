@@ -1,45 +1,37 @@
-part of 'bloc.dart';
-
-/// {@template {{name.snakeCase()}}_form_event}
-/// {{name.pascalCase()}}FormEvent represents events that can occur in the {{name.sentenceCase()}} form.
+/// {@template {{name.snakeCase()}}_form_events}
+/// Custom events for {{name.pascalCase()}}FormBloc beyond the standard FormBloc events.
 /// {@endtemplate}
-abstract class {{name.pascalCase()}}FormEvent extends Equatable {
-  /// {@macro {{name.snakeCase()}}_form_event}
+abstract class {{name.pascalCase()}}FormEvent {
+  /// {@macro {{name.snakeCase()}}_form_events}
   const {{name.pascalCase()}}FormEvent();
-
-  @override
-  List<Object?> get props => [];
 }
 
-/// Event triggered when a form field value changes
-class {{name.pascalCase()}}FieldChanged extends {{name.pascalCase()}}FormEvent {
-  /// {@macro {{name.snakeCase()}}_field_changed}
-  const {{name.pascalCase()}}FieldChanged(this.field, this.value);
-
-  /// The field name that changed
-  final String field;
-
-  /// The new value for the field
-  final String value;
-
-  @override
-  List<Object?> get props => [field, value];
+/// Event to clear all form fields
+class ClearFormEvent extends {{name.pascalCase()}}FormEvent {
+  /// {@macro {{name.snakeCase()}}_form_clear_event}
+  const ClearFormEvent();
 }
 
-/// Event triggered when the form is submitted
-class {{name.pascalCase()}}FormSubmitted extends {{name.pascalCase()}}FormEvent {
-  /// {@macro {{name.snakeCase()}}_form_submitted}
-  const {{name.pascalCase()}}FormSubmitted();
+/// Event to populate form with initial data
+class PopulateFormEvent extends {{name.pascalCase()}}FormEvent {
+  /// {@macro {{name.snakeCase()}}_form_populate_event}
+  const PopulateFormEvent({
+    required this.email,
+    required this.password,
+  });
+
+  /// Initial email value
+  final String email;
+  
+  /// Initial password value
+  final String password;
 }
 
-/// Event triggered when form validation should be performed
-class {{name.pascalCase()}}FormValidated extends {{name.pascalCase()}}FormEvent {
-  /// {@macro {{name.snakeCase()}}_form_validated}
-  const {{name.pascalCase()}}FormValidated();
-}
+/// Event to validate specific field
+class ValidateFieldEvent extends {{name.pascalCase()}}FormEvent {
+  /// {@macro {{name.snakeCase()}}_form_validate_field_event}
+  const ValidateFieldEvent(this.fieldName);
 
-/// Event triggered when the form is reset
-class {{name.pascalCase()}}FormReset extends {{name.pascalCase()}}FormEvent {
-  /// {@macro {{name.snakeCase()}}_form_reset}
-  const {{name.pascalCase()}}FormReset();
+  /// Name of the field to validate
+  final String fieldName;
 }
