@@ -47,7 +47,8 @@ mason get
 ### Development Workflow
 ```bash
 # Run all static analysis
-melos run lint:all
+melos run analyze
+melos run format
 
 # Format all code
 melos run format
@@ -55,10 +56,11 @@ melos run format
 # Run tests across all packages
 flutter test
 melos exec flutter test
+melos run test
 
 # Generate code (build_runner, l10n)
 melos run prepare
-melos run build-all
+melos run build-runner
 
 # Check dependencies
 melos run validate-dependencies
@@ -89,12 +91,23 @@ mason make api_client -o app_api/app_api --package_name=app_api
 # Generate new BLoC
 mason make simple_bloc -o app_bloc/feature_name --name=feature_name
 
+# Generate new list BLoC
+mason make list_bloc -o app_bloc/feature_name --name=feature_name
+
+# Generate new form BLoC
+mason make form_bloc --name Login --field_names "email,password"
+
+# Generate new repository
+mason make repository -o app_lib/feature_name --name=feature_name
+
 # Generate new screen
 mason make screen --name ScreenName --folder subfolder
 
 # Generate new widget
 mason make widget --name WidgetName --type stateless --folder components
 ```
+
+For complete documentation on all available Mason bricks and their usage, see [BRICKS.md](./BRICKS.md).
 
 ### Running the App
 ```bash
@@ -121,7 +134,7 @@ dart run flutter_launcher_icons:main
 ## Configuration Files
 
 - **Melos**: `pubspec.yaml` (workspace configuration with scripts)
-- **Mason**: `mason.yaml` (code generation templates: api_client, simple_bloc, repository, screen, widget)
+- **Mason**: `mason.yaml` (code generation templates: api_client, simple_bloc, list_bloc, form_bloc, repository, screen, widget)
 - **Analysis**: `analysis_options.yaml` (linting rules, excludes generated files)
 - **Localization**: `app_lib/locale/l10n.yaml` (i18n configuration)
 - **Environment**: `.envrc`, `devenv.nix` (development environment setup)
@@ -154,11 +167,21 @@ Structured logging with:
 ### Theme Management
 Dynamic theme switching through:
 - `ThemeBloc` for state management
-- Multiple predefined color schemes
+- Multiple predefined color schemes (fire, green, violet, wheat)
 - Light/dark theme support
 
 ### Routing
 Declarative routing with GoRouter:
 - Route definitions with static paths and names
-- `NoTransitionPage` for consistent navigation
+- `MaterialApp.router` configuration in `lib/app.dart`
 - Error handling with dedicated error screen
+
+### Code Style Guidelines
+- Use flutter_lints from analysis_options.yaml
+- Import order: dart, package, local (standard Dart convention)
+- Use single quotes for strings (prefer_single_quotes rule available)
+- Prefer const constructors for performance
+- Use BLoC pattern for state management (flutter_bloc in dependencies)
+- Error handling: try/catch with logging (logging package in dependencies)
+- Naming: PascalCase for classes, camelCase for variables
+- Types: always specify return types and parameter types
