@@ -148,7 +148,7 @@ Tests are co-located with their respective packages:
 
 ## Package Dependencies
 
-The workspace uses path-based dependencies for internal packages (marked as `any` in pubspec.yaml). All packages are managed through Melos workspace configuration.
+This project uses Melos to manage a mono-repo structure. When including packages in this project, use `<package_name>: any` in pubspec.yaml dependencies - do not use path dependencies. Melos automatically resolves internal package dependencies through workspace configuration.
 
 ## Key Architecture Patterns
 
