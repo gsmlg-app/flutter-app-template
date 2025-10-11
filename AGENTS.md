@@ -16,7 +16,7 @@
 - Use single quotes for strings (prefer_single_quotes rule available)
 - Prefer const constructors for performance
 - Use BLoC pattern for state management (flutter_bloc in dependencies)
-- Error handling: try/catch with logging (logging package in dependencies)
+- Error handling: try/catch with logging (use app_logging package in app_lib/logging)
 - Naming: PascalCase for classes, camelCase for variables
 - Types: always specify return types and parameter types
 - Workspace structure: multi-package with melos, use workspace packages

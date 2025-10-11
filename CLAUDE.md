@@ -163,6 +163,7 @@ Structured logging with:
 - File-based logging to app support directory
 - Configurable log levels
 - Centralized `AppLogger` instance
+- Use the `app_logging` package from `app_lib/logging` for all logging needs
 
 ### Theme Management
 Dynamic theme switching through:
