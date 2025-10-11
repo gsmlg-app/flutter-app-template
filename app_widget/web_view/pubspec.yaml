@@ -10,6 +10,7 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
+  app_locale: any
 
   webview_flutter: ^4.4.2
 
