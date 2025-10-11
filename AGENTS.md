@@ -20,3 +20,8 @@
 - Naming: PascalCase for classes, camelCase for variables
 - Types: always specify return types and parameter types
 - Workspace structure: multi-package with melos, use workspace packages
+
+# Package Management
+- This project uses Melos for mono-repo management
+- When including packages in this project, use `<package_name>: any` in pubspec.yaml
+- Do not use path dependencies for workspace packages
