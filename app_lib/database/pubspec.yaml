@@ -7,6 +7,8 @@ environment:
 resolution: workspace
 
 dependencies:
+  flutter:
+    sdk: flutter
   drift: ^2.26.2
   drift_flutter: ^0.2.5
   path_provider: ^2.1.5
