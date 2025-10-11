@@ -1,29 +1,20 @@
 import 'package:app_logging/app_logging.dart';
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart' as logging;
 
 class ErrorHandler {
   static final ErrorHandler _instance = ErrorHandler._internal();
   factory ErrorHandler() => _instance;
   ErrorHandler._internal();
 
+  final AppLogger _logger = AppLogger();
   final ErrorReportingService _errorService = ErrorReportingService();
   final ApiLoggingInterceptor _apiLogger = ApiLoggingInterceptor();
-  late final logging.Logger _logger;
 
   void initialize() {
-    _logger = logging.Logger('AppErrorHandler');
-
     // Set up global error handling
     _errorService.setupGlobalErrorHandler();
 
-    // Configure logging levels
-    logging.Logger.root.level = logging.Level.ALL;
-    logging.Logger.root.onRecord.listen((record) {
-      debugPrint('${record.level.name}: ${record.time}: ${record.message}');
-    });
-
-    _logger.info('Error handler initialized');
+    _logger.i('Error handler initialized');
   }
 
   // Convenience methods
