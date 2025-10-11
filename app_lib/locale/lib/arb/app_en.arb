@@ -17,5 +17,6 @@
   "appearance": "Appearance",
   "accentColor": "Accent Color",
   "language": "Language",
+  "retry": "Retry",
   "@@description": "App description"
 }
