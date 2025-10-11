@@ -94,19 +94,17 @@ mason get
 ### Development Commands
 
 ```bash
-# Run all static analysis
-melos run lint:all
-
-# Format all code
+# Run analysis and formatting
+melos run analyze
 melos run format
 
 # Run tests across all packages
+melos run test
 flutter test
-melos exec flutter test
 
 # Generate code (build_runner, l10n)
 melos run prepare
-melos run build-all
+melos run build-runner
 ```
 
 ### Individual Package Commands
@@ -140,16 +138,19 @@ cd app_lib/theme && dart run build_runner build --delete-conflicting-outputs
 
 This project uses Melos to manage the monorepo. Here are some of the available scripts:
 
--   `melos run lint:all`: Run all static analysis checks
 -   `melos run analyze`: Run `flutter analyze` for all packages
 -   `melos run fix`: Run `dart fix` for all packages
 -   `melos run format`: Run `dart format` for all packages
+-   `melos run test`: Run Flutter tests for all packages
+-   `melos run test:dart`: Run Dart tests for non-Flutter packages
+-   `melos run test:flutter`: Run Flutter tests for Flutter packages
 -   `melos run upgrade`: Upgrade dependencies in all packages
 -   `melos run outdated`: Check for outdated dependencies in all packages
 -   `melos run validate-dependencies`: Validate dependencies usage
--   `melos run prepare`: Generate code (build_runner, l10n)
--   `melos run test:bricks`: Run Mason brick tests (see [BRICK_TESTING.md](BRICK_TESTING.md))
--   `melos run build-all`: Build all packages
+-   `melos run prepare`: Generate code (bootstrap + gen-l10n + build-runner)
+-   `melos run build-runner`: Run build_runner for all packages
+-   `melos run gen-l10n`: Generate localization files
+-   `melos run brick-test`: Run Mason brick tests (see [BRICK_TESTING.md](BRICK_TESTING.md))
 
 ## Code Generation with Mason
 
@@ -242,8 +243,8 @@ Contributions are welcome! Please feel free to submit a pull request. For major 
 1. Follow the existing code style and architecture patterns
 2. Write tests for new features
 3. Update documentation as needed
-4. Run `melos run lint:all` before submitting PRs
-5. Ensure all tests pass with `melos exec flutter test`
+4. Run `melos run analyze` and `melos run format` before submitting PRs
+5. Ensure all tests pass with `melos run test`
 
 ## License
 
