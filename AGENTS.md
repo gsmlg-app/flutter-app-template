@@ -1,17 +1,22 @@
 # Build/Lint/Test Commands
 - Run single test: `flutter test test/widget_test.dart`
-- Run all tests: `flutter test` or `melos exec flutter test`
-- Lint: `melos run lint:all` (analyze + format)
+- Run all tests: `melos run test` (dart + flutter tests) or `flutter test`
+- Lint: `melos run analyze` + `melos run format` (no lint:all command)
 - Format: `melos run format`
 - Analyze: `melos run analyze`
-- Build: `melos run build-all`
+- Build: `melos run build-runner`
+- Prepare: `melos run prepare` (bootstrap + gen-l10n + build-runner)
+
+# Mason Bricks
+- Usage documentation for mason bricks can be found in BRICKS.md
 
 # Code Style Guidelines
 - Use flutter_lints from analysis_options.yaml
-- Import order: dart, package, local
-- Use single quotes for strings
-- Prefer const constructors
-- Use BLoC pattern for state management
-- Error handling: try/catch with logging
+- Import order: dart, package, local (standard Dart convention)
+- Use single quotes for strings (prefer_single_quotes rule available)
+- Prefer const constructors for performance
+- Use BLoC pattern for state management (flutter_bloc in dependencies)
+- Error handling: try/catch with logging (logging package in dependencies)
 - Naming: PascalCase for classes, camelCase for variables
 - Types: always specify return types and parameter types
+- Workspace structure: multi-package with melos, use workspace packages
