@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:async';
 
 import 'package:app_locale/app_locale.dart';
+import 'package:app_logging/app_logging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class LocalHtmlViewer extends StatefulWidget {
 }
 
 class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
+  final _logger = AppLogger();
   WebViewController? _controller;
   String? _error;
   bool _isInitialized = false;
@@ -35,12 +37,12 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
     int attempt = 0;
 
     while (attempt < maxRetries) {
-      debugPrint(
+      _logger.d(
           'LocalHtmlViewer: Attempt ${attempt + 1} of $maxRetries at ${DateTime.now()}');
 
       final success = await _initializeWebView();
       if (success) {
-        debugPrint(
+        _logger.d(
             'LocalHtmlViewer: Successfully loaded on attempt ${attempt + 1}');
         return;
       }
@@ -49,7 +51,7 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
       if (attempt < maxRetries) {
         // Use shorter delays for first attempts, then increase
         final delaySeconds = attempt <= 2 ? 1 : attempt;
-        debugPrint('LocalHtmlViewer: Retrying in $delaySeconds seconds...');
+        _logger.d('LocalHtmlViewer: Retrying in $delaySeconds seconds...');
         await Future.delayed(Duration(seconds: delaySeconds));
       }
     }
@@ -63,13 +65,13 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
 
   Future<bool> _initializeWebView() async {
     try {
-      debugPrint('LocalHtmlViewer: Loading file ${widget.indexFile}');
-      debugPrint(
+      _logger.d('LocalHtmlViewer: Loading file ${widget.indexFile}');
+      _logger.d(
           'LocalHtmlViewer: File exists: ${File(widget.indexFile).existsSync()}');
 
       // Normalize the file path for the platform
       final normalizedPath = Uri.file(widget.indexFile).toFilePath();
-      debugPrint('LocalHtmlViewer: Normalized path: $normalizedPath');
+      _logger.d('LocalHtmlViewer: Normalized path: $normalizedPath');
 
       setState(() {
         _error = null;
@@ -82,23 +84,23 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
       int retries = 0;
       while (!file.existsSync() && retries < 20) {
         // Increased retries
-        debugPrint(
+        _logger.d(
             'LocalHtmlViewer: File not found, waiting... retry $retries');
         await Future.delayed(Duration(milliseconds: 200)); // Increased delay
         retries++;
       }
 
       if (!file.existsSync()) {
-        debugPrint('LocalHtmlViewer: File does not exist: ${widget.indexFile}');
+        _logger.d('LocalHtmlViewer: File does not exist: ${widget.indexFile}');
         return false; // Return failure instead of setting final error
       }
 
-      debugPrint(
+      _logger.d(
           'LocalHtmlViewer: File found, size: ${file.lengthSync()} bytes');
 
       // Additional wait time to ensure file is fully released by OS
       await Future.delayed(Duration(milliseconds: 500));
-      debugPrint('LocalHtmlViewer: Finished waiting for file system to settle');
+      _logger.d('LocalHtmlViewer: Finished waiting for file system to settle');
 
       // Create the controller first
       final controller = WebViewController();
@@ -110,7 +112,7 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
         ..setNavigationDelegate(
           NavigationDelegate(
             onPageStarted: (String url) {
-              debugPrint('LocalHtmlViewer: Page started loading: $url');
+              _logger.d('LocalHtmlViewer: Page started loading: $url');
             },
             onPageFinished: (String url) {
               // Inject CSS to improve scrolling behavior
@@ -120,10 +122,10 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
                 document.documentElement.style.overflow = 'auto';
                 document.documentElement.style.webkitOverflowScrolling = 'touch';
               ''');
-              debugPrint('LocalHtmlViewer: Page finished loading: $url');
+              _logger.d('LocalHtmlViewer: Page finished loading: $url');
             },
             onWebResourceError: (WebResourceError error) {
-              debugPrint('WebView resource error: ${error.description}');
+              _logger.w('WebView resource error: ${error.description}');
               // Don't set state here, let the loadFile catch block handle it
             },
           ),
@@ -131,7 +133,7 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
 
       // Load the file with proper error handling
       await controller.loadFile(widget.indexFile);
-      debugPrint(
+      _logger.d(
           'LocalHtmlViewer: WebView loadFile completed for: ${widget.indexFile}');
 
       // Set the controller and mark as initialized
@@ -142,8 +144,7 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
 
       return true; // Success
     } catch (e, stackTrace) {
-      debugPrint('LocalHtmlViewer: Error loading file: $e');
-      debugPrint('LocalHtmlViewer: Stack trace: $stackTrace');
+      _logger.e('LocalHtmlViewer: Error loading file: $e', e, stackTrace);
       return false; // Failure
     }
   }

@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   app_locale: any
+  app_logging: any
 
   webview_flutter: ^4.4.2
 
