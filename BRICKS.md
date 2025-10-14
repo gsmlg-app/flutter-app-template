@@ -9,7 +9,7 @@ Creates a new screen file in the `lib/screens/` directory with proper navigation
 
 **Usage:**
 ```bash
-mason make screen --name ScreenName [options]
+mason make screen -c config.json
 ```
 
 **Variables:**
@@ -20,15 +20,22 @@ mason make screen --name ScreenName [options]
 
 **Examples:**
 ```bash
-# Basic screen in root screens folder
-mason make screen --name Home
+# Create config file for basic screen
+echo '{"name": "Home", "folder": "", "has_adaptive_scaffold": true, "has_app_bar": true}' > config.json
+mason make screen -c config.json
 
 # Screen in subfolder with custom options
-mason make screen --name Profile --folder user --has_adaptive_scaffold true --has_app_bar true
+echo '{"name": "Profile", "folder": "user", "has_adaptive_scaffold": true, "has_app_bar": true}' > config.json
+mason make screen -c config.json
 
 # Simple screen without adaptive scaffold
-mason make screen --name Login --has_adaptive_scaffold false
+echo '{"name": "Login", "folder": "auth", "has_adaptive_scaffold": false, "has_app_bar": false}' > config.json
+mason make screen -c config.json
 ```
+
+**⚠️ Known Issues:**
+- When `has_adaptive_scaffold` is false, extra import may be generated (needs manual cleanup)
+- When `has_app_bar` is false, dangling comma may need manual removal
 
 **Generated File:**
 - `lib/screens/{folder}/{name}_screen.dart`
@@ -43,30 +50,43 @@ mason make screen --name Login --has_adaptive_scaffold false
 ---
 
 ### 2. Widget Brick (`widget`)
-Creates a complete reusable widget package in the `app_widget/` directory with platform-specific implementations.
+Creates a reusable widget package in the `app_widget/` folder with platform adaptive support and proper testing.
 
 **Usage:**
 ```bash
-mason make widget --name WidgetName [options]
+mason make widget -c config.json
 ```
 
 **Variables:**
 - `name` (required): Widget name (e.g., "CustomButton", "LoadingSpinner")
 - `type` (default: stateless): Widget type (`stateless` or `stateful`)
-- `folder` (optional): Subfolder name (e.g., "buttons" creates `app_widget/buttons/custom_button_widget/`)
-- `has_platform_adaptive` (default: true): Include platform-specific implementation
+- `folder` (optional): Optional subfolder in app_widget (e.g., "buttons" for app_widget/buttons/)
+- `has_platform_adaptive` (default: true): Include platform-specific implementation (Material vs Cupertino)
 
 **Examples:**
 ```bash
 # Basic stateless widget
-mason make widget --name CustomButton
+echo '{"name": "CustomButton", "type": "stateless", "folder": "buttons", "has_platform_adaptive": true}' > config.json
+mason make widget -c config.json
 
 # Stateful widget with platform adaptation
-mason make widget --name LoadingSpinner --type stateful --has_platform_adaptive true
+echo '{"name": "LoadingSpinner", "type": "stateful", "folder": "", "has_platform_adaptive": true}' > config.json
+mason make widget -c config.json
 
-# Widget in specific folder
-mason make widget --name Card --folder cards --type stateless
+# Widget in specific folder without platform adaptation
+echo '{"name": "Card", "type": "stateless", "folder": "cards", "has_platform_adaptive": false}' > config.json
+mason make widget -c config.json
 ```
+
+**⚠️ Known Issues:**
+- **CRITICAL**: Generated widgets missing class inheritance and build method signatures
+- Widget output directory may not respect folder structure
+- Manual fixes required for generated widget files to be functional
+
+**Manual Fixes Required:**
+1. Add `StatelessWidget` or `StatefulWidget` to class declaration
+2. Fix build method signature: `Widget build(BuildContext context)`
+3. Move files to correct `app_widget/{folder}/{name}_widget/` structure if needed
 
 **Generated Structure:**
 ```
@@ -92,19 +112,30 @@ app_widget/{folder}/{name}_widget/
 - Proper documentation and changelog
 - Export pattern following project conventions
 - MIT license included
+- Analysis options for consistent linting
 
 ---
 
 ### 3. Simple BLoC Brick (`simple_bloc`)
-Creates a simple BLoC package with state management components.
+Creates a simple bloc package in this app with state management components.
 
 **Usage:**
 ```bash
-mason make simple_bloc --name BlocName
+mason make simple_bloc -c config.json
 ```
 
 **Variables:**
-- `name` (required): BLoC name (e.g., "User", "Settings")
+- `name` (required): BLoC name (e.g., "User", "Settings", default: "todo")
+
+**Examples:**
+```bash
+echo '{"name": "User"}' > config.json
+mason make simple_bloc -c config.json
+
+# Using default name
+echo '{"name": "todo"}' > config.json
+mason make simple_bloc -c config.json
+```
 
 **Generated Structure:**
 ```
@@ -117,8 +148,22 @@ mason make simple_bloc --name BlocName
 │   └── {name}_bloc.dart
 ├── test/
 │   └── {name}_bloc_test.dart
-└── pubspec.yaml
+├── .gitignore
+├── .metadata
+├── README.md
+├── CHANGELOG.md
+├── LICENSE
+├── pubspec.yaml
+└── hooks/ (pre/post generation scripts)
 ```
+
+**Features:**
+- Clean BLoC pattern implementation
+- Event-driven state management
+- Comprehensive testing scaffold
+- Proper documentation and changelog
+- MIT license included
+- Pre/post generation hooks for customization
 
 ---
 
@@ -127,7 +172,7 @@ Creates a comprehensive list BLoC package with advanced features including schem
 
 **Usage:**
 ```bash
-mason make list_bloc --name ListName [options]
+mason make list_bloc -c config.json
 ```
 
 **Variables:**
@@ -145,13 +190,16 @@ mason make list_bloc --name ListName [options]
 **Examples:**
 ```bash
 # Complete feature list for users
-mason make list_bloc --name Users --item_type User --has_pagination true --has_search true --has_filters true --has_reorder true
+echo '{"name": "Users", "item_type": "User", "has_pagination": true, "has_search": true, "has_filters": true, "has_reorder": true, "has_crud": true, "filter_types": ["category", "status"], "sort_options": ["name", "date"], "output_directory": "app_bloc"}' > config.json
+mason make list_bloc -c config.json
 
 # Simple product list without pagination
-mason make list_bloc --name Products --item_type Product --has_pagination false --has_search false --has_filters false
+echo '{"name": "Products", "item_type": "Product", "has_pagination": false, "has_search": false, "has_filters": false, "has_reorder": false, "has_crud": false, "filter_types": [], "sort_options": [], "output_directory": "app_bloc"}' > config.json
+mason make list_bloc -c config.json
 
 # Task list with basic features
-mason make list_bloc --name Tasks --item_type Task --has_crud true --filter_types "status,priority"
+echo '{"name": "Tasks", "item_type": "Task", "has_crud": true, "filter_types": ["status", "priority"], "sort_options": ["name", "date"], "output_directory": "app_bloc"}' > config.json
+mason make list_bloc -c config.json
 ```
 
 **Generated Structure:**
@@ -214,17 +262,17 @@ context.read<UserListBloc>().add(UserListEventBatchDelete(['user-1', 'user-2']))
 ---
 
 ### 5. Form BLoC Brick (`form_bloc`)
-Creates a comprehensive form BLoC package using the advanced `form_bloc` library with dynamic field generation, validation, submission logic, and support for multiple field types.
+Creates a form bloc package with dynamic field generation, validation, and submission logic.
 
 **Usage:**
 ```bash
-mason make form_bloc --name FormName [options]
+mason make form_bloc -c config.json
 ```
 
 **Variables:**
-- `name` (required): Form name (e.g., "Login", "Registration", "Profile")
-- `output_directory` (default: "app_bloc"): Where to create the bloc package
-- `fields` (default: ["email:email", "password:password"]): List of fields in format "name:field_type[:options]"
+- `name` (required): Form bloc name (e.g., "Login", "Registration", default: "login")
+- `output_directory` (default: "app_bloc"): Output directory for the form bloc
+- `fields` (default: ["email:email", "password:password"]): List of fields in format "name:field_type" (e.g., "name:text", "age:number", "isActive:boolean")
 
 **Field Types:**
 | Field Type | Description | Example | Generated FieldBloc |
@@ -243,32 +291,36 @@ mason make form_bloc --name FormName [options]
 
 **Basic Login Form (default):**
 ```bash
-mason make form_bloc --name Login
+echo '{"name": "Login", "output_directory": "app_bloc", "fields": ["email:email", "password:password"]}' > config.json
+mason make form_bloc -c config.json
+
+# Using default values
+echo '{"name": "login"}' > config.json
+mason make form_bloc -c config.json
 ```
-Generates: `email:email`, `password:password`
 
 **User Registration Form:**
 ```bash
-mason make form_bloc --name Registration \
-  --fields "name:text,email:email,password:password,confirmPassword:password,agreeTerms:boolean"
+echo '{"name": "Registration", "output_directory": "app_bloc", "fields": ["name:text", "email:email", "password:password", "confirmPassword:password", "agreeTerms:boolean"]}' > config.json
+mason make form_bloc -c config.json
 ```
 
 **Profile Form with Select Options:**
 ```bash
-mason make form_bloc --name Profile \
-  --fields "firstName:text,lastName:text,email:email,phone:text,country:select:USA,Canada,Mexico,newsletter:boolean"
+echo '{"name": "Profile", "output_directory": "app_bloc", "fields": ["firstName:text", "lastName:text", "email:email", "phone:text", "country:select:USA,Canada,Mexico", "newsletter:boolean"]}' > config.json
+mason make form_bloc -c config.json
 ```
 
 **Survey Form with Multiple Selection:**
 ```bash
-mason make form_bloc --name Survey \
-  --fields "rating:select:1,2,3,4,5,comments:text,interests:multiselect:sports,music,movies,newsletter:boolean"
+echo '{"name": "Survey", "output_directory": "app_bloc", "fields": ["rating:select:1,2,3,4,5", "comments:text", "interests:multiselect:sports,music,movies", "newsletter:boolean"]}' > config.json
+mason make form_bloc -c config.json
 ```
 
 **Complex Form with Mixed Types:**
 ```bash
-mason make form_bloc --name Application \
-  --fields "fullName:text,email:email,age:number,birthDate:date,experience:select:Junior,Senior,Expert,skills:multiselect:Flutter,Dart,React,available:boolean,resume:file"
+echo '{"name": "Application", "output_directory": "app_bloc", "fields": ["fullName:text", "email:email", "age:number", "birthDate:date", "experience:select:Junior,Senior,Expert", "skills:multiselect:Flutter,Dart,React", "available:boolean", "resume:file"]}' > config.json
+mason make form_bloc -c config.json
 ```
 
 **Generated Structure:**
@@ -496,31 +548,106 @@ This generates a complete form with text inputs, email validation, phone number,
 
 
 ### 7. Repository Brick (`repository`)
-Creates a complete repository pattern implementation with data sources and models.
+Creates a complete repository pattern implementation with data sources, models, and comprehensive testing.
 
 **Usage:**
 ```bash
-mason make repository --name RepositoryName [options]
+mason make repository -c config.json
 ```
 
 **Variables:**
 - `name` (required): Repository name (e.g., "User", "Product")
-- `has_remote_data_source` (default: true): Include remote data source
-- `has_local_data_source` (default: true): Include local data source
-- `model_name` (optional): Model name (defaults to repository name)
+- `has_remote_data_source` (default: true): Include remote data source (API calls)
+- `has_local_data_source` (default: true): Include local data source (local storage)
+- `model_name` (optional): Model name for the repository (defaults to repository name)
+
+**Examples:**
+```bash
+# Repository with both data sources
+echo '{"name": "User", "has_remote_data_source": true, "has_local_data_source": true, "model_name": "User"}' > config.json
+mason make repository -c config.json
+
+# Repository with only local data source
+echo '{"name": "Product", "has_remote_data_source": false, "has_local_data_source": true, "model_name": "Product"}' > config.json
+mason make repository -c config.json
+
+# Repository with custom model name
+echo '{"name": "UserAuth", "has_remote_data_source": true, "has_local_data_source": false, "model_name": "Authentication"}' > config.json
+mason make repository -c config.json
+```
+
+**Generated Structure:**
+```
+{name}_repository/
+├── lib/
+│   ├── src/
+│   │   ├── data_sources/
+│   │   │   ├── local_data_source.dart
+│   │   │   └── remote_data_source.dart
+│   │   ├── exceptions/
+│   │   │   └── exceptions.dart
+│   │   ├── models/
+│   │   │   └── {name}_model.dart
+│   │   └── repository.dart
+│   └── {name}_repository.dart
+└── pubspec.yaml
+```
+
+**Features:**
+- Clean architecture repository pattern
+- Remote and local data source separation
+- Custom exception handling
+- Data model generation
+- Comprehensive testing support
+- Flexible data source configuration
+
+**⚠️ Known Issues:**
+- Method parameter names may be missing in generated repository (needs manual fix)
+- Data sources may be generated even when set to false
 
 ---
 
 ### 8. API Client Brick (`api_client`)
-Generates a complete API client package from OpenAPI/Swagger specifications.
+Generates a complete API client package from OpenAPI/Swagger specifications with Dio, Retrofit, and JSON serialization support.
 
 **Usage:**
 ```bash
-mason make api_client --package_name api_package_name
+mason make api_client -c config.json
 ```
 
 **Variables:**
-- `package_name` (required): Package name for the API client
+- `package_name` (required): Package name for the API client (default: "app_api")
+
+**Examples:**
+```bash
+echo '{"package_name": "user_api_client"}' > config.json
+mason make api_client -c config.json
+
+# Using default name
+echo '{"package_name": "app_api"}' > config.json
+mason make api_client -c config.json
+```
+
+**Generated Structure:**
+```
+{package_name}/
+├── lib/
+│   └── {package_name}.dart
+├── test/
+│   └── {package_name}_test.dart
+├── openapi.yaml (place your OpenAPI spec here)
+├── swagger_parser.yaml
+├── pubspec.yaml
+└── hooks/ (pre/post generation scripts)
+```
+
+**Features:**
+- OpenAPI/Swagger specification support
+- Dio HTTP client integration
+- Retrofit annotation support
+- JSON serialization setup
+- Comprehensive testing scaffold
+- Pre/post generation hooks for customization
 
 ---
 

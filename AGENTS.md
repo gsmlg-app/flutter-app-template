@@ -6,6 +6,8 @@
 - Analyze: `melos run analyze`
 - Build: `melos run build-runner`
 - Prepare: `melos run prepare` (bootstrap + gen-l10n + build-runner)
+- Fix code: `melos run fix` (applies dart fix --apply)
+- Check dependencies: `melos run validate-dependencies`
 
 # Mason Bricks
 - Usage documentation for mason bricks can be found in BRICKS.md
@@ -25,3 +27,8 @@
 - This project uses Melos for mono-repo management
 - When including packages in this project, use `<package_name>: any` in pubspec.yaml
 - Do not use path dependencies for workspace packages
+
+# Additional Notes
+- Generated files (*.g.dart, *.freezed.dart) are excluded from analysis
+- Localization: use `melos run gen-l10n` to generate from ARB files
+- Brick testing: use `melos run brick-test` for Mason template tests
