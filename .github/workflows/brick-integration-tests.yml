@@ -42,6 +42,7 @@ jobs:
 
       - name: Initialize project
         run: |
+          flutter pub get
           melos bootstrap
           mason get
 
