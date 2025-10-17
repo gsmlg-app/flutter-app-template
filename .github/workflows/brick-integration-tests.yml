@@ -43,7 +43,7 @@ jobs:
       - name: Initialize project
         run: |
           flutter pub get
-          melos bootstrap
+          melos exec -- flutter pub get
           mason get
 
       - name: Install brick test dependencies
