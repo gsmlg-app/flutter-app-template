@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Flutter monorepo managed by Melos, providing a comprehensive template for building Flutter applications with modular architecture. The project follows clean architecture principles with separation of concerns across multiple packages.
+This is a sophisticated Flutter monorepo template that demonstrates modern Flutter development practices with modular architecture, BLoC state management, and comprehensive tooling setup. The project follows clean architecture principles with separation of concerns across multiple specialized packages, providing a production-ready foundation for building scalable Flutter applications.
 
 ## Architecture Structure
 
@@ -46,25 +46,27 @@ mason get
 
 ### Development Workflow
 ```bash
-# Run all static analysis
-melos run analyze
-melos run format
+# Code quality and analysis
+melos run analyze      # Run Flutter analysis for all packages
+melos run format       # Format all Dart code
+melos run fix          # Apply automatic fixes
 
-# Format all code
-melos run format
+# Testing
+melos run test         # Run Flutter tests for all packages
+melos run test:dart    # Run Dart tests for non-Flutter packages
+melos run test:flutter # Run Flutter tests
+melos run test:all     # All tests including brick tests
+melos run test:coverage # Run tests with coverage reports
+melos run test:watch   # Watch mode for development
 
-# Run tests across all packages
-flutter test
-melos exec flutter test
-melos run test
+# Code generation
+melos run prepare      # Bootstrap + gen-l10n + build-runner
+melos run build-runner # Run build_runner
+melos run gen-l10n     # Generate localization files
 
-# Generate code (build_runner, l10n)
-melos run prepare
-melos run build-runner
-
-# Check dependencies
-melos run validate-dependencies
-melos run outdated
+# Dependency management
+melos run validate-dependencies # Validate dependencies usage
+melos run outdated      # Check outdated dependencies
 ```
 
 ### Individual Package Commands
@@ -141,10 +143,33 @@ dart run flutter_launcher_icons:main
 
 ## Testing Structure
 
+### Test Organization
 Tests are co-located with their respective packages:
-- Unit tests: `test/` directory in each package
-- Widget tests: `test/` directory in main app
-- Integration tests: Use `flutter test` at root level
+- **Unit tests**: `test/` directory in each package
+- **Widget tests**: `test/screens/` in main app with comprehensive coverage
+- **Integration tests**: Use `flutter test` at root level
+- **Brick tests**: `tool/brick_tests/` for Mason template validation
+
+### Screen Test Coverage
+The main application includes comprehensive screen tests covering:
+- **SplashScreen**: UI rendering, dimensions, orientation, theming
+- **ErrorScreen**: Error display, localization, navigation
+- **HomeScreen**: Component rendering, button interactions, exception handling
+- **SettingsScreen**: Tile display, icons, navigation
+- **AppSettingsScreen**: SharedPreferences integration, dialogs, user interactions
+
+### Running Tests
+```bash
+# All tests
+melos run test
+
+# Specific test types
+melos run test:selective  # Only packages with tests
+melos run test:bricks     # Mason brick tests
+
+# Single test
+flutter test test/screens/splash_screen_test.dart
+```
 
 ## Package Dependencies
 
@@ -177,12 +202,67 @@ Declarative routing with GoRouter:
 - `MaterialApp.router` configuration in `lib/app.dart`
 - Error handling with dedicated error screen
 
-### Code Style Guidelines
+## Mason Code Generation System
+
+### Available Bricks
+The project includes 7+ Mason bricks for rapid development:
+
+1. **api_client**: Generate API client from OpenAPI specifications
+2. **simple_bloc**: Generate basic BLoC structure with event/state management
+3. **list_bloc**: Generate list-based BLoC with pagination support
+4. **form_bloc**: Generate form validation and submission BLoC
+5. **repository**: Generate repository pattern classes with data sources
+6. **screen**: Generate screen with adaptive scaffold integration
+7. **widget**: Generate reusable widget components
+
+### Brick Usage Examples
+```bash
+# Generate API client (add OpenAPI spec afterward)
+mason make api_client -o app_api/app_api --package_name=app_api
+
+# Generate BLoC patterns
+mason make simple_bloc -o app_bloc/feature_name --name=feature_name
+mason make list_bloc -o app_bloc/feature_name --name=feature_name
+
+# Generate form BLoC with validation
+mason make form_bloc --name Login --field_names "email,password"
+
+# Generate repository with data sources
+mason make repository -o app_lib/feature_name --name=feature_name
+
+# Generate UI components
+mason make screen --name ScreenName --folder subfolder
+mason make widget --name WidgetName --type stateless --folder components
+```
+
+For complete documentation, see [BRICKS.md](./BRICKS.md).
+
+## CI/CD and Development Environment
+
+### GitHub Workflows
+- **Brick Integration Demo**: Automated testing of Mason brick generation
+- Supports manual and automatic triggering for brick changes
+- Multiple test types: unit, performance, integration, specific bricks
+
+### Development Environment
+- **Nix**: Reproducible development environment via Devenv
+- **Direnv**: Automatic environment loading with `.envrc`
+- **Devenv**: Composable development environments with `devenv.nix`
+- **Flutter SDK**: Managed through Devenv for consistent versions
+
+## Code Style Guidelines
+
+### General Style
 - Use flutter_lints from analysis_options.yaml
 - Import order: dart, package, local (standard Dart convention)
 - Use single quotes for strings (prefer_single_quotes rule available)
 - Prefer const constructors for performance
-- Use BLoC pattern for state management (flutter_bloc in dependencies)
-- Error handling: try/catch with logging (logging package in dependencies)
 - Naming: PascalCase for classes, camelCase for variables
 - Types: always specify return types and parameter types
+
+### Architecture Patterns
+- Use BLoC pattern for state management (flutter_bloc in dependencies)
+- Error handling: try/catch with logging (use app_logging package)
+- Provider pattern for dependency injection via MainProvider
+- Repository pattern for data layer abstraction
+- Clean architecture with separation of concerns
