@@ -13,6 +13,7 @@ This is a sophisticated Flutter monorepo template that demonstrates modern Flutt
 - **State Management**: `app_bloc/` - BLoC pattern implementations for business logic
 - **Shared Libraries**: `app_lib/` - Core utilities, themes, localization, database, logging
 - **UI Components**: `app_widget/` - Reusable widgets and UI elements
+- **Plugins**: `app_plugin/` - Native platform plugins with federated architecture
 - **Code Generation**: `bricks/` - Mason templates for scaffolding
 - **Third-party**: `third_party/` - Modified/custom third-party packages
 
@@ -107,6 +108,13 @@ mason make screen --name ScreenName --folder subfolder
 
 # Generate new widget
 mason make widget --name WidgetName --type stateless --folder components
+
+# Generate native federation plugin
+mason make native_federation_plugin \
+  --name client_info \
+  --description "Gather client information" \
+  --package_prefix app \
+  -o app_plugin
 ```
 
 For complete documentation on all available Mason bricks and their usage, see [BRICKS.md](./BRICKS.md).
@@ -205,7 +213,7 @@ Declarative routing with GoRouter:
 ## Mason Code Generation System
 
 ### Available Bricks
-The project includes 7+ Mason bricks for rapid development:
+The project includes 8+ Mason bricks for rapid development:
 
 1. **api_client**: Generate API client from OpenAPI specifications
 2. **simple_bloc**: Generate basic BLoC structure with event/state management
@@ -214,6 +222,7 @@ The project includes 7+ Mason bricks for rapid development:
 5. **repository**: Generate repository pattern classes with data sources
 6. **screen**: Generate screen with adaptive scaffold integration
 7. **widget**: Generate reusable widget components
+8. **native_federation_plugin**: Generate complete native federation plugin with platform-specific implementations
 
 ### Brick Usage Examples
 ```bash

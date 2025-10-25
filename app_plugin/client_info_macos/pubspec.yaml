@@ -1,0 +1,26 @@
+name: app_client_info_macos
+description: macOS implementation of app_client_info
+version: 0.1.0
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.5.0
+  flutter: ^3.24.0
+
+flutter:
+  plugin:
+    implements: app_client_info
+    platforms:
+      macos:
+        pluginClass: ClientInfoPlugin
+
+dependencies:
+  flutter:
+    sdk: flutter
+  app_client_info_platform_interface: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

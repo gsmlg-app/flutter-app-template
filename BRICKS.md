@@ -607,7 +607,297 @@ mason make repository -c config.json
 
 ---
 
-### 8. API Client Brick (`api_client`)
+### 8. Native Federation Plugin Brick (`native_federation_plugin`)
+Creates a complete federated Flutter plugin with native platform implementations for Android, iOS, Linux, macOS, and Windows.
+
+**Usage:**
+```bash
+mason make native_federation_plugin -c config.json
+```
+
+**Variables:**
+- `name` (required): Plugin name (e.g., "client_info", "battery_monitor")
+- `description` (required): Plugin description
+- `package_prefix` (default: "app"): Package name prefix
+- `author` (default: "GSMLG Team"): Author name
+- `support_android` (default: true): Include Android platform support
+- `support_ios` (default: true): Include iOS platform support
+- `support_linux` (default: true): Include Linux platform support
+- `support_macos` (default: true): Include macOS platform support
+- `support_windows` (default: true): Include Windows platform support
+- `support_web` (default: false): Include Web platform support
+
+**Examples:**
+```bash
+# Full cross-platform plugin
+mason make native_federation_plugin \
+  --name client_info \
+  --description "Gather client information across all platforms" \
+  --package_prefix app \
+  --author "GSMLG Team" \
+  --support_android true \
+  --support_ios true \
+  --support_linux true \
+  --support_macos true \
+  --support_windows true \
+  -o app_plugin
+
+# Mobile-only plugin
+echo '{"name": "mobile_info", "description": "Mobile device information", "package_prefix": "app", "support_android": true, "support_ios": true, "support_linux": false, "support_macos": false, "support_windows": false}' > config.json
+mason make native_federation_plugin -c config.json -o app_plugin
+
+# Desktop-only plugin
+echo '{"name": "desktop_utils", "description": "Desktop utilities", "package_prefix": "app", "support_android": false, "support_ios": false, "support_linux": true, "support_macos": true, "support_windows": true}' > config.json
+mason make native_federation_plugin -c config.json -o app_plugin
+```
+
+**Generated Structure:**
+```
+{name}/                                    # Main plugin package
+├── lib/
+│   ├── src/
+│   │   ├── {name}.dart                   # Plugin main class
+│   │   └── models/
+│   │       ├── models.dart               # Model exports
+│   │       └── {name}_data.dart          # Data model
+│   └── {package_prefix}_{name}.dart      # Public API export
+└── pubspec.yaml
+
+{name}_platform_interface/                # Platform interface
+├── lib/
+│   ├── src/
+│   │   ├── {name}_platform.dart          # Abstract platform interface
+│   │   └── method_channel_{name}.dart    # Method channel implementation
+│   └── {package_prefix}_{name}_platform_interface.dart
+└── pubspec.yaml
+
+{name}_android/                            # Android implementation
+├── android/
+│   ├── build.gradle
+│   ├── src/main/
+│   │   ├── AndroidManifest.xml
+│   │   └── kotlin/com/{package_prefix}/{name}/
+│   │       └── {Name}Plugin.kt           # Kotlin native code
+├── lib/
+│   └── {package_prefix}_{name}_android.dart
+└── pubspec.yaml
+
+{name}_ios/                                # iOS implementation
+├── ios/
+│   ├── {name}_ios.podspec
+│   └── Classes/
+│       └── {Name}Plugin.swift            # Swift native code
+├── lib/
+│   └── {package_prefix}_{name}_ios.dart
+└── pubspec.yaml
+
+{name}_linux/                              # Linux implementation
+├── linux/
+│   ├── CMakeLists.txt
+│   ├── {name}_plugin.cc                  # C++ implementation
+│   └── include/{name}_linux/
+│       └── {name}_plugin.h               # C++ header
+├── lib/
+│   └── {package_prefix}_{name}_linux.dart
+└── pubspec.yaml
+
+{name}_macos/                              # macOS implementation
+├── macos/
+│   ├── {name}_macos.podspec
+│   └── Classes/
+│       └── {Name}Plugin.swift            # Swift native code
+├── lib/
+│   └── {package_prefix}_{name}_macos.dart
+└── pubspec.yaml
+
+{name}_windows/                            # Windows implementation
+├── windows/
+│   ├── CMakeLists.txt
+│   ├── {name}_plugin.cpp                 # C++ implementation
+│   └── {name}_plugin.h                   # C++ header
+├── lib/
+│   └── {package_prefix}_{name}_windows.dart
+└── pubspec.yaml
+
+README.md                                  # Plugin documentation
+```
+
+**Post-Generation Steps:**
+
+1. **Add to Melos Workspace:**
+```yaml
+# In root pubspec.yaml
+workspace:
+  - app_plugin/{name}
+  - app_plugin/{name}_platform_interface
+  - app_plugin/{name}_android
+  - app_plugin/{name}_ios
+  - app_plugin/{name}_linux
+  - app_plugin/{name}_macos
+  - app_plugin/{name}_windows
+```
+
+2. **Add resolution: workspace to all pubspec.yaml files:**
+```yaml
+# In each generated pubspec.yaml
+resolution: workspace
+```
+
+3. **Run Melos Bootstrap:**
+```bash
+melos bootstrap
+```
+
+4. **Add to Main App:**
+```yaml
+# In main app pubspec.yaml dependencies
+dependencies:
+  {package_prefix}_{name}: any
+```
+
+**Features:**
+- **Federated Architecture**: Clean separation between interface and implementations
+- **Native Code**: Platform-specific implementations in Kotlin, Swift, and C++
+- **Method Channels**: Type-safe communication between Dart and native code
+- **Built-in Caching**: Platform implementations include data caching
+- **Comprehensive Structure**: Includes pubspec, native build files, and platform registration
+- **Cross-Platform**: Support for all major platforms (Android, iOS, Linux, macOS, Windows)
+- **Ready to Extend**: Easy to add new methods and features
+
+**Native Implementation Details:**
+
+**Android (Kotlin):**
+- Uses `FlutterPlugin` and `MethodCallHandler`
+- Access to Android `Build` class for device info
+- Method channel: `{package_prefix}_{name}`
+- Supports `getData()` and `refresh()` methods
+
+**iOS (Swift):**
+- Uses `FlutterPlugin` protocol
+- Access to `UIDevice` for device information
+- Podspec configured for iOS 12.0+
+- Automatic platform registration
+
+**Linux (C++):**
+- GTK-based Flutter Linux plugin
+- Uses `uname` for system information
+- CMake build configuration
+- FlValue serialization for data exchange
+
+**macOS (Swift):**
+- Uses `ProcessInfo` for system data
+- Podspec configured for macOS 10.14+
+- Native Swift implementation
+- Access to macOS-specific APIs
+
+**Windows (C++):**
+- Windows API integration
+- CMake build system
+- Access to `OSVERSIONINFOW` and `SYSTEM_INFO`
+- Memory and CPU information available
+
+**Example Usage:**
+
+After generating the plugin, use it in your app:
+
+```dart
+import 'package:app_client_info/app_client_info.dart';
+
+// Get plugin instance
+final clientInfo = ClientInfo.instance;
+
+// Fetch data from native platform
+final data = await clientInfo.getData();
+print('Platform: ${data.platform}');
+print('Timestamp: ${data.timestamp}');
+print('Additional Data: ${data.additionalData}');
+
+// Refresh cached data
+await clientInfo.refresh();
+final newData = await clientInfo.getData();
+```
+
+**Customizing Native Implementations:**
+
+Each platform package can be customized independently:
+
+**Android (`{name}_android/android/src/main/kotlin/.../Plugin.kt`):**
+```kotlin
+private fun getData(): Map<String, Any> {
+    return mutableMapOf(
+        "platform" to "android",
+        "additionalData" to mapOf(
+            "manufacturer" to Build.MANUFACTURER,
+            "model" to Build.MODEL,
+            // Add more Android-specific data here
+        )
+    )
+}
+```
+
+**iOS (`{name}_ios/ios/Classes/Plugin.swift`):**
+```swift
+private func getData() throws -> [String: Any] {
+    let device = UIDevice.current
+    return [
+        "platform": "ios",
+        "additionalData": [
+            "name": device.name,
+            "model": device.model,
+            // Add more iOS-specific data here
+        ]
+    ]
+}
+```
+
+**Testing:**
+
+The brick generates test-ready structure. Add tests in each package:
+
+```dart
+// In {name}/test/{name}_test.dart
+void main() {
+  test('getData returns platform data', () async {
+    final clientInfo = ClientInfo.instance;
+    final data = await clientInfo.getData();
+    expect(data.platform, isNotEmpty);
+    expect(data.timestamp, isNotNull);
+  });
+}
+```
+
+**Best Practices:**
+1. Design the platform interface before generating
+2. Use descriptive names that clearly indicate plugin purpose
+3. Implement error handling in native code
+4. Add comprehensive tests for each platform
+5. Document public APIs thoroughly
+6. Use caching to avoid expensive native calls
+7. Handle platform-specific edge cases gracefully
+8. Version all packages together (keep versions in sync)
+
+**⚠️ Known Limitations:**
+- Web platform support is basic (no native code, Dart only)
+- Native code requires platform-specific development knowledge
+- Each platform must be tested on actual devices
+- CMake and build configuration may need adjustment for complex plugins
+
+**Dependencies:**
+- `plugin_platform_interface`: For federated plugin architecture
+- `flutter_lints`: For code quality
+- `mockito`: For testing (optional)
+
+**Publishing:**
+If you want to publish to pub.dev:
+1. Remove `publish_to: none` from all pubspec.yaml files
+2. Add proper `homepage` and `repository` URLs
+3. Ensure all packages have matching versions
+4. Test on all supported platforms
+5. Follow pub.dev publishing guidelines
+
+---
+
+### 9. API Client Brick (`api_client`)
 Generates a complete API client package from OpenAPI/Swagger specifications with Dio, Retrofit, and JSON serialization support.
 
 **Usage:**
