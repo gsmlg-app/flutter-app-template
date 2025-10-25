@@ -13,3 +13,5 @@ bricks:
     path: bricks/widget
   form_bloc:
     path: bricks/form_bloc
+  native_federation_plugin:
+    path: bricks/native_federation_plugin

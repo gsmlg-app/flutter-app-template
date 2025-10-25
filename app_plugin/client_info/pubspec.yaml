@@ -1,0 +1,27 @@
+name: app_client_info
+description: Gather client information across all platforms
+version: 0.1.0
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.5.0
+  flutter: ^3.24.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  app_client_info_platform_interface: any
+  app_client_info_android: any
+  app_client_info_ios: any
+  app_client_info_linux: any
+  app_client_info_macos: any
+  app_client_info_windows: any
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  mockito: ^5.4.4
+  build_runner: ^2.4.9
