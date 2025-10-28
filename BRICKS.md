@@ -20,12 +20,12 @@ mason make screen -c config.json
 
 **Examples:**
 ```bash
-# Create config file for basic screen
+# Create config file for basic screen 
 echo '{"name": "Home", "folder": "", "has_adaptive_scaffold": true, "has_app_bar": true}' > config.json
 mason make screen -c config.json
 
 # Screen in subfolder with custom options
-echo '{"name": "Profile", "folder": "user", "has_adaptive_scaffold": true, "has_app_bar": true}' > config.json
+echo '{"name": "Profile", "folder": "user", "ham nnks_adaptive_scaffold": true, "has_app_bar": true}' > config.json
 mason make screen -c config.json
 
 # Simple screen without adaptive scaffold
