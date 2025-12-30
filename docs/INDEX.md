@@ -45,10 +45,10 @@ In-depth guide for the `form_bloc` and `flutter_form_bloc` packages:
 
 ### TESTING.md
 Guide for running tests across the Flutter monorepo using Melos:
-- Basic test commands (`melos run test`)
-- Coverage reporting
-- Watch mode for development
-- Package-specific test information
+- Melos test commands (`melos run test`, `melos run brick-test`)
+- CI/CD integration with GitHub Actions
+- Screen test coverage details
+- Writing widget and BLoC tests
 
 ### USAGE.md
 Practical guide for setting up and using the error handling system:

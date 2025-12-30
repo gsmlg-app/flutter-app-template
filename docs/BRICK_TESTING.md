@@ -32,12 +32,13 @@ tool/brick_tests/
 
 ### Quick Start
 ```bash
-# Run all brick tests (when compatible)
-melos run test:bricks
+# Run brick tests via melos
+melos run brick-test
 
 # Or run directly
 cd tool/brick_tests
-./run_tests.sh
+dart pub get
+dart test *.dart
 ```
 
 ### Individual Test Suites
@@ -335,29 +336,69 @@ dart test --pause-after-load api_client_test.dart
 
 ## CI/CD Integration
 
-### GitHub Actions Example
+Brick tests are integrated into the project's GitHub Actions CI pipeline via `.github/workflows/brick-tests.yml`.
+
+### GitHub Actions Workflow
+
+The workflow runs on:
+- Push to `main` or `develop` branches (when `bricks/**` or `tool/brick_tests/**` changes)
+- Pull requests to `main` or `develop` branches
+- Manual trigger via `workflow_dispatch`
+
 ```yaml
 name: Brick Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'bricks/**'
+      - 'tool/brick_tests/**'
+      - '.github/workflows/brick-tests.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'bricks/**'
+      - 'tool/brick_tests/**'
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of test to run'
+        type: choice
+        options: ['all', 'structure', 'generation', 'integration']
+      run_integration:
+        description: 'Run integration tests in real project'
+        type: boolean
 
 jobs:
-  brick-tests:
+  test-bricks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@v1
-      
-      - name: Install dependencies
+      - uses: actions/checkout@v4
+      - uses: flutter-actions/setup-flutter@v4
+
+      - name: Install tools
         run: |
-          cd tool/brick_tests
-          dart pub get
-      
-      - name: Run brick tests
+          dart pub global activate mason_cli
+          dart pub global activate melos
+
+      - name: Initialize project
         run: |
-          cd tool/brick_tests
-          dart test
+          melos bootstrap
+          mason get
+
+      - name: Validate brick structure
+        run: # Validates brick.yaml files
+
+      - name: Test brick generation
+        run: # Tests mason make commands
 ```
+
+### Manual Trigger Options
+
+When triggering manually, you can choose:
+- **test_type**: `all`, `structure`, `generation`, or `integration`
+- **run_integration**: Enable real Flutter project integration tests
 
 ## Troubleshooting
 

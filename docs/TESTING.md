@@ -1,76 +1,153 @@
 # Testing Guide
 
-This document explains how to run tests across the entire Flutter monorepo using Melos.
+This document explains how to run tests across the Flutter monorepo using Melos.
 
 ## Available Test Commands
 
-### Basic Testing Commands
+### Melos Test Commands
 
-- `melos run test` - Run Flutter tests for all packages (ignores packages without tests)
-- `melos run test:selective` - Run Flutter tests only for packages that have test directories
-- `melos run test:coverage` - Run Flutter tests with coverage for all packages
-- `melos run test:watch` - Run Flutter tests in watch mode for all packages
-- `melos run test:names` - List all available tests in all packages
+| Command | Description |
+|---------|-------------|
+| `melos run test` | Run Flutter tests for all packages |
+| `melos run test:dart` | Run Dart tests (non-Flutter packages) |
+| `melos run test:flutter` | Run Flutter tests |
+| `melos run brick-test` | Run Mason brick tests (in `tool/brick_tests/`) |
 
-### Comprehensive Testing
+### Direct Test Commands
 
-- `melos run test:all` - Run all tests including Flutter tests and brick tests
-- `melos run test:report` - Generate a comprehensive test report for all packages
-- `melos run test:bricks` - Run Mason brick tests separately from Flutter tests
+```bash
+# Run all tests in a specific package
+cd app_lib/theme && flutter test
+
+# Run a single test file
+flutter test test/screens/splash_screen_test.dart
+
+# Run tests with coverage
+flutter test --coverage
+
+# Run tests in watch mode
+flutter test --watch
+```
+
+## CI/CD Integration
+
+Tests are automatically run on push/PR to main via GitHub Actions:
+
+```yaml
+# .github/workflows/ci.yml
+- name: Run tests
+  run: melos run test
+```
+
+The CI pipeline runs:
+1. Format check (`melos run format-check`)
+2. Analysis (`melos run analyze`)
+3. Tests (`melos run test`)
 
 ## Packages with Tests
 
-The following packages in the workspace have test directories:
+The following packages have test directories:
 
+### Main Application
+- `flutter_app_template` - Main app tests including screen tests in `test/screens/`
+
+### BLoC Packages
+- `theme_bloc` - Theme state management tests
+
+### Library Packages
 - `app_theme` - Theme management tests
-- `app_provider` - Provider/state management tests  
+- `app_provider` - Provider/state management tests
 - `app_database` - Database layer tests
 - `app_locale` - Internationalization tests
-- `theme_bloc` - BLoC theme management tests
-- `settings_ui` - Settings UI component tests
-- `form_bloc` - Form BLoC tests
-- `flutter_adaptive_scaffold` - Adaptive scaffold tests
-- `app_web_view` - WebView component tests
+
+### Widget Packages
 - `app_adaptive_widgets` - Adaptive widget tests
 - `app_feedback` - Feedback component tests
 - `app_artwork` - Artwork asset tests
-- `flutter_app_template` - Main app tests (including screen tests)
+- `app_web_view` - WebView component tests
 
-## Usage Examples
+### Third-Party Packages
+- `settings_ui` - Settings UI component tests
+- `form_bloc` - Form BLoC tests
+- `flutter_adaptive_scaffold` - Adaptive scaffold tests
 
-### Run all tests across the workspace
+## Screen Tests
+
+The main application includes comprehensive screen tests in `test/screens/`:
+
+| Screen | Test Coverage |
+|--------|---------------|
+| SplashScreen | UI rendering, dimensions, orientation, theming |
+| ErrorScreen | Error display, localization, navigation |
+| HomeScreen | Component rendering, button interactions, exception handling |
+| SettingsScreen | Tile display, icons, navigation |
+| AppSettingsScreen | SharedPreferences integration, dialogs, user interactions |
+
+## Running Tests
+
+### All Tests
 ```bash
-melos run test:selective
+melos run test
 ```
 
-### Run tests with coverage
+### Package-Specific Tests
 ```bash
-melos run test:coverage
+# Navigate to package and run tests
+cd app_lib/theme
+flutter test
 ```
 
-### Run tests in watch mode for development
+### Single Test File
 ```bash
-melos run test:watch
+flutter test test/screens/home_screen_test.dart
 ```
 
-### Run all tests including brick tests
+### With Verbose Output
 ```bash
-melos run test:all
+flutter test --reporter expanded
 ```
 
 ## Test Results
 
-Tests are executed in dependency order, ensuring that packages are tested after their dependencies. The output shows results for each package individually, making it easy to identify which packages have failing tests.
+Tests are executed in dependency order. The output shows results for each package individually, making it easy to identify failing tests.
 
-## Screen Tests
+## Writing Tests
 
-The main application (`flutter_app_template`) includes comprehensive screen tests in the `test/screens/` directory covering:
-- SplashScreen tests (UI rendering, dimensions, orientation, theming)
-- ErrorScreen tests (error display, localization, navigation)
-- HomeScreen tests (component rendering, button interactions, exception handling)
-- SettingsScreen tests (tile display, icons, navigation)
-- AppSettingsScreen tests (SharedPreferences integration, dialogs, user interactions)
+### Widget Test Example
+```dart
+import 'package:flutter_test/flutter_test.dart';
 
-All screen tests are passing and provide good coverage of the main user flows.
+void main() {
+  testWidgets('MyWidget renders correctly', (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: MyWidget()));
 
-**Note**: The original `test/widget_test.dart` file has been removed as its functionality is now comprehensively covered by the dedicated screen tests in the `test/screens/` directory.
+    expect(find.text('Hello'), findsOneWidget);
+  });
+}
+```
+
+### BLoC Test Example
+```dart
+import 'package:bloc_test/bloc_test.dart';
+import 'package:test/test.dart';
+
+void main() {
+  blocTest<MyBloc, MyState>(
+    'emits [loading, loaded] when fetch is called',
+    build: () => MyBloc(),
+    act: (bloc) => bloc.add(FetchEvent()),
+    expect: () => [isA<Loading>(), isA<Loaded>()],
+  );
+}
+```
+
+## Troubleshooting
+
+### Tests Not Found
+Ensure the package has a `test/` directory and test files ending in `_test.dart`.
+
+### Dependency Issues
+Run `melos bootstrap` to ensure all dependencies are resolved.
+
+### Flaky Tests
+Use `await tester.pumpAndSettle()` for animations and async operations.
