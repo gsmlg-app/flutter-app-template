@@ -1,0 +1,29 @@
+version: 2
+updates:
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+  # Dart/Flutter packages (root)
+  - package-ecosystem: "pub"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "deps"
+    labels:
+      - "dependencies"
+      - "dart"
+    ignore:
+      # Ignore major version updates for core packages to avoid breaking changes
+      - dependency-name: "flutter_bloc"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "go_router"
+        update-types: ["version-update:semver-major"]
