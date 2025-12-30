@@ -880,7 +880,21 @@ void main() {
 - Web platform support is basic (no native code, Dart only)
 - Native code requires platform-specific development knowledge
 - Each platform must be tested on actual devices
-- CMake and build configuration may need adjustment for complex plugins
+
+**Important CMake Naming Convention:**
+The CMake `PROJECT_NAME` in Linux/Windows plugins **must match** the package name from pubspec.yaml. This is because Flutter's `generated_plugins.cmake` expects the target name to be `${package_name}_plugin`.
+
+For example, if your pubspec.yaml has:
+```yaml
+name: app_client_info_linux
+```
+
+Then CMakeLists.txt must have:
+```cmake
+set(PROJECT_NAME "app_client_info_linux")  # NOT "client_info_linux"
+```
+
+The brick template handles this automatically by using `{{package_prefix}}_{{name}}_linux` for the PROJECT_NAME.
 
 **Dependencies:**
 - `plugin_platform_interface`: For federated plugin architecture
