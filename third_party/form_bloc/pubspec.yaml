@@ -7,7 +7,7 @@ environment:
 resolution: workspace
 
 dependencies:
-  meta: any
+  meta: ^1.17.0
   uuid: any
   bloc: ^9.0.0
   rxdart: any
