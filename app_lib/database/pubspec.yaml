@@ -17,5 +17,5 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  drift_dev: ^2.26.2
+  drift_dev: ^2.30.0
   build_runner: ^2.4.15
