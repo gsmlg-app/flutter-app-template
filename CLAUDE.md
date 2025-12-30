@@ -72,7 +72,7 @@ mason make api_client -o app_api/app_api --package_name=app_api
 mason make native_federation_plugin --name plugin_name --description "Description" --package_prefix app -o app_plugin
 ```
 
-See [BRICKS.md](./BRICKS.md) for complete brick documentation.
+See [BRICKS.md](./docs/BRICKS.md) for complete brick documentation.
 
 ## Key Entry Points
 
