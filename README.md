@@ -150,15 +150,15 @@ This project uses Melos to manage the monorepo. Here are some of the available s
 -   `melos run prepare`: Generate code (bootstrap + gen-l10n + build-runner)
 -   `melos run build-runner`: Run build_runner for all packages
 -   `melos run gen-l10n`: Generate localization files
--   `melos run brick-test`: Run Mason brick tests (see [BRICK_TESTING.md](BRICK_TESTING.md))
+-   `melos run brick-test`: Run Mason brick tests (see [BRICK_TESTING.md](docs/BRICK_TESTING.md))
 
 ## Code Generation with Mason
 
-This project uses Mason for code generation to maintain consistency and speed up development. For a complete guide to all available bricks and their usage, see [BRICKS.md](./BRICKS.md).
+This project uses Mason for code generation to maintain consistency and speed up development. For a complete guide to all available bricks and their usage, see [BRICKS.md](./docs/BRICKS.md).
 
 ### Testing Mason Bricks
 
-For comprehensive documentation on testing Mason bricks, including test structure, running tests, and writing new tests, see [BRICK_TESTING.md](./BRICK_TESTING.md).
+For comprehensive documentation on testing Mason bricks, including test structure, running tests, and writing new tests, see [BRICK_TESTING.md](./docs/BRICK_TESTING.md).
 
 ### Initialize Mason
 
@@ -194,8 +194,9 @@ mason make form_bloc --name Login --field_names "email,password"
 
 ## 📚 Additional Documentation
 
-- **[🧱 Mason Bricks Guide](./BRICKS.md)** - Complete guide to all available Mason bricks for code generation
-- **[📝 Form BLoC Guide](./FORM_BLOC.md)** - Comprehensive documentation for form validation and submission
+- **[📚 Documentation Index](./docs/INDEX.md)** - Index of all project documentation
+- **[🧱 Mason Bricks Guide](./docs/BRICKS.md)** - Complete guide to all available Mason bricks for code generation
+- **[📝 Form BLoC Guide](./docs/FORM_BLOC.md)** - Comprehensive documentation for form validation and submission
 - **[📋 CLAUDE.md](./CLAUDE.md)** - Development guidance and project architecture for AI assistants
 
 ### Running the App
