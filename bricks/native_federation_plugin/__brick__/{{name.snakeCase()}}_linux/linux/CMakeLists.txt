@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-set(PROJECT_NAME "{{name.snakeCase()}}_linux")
+set(PROJECT_NAME "{{package_prefix.snakeCase()}}_{{name.snakeCase()}}_linux")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
 set(PLUGIN_NAME "${PROJECT_NAME}_plugin")
@@ -19,7 +19,7 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
 target_link_libraries(${PLUGIN_NAME} PRIVATE flutter)
 target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)
 
-set({{name.snakeCase()}}_linux_bundled_libraries
+set({{package_prefix.snakeCase()}}_{{name.snakeCase()}}_linux_bundled_libraries
   ""
   PARENT_SCOPE
 )
