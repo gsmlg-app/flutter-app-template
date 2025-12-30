@@ -84,8 +84,7 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
       int retries = 0;
       while (!file.existsSync() && retries < 20) {
         // Increased retries
-        _logger.d(
-            'LocalHtmlViewer: File not found, waiting... retry $retries');
+        _logger.d('LocalHtmlViewer: File not found, waiting... retry $retries');
         await Future.delayed(Duration(milliseconds: 200)); // Increased delay
         retries++;
       }
@@ -95,8 +94,8 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
         return false; // Return failure instead of setting final error
       }
 
-      _logger.d(
-          'LocalHtmlViewer: File found, size: ${file.lengthSync()} bytes');
+      _logger
+          .d('LocalHtmlViewer: File found, size: ${file.lengthSync()} bytes');
 
       // Additional wait time to ensure file is fully released by OS
       await Future.delayed(Duration(milliseconds: 500));
