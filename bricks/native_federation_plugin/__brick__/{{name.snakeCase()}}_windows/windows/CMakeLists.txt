@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-set(PROJECT_NAME "{{name.snakeCase()}}_windows")
+set(PROJECT_NAME "{{package_prefix.snakeCase()}}_{{name.snakeCase()}}_windows")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
 set(PLUGIN_NAME "${PROJECT_NAME}_plugin")
@@ -18,7 +18,7 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
   "${CMAKE_CURRENT_SOURCE_DIR}")
 target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin)
 
-set({{name.snakeCase()}}_windows_bundled_libraries
+set({{package_prefix.snakeCase()}}_{{name.snakeCase()}}_windows_bundled_libraries
   ""
   PARENT_SCOPE
 )

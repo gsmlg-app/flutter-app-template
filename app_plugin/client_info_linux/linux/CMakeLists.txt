@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-set(PROJECT_NAME "client_info_linux")
+set(PROJECT_NAME "app_client_info_linux")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
 set(PLUGIN_NAME "${PROJECT_NAME}_plugin")
@@ -19,7 +19,7 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
 target_link_libraries(${PLUGIN_NAME} PRIVATE flutter)
 target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)
 
-set(client_info_linux_bundled_libraries
+set(app_client_info_linux_bundled_libraries
   ""
   PARENT_SCOPE
 )

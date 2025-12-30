@@ -1,4 +1,4 @@
-#include "include/{{name.snakeCase()}}_linux/{{name.snakeCase()}}_plugin.h"
+#include "include/{{package_prefix.snakeCase()}}_{{name.snakeCase()}}_linux/{{name.snakeCase()}}_plugin.h"
 
 #include <flutter_linux/flutter_linux.h>
 #include <gtk/gtk.h>

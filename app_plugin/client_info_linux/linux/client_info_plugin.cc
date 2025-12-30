@@ -1,4 +1,4 @@
-#include "include/client_info_linux/client_info_plugin.h"
+#include "include/app_client_info_linux/client_info_plugin.h"
 
 #include <flutter_linux/flutter_linux.h>
 #include <gtk/gtk.h>
