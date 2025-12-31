@@ -2,6 +2,7 @@ import 'package:app_locale/app_locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/screens/home/home_screen.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
+import 'package:flutter_app_template/screens/showcase/showcase_screen.dart';
 import 'package:go_router/go_router.dart';
 
 class Destinations {
@@ -12,6 +13,12 @@ class Destinations {
           icon: const Icon(Icons.home_outlined),
           selectedIcon: const Icon(Icons.home),
           label: context.l10n.navHome,
+        ),
+        NavigationDestination(
+          key: const Key(ShowcaseScreen.name),
+          icon: const Icon(Icons.widgets_outlined),
+          selectedIcon: const Icon(Icons.widgets),
+          label: context.l10n.navShowcase,
         ),
         NavigationDestination(
           key: const Key(SettingsScreen.name),
@@ -28,7 +35,8 @@ class Destinations {
   static void changeHandler(int idx, BuildContext context) {
     void _ = switch (idx) {
       0 => context.goNamed(HomeScreen.name),
-      1 => context.goNamed(SettingsScreen.name),
+      1 => context.goNamed(ShowcaseScreen.name),
+      2 => context.goNamed(SettingsScreen.name),
       int() => context.goNamed(HomeScreen.name),
     };
   }
