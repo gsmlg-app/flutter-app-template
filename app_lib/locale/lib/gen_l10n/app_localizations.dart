@@ -160,6 +160,12 @@ abstract class AppLocalizations {
   /// **'Home'**
   String get navHome;
 
+  /// No description provided for @navShowcase.
+  ///
+  /// In en, this message translates to:
+  /// **'Showcase'**
+  String get navShowcase;
+
   /// No description provided for @navSetting.
   ///
   /// In en, this message translates to:
