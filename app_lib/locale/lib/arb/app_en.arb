@@ -18,5 +18,8 @@
   "accentColor": "Accent Color",
   "language": "Language",
   "retry": "Retry",
+  "lightTheme": "Light",
+  "darkTheme": "Dark",
+  "systemTheme": "System",
   "@@description": "App description"
 }
