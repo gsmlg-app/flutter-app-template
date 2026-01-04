@@ -115,11 +115,28 @@ melos:
       description: Run `dart/flutter analyze` for all packages.
 
     analyze:
-      run: flutter analyze --fatal-infos
+      description: Run `dart/flutter analyze` for all packages.
+      steps:
+        - melos run analyze:dart
+        - melos run analyze:flutter
+
+    analyze:dart:
+      run: dart analyze --fatal-warnings
       exec:
         concurrency: 1
         orderDependents: true
-      description: Run `flutter analyze` for all packages.
+      packageFilters:
+        flutter: false
+      description: Run `dart analyze` for non-Flutter packages.
+
+    analyze:flutter:
+      run: flutter analyze --fatal-warnings
+      exec:
+        concurrency: 1
+        orderDependents: true
+      packageFilters:
+        flutter: true
+      description: Run `flutter analyze` for Flutter packages.
 
     fix:
       run: dart fix . --apply
