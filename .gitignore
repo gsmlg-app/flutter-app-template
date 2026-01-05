@@ -52,3 +52,6 @@ mason-lock.json
 /.devenv*
 /local.properties
 
+/.claude/*
+!/.claude/commands/
+!/.claude/skills/
