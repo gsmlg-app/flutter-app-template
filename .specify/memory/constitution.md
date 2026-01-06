@@ -1,13 +1,12 @@
 <!--
 Sync Impact Report:
-- Version change: 0.0.0 → 1.0.0
-- Modified principles: N/A (initial constitution)
+- Version change: 1.0.0 → 1.1.0
+- Modified principles:
+  - "IV. Code Generation First" - Added native_plugin as preferred option
+  - "V. Testing Co-location" - Clarified test_bricks is template-development only
 - Added sections:
-  - Core Principles (5 principles)
-  - Development Standards
-  - Quality Gates
-  - Governance
-- Removed sections: N/A
+  - Template Management subsection under Development Standards
+- Removed sections: None
 - Templates requiring updates:
   - .specify/templates/plan-template.md ✅ (no changes needed - generic constitution check)
   - .specify/templates/spec-template.md ✅ (no changes needed - technology agnostic)
@@ -26,7 +25,7 @@ All functionality MUST be organized into purpose-driven packages within the mono
 - **app_lib/**: Core utilities (database, theme, locale, logging, provider)
 - **app_bloc/**: BLoC state management packages
 - **app_widget/**: Reusable UI components
-- **app_plugin/**: Native platform plugins with federated architecture
+- **app_plugin/**: Native platform plugins (simple or federated architecture)
 - **third_party/**: Modified third-party packages
 - **bricks/**: Mason templates for code generation
 
@@ -61,7 +60,8 @@ Scaffolding new code MUST use Mason templates when available:
 - Use `mason make simple_bloc` or `mason make list_bloc` for BLoCs
 - Use `mason make form_bloc` for form handling
 - Use `mason make repository` for data layer
-- Use `mason make native_federation_plugin` for platform plugins
+- Use `mason make native_plugin` for platform plugins (preferred for simplicity)
+- Use `mason make native_federation_plugin` only when publishing separate platform packages
 
 Custom implementations without using available templates require justification.
 
@@ -74,7 +74,7 @@ Tests MUST be co-located with their packages:
 - Use `melos run test` to run all tests across packages
 - Use `melos run test:dart` for non-Flutter packages
 - Use `melos run test:flutter` for Flutter packages
-- Isolated brick tests reside in `test_bricks/` (excluded from default analysis)
+- Brick tests in `test_bricks/` are for template development only (removed after project setup)
 
 ## Development Standards
 
@@ -109,6 +109,15 @@ MainProvider(
 )
 ```
 
+### Template Management
+
+Projects derived from flutter-app-template have two management scripts:
+
+- `dart run bin/setup_project.dart <name>` - Initial project setup (rename template, remove test_bricks)
+- `dart run bin/update_bricks.dart` - Sync bricks from upstream template (only works after setup)
+
+After running setup_project.dart, regenerate project constitution with `/speckit.constitution`.
+
 ## Quality Gates
 
 Before merging any PR:
@@ -140,4 +149,4 @@ All contributors and AI assistants MUST verify compliance with these principles.
 - Violations require documented justification in Complexity Tracking
 - Use CLAUDE.md as runtime development guidance
 
-**Version**: 1.0.0 | **Ratified**: 2025-01-05 | **Last Amended**: 2025-01-05
+**Version**: 1.1.0 | **Ratified**: 2025-01-05 | **Last Amended**: 2025-01-06
