@@ -718,7 +718,7 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
               ),
             ),
             widget.mediumLargeBreakpoint: SlotLayout.from(
-              key: Key('primaryNavigation1_${isExtendedOnLarge ? 'ext' : 'col'}'),
+              key: const Key('primaryNavigation1'),
               builder: (_) => AdaptiveScaffold.standardNavigationRail(
                 width: largeWidth,
                 extended: isExtendedOnLarge,
@@ -738,7 +738,7 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
               ),
             ),
             widget.largeBreakpoint: SlotLayout.from(
-              key: Key('primaryNavigation2_${isExtendedOnLarge ? 'ext' : 'col'}'),
+              key: const Key('primaryNavigation2'),
               builder: (_) => AdaptiveScaffold.standardNavigationRail(
                 width: largeWidth,
                 extended: isExtendedOnLarge,
@@ -756,7 +756,7 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
               ),
             ),
             widget.extraLargeBreakpoint: SlotLayout.from(
-              key: Key('primaryNavigation3_${isExtendedOnLarge ? 'ext' : 'col'}'),
+              key: const Key('primaryNavigation3'),
               builder: (_) => AdaptiveScaffold.standardNavigationRail(
                 width: largeWidth,
                 extended: isExtendedOnLarge,
