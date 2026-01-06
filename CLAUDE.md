@@ -29,11 +29,11 @@ Flutter monorepo template with modular architecture, BLoC state management, and 
 ## Custom Skills (Claude Code)
 
 Project-specific skills are available in `.claude/skills/`:
-- `/flutter-bloc` - Create BLoC packages with events, states, and proper structure
-- `/flutter-screen` - Create screens with routing conventions and adaptive scaffold
-- `/flutter-widget` - Create reusable widgets with platform adaptive support
-- `/flutter-plugin` - Create native plugins (simple or federated)
-- `/mason-brick` - Create, update, or remove Mason bricks with tests
+- `/project-bloc` - Create BLoC packages with events, states, and proper structure
+- `/project-screen` - Create screens with routing conventions and adaptive scaffold
+- `/project-widget` - Create reusable widgets with platform adaptive support
+- `/project-plugin` - Create native plugins (simple or federated)
+- `/template-mason-brick` - Create, update, or remove Mason bricks with tests
 
 ## Development Commands
 

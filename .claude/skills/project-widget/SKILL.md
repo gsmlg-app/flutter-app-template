@@ -1,5 +1,5 @@
 ---
-name: flutter-widget
+name: project-widget
 description: Guide for creating reusable widgets in app_widget packages with platform adaptive support (project)
 ---
 

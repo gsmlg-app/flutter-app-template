@@ -1,5 +1,5 @@
 ---
-name: flutter-plugin
+name: project-plugin
 description: Guide for creating native plugins in app_plugin with platform-specific implementations (project)
 ---
 

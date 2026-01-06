@@ -1,5 +1,5 @@
 ---
-name: flutter-bloc
+name: project-bloc
 description: Guide for creating BLoC patterns with events, states, and proper structure in app_bloc packages (project)
 ---
 
