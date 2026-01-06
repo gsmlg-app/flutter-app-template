@@ -25,7 +25,6 @@ void main() {
         DirectoryGeneratorTarget(tempDir),
         vars: {
           'name': 'TestHome',
-          'folder': '',
           'has_adaptive_scaffold': true,
           'has_app_bar': true,
         },
@@ -52,14 +51,13 @@ void main() {
         DirectoryGeneratorTarget(tempDir),
         vars: {
           'name': 'TestLogin',
-          'folder': 'auth',
           'has_adaptive_scaffold': false,
           'has_app_bar': true,
         },
       );
 
       final screenFile = File(
-        path.join(tempDir.path, 'lib', 'screens', 'auth', 'test_login_screen.dart'),
+        path.join(tempDir.path, 'lib', 'screens', 'test_login_screen.dart'),
       );
       expect(await screenFile.exists(), isTrue);
 
@@ -77,7 +75,6 @@ void main() {
         DirectoryGeneratorTarget(tempDir),
         vars: {
           'name': 'TestSplash',
-          'folder': '',
           'has_adaptive_scaffold': false,
           'has_app_bar': false,
         },
@@ -94,7 +91,7 @@ void main() {
       expect(content, isNot(contains('appBar:')));
     });
 
-    test('handles special characters in screen name', () async {
+    test('handles different screen names', () async {
       final brick = Brick.path(path.join('bricks', 'screen'));
 
       final generator = await MasonGenerator.fromBrick(brick);
@@ -102,14 +99,13 @@ void main() {
         DirectoryGeneratorTarget(tempDir),
         vars: {
           'name': 'UserProfile',
-          'folder': 'user',
           'has_adaptive_scaffold': true,
           'has_app_bar': true,
         },
       );
 
       final screenFile = File(
-        path.join(tempDir.path, 'lib', 'screens', 'user', 'user_profile_screen.dart'),
+        path.join(tempDir.path, 'lib', 'screens', 'user_profile_screen.dart'),
       );
       expect(await screenFile.exists(), isTrue);
 
@@ -119,7 +115,7 @@ void main() {
       expect(content, contains("static const path = '/user-profile'"));
     });
 
-    test('creates directory structure for nested screens', () async {
+    test('generates screen with app bar only', () async {
       final brick = Brick.path(path.join('bricks', 'screen'));
 
       final generator = await MasonGenerator.fromBrick(brick);
@@ -127,22 +123,20 @@ void main() {
         DirectoryGeneratorTarget(tempDir),
         vars: {
           'name': 'Settings',
-          'folder': 'user/profile',
-          'has_adaptive_scaffold': true,
+          'has_adaptive_scaffold': false,
           'has_app_bar': true,
         },
       );
 
       final screenFile = File(
-        path.join(tempDir.path, 'lib', 'screens', 'user', 'profile', 'settings_screen.dart'),
+        path.join(tempDir.path, 'lib', 'screens', 'settings_screen.dart'),
       );
       expect(await screenFile.exists(), isTrue);
 
-      final userDir = Directory(path.join(tempDir.path, 'lib', 'screens', 'user'));
-      expect(await userDir.exists(), isTrue);
-
-      final profileDir = Directory(path.join(tempDir.path, 'lib', 'screens', 'user', 'profile'));
-      expect(await profileDir.exists(), isTrue);
+      final content = await screenFile.readAsString();
+      expect(content, contains('class SettingsScreen extends StatelessWidget'));
+      expect(content, contains('appBar: AppBar('));
+      expect(content, contains("title: const Text('Settings')"));
     });
   });
 }

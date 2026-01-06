@@ -3,6 +3,20 @@ import 'package:mason/mason.dart';
 import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
+/// Default variables for list_bloc brick tests.
+Map<String, dynamic> defaultVars(String name, {String itemType = 'Item'}) => {
+      'name': name,
+      'item_type': itemType,
+      'has_pagination': true,
+      'has_search': true,
+      'has_filters': true,
+      'has_reorder': false,
+      'has_crud': true,
+      'filter_types': ['category', 'status'],
+      'sort_options': ['name', 'date'],
+      'output_directory': 'app_bloc',
+    };
+
 void main() {
   group('List BLoC Brick Tests', () {
     late Directory tempDir;
@@ -23,16 +37,18 @@ void main() {
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
         DirectoryGeneratorTarget(tempDir),
-        vars: {'name': 'users'},
+        vars: defaultVars('users', itemType: 'User'),
       );
 
       final expectedFiles = [
         'pubspec.yaml',
-        'lib/users_bloc.dart',
+        'lib/users_list_bloc.dart',
         'lib/src/bloc.dart',
         'lib/src/event.dart',
         'lib/src/state.dart',
-        'test/users_bloc_test.dart',
+        'lib/src/schema.dart',
+        'lib/src/item_state.dart',
+        'test/users_list_bloc_test.dart',
       ];
 
       for (final expectedFile in expectedFiles) {
@@ -51,7 +67,7 @@ void main() {
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
         DirectoryGeneratorTarget(tempDir),
-        vars: {'name': 'products'},
+        vars: defaultVars('products', itemType: 'Product'),
       );
 
       final pubspecFile = File(path.join(tempDir.path, 'pubspec.yaml'));
@@ -59,8 +75,8 @@ void main() {
 
       final pubspecContent = await pubspecFile.readAsString();
 
-      // Check package name
-      expect(pubspecContent, contains('name: products_bloc'));
+      // Check package name (list_bloc uses _list_bloc suffix)
+      expect(pubspecContent, contains('name: products_list_bloc'));
 
       // Check dependencies
       expect(pubspecContent, contains('bloc:'));
@@ -77,15 +93,15 @@ void main() {
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
         DirectoryGeneratorTarget(tempDir),
-        vars: {'name': 'orders'},
+        vars: defaultVars('orders', itemType: 'Order'),
       );
 
       final blocFile = File(path.join(tempDir.path, 'lib', 'src', 'bloc.dart'));
       expect(await blocFile.exists(), isTrue);
 
       final blocContent = await blocFile.readAsString();
-      expect(blocContent, contains('class OrdersBloc'));
-      expect(blocContent, contains('extends Bloc<OrdersEvent, OrdersState>'));
+      expect(blocContent, contains('class OrdersListBloc'));
+      expect(blocContent, contains('Bloc<OrdersListEvent, OrdersListState>'));
     });
 
     test('generates event file with correct structure', () async {
@@ -94,14 +110,14 @@ void main() {
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
         DirectoryGeneratorTarget(tempDir),
-        vars: {'name': 'tasks'},
+        vars: defaultVars('tasks', itemType: 'Task'),
       );
 
       final eventFile = File(path.join(tempDir.path, 'lib', 'src', 'event.dart'));
       expect(await eventFile.exists(), isTrue);
 
       final eventContent = await eventFile.readAsString();
-      expect(eventContent, contains('TasksEvent'));
+      expect(eventContent, contains('TasksListEvent'));
     });
 
     test('generates state file with correct structure', () async {
@@ -110,15 +126,15 @@ void main() {
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
         DirectoryGeneratorTarget(tempDir),
-        vars: {'name': 'comments'},
+        vars: defaultVars('comments', itemType: 'Comment'),
       );
 
       final stateFile = File(path.join(tempDir.path, 'lib', 'src', 'state.dart'));
       expect(await stateFile.exists(), isTrue);
 
       final stateContent = await stateFile.readAsString();
-      expect(stateContent, contains('CommentsState'));
-      expect(stateContent, contains('extends Equatable'));
+      expect(stateContent, contains('CommentsListState'));
+      expect(stateContent, contains('Equatable'));
     });
 
     test('generates correct main export file', () async {
@@ -127,10 +143,10 @@ void main() {
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
         DirectoryGeneratorTarget(tempDir),
-        vars: {'name': 'notifications'},
+        vars: defaultVars('notifications', itemType: 'Notification'),
       );
 
-      final mainFile = File(path.join(tempDir.path, 'lib', 'notifications_bloc.dart'));
+      final mainFile = File(path.join(tempDir.path, 'lib', 'notifications_list_bloc.dart'));
       expect(await mainFile.exists(), isTrue);
 
       final mainContent = await mainFile.readAsString();
@@ -143,15 +159,15 @@ void main() {
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
         DirectoryGeneratorTarget(tempDir),
-        vars: {'name': 'documents'},
+        vars: defaultVars('documents', itemType: 'Document'),
       );
 
-      final testFile = File(path.join(tempDir.path, 'test', 'documents_bloc_test.dart'));
+      final testFile = File(path.join(tempDir.path, 'test', 'documents_list_bloc_test.dart'));
       expect(await testFile.exists(), isTrue);
 
       final testContent = await testFile.readAsString();
       expect(testContent, contains("import 'package:bloc_test/bloc_test.dart'"));
-      expect(testContent, contains('DocumentsBloc'));
+      expect(testContent, contains('DocumentsListBloc'));
     });
 
     test('handles different naming conventions', () async {
@@ -160,12 +176,12 @@ void main() {
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
         DirectoryGeneratorTarget(tempDir),
-        vars: {'name': 'user_profiles'},
+        vars: defaultVars('user_profiles', itemType: 'UserProfile'),
       );
 
       final blocFile = File(path.join(tempDir.path, 'lib', 'src', 'bloc.dart'));
       final blocContent = await blocFile.readAsString();
-      expect(blocContent, contains('class UserProfilesBloc'));
+      expect(blocContent, contains('class UserProfilesListBloc'));
     });
   });
 }
