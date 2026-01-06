@@ -113,3 +113,33 @@ jobs:
 
       - name: Test native_federation_plugin brick
         run: dart run test_bricks/native_federation_plugin/native_federation_plugin_test.dart
+
+  native-plugin:
+    name: Test native_plugin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: flutter-actions/setup-flutter@v4
+
+      - name: Cache dependencies
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Install tools
+        run: |
+          dart pub global activate melos
+          dart pub global activate mason_cli
+
+      - name: Prepare project
+        run: |
+          melos run prepare
+          mason get
+
+      - name: Test native_plugin brick
+        run: dart run test_bricks/native_plugin/native_plugin_test.dart

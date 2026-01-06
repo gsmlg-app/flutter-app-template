@@ -18,13 +18,13 @@ workspace:
   - app_widget/artwork
   - app_widget/feedback
   - app_widget/web_view
-  - app_plugin/client_info
-  - app_plugin/client_info_platform_interface
-  - app_plugin/client_info_android
-  - app_plugin/client_info_ios
-  - app_plugin/client_info_linux
-  - app_plugin/client_info_macos
-  - app_plugin/client_info_windows
+  - app_plugin/client_info/client_info
+  - app_plugin/client_info/client_info_platform_interface
+  - app_plugin/client_info/client_info_android
+  - app_plugin/client_info/client_info_ios
+  - app_plugin/client_info/client_info_linux
+  - app_plugin/client_info/client_info_macos
+  - app_plugin/client_info/client_info_windows
   - third_party/form_bloc
   - third_party/flutter_form_bloc
   - third_party/flutter_adaptive_scaffold

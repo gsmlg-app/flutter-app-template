@@ -1,11 +1,11 @@
 ---
 name: flutter-plugin
-description: Guide for creating federated native plugins in app_plugin with platform-specific implementations (project)
+description: Guide for creating native plugins in app_plugin with platform-specific implementations (project)
 ---
 
 # Flutter Plugin Development Skill
 
-This skill guides the creation of federated native plugins following this project's architecture.
+This skill guides the creation of native plugins following this project's architecture.
 
 ## When to Use
 
@@ -14,12 +14,23 @@ Trigger this skill when:
 - Adding new platform support to an existing plugin
 - User asks to "create a plugin", "add native functionality", or "implement platform-specific feature"
 
-## Mason Template
+## Plugin Types
 
-**Always use Mason template first:**
+This project supports two plugin architectures:
+
+| Type | Use Case | Complexity |
+|------|----------|------------|
+| **native_plugin** (Recommended) | Single package with all platform code | Simple |
+| **native_federation_plugin** | Separate packages per platform | Complex, for public distribution |
+
+**Default to `native_plugin`** unless the user specifically requests federation or needs to publish platform implementations as separate packages.
+
+## Mason Templates
+
+### Simple Plugin (Recommended)
 
 ```bash
-mason make native_federation_plugin \
+mason make native_plugin \
   --name plugin_name \
   --description "Plugin description" \
   --package_prefix app \
@@ -34,181 +45,124 @@ mason make native_federation_plugin \
 # --support_web (default: false)
 ```
 
-## Federated Plugin Architecture
-
-This project uses Flutter's federated plugin pattern:
-
+**Structure:**
 ```
 app_plugin/
-├── plugin_name/                        # Main package (app-facing API)
-├── plugin_name_platform_interface/     # Platform interface (abstract)
-├── plugin_name_android/                # Android implementation (Kotlin)
-├── plugin_name_ios/                    # iOS implementation (Swift)
-├── plugin_name_linux/                  # Linux implementation (C++)
-├── plugin_name_macos/                  # macOS implementation (Swift)
-└── plugin_name_windows/                # Windows implementation (C++)
+└── plugin_name/                    # Single package
+    ├── lib/                        # Dart API
+    ├── android/                    # Android (Kotlin)
+    ├── ios/                        # iOS (Swift)
+    ├── linux/                      # Linux (C++)
+    ├── macos/                      # macOS (Swift)
+    ├── windows/                    # Windows (C++)
+    └── pubspec.yaml
 ```
 
-## Package Responsibilities
+### Federated Plugin (When User Specifies)
 
-### Main Package (`plugin_name/`)
-- App-facing API
-- Re-exports platform interface types
-- Delegates to platform implementations
+Use `native_federation_plugin` when:
+- Publishing to pub.dev with separate platform packages
+- Different teams maintain different platforms
+- Need to allow third-party platform implementations
 
-```dart
-// lib/src/plugin_name.dart
-class PluginName {
-  static PluginNamePlatform get _platform => PluginNamePlatform.instance;
-
-  static Future<String> getData() => _platform.getData();
-}
+```bash
+mason make native_federation_plugin \
+  --name plugin_name \
+  --description "Plugin description" \
+  --package_prefix app \
+  -o app_plugin
 ```
 
-### Platform Interface (`plugin_name_platform_interface/`)
-- Defines abstract interface
-- Shared data classes
-- Method channel constants
-
-```dart
-// lib/plugin_name_platform_interface.dart
-abstract class PluginNamePlatform extends PlatformInterface {
-  static PluginNamePlatform _instance = MethodChannelPluginName();
-
-  static PluginNamePlatform get instance => _instance;
-
-  Future<String> getData();
-}
+**Structure:**
 ```
-
-### Platform Implementations
-Each platform package implements the interface using native code:
-
-- **Android**: Kotlin + Method Channel
-- **iOS/macOS**: Swift + Method Channel
-- **Linux/Windows**: C++ + Method Channel
+app_plugin/
+└── plugin_name/                            # Parent directory
+    ├── plugin_name/                        # Main package (API)
+    ├── plugin_name_platform_interface/     # Abstract interface
+    ├── plugin_name_android/                # Android implementation
+    ├── plugin_name_ios/                    # iOS implementation
+    ├── plugin_name_linux/                  # Linux implementation
+    ├── plugin_name_macos/                  # macOS implementation
+    └── plugin_name_windows/                # Windows implementation
+```
 
 ## Workspace Registration
 
-Add ALL plugin packages to root `pubspec.yaml`:
+### Simple Plugin
 
 ```yaml
 workspace:
-  # existing packages...
   - app_plugin/plugin_name
-  - app_plugin/plugin_name_platform_interface
-  - app_plugin/plugin_name_android
-  - app_plugin/plugin_name_ios
-  - app_plugin/plugin_name_linux
-  - app_plugin/plugin_name_macos
-  - app_plugin/plugin_name_windows
 ```
 
-## Method Channel Pattern
+### Federated Plugin
 
-### Dart Side (Platform Interface)
+```yaml
+workspace:
+  - app_plugin/plugin_name/plugin_name
+  - app_plugin/plugin_name/plugin_name_platform_interface
+  - app_plugin/plugin_name/plugin_name_android
+  - app_plugin/plugin_name/plugin_name_ios
+  - app_plugin/plugin_name/plugin_name_linux
+  - app_plugin/plugin_name/plugin_name_macos
+  - app_plugin/plugin_name/plugin_name_windows
+```
+
+## Plugin Implementation
+
+### Dart API (lib/src/plugin_name.dart)
 ```dart
-class MethodChannelPluginName extends PluginNamePlatform {
-  final methodChannel = const MethodChannel('app_plugin_name');
+class PluginName {
+  static final PluginName _instance = PluginName._();
+  static PluginName get instance => _instance;
 
-  @override
-  Future<String> getData() async {
-    final result = await methodChannel.invokeMethod<String>('getData');
-    return result ?? '';
+  static const MethodChannel _channel = MethodChannel('app_plugin_name');
+
+  Future<PluginData> getData() async {
+    final result = await _channel.invokeMethod<Map>('getData');
+    return PluginData.fromMap(result ?? {});
   }
 }
 ```
 
-### Native Side (Example: Swift/iOS)
-```swift
-public class PluginNamePlugin: NSObject, FlutterPlugin {
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(
-      name: "app_plugin_name",
-      binaryMessenger: registrar.messenger()
-    )
-    let instance = PluginNamePlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
-  }
+### Native Implementation (Example: Kotlin/Android)
+```kotlin
+class PluginNamePlugin: FlutterPlugin, MethodCallHandler {
+    private lateinit var channel: MethodChannel
 
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    switch call.method {
-    case "getData":
-      result("Data from iOS")
-    default:
-      result(FlutterMethodNotImplemented)
+    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        channel = MethodChannel(binding.binaryMessenger, "app_plugin_name")
+        channel.setMethodCallHandler(this)
     }
-  }
+
+    override fun onMethodCall(call: MethodCall, result: Result) {
+        when (call.method) {
+            "getData" -> result.success(mapOf("platform" to "android"))
+            else -> result.notImplemented()
+        }
+    }
 }
 ```
-
-## Dependencies
-
-Main package `pubspec.yaml`:
-```yaml
-dependencies:
-  flutter:
-    sdk: flutter
-  app_plugin_name_platform_interface: any
-  app_plugin_name_android: any
-  app_plugin_name_ios: any
-  app_plugin_name_linux: any
-  app_plugin_name_macos: any
-  app_plugin_name_windows: any
-```
-
-Platform implementation packages:
-```yaml
-dependencies:
-  flutter:
-    sdk: flutter
-  app_plugin_name_platform_interface: any
-```
-
-## Adding New Features
-
-1. **Update Platform Interface**
-   - Add method to abstract class
-   - Add to method channel implementation
-
-2. **Implement on Each Platform**
-   - Add native code in each platform package
-   - Handle the new method channel call
-
-3. **Update Main API**
-   - Expose new functionality in main package
-
-4. **Add Tests**
-   - Unit tests for Dart code
-   - Integration tests for native code
 
 ## Testing
 
 ```bash
-# Test all plugin packages
-melos run test
-
-# Test specific platform
+# Test plugin
 cd app_plugin/plugin_name && flutter test
-cd app_plugin/plugin_name_android && flutter test
+
+# For federated plugins
+cd app_plugin/plugin_name/plugin_name && flutter test
 ```
 
 ## Reference Implementation
 
-`app_client_info` serves as the reference federated plugin:
-
-- Main API: `app_plugin/client_info/`
-- Interface: `app_plugin/client_info_platform_interface/`
-- Platforms: `client_info_android`, `client_info_ios`, etc.
+`app_client_info` in `app_plugin/client_info/` demonstrates the federated pattern.
 
 ## Usage in App
 
 ```dart
 import 'package:app_plugin_name/app_plugin_name.dart';
 
-// Get instance
 final plugin = PluginName.instance;
-
-// Call methods
 final data = await plugin.getData();
 ```

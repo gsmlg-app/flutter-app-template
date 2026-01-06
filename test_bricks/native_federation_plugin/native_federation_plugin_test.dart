@@ -39,9 +39,9 @@ void main() {
         },
       );
 
-      // Check main plugin package
+      // Check main plugin package (nested structure)
       final mainPubspec = File(
-        path.join(tempDir.path, 'battery_monitor', 'pubspec.yaml'),
+        path.join(tempDir.path, 'battery_monitor', 'battery_monitor', 'pubspec.yaml'),
       );
       expect(await mainPubspec.exists(), isTrue);
 
@@ -49,6 +49,7 @@ void main() {
       final interfacePubspec = File(
         path.join(
           tempDir.path,
+          'battery_monitor',
           'battery_monitor_platform_interface',
           'pubspec.yaml',
         ),
@@ -59,7 +60,7 @@ void main() {
       final platforms = ['android', 'ios', 'linux', 'macos', 'windows'];
       for (final platform in platforms) {
         final platformPubspec = File(
-          path.join(tempDir.path, 'battery_monitor_$platform', 'pubspec.yaml'),
+          path.join(tempDir.path, 'battery_monitor', 'battery_monitor_$platform', 'pubspec.yaml'),
         );
         expect(
           await platformPubspec.exists(),
@@ -91,21 +92,21 @@ void main() {
         },
       );
 
-      // Check main export file
+      // Check main export file (nested structure)
       final mainExport = File(
-        path.join(tempDir.path, 'device_info', 'lib', 'my_device_info.dart'),
+        path.join(tempDir.path, 'device_info', 'device_info', 'lib', 'my_device_info.dart'),
       );
       expect(await mainExport.exists(), isTrue);
 
       // Check source files
       final srcFile = File(
-        path.join(tempDir.path, 'device_info', 'lib', 'src', 'device_info.dart'),
+        path.join(tempDir.path, 'device_info', 'device_info', 'lib', 'src', 'device_info.dart'),
       );
       expect(await srcFile.exists(), isTrue);
 
       // Check models
       final modelsDir = Directory(
-        path.join(tempDir.path, 'device_info', 'lib', 'src', 'models'),
+        path.join(tempDir.path, 'device_info', 'device_info', 'lib', 'src', 'models'),
       );
       expect(await modelsDir.exists(), isTrue);
     });
@@ -132,7 +133,7 @@ void main() {
         },
       );
 
-      final interfaceDir = path.join(tempDir.path, 'sensor_platform_interface');
+      final interfaceDir = path.join(tempDir.path, 'sensor', 'sensor_platform_interface');
 
       // Check main export
       final mainExport = File(
@@ -175,7 +176,7 @@ void main() {
         },
       );
 
-      final androidDir = path.join(tempDir.path, 'audio_android');
+      final androidDir = path.join(tempDir.path, 'audio', 'audio_android');
 
       // Check Kotlin plugin file
       final kotlinFile = File(
@@ -226,7 +227,7 @@ void main() {
         },
       );
 
-      final iosDir = path.join(tempDir.path, 'camera_ios');
+      final iosDir = path.join(tempDir.path, 'camera', 'camera_ios');
 
       // Check Swift plugin file
       final swiftFile = File(
@@ -267,7 +268,7 @@ void main() {
         },
       );
 
-      final linuxDir = path.join(tempDir.path, 'file_picker_linux');
+      final linuxDir = path.join(tempDir.path, 'file_picker', 'file_picker_linux');
 
       // Check C++ plugin file
       final cppFile = File(
@@ -314,7 +315,7 @@ void main() {
         },
       );
 
-      final windowsDir = path.join(tempDir.path, 'clipboard_windows');
+      final windowsDir = path.join(tempDir.path, 'clipboard', 'clipboard_windows');
 
       // Check C++ plugin files
       final cppFile = File(
@@ -354,9 +355,9 @@ void main() {
         },
       );
 
-      // Check main export uses custom prefix
+      // Check main export uses custom prefix (nested structure)
       final mainExport = File(
-        path.join(tempDir.path, 'network', 'lib', 'my_company_network.dart'),
+        path.join(tempDir.path, 'network', 'network', 'lib', 'my_company_network.dart'),
       );
       expect(await mainExport.exists(), isTrue);
 
@@ -364,6 +365,7 @@ void main() {
       final interfaceExport = File(
         path.join(
           tempDir.path,
+          'network',
           'network_platform_interface',
           'lib',
           'my_company_network_platform_interface.dart',
@@ -394,7 +396,7 @@ void main() {
         },
       );
 
-      final readme = File(path.join(tempDir.path, 'README.md'));
+      final readme = File(path.join(tempDir.path, 'storage', 'README.md'));
       expect(await readme.exists(), isTrue);
 
       final readmeContent = await readme.readAsString();

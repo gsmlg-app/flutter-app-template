@@ -23,8 +23,17 @@ Flutter monorepo template with modular architecture, BLoC state management, and 
 - `app_lib/`: database, theme, locale, provider, logging
 - `app_bloc/`: theme
 - `app_widget/`: adaptive, artwork, feedback, web_view
-- `app_plugin/`: client_info (federated plugin with platform implementations)
+- `app_plugin/`: client_info/ (nested federated plugin containing: client_info, client_info_platform_interface, client_info_android, client_info_ios, client_info_linux, client_info_macos, client_info_windows)
 - `third_party/`: form_bloc, flutter_form_bloc, flutter_adaptive_scaffold, settings_ui
+
+## Custom Skills (Claude Code)
+
+Project-specific skills are available in `.claude/skills/`:
+- `/flutter-bloc` - Create BLoC packages with events, states, and proper structure
+- `/flutter-screen` - Create screens with routing conventions and adaptive scaffold
+- `/flutter-widget` - Create reusable widgets with platform adaptive support
+- `/flutter-plugin` - Create native plugins (simple or federated)
+- `/mason-brick` - Create, update, or remove Mason bricks with tests
 
 ## Development Commands
 
@@ -41,6 +50,7 @@ mason get
 melos run prepare          # Bootstrap + gen-l10n + build-runner (full setup)
 melos run analyze          # Lint all packages (--fatal-warnings)
 melos run format           # Format all packages
+melos run format-check     # Check formatting (CI uses this, exits non-zero if changes needed)
 melos run fix              # Apply dart fix --apply
 melos run test             # Run all tests (flutter + dart)
 ```
@@ -69,6 +79,10 @@ mason make form_bloc --name Login --field_names "email,password"
 # Other generators
 mason make repository -o app_lib/feature_name --name=feature_name
 mason make api_client -o app_api/app_api --package_name=app_api
+
+# Native plugins (prefer native_plugin for simplicity)
+mason make native_plugin --name plugin_name --description "Description" --package_prefix app -o app_plugin
+# Use native_federation_plugin only when publishing separate platform packages
 mason make native_federation_plugin --name plugin_name --description "Description" --package_prefix app -o app_plugin
 ```
 
@@ -133,3 +147,18 @@ Uses Nix/Devenv for reproducible environment. Auto-loads via direnv (`.envrc`). 
 - Repository pattern for data layer
 - Prefer const constructors
 - Use AppLogger for error handling with logging
+
+## Running the App
+
+```bash
+flutter run                # Default device
+flutter run -d chrome      # Web
+flutter run -d macos       # macOS
+flutter run -d linux       # Linux
+```
+
+## CI Workflows
+
+- `ci.yml` - Format check, analyze, test, and build (skips for docs/config changes)
+- `brick-test.yml` - Tests Mason bricks (only runs when brick files change)
+- `release.yml` - Manual workflow for creating releases with platform builds
