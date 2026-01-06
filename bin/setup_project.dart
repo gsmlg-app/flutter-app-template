@@ -121,6 +121,8 @@ void main(List<String> args) async {
   print('  1. Run: melos bootstrap');
   print('  2. Update app icons in app_widget/artwork/assets/icon/');
   print('  3. Update app info in android/app/build.gradle and ios/Runner/Info.plist');
-  print('  4. Commit your changes: git add -A && git commit -m "chore: initialize project as $newName"');
+  print('  4. In Claude Code, run: /speckit.constitution');
+  print('     (This regenerates the project constitution for your new project)');
+  print('  5. Commit your changes: git add -A && git commit -m "chore: initialize project as $newName"');
   print('');
 }
