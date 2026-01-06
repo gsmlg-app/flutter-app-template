@@ -18,7 +18,7 @@ void main() {
     });
 
     test('generates BLoC package with correct structure', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'simple_bloc'));
+      final brick = Brick.path(path.join('bricks', 'simple_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       final files = await generator.generate(
@@ -50,7 +50,7 @@ void main() {
     });
 
     test('generates valid pubspec.yaml with correct dependencies', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'simple_bloc'));
+      final brick = Brick.path(path.join('bricks', 'simple_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -77,7 +77,7 @@ void main() {
     });
 
     test('generates correct BLoC class structure', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'simple_bloc'));
+      final brick = Brick.path(path.join('bricks', 'simple_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -113,7 +113,7 @@ void main() {
     });
 
     test('generates correct event class structure', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'simple_bloc'));
+      final brick = Brick.path(path.join('bricks', 'simple_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -139,7 +139,7 @@ void main() {
     });
 
     test('generates correct state class structure', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'simple_bloc'));
+      final brick = Brick.path(path.join('bricks', 'simple_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -172,7 +172,7 @@ void main() {
     });
 
     test('generates correct main export file', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'simple_bloc'));
+      final brick = Brick.path(path.join('bricks', 'simple_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -188,7 +188,7 @@ void main() {
     });
 
     test('generates comprehensive test file', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'simple_bloc'));
+      final brick = Brick.path(path.join('bricks', 'simple_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -235,7 +235,7 @@ void main() {
     });
 
     test('handles different BLoC names correctly', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'simple_bloc'));
+      final brick = Brick.path(path.join('bricks', 'simple_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -255,7 +255,7 @@ void main() {
     });
 
     test('validates name parameter', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'simple_bloc'));
+      final brick = Brick.path(path.join('bricks', 'simple_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
 
@@ -270,7 +270,7 @@ void main() {
     });
 
     test('generates README with documentation', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'simple_bloc'));
+      final brick = Brick.path(path.join('bricks', 'simple_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(

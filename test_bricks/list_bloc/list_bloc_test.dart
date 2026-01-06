@@ -18,7 +18,7 @@ void main() {
     });
 
     test('generates list BLoC package with correct structure', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'list_bloc'));
+      final brick = Brick.path(path.join('bricks', 'list_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -46,7 +46,7 @@ void main() {
     });
 
     test('generates valid pubspec.yaml with correct dependencies', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'list_bloc'));
+      final brick = Brick.path(path.join('bricks', 'list_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -72,7 +72,7 @@ void main() {
     });
 
     test('generates BLoC file with correct structure', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'list_bloc'));
+      final brick = Brick.path(path.join('bricks', 'list_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -89,7 +89,7 @@ void main() {
     });
 
     test('generates event file with correct structure', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'list_bloc'));
+      final brick = Brick.path(path.join('bricks', 'list_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -105,7 +105,7 @@ void main() {
     });
 
     test('generates state file with correct structure', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'list_bloc'));
+      final brick = Brick.path(path.join('bricks', 'list_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -122,7 +122,7 @@ void main() {
     });
 
     test('generates correct main export file', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'list_bloc'));
+      final brick = Brick.path(path.join('bricks', 'list_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -138,7 +138,7 @@ void main() {
     });
 
     test('generates test file with correct structure', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'list_bloc'));
+      final brick = Brick.path(path.join('bricks', 'list_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -155,7 +155,7 @@ void main() {
     });
 
     test('handles different naming conventions', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'list_bloc'));
+      final brick = Brick.path(path.join('bricks', 'list_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(

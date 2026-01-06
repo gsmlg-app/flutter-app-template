@@ -18,7 +18,7 @@ void main() {
     });
 
     test('generates basic stateless widget', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'widget'));
+      final brick = Brick.path(path.join('bricks', 'widget'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -39,7 +39,7 @@ void main() {
     });
 
     test('generates stateful widget', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'widget'));
+      final brick = Brick.path(path.join('bricks', 'widget'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -63,7 +63,7 @@ void main() {
     });
 
     test('creates complete widget package structure', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'widget'));
+      final brick = Brick.path(path.join('bricks', 'widget'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -89,7 +89,7 @@ void main() {
     });
 
     test('generates proper export file', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'widget'));
+      final brick = Brick.path(path.join('bricks', 'widget'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -112,7 +112,7 @@ void main() {
     });
 
     test('includes test template', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'widget'));
+      final brick = Brick.path(path.join('bricks', 'widget'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -135,7 +135,7 @@ void main() {
     });
 
     test('handles camelCase to snakeCase conversion', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'widget'));
+      final brick = Brick.path(path.join('bricks', 'widget'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -155,7 +155,7 @@ void main() {
     });
 
     test('creates proper pubspec.yaml with dependencies', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'widget'));
+      final brick = Brick.path(path.join('bricks', 'widget'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(

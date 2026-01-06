@@ -19,7 +19,7 @@ void main() {
 
     test('generates federated plugin with all platforms', () async {
       final brick = Brick.path(
-        path.join('..', '..', 'bricks', 'native_federation_plugin'),
+        path.join('bricks', 'native_federation_plugin'),
       );
 
       final generator = await MasonGenerator.fromBrick(brick);
@@ -71,7 +71,7 @@ void main() {
 
     test('generates correct main plugin structure', () async {
       final brick = Brick.path(
-        path.join('..', '..', 'bricks', 'native_federation_plugin'),
+        path.join('bricks', 'native_federation_plugin'),
       );
 
       final generator = await MasonGenerator.fromBrick(brick);
@@ -112,7 +112,7 @@ void main() {
 
     test('generates platform interface with correct structure', () async {
       final brick = Brick.path(
-        path.join('..', '..', 'bricks', 'native_federation_plugin'),
+        path.join('bricks', 'native_federation_plugin'),
       );
 
       final generator = await MasonGenerator.fromBrick(brick);
@@ -155,7 +155,7 @@ void main() {
 
     test('generates Android implementation with Kotlin code', () async {
       final brick = Brick.path(
-        path.join('..', '..', 'bricks', 'native_federation_plugin'),
+        path.join('bricks', 'native_federation_plugin'),
       );
 
       final generator = await MasonGenerator.fromBrick(brick);
@@ -206,7 +206,7 @@ void main() {
 
     test('generates iOS implementation with Swift code', () async {
       final brick = Brick.path(
-        path.join('..', '..', 'bricks', 'native_federation_plugin'),
+        path.join('bricks', 'native_federation_plugin'),
       );
 
       final generator = await MasonGenerator.fromBrick(brick);
@@ -247,7 +247,7 @@ void main() {
 
     test('generates Linux implementation with C++ code', () async {
       final brick = Brick.path(
-        path.join('..', '..', 'bricks', 'native_federation_plugin'),
+        path.join('bricks', 'native_federation_plugin'),
       );
 
       final generator = await MasonGenerator.fromBrick(brick);
@@ -294,7 +294,7 @@ void main() {
 
     test('generates Windows implementation with C++ code', () async {
       final brick = Brick.path(
-        path.join('..', '..', 'bricks', 'native_federation_plugin'),
+        path.join('bricks', 'native_federation_plugin'),
       );
 
       final generator = await MasonGenerator.fromBrick(brick);
@@ -334,7 +334,7 @@ void main() {
 
     test('handles different package prefixes correctly', () async {
       final brick = Brick.path(
-        path.join('..', '..', 'bricks', 'native_federation_plugin'),
+        path.join('bricks', 'native_federation_plugin'),
       );
 
       final generator = await MasonGenerator.fromBrick(brick);
@@ -374,7 +374,7 @@ void main() {
 
     test('generates README documentation', () async {
       final brick = Brick.path(
-        path.join('..', '..', 'bricks', 'native_federation_plugin'),
+        path.join('bricks', 'native_federation_plugin'),
       );
 
       final generator = await MasonGenerator.fromBrick(brick);

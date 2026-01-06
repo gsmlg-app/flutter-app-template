@@ -18,7 +18,7 @@ void main() {
     });
 
     test('generates API client package with correct structure', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'api_client'));
+      final brick = Brick.path(path.join('bricks', 'api_client'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -45,7 +45,7 @@ void main() {
     });
 
     test('generates valid pubspec.yaml with correct dependencies', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'api_client'));
+      final brick = Brick.path(path.join('bricks', 'api_client'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -72,7 +72,7 @@ void main() {
     });
 
     test('generates correct main library file', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'api_client'));
+      final brick = Brick.path(path.join('bricks', 'api_client'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -88,7 +88,7 @@ void main() {
     });
 
     test('generates OpenAPI template file', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'api_client'));
+      final brick = Brick.path(path.join('bricks', 'api_client'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -105,7 +105,7 @@ void main() {
     });
 
     test('generates swagger_parser configuration', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'api_client'));
+      final brick = Brick.path(path.join('bricks', 'api_client'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -123,7 +123,7 @@ void main() {
     });
 
     test('generates test file with correct structure', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'api_client'));
+      final brick = Brick.path(path.join('bricks', 'api_client'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -141,7 +141,7 @@ void main() {
     });
 
     test('handles different package names correctly', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'api_client'));
+      final brick = Brick.path(path.join('bricks', 'api_client'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(

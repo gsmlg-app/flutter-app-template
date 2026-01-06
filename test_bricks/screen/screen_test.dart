@@ -18,7 +18,7 @@ void main() {
     });
 
     test('generates basic screen with default options', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'screen'));
+      final brick = Brick.path(path.join('bricks', 'screen'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -45,7 +45,7 @@ void main() {
     });
 
     test('generates screen without adaptive scaffold', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'screen'));
+      final brick = Brick.path(path.join('bricks', 'screen'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -70,7 +70,7 @@ void main() {
     });
 
     test('generates minimal screen', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'screen'));
+      final brick = Brick.path(path.join('bricks', 'screen'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -95,7 +95,7 @@ void main() {
     });
 
     test('handles special characters in screen name', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'screen'));
+      final brick = Brick.path(path.join('bricks', 'screen'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -120,7 +120,7 @@ void main() {
     });
 
     test('creates directory structure for nested screens', () async {
-      final brick = Brick.path(path.join('..', '..', 'bricks', 'screen'));
+      final brick = Brick.path(path.join('bricks', 'screen'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
