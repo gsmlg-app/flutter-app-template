@@ -1,5 +1,6 @@
 ---
-description: Guide for creating federated native plugins in app_plugin with platform-specific implementations
+name: flutter-plugin
+description: Guide for creating federated native plugins in app_plugin with platform-specific implementations (project)
 ---
 
 # Flutter Plugin Development Skill

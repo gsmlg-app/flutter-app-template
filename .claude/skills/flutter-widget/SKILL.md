@@ -1,5 +1,6 @@
 ---
-description: Guide for creating reusable widgets in app_widget packages with platform adaptive support
+name: flutter-widget
+description: Guide for creating reusable widgets in app_widget packages with platform adaptive support (project)
 ---
 
 # Flutter Widget Development Skill

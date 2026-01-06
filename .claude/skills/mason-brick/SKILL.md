@@ -1,5 +1,6 @@
 ---
-description: Guide for creating, updating, or removing Mason bricks with corresponding tests and CI workflow
+name: mason-brick
+description: Guide for creating, updating, or removing Mason bricks with corresponding tests and CI workflow (project)
 ---
 
 # Mason Brick Development Skill
