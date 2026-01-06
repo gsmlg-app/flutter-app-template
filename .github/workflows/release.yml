@@ -1,0 +1,292 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform to build'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - 'android'
+          - 'ios'
+          - 'linux'
+          - 'macos'
+          - 'all'
+      build-name:
+        required: true
+        description: 'Version number (x.y.z)'
+        default: '0.1.0'
+      release-notes:
+        required: false
+        description: 'Release notes (leave empty to auto-generate from commits)'
+        default: ''
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: flutter-actions/setup-flutter@v4
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Install tools
+        run: dart pub global activate melos
+
+      - name: Prepare project
+        run: melos run prepare
+
+      - name: Run analyze
+        run: melos run analyze
+
+      - name: Run tests
+        run: melos run test
+
+  create-release:
+    name: Create Release
+    needs: test
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      release_id: ${{ steps.create_release.outputs.id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v${{ inputs.build-name }}" -m "Release v${{ inputs.build-name }}"
+          git push origin "v${{ inputs.build-name }}"
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          if [ -n "${{ inputs.release-notes }}" ]; then
+            echo "notes<<EOF" >> $GITHUB_OUTPUT
+            echo "${{ inputs.release-notes }}" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            # Auto-generate from recent commits
+            PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+            if [ -n "$PREV_TAG" ]; then
+              COMMITS=$(git log ${PREV_TAG}..HEAD --pretty=format:"- %s" --no-merges)
+            else
+              COMMITS=$(git log --pretty=format:"- %s" --no-merges -10)
+            fi
+            echo "notes<<EOF" >> $GITHUB_OUTPUT
+            echo "## What's Changed" >> $GITHUB_OUTPUT
+            echo "" >> $GITHUB_OUTPUT
+            echo "$COMMITS" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ inputs.build-name }}
+          release_name: Release v${{ inputs.build-name }}
+          body: ${{ steps.release_notes.outputs.notes }}
+          draft: false
+          prerelease: false
+
+  build-android:
+    if: inputs.platform == 'android' || inputs.platform == 'all'
+    name: Build Android
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v${{ inputs.build-name }}
+
+      - uses: flutter-actions/setup-flutter@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Install tools
+        run: dart pub global activate melos
+
+      - name: Prepare project
+        run: melos run prepare
+
+      - name: Build APK
+        run: flutter build apk --build-name=${{ inputs.build-name }} --release
+
+      - name: Upload APK to Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: v${{ inputs.build-name }}
+          file: build/app/outputs/flutter-apk/app-release.apk
+          asset_name: flutter-app-${{ inputs.build-name }}-android.apk
+          overwrite: true
+
+  build-ios:
+    if: inputs.platform == 'ios' || inputs.platform == 'all'
+    name: Build iOS
+    needs: create-release
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v${{ inputs.build-name }}
+
+      - uses: flutter-actions/setup-flutter@v4
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Install tools
+        run: dart pub global activate melos
+
+      - name: Prepare project
+        run: melos run prepare
+
+      - name: Build iOS (no codesign)
+        run: flutter build ios --build-name=${{ inputs.build-name }} --release --no-codesign
+
+      - name: Create IPA
+        run: |
+          mkdir -p build/ios/ipa
+          cd build/ios/iphoneos
+          mkdir Payload
+          cp -r Runner.app Payload/
+          zip -r ../ipa/flutter-app-${{ inputs.build-name }}-ios.ipa Payload
+
+      - name: Upload IPA to Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: v${{ inputs.build-name }}
+          file: build/ios/ipa/flutter-app-${{ inputs.build-name }}-ios.ipa
+          asset_name: flutter-app-${{ inputs.build-name }}-ios.ipa
+          overwrite: true
+
+  build-linux:
+    if: inputs.platform == 'linux' || inputs.platform == 'all'
+    name: Build Linux
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v${{ inputs.build-name }}
+
+      - uses: flutter-actions/setup-flutter@v4
+
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Install tools
+        run: dart pub global activate melos
+
+      - name: Prepare project
+        run: melos run prepare
+
+      - name: Build Linux
+        run: flutter build linux --build-name=${{ inputs.build-name }} --release
+
+      - name: Package Linux build
+        run: |
+          cd build/linux/x64/release/bundle
+          tar -czvf ../../../../../flutter-app-${{ inputs.build-name }}-linux.tar.gz .
+
+      - name: Upload Linux to Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: v${{ inputs.build-name }}
+          file: flutter-app-${{ inputs.build-name }}-linux.tar.gz
+          asset_name: flutter-app-${{ inputs.build-name }}-linux.tar.gz
+          overwrite: true
+
+  build-macos:
+    if: inputs.platform == 'macos' || inputs.platform == 'all'
+    name: Build macOS
+    needs: create-release
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v${{ inputs.build-name }}
+
+      - uses: flutter-actions/setup-flutter@v4
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Install tools
+        run: dart pub global activate melos
+
+      - name: Prepare project
+        run: melos run prepare
+
+      - name: Build macOS
+        run: flutter build macos --build-name=${{ inputs.build-name }} --release
+
+      - name: Package macOS build
+        run: |
+          cd build/macos/Build/Products/Release
+          zip -r ../../../../../flutter-app-${{ inputs.build-name }}-macos.zip "Flutter App Template.app"
+
+      - name: Upload macOS to Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: v${{ inputs.build-name }}
+          file: flutter-app-${{ inputs.build-name }}-macos.zip
+          asset_name: flutter-app-${{ inputs.build-name }}-macos.zip
+          overwrite: true
