@@ -7,7 +7,6 @@ analyzer:
     - "bricks/**" # If your Mason templates are in 'bricks' and you don't want them analyzed
     - "**/_templates/**" # Common name for Mason template directories
     - "**/.mason/**" # Mason's internal directory
-    - "tool/**" # Isolated e2e tests, checked separately
 
 linter:
   # The lint rules applied to this project can be customized in the

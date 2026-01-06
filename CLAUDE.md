@@ -15,6 +15,7 @@ Flutter monorepo template with modular architecture, BLoC state management, and 
 ├── app_widget/             # Reusable UI components (adaptive, artwork, feedback, web_view)
 ├── app_plugin/             # Native platform plugins with federated architecture
 ├── bricks/                 # Mason templates for code generation
+├── test_bricks/            # Brick tests (one folder per brick)
 └── third_party/            # Modified third-party packages
 ```
 
@@ -38,11 +39,10 @@ mason get
 ### Common Workflows
 ```bash
 melos run prepare          # Bootstrap + gen-l10n + build-runner (full setup)
-melos run analyze          # Lint all packages (--fatal-infos)
+melos run analyze          # Lint all packages (--fatal-warnings)
 melos run format           # Format all packages
 melos run fix              # Apply dart fix --apply
 melos run test             # Run all tests (flutter + dart)
-melos run brick-test       # Test Mason bricks (tool/brick_tests/)
 ```
 
 ### Individual Package Operations
@@ -118,8 +118,9 @@ Tests co-located with packages in `test/` directories. Main app has comprehensiv
 ```bash
 melos run test:dart       # Non-Flutter packages only
 melos run test:flutter    # Flutter packages only
-melos run test:selective  # Only packages with test/ directory
 ```
+
+Brick tests are in `test_bricks/` (one folder per brick) and run via GitHub Actions workflow `brick-test.yml`.
 
 ## Development Environment
 

@@ -74,7 +74,7 @@ Tests MUST be co-located with their packages:
 - Use `melos run test` to run all tests across packages
 - Use `melos run test:dart` for non-Flutter packages
 - Use `melos run test:flutter` for Flutter packages
-- Isolated e2e/brick tests reside in `tool/` (excluded from default analysis)
+- Isolated brick tests reside in `test_bricks/` (excluded from default analysis)
 
 ## Development Standards
 
