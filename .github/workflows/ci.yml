@@ -3,8 +3,32 @@ name: CI
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - '.claude/**'
+      - '.specify/**'
+      - '.speckit/**'
+      - 'docs/**'
+      - '.gitignore'
+      - '.gitattributes'
+      - '.editorconfig'
+      - 'LICENSE'
+      - '.vscode/**'
+      - '.idea/**'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - '.claude/**'
+      - '.specify/**'
+      - '.speckit/**'
+      - 'docs/**'
+      - '.gitignore'
+      - '.gitattributes'
+      - '.editorconfig'
+      - 'LICENSE'
+      - '.vscode/**'
+      - '.idea/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
