@@ -33,6 +33,7 @@ Project-specific skills are available in `.claude/skills/`:
 - `/project-screen` - Create screens with routing conventions and adaptive scaffold
 - `/project-widget` - Create reusable widgets with platform adaptive support
 - `/project-plugin` - Create native plugins (simple or federated)
+- `/project-locale` - Add localized text using l10n in app_lib/locale
 - `/template-mason-brick` - Create, update, or remove Mason bricks with tests
 
 ## Development Commands
