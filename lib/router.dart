@@ -8,6 +8,7 @@ import 'package:flutter_app_template/screens/settings/appearance_settings_screen
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
 import 'package:flutter_app_template/screens/showcase/adaptive_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/artwork_demo_screen.dart';
+import 'package:flutter_app_template/screens/showcase/client_info_screen.dart';
 import 'package:flutter_app_template/screens/showcase/feedback_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/showcase_screen.dart';
 import 'package:flutter_app_template/screens/showcase/webview_demo_screen.dart';
@@ -103,6 +104,17 @@ class AppRouter {
               key: state.pageKey,
               restorationId: state.pageKey.value,
               child: const WebViewDemoScreen(),
+            );
+          },
+        ),
+        GoRoute(
+          name: ClientInfoScreen.name,
+          path: ClientInfoScreen.path,
+          pageBuilder: (context, state) {
+            return NoTransitionPage<void>(
+              key: state.pageKey,
+              restorationId: state.pageKey.value,
+              child: const ClientInfoScreen(),
             );
           },
         ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/showcase/adaptive_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/artwork_demo_screen.dart';
+import 'package:flutter_app_template/screens/showcase/client_info_screen.dart';
 import 'package:flutter_app_template/screens/showcase/feedback_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/webview_demo_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -75,6 +76,16 @@ class ShowcaseScreen extends StatelessWidget {
                 icon: Icons.web,
                 color: Colors.green,
                 onTap: () => context.goNamed(WebViewDemoScreen.name),
+              ),
+              const SizedBox(height: 12),
+              _buildDemoCard(
+                context,
+                title: 'Client Info',
+                subtitle: 'app_client_info',
+                description: 'Platform info from native federated plugin',
+                icon: Icons.phone_android,
+                color: Colors.indigo,
+                onTap: () => context.goNamed(ClientInfoScreen.name),
               ),
             ],
           ),
