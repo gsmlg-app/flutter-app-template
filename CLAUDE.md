@@ -88,6 +88,16 @@ mason make native_federation_plugin --name plugin_name --description "Descriptio
 
 See [BRICKS.md](./docs/BRICKS.md) for complete brick documentation.
 
+### Template Scripts
+```bash
+# Rename template to your project name (run once after cloning)
+dart run bin/setup_project.dart my_project_name
+
+# Update bricks from upstream template (only works after renaming)
+dart run bin/update_bricks.dart
+dart run bin/update_bricks.dart --force  # Force update all bricks
+```
+
 ## Key Entry Points
 
 - `lib/main.dart` - App initialization: MainProvider, AppLogger, AppDatabase, SharedPreferences

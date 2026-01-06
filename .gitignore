@@ -51,6 +51,7 @@ mason-lock.json
 
 /.devenv*
 /local.properties
+/.template-sync
 
 /.claude/*
 !/.claude/commands/
