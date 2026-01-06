@@ -127,6 +127,11 @@ class AdaptiveScaffold extends StatefulWidget {
     this.appBarBreakpoint,
     this.navigationRailDestinationBuilder,
     this.groupAlignment,
+    this.isExtendedOverride,
+    this.onExtendedChange,
+    this.showCollapseToggle = false,
+    this.collapseIcon = Icons.menu_open,
+    this.expandIcon = Icons.menu,
   }) : assert(
           destinations.length >= 2,
           'At least two destinations are required',
@@ -320,6 +325,30 @@ class AdaptiveScaffold extends StatefulWidget {
 
   /// Used to map NavigationDestination to NavigationRailDestination.
   final NavigationRailDestinationBuilder? navigationRailDestinationBuilder;
+
+  /// Override the automatic extended state of the navigation rail.
+  ///
+  /// When null, the extended state is determined by breakpoints (default behavior).
+  /// When true, the navigation rail is always extended (shows icons + labels).
+  /// When false, the navigation rail is always collapsed (shows icons only).
+  final bool? isExtendedOverride;
+
+  /// Callback when the extended state changes (via toggle button).
+  ///
+  /// Use this to persist the user's preference in state management.
+  final void Function(bool isExtended)? onExtendedChange;
+
+  /// Whether to show a collapse/expand toggle button in the navigation rail.
+  ///
+  /// When true, a toggle button is shown at the top of the navigation rail
+  /// on large screens, allowing users to collapse/expand the rail.
+  final bool showCollapseToggle;
+
+  /// Icon to show when the navigation rail is extended (will collapse on tap).
+  final IconData collapseIcon;
+
+  /// Icon to show when the navigation rail is collapsed (will expand on tap).
+  final IconData expandIcon;
 
   /// Callback function for when the index of a [NavigationRail] changes.
   static WidgetBuilder emptyBuilder = (_) => const SizedBox();
@@ -567,6 +596,58 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
   // Global scaffold key that will help to manage drawer state.
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  /// Determines if the navigation rail should be extended.
+  ///
+  /// If [isExtendedOverride] is set, it takes precedence.
+  /// Otherwise, returns the default based on whether this is a "large" breakpoint.
+  bool _shouldBeExtended(bool defaultExtended) {
+    return widget.isExtendedOverride ?? defaultExtended;
+  }
+
+  /// Builds the toggle button for collapsing/expanding the navigation rail.
+  Widget? _buildToggleButton(bool isExtended) {
+    if (!widget.showCollapseToggle) {
+      return null;
+    }
+    return IconButton(
+      icon: Icon(isExtended ? widget.collapseIcon : widget.expandIcon),
+      onPressed: () {
+        widget.onExtendedChange?.call(!isExtended);
+      },
+      tooltip: isExtended ? 'Collapse menu' : 'Expand menu',
+    );
+  }
+
+  /// Builds the leading widget for the navigation rail, including toggle if enabled.
+  Widget? _buildLeading(bool isExtended) {
+    final toggleButton = _buildToggleButton(isExtended);
+    final existingLeading = isExtended
+        ? widget.leadingExtendedNavRail
+        : widget.leadingUnextendedNavRail;
+
+    if (toggleButton == null && existingLeading == null) {
+      return null;
+    }
+
+    if (toggleButton == null) {
+      return existingLeading;
+    }
+
+    if (existingLeading == null) {
+      return toggleButton;
+    }
+
+    // Combine toggle button with existing leading widget
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        toggleButton,
+        const SizedBox(height: 8),
+        existingLeading,
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final NavigationRailThemeData navRailTheme =
@@ -578,6 +659,12 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
                 ?.call(widget.destinations.indexOf(destination), destination) ??
             AdaptiveScaffold.toRailDestination(destination))
         .toList();
+
+    // Determine extended state for large breakpoints
+    final bool isExtendedOnLarge = _shouldBeExtended(true);
+    final double largeWidth = isExtendedOnLarge
+        ? widget.extendedNavigationRailWidth
+        : widget.navigationRailWidth;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -631,11 +718,11 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
               ),
             ),
             widget.mediumLargeBreakpoint: SlotLayout.from(
-              key: const Key('primaryNavigation1'),
+              key: Key('primaryNavigation1_${isExtendedOnLarge ? 'ext' : 'col'}'),
               builder: (_) => AdaptiveScaffold.standardNavigationRail(
-                width: widget.extendedNavigationRailWidth,
-                extended: true,
-                leading: widget.leadingExtendedNavRail,
+                width: largeWidth,
+                extended: isExtendedOnLarge,
+                leading: _buildLeading(isExtendedOnLarge),
                 trailing: widget.trailingNavRail,
                 padding: widget.navigationRailPadding,
                 selectedIndex: widget.selectedIndex,
@@ -651,18 +738,15 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
               ),
             ),
             widget.largeBreakpoint: SlotLayout.from(
-              key: const Key('primaryNavigation2'),
+              key: Key('primaryNavigation2_${isExtendedOnLarge ? 'ext' : 'col'}'),
               builder: (_) => AdaptiveScaffold.standardNavigationRail(
-                width: widget.extendedNavigationRailWidth,
-                extended: true,
-                leading: widget.leadingExtendedNavRail,
+                width: largeWidth,
+                extended: isExtendedOnLarge,
+                leading: _buildLeading(isExtendedOnLarge),
                 trailing: widget.trailingNavRail,
                 padding: widget.navigationRailPadding,
                 selectedIndex: widget.selectedIndex,
-                destinations: widget.destinations
-                    .map((NavigationDestination destination) =>
-                        AdaptiveScaffold.toRailDestination(destination))
-                    .toList(),
+                destinations: destinations,
                 onDestinationSelected: widget.onSelectedIndexChange,
                 backgroundColor: navRailTheme.backgroundColor,
                 selectedIconTheme: navRailTheme.selectedIconTheme,
@@ -672,18 +756,15 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
               ),
             ),
             widget.extraLargeBreakpoint: SlotLayout.from(
-              key: const Key('primaryNavigation3'),
+              key: Key('primaryNavigation3_${isExtendedOnLarge ? 'ext' : 'col'}'),
               builder: (_) => AdaptiveScaffold.standardNavigationRail(
-                width: widget.extendedNavigationRailWidth,
-                extended: true,
-                leading: widget.leadingExtendedNavRail,
+                width: largeWidth,
+                extended: isExtendedOnLarge,
+                leading: _buildLeading(isExtendedOnLarge),
                 trailing: widget.trailingNavRail,
                 padding: widget.navigationRailPadding,
                 selectedIndex: widget.selectedIndex,
-                destinations: widget.destinations
-                    .map((NavigationDestination destination) =>
-                        AdaptiveScaffold.toRailDestination(destination))
-                    .toList(),
+                destinations: destinations,
                 onDestinationSelected: widget.onSelectedIndexChange,
                 backgroundColor: navRailTheme.backgroundColor,
                 selectedIconTheme: navRailTheme.selectedIconTheme,

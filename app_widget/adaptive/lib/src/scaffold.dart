@@ -200,6 +200,27 @@ class AppAdaptiveScaffold extends StatelessWidget {
   /// Used to map NavigationDestination to NavigationRailDestination.
   final NavigationRailDestinationBuilder? navigationRailDestinationBuilder;
 
+  /// Override the automatic extended state of the navigation rail.
+  ///
+  /// When null, the extended state is determined by the current breakpoint.
+  /// When true, the navigation rail is always extended.
+  /// When false, the navigation rail is always collapsed.
+  final bool? isExtendedOverride;
+
+  /// Callback when the extended state changes (user toggles the rail).
+  final void Function(bool isExtended)? onExtendedChange;
+
+  /// Whether to show a collapse/expand toggle button on the navigation rail.
+  ///
+  /// Defaults to false.
+  final bool showCollapseToggle;
+
+  /// Icon to display when the navigation rail can be collapsed.
+  final IconData collapseIcon;
+
+  /// Icon to display when the navigation rail can be expanded.
+  final IconData expandIcon;
+
   const AppAdaptiveScaffold({
     super.key,
     required this.destinations,
@@ -237,6 +258,11 @@ class AppAdaptiveScaffold extends StatelessWidget {
     this.appBarBreakpoint,
     this.navigationRailDestinationBuilder,
     this.groupAlignment,
+    this.isExtendedOverride,
+    this.onExtendedChange,
+    this.showCollapseToggle = false,
+    this.collapseIcon = Icons.menu_open,
+    this.expandIcon = Icons.menu,
   });
 
   @override
@@ -276,6 +302,11 @@ class AppAdaptiveScaffold extends StatelessWidget {
       appBarBreakpoint: appBarBreakpoint,
       navigationRailDestinationBuilder: navigationRailDestinationBuilder,
       groupAlignment: groupAlignment,
+      isExtendedOverride: isExtendedOverride,
+      onExtendedChange: onExtendedChange,
+      showCollapseToggle: showCollapseToggle,
+      collapseIcon: collapseIcon,
+      expandIcon: expandIcon,
     );
   }
 }
