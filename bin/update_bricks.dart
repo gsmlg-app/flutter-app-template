@@ -75,10 +75,11 @@ void main(List<String> args) async {
       exit(1);
     }
 
-    // Set sparse checkout to only include bricks
+    // Set sparse checkout to only include bricks and mason.yaml
+    // Use --no-cone mode to allow file patterns (mason.yaml is a file, not directory)
     result = Process.runSync(
       'git',
-      ['sparse-checkout', 'set', 'bricks', 'mason.yaml'],
+      ['sparse-checkout', 'set', '--no-cone', 'bricks/', 'mason.yaml'],
       workingDirectory: tempDir,
     );
 
