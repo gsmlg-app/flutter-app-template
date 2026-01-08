@@ -148,7 +148,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: v${{ inputs.build-name }}
           file: build/app/outputs/flutter-apk/app-release.apk
-          asset_name: flutter-app-${{ inputs.build-name }}-android.apk
+          asset_name: app-${{ inputs.build-name }}-android.apk
           overwrite: true
 
   build-ios:
@@ -187,15 +187,15 @@ jobs:
           cd build/ios/iphoneos
           mkdir Payload
           cp -r Runner.app Payload/
-          zip -r ../ipa/flutter-app-${{ inputs.build-name }}-ios.ipa Payload
+          zip -r ../ipa/app-${{ inputs.build-name }}-ios.ipa Payload
 
       - name: Upload IPA to Release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: v${{ inputs.build-name }}
-          file: build/ios/ipa/flutter-app-${{ inputs.build-name }}-ios.ipa
-          asset_name: flutter-app-${{ inputs.build-name }}-ios.ipa
+          file: build/ios/ipa/app-${{ inputs.build-name }}-ios.ipa
+          asset_name: app-${{ inputs.build-name }}-ios.ipa
           overwrite: true
 
   build-linux:
@@ -236,15 +236,15 @@ jobs:
       - name: Package Linux build
         run: |
           cd build/linux/x64/release/bundle
-          tar -czvf ../../../../../flutter-app-${{ inputs.build-name }}-linux.tar.gz .
+          tar -czvf ../../../../../app-${{ inputs.build-name }}-linux.tar.gz .
 
       - name: Upload Linux to Release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: v${{ inputs.build-name }}
-          file: flutter-app-${{ inputs.build-name }}-linux.tar.gz
-          asset_name: flutter-app-${{ inputs.build-name }}-linux.tar.gz
+          file: app-${{ inputs.build-name }}-linux.tar.gz
+          asset_name: app-${{ inputs.build-name }}-linux.tar.gz
           overwrite: true
 
   build-macos:
@@ -280,13 +280,13 @@ jobs:
       - name: Package macOS build
         run: |
           cd build/macos/Build/Products/Release
-          zip -r ../../../../../flutter-app-${{ inputs.build-name }}-macos.zip "Flutter App Template.app"
+          zip -r ../../../../../app-${{ inputs.build-name }}-macos.zip *.app
 
       - name: Upload macOS to Release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: v${{ inputs.build-name }}
-          file: flutter-app-${{ inputs.build-name }}-macos.zip
-          asset_name: flutter-app-${{ inputs.build-name }}-macos.zip
+          file: app-${{ inputs.build-name }}-macos.zip
+          asset_name: app-${{ inputs.build-name }}-macos.zip
           overwrite: true
