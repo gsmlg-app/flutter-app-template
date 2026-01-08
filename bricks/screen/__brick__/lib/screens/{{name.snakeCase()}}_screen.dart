@@ -1,7 +1,7 @@
 import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';{{#has_adaptive_scaffold}}
 import 'package:app_locale/app_locale.dart';{{/has_adaptive_scaffold}}
 import 'package:flutter/material.dart';{{#has_adaptive_scaffold}}
-import 'package:flutter_app_template/destination.dart';{{/has_adaptive_scaffold}}
+import 'package:{{package_name.snakeCase()}}/destination.dart';{{/has_adaptive_scaffold}}
 {{#has_app_bar}}
 import 'package:flutter_bloc/flutter_bloc.dart';{{/has_app_bar}}
 

@@ -560,4 +560,4 @@ When modifying this brick:
 
 ## License
 
-This brick is part of the Flutter App Template project. See the main project license for details.
+MIT License. See the project license for details.

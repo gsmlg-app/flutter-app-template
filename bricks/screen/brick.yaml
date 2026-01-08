@@ -28,6 +28,12 @@ vars:
     default: Profile
     prompt: What is your screen name?
 
+  package_name:
+    type: string
+    description: Main app package name for imports
+    default: my_app
+    prompt: What is your app package name?
+
   has_adaptive_scaffold:
     type: boolean
     description: Use AppAdaptiveScaffold for responsive layout
