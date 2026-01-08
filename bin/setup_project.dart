@@ -121,8 +121,11 @@ void main(List<String> args) async {
   print('  1. Run: melos bootstrap');
   print('  2. Update app icons in app_widget/artwork/assets/icon/');
   print('  3. Update app info in android/app/build.gradle and ios/Runner/Info.plist');
-  print('  4. In Claude Code, run: /speckit.constitution');
+  print('  4. Update .github/workflows/release.yml:');
+  print('     - Replace "flutter-app-" with your app name in asset_name fields');
+  print('     - Replace "Flutter App Template.app" with your macOS app name');
+  print('  5. In Claude Code, run: /speckit.constitution');
   print('     (This regenerates the project constitution for your new project)');
-  print('  5. Commit your changes: git add -A && git commit -m "chore: initialize project as $newName"');
+  print('  6. Commit your changes: git add -A && git commit -m "chore: initialize project as $newName"');
   print('');
 }
