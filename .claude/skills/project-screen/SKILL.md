@@ -137,6 +137,152 @@ import 'package:app_artwork/app_artwork.dart';                    // Icons, anim
 import 'package:flutter_app_template/destination.dart';           // Navigation
 ```
 
+## AppAdaptiveScaffold Features
+
+### Responsive Body Slots
+
+```dart
+AppAdaptiveScaffold(
+  // Main body - used for medium+ breakpoints
+  body: (context) => MainContent(),
+
+  // Small screen body (mobile)
+  smallBody: (context) => MobileContent(),
+
+  // Medium-large screen body (tablet)
+  mediumLargeBody: (context) => TabletContent(),
+
+  // Large screen body (desktop)
+  largeBody: (context) => DesktopContent(),
+
+  // Extra large screen body
+  extraLargeBody: (context) => WideDesktopContent(),
+)
+```
+
+### Secondary Body (Split View)
+
+```dart
+AppAdaptiveScaffold(
+  body: (context) => ListView(...),
+
+  // Secondary panel (detail view)
+  secondaryBody: (context) => DetailView(),
+
+  // Hide secondary on small screens
+  smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
+
+  // Body to secondary ratio (0.3 = 30% body, 70% secondary)
+  bodyRatio: 0.3,
+
+  // Orientation of split
+  bodyOrientation: Axis.horizontal, // or Axis.vertical
+)
+```
+
+### Collapsible Navigation Rail
+
+```dart
+AppAdaptiveScaffold(
+  // Enable collapse toggle button
+  showCollapseToggle: true,
+
+  // Custom icons for toggle
+  collapseIcon: Icons.menu_open,
+  expandIcon: Icons.menu,
+
+  // Control extended state externally
+  isExtendedOverride: isNavExtended,
+
+  // Listen for state changes
+  onExtendedChange: (isExtended) {
+    setState(() => isNavExtended = isExtended);
+  },
+)
+```
+
+### Navigation Rail Customization
+
+```dart
+AppAdaptiveScaffold(
+  // Leading widget (collapsed state)
+  leadingUnextendedNavRail: Icon(Icons.menu),
+
+  // Leading widget (extended state)
+  leadingExtendedNavRail: Text('My App'),
+
+  // Trailing widget below destinations
+  trailingNavRail: IconButton(icon: Icon(Icons.logout), onPressed: logout),
+
+  // Rail width
+  navigationRailWidth: 72,
+  extendedNavigationRailWidth: 192,
+
+  // Destination alignment
+  groupAlignment: -1.0, // Top aligned
+)
+```
+
+### Drawer Configuration
+
+```dart
+AppAdaptiveScaffold(
+  // Use drawer instead of bottom nav on small desktop
+  useDrawer: true,
+
+  // Custom breakpoint for drawer
+  drawerBreakpoint: Breakpoints.smallDesktop,
+
+  // Custom app bar when using drawer
+  appBar: AppBar(title: Text('My App')),
+
+  // Breakpoint to show app bar
+  appBarBreakpoint: Breakpoints.small,
+)
+```
+
+### Breakpoints Reference
+
+- `Breakpoints.small` - Mobile (< 600px)
+- `Breakpoints.medium` - Tablet (600-840px)
+- `Breakpoints.mediumLarge` - Small desktop (840-1200px)
+- `Breakpoints.large` - Desktop (1200-1600px)
+- `Breakpoints.extraLarge` - Wide desktop (> 1600px)
+
+## AppAdaptiveAction (Responsive Action Buttons)
+
+For action buttons that adapt to screen size:
+
+```dart
+// Define actions
+final actions = [
+  AppAdaptiveAction(
+    title: 'Edit',
+    icon: Icons.edit,
+    onPressed: () => handleEdit(),
+  ),
+  AppAdaptiveAction(
+    title: 'Delete',
+    icon: Icons.delete,
+    onPressed: () => handleDelete(),
+    disabled: !canDelete,
+  ),
+];
+
+// Display in AppBar or elsewhere
+AppAdaptiveActionList(
+  actions: actions,
+  size: AppAdaptiveActionSize.medium, // small, medium, large
+  direction: Axis.horizontal,
+  hideDisabled: true,
+)
+```
+
+**Action Sizes:**
+- `small` - Popup menu (overflow menu)
+- `medium` - Icon buttons only
+- `large` - Text buttons with icons
+
 ## Localization
 
 Add screen text to `app_lib/locale/lib/l10n/app_en.arb`:
