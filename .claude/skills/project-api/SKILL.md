@@ -425,19 +425,20 @@ swagger_parser:
 
 ## Using Generated API Client
 
-### Basic Usage
+### Basic Usage (with createDioClient helper)
 
 ```dart
 import 'package:github_api/github_api.dart';
-import 'package:dio/dio.dart';
 
-// Create Dio instance
-final dio = Dio(BaseOptions(
+// Create pre-configured Dio instance with automatic logging
+// - Debug mode: LogInterceptor enabled by default
+// - Release mode: LogInterceptor disabled by default
+final dio = createDioClient(
   baseUrl: 'https://api.github.com',
   headers: {
     'Accept': 'application/vnd.github.v3+json',
   },
-));
+);
 
 // Create API client
 final api = GithubApi(dio);
@@ -452,6 +453,26 @@ final repos = await api.reposClient.getUserRepos(
   perPage: 10,
 );
 print('Repos: ${repos.length}');
+```
+
+### Logging Configuration
+
+The `createDioClient` helper provides environment-aware logging:
+
+```dart
+// Default behavior:
+// - Debug mode: logging ON
+// - Release mode: logging OFF
+
+// Explicitly enable/disable logging
+final dio = createDioClient(
+  baseUrl: 'https://api.example.com',
+  enableLogging: true,  // Force enable
+  // enableLogging: false, // Force disable
+);
+
+// Disable logging in debug via environment variable:
+// flutter run --dart-define=DISABLE_API_LOG=true
 ```
 
 ### With Authentication
@@ -469,10 +490,11 @@ class AuthInterceptor extends Interceptor {
   }
 }
 
-// Setup
-final dio = Dio();
-dio.interceptors.add(AuthInterceptor('your-token'));
-dio.interceptors.add(LogInterceptor()); // For debugging
+// Setup with custom interceptors
+final dio = createDioClient(
+  baseUrl: 'https://api.github.com',
+  interceptors: [AuthInterceptor('your-token')],
+);
 
 final api = GithubApi(dio);
 ```
