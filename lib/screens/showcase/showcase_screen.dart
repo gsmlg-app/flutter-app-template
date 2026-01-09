@@ -5,6 +5,7 @@ import 'package:flutter_app_template/screens/showcase/adaptive_demo_screen.dart'
 import 'package:flutter_app_template/screens/showcase/artwork_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/client_info_screen.dart';
 import 'package:flutter_app_template/screens/showcase/feedback_demo_screen.dart';
+import 'package:flutter_app_template/screens/showcase/form_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/webview_demo_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -86,6 +87,16 @@ class ShowcaseScreen extends StatelessWidget {
                 icon: Icons.phone_android,
                 color: Colors.indigo,
                 onTap: () => context.goNamed(ClientInfoScreen.name),
+              ),
+              const SizedBox(height: 12),
+              _buildDemoCard(
+                context,
+                title: 'Form Widgets',
+                subtitle: 'demo_form',
+                description: 'FormBloc state management with validation',
+                icon: Icons.edit_document,
+                color: Colors.teal,
+                onTap: () => context.goNamed(FormDemoScreen.name),
               ),
             ],
           ),
