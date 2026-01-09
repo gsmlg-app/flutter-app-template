@@ -199,7 +199,6 @@ class FeedbackDemoScreen extends StatelessWidget {
       context: context,
       title: 'Error!',
       message: 'Something went wrong. Please try again.',
-      showCloseIcon: true,
     );
   }
 
