@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('showSuccessToast', () {
     testWidgets('displays success message', (WidgetTester tester) async {
-      const Key tapSuccessTarget = Key('tap-success');
+      const Key tapTarget = Key('tap-target');
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: Builder(builder: (BuildContext context) {
@@ -18,15 +18,15 @@ void main() {
               child: const SizedBox(
                 height: 100.0,
                 width: 100.0,
-                key: tapSuccessTarget,
+                key: tapTarget,
               ),
             );
           }),
         ),
       ));
 
-      await tester.tap(find.byKey(tapSuccessTarget), warnIfMissed: false);
-      await tester.pump(); // schedule animation
+      await tester.tap(find.byKey(tapTarget), warnIfMissed: false);
+      await tester.pump();
       expect(find.text('success'), findsOneWidget);
       expect(find.text('message'), findsOneWidget);
     });
@@ -34,7 +34,7 @@ void main() {
 
   group('showErrorToast', () {
     testWidgets('displays error message', (WidgetTester tester) async {
-      const Key tapErrorTarget = Key('tap-error');
+      const Key tapTarget = Key('tap-target');
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: Builder(builder: (BuildContext context) {
@@ -47,15 +47,15 @@ void main() {
               child: const SizedBox(
                 height: 100.0,
                 width: 100.0,
-                key: tapErrorTarget,
+                key: tapTarget,
               ),
             );
           }),
         ),
       ));
 
-      await tester.tap(find.byKey(tapErrorTarget), warnIfMissed: false);
-      await tester.pump(); // schedule animation
+      await tester.tap(find.byKey(tapTarget), warnIfMissed: false);
+      await tester.pump();
       expect(find.text('error'), findsOneWidget);
       expect(find.text('error message'), findsOneWidget);
     });
@@ -87,7 +87,6 @@ void main() {
       await tester.tap(find.byKey(tapTarget), warnIfMissed: false);
       await tester.pump();
 
-      // Close icon should be visible
       expect(find.byIcon(Icons.close), findsOneWidget);
     });
 
@@ -120,7 +119,6 @@ void main() {
       await tester.tap(find.byKey(tapTarget), warnIfMissed: false);
       await tester.pump();
 
-      // Message should use SelectableText widget
       expect(find.byType(SelectableText), findsOneWidget);
       expect(find.text(testMessage), findsOneWidget);
     });
@@ -154,11 +152,9 @@ void main() {
       await tester.pump();
       expect(find.text('error'), findsOneWidget);
 
-      // Wait a long time - error toast should still be visible
       await tester.pump(const Duration(seconds: 10));
       expect(find.text('error'), findsOneWidget);
 
-      // Even longer
       await tester.pump(const Duration(seconds: 30));
       expect(find.text('error'), findsOneWidget);
     });
@@ -197,11 +193,9 @@ void main() {
       await tester.pump();
       expect(find.text('error'), findsOneWidget);
 
-      // Dismiss via ScaffoldMessenger
       messengerState.hideCurrentSnackBar();
       await tester.pumpAndSettle();
 
-      // Toast should be dismissed
       expect(find.text('error'), findsNothing);
     });
   });
