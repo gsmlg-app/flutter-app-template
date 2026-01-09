@@ -40,18 +40,24 @@ showSuccessToast(
 
 ### Error Toast
 
+Error toasts **stay visible until user dismisses** them (no auto-dismiss).
+The message text is **selectable** so users can copy error details.
+
 ```dart
 showErrorToast(
   context: context,
   message: 'Failed to save item. Please try again.',
   title: 'Error',  // Optional, defaults to localized "Error"
-  duration: const Duration(seconds: 5),
-  showCloseIcon: true,
   // Optional action button
   actionLabel: 'Retry',
   onActionPressed: () => retryOperation(),
 );
 ```
+
+**Note:** Unlike success toasts, error toasts:
+- Always show close icon (user must dismiss)
+- Have selectable message text (for copying error details)
+- Don't auto-dismiss (important errors shouldn't disappear)
 
 ## Snackbars
 

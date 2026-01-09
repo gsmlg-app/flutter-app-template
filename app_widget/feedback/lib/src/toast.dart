@@ -60,8 +60,6 @@ void showErrorToast({
   required BuildContext context,
   String? title,
   required String message,
-  Duration duration = const Duration(seconds: 5),
-  bool showCloseIcon = false,
   String? actionLabel,
   void Function()? onActionPressed,
 }) {
@@ -87,17 +85,21 @@ void showErrorToast({
                 const SizedBox(
                   height: 8,
                 ),
-                Text(message,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onError)),
+                SelectableText(
+                  message,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onError),
+                ),
               ],
             ),
           ),
         ],
       ),
     ),
-    duration: duration,
-    showCloseIcon: showCloseIcon,
+    // Error toasts stay until user dismisses them
+    duration: const Duration(days: 365),
+    showCloseIcon: true,
+    closeIconColor: Theme.of(context).colorScheme.onError,
     action: actionLabel != null && onActionPressed != null
         ? SnackBarAction(
             label: actionLabel,
