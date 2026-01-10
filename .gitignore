@@ -56,3 +56,25 @@ mason-lock.json
 /.claude/*
 !/.claude/commands/
 !/.claude/skills/
+
+# Fastlane
+android/fastlane/report.xml
+android/fastlane/Preview.html
+android/fastlane/.env*
+android/fastlane/play-store-key.json
+ios/fastlane/report.xml
+ios/fastlane/Preview.html
+ios/fastlane/.env*
+
+# Android signing
+android/key.properties
+android/keystore/
+*.jks
+*.keystore
+
+# Bundler
+android/.bundle/
+android/vendor/
+ios/.bundle/
+ios/vendor/
+Gemfile.lock

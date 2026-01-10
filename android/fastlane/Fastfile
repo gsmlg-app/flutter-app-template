@@ -1,0 +1,63 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build release AAB"
+  lane :build do |options|
+    version_name = options[:version_name] || "1.0.0"
+    version_code = options[:version_code] || "1"
+
+    # Run flutter build from project root
+    Dir.chdir("../..") do
+      sh("flutter build appbundle --release --build-name=#{version_name} --build-number=#{version_code}")
+    end
+  end
+
+  desc "Deploy to Google Play Internal Testing"
+  lane :deploy_internal do |options|
+    version_name = options[:version_name] || "1.0.0"
+    version_code = options[:version_code] || "1"
+
+    build(version_name: version_name, version_code: version_code)
+
+    upload_to_play_store(
+      track: "internal",
+      aab: "../build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: "draft"
+    )
+  end
+
+  desc "Deploy to Google Play Alpha (Closed Testing)"
+  lane :deploy_alpha do |options|
+    version_name = options[:version_name] || "1.0.0"
+    version_code = options[:version_code] || "1"
+
+    build(version_name: version_name, version_code: version_code)
+
+    upload_to_play_store(
+      track: "alpha",
+      aab: "../build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: "draft"
+    )
+  end
+
+  desc "Promote from Internal to Production"
+  lane :promote_to_production do
+    upload_to_play_store(
+      track: "internal",
+      track_promote_to: "production",
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+end
