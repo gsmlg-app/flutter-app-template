@@ -31,6 +31,57 @@ jobs:
     name: Deploy Android to Play Store
     runs-on: ubuntu-latest
     steps:
+      - name: Validate Android secrets
+        run: |
+          echo "::group::Checking required secrets"
+          MISSING=""
+
+          if [ -z "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ]; then
+            echo "::error::ANDROID_KEYSTORE_BASE64 is not set"
+            MISSING="$MISSING ANDROID_KEYSTORE_BASE64"
+          else
+            echo "✓ ANDROID_KEYSTORE_BASE64 is set"
+          fi
+
+          if [ -z "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" ]; then
+            echo "::error::ANDROID_KEYSTORE_PASSWORD is not set"
+            MISSING="$MISSING ANDROID_KEYSTORE_PASSWORD"
+          else
+            echo "✓ ANDROID_KEYSTORE_PASSWORD is set"
+          fi
+
+          if [ -z "${{ secrets.ANDROID_KEY_PASSWORD }}" ]; then
+            echo "::error::ANDROID_KEY_PASSWORD is not set"
+            MISSING="$MISSING ANDROID_KEY_PASSWORD"
+          else
+            echo "✓ ANDROID_KEY_PASSWORD is set"
+          fi
+
+          if [ -z "${{ secrets.ANDROID_KEY_ALIAS }}" ]; then
+            echo "::error::ANDROID_KEY_ALIAS is not set"
+            MISSING="$MISSING ANDROID_KEY_ALIAS"
+          else
+            echo "✓ ANDROID_KEY_ALIAS is set"
+          fi
+
+          if [ -z "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}" ]; then
+            echo "::error::GOOGLE_PLAY_SERVICE_ACCOUNT_JSON is not set"
+            MISSING="$MISSING GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"
+          else
+            echo "✓ GOOGLE_PLAY_SERVICE_ACCOUNT_JSON is set"
+          fi
+
+          echo "::endgroup::"
+
+          if [ -n "$MISSING" ]; then
+            echo ""
+            echo "::error::Missing required secrets:$MISSING"
+            echo ""
+            echo "Please configure these secrets in GitHub repository settings."
+            echo "See docs/DEPLOYMENT_SETUP.md for setup instructions."
+            exit 1
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -70,6 +121,35 @@ jobs:
           mkdir -p android/keystore
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/keystore/upload-keystore.jks
 
+      - name: Validate keystore
+        run: |
+          echo "::group::Validating keystore"
+
+          # Check file exists and has content
+          if [ ! -s android/keystore/upload-keystore.jks ]; then
+            echo "::error::Keystore file is empty. Check ANDROID_KEYSTORE_BASE64 encoding."
+            exit 1
+          fi
+          echo "✓ Keystore file exists ($(stat -f%z android/keystore/upload-keystore.jks 2>/dev/null || stat -c%s android/keystore/upload-keystore.jks) bytes)"
+
+          # Validate keystore can be read with provided password
+          if ! keytool -list -keystore android/keystore/upload-keystore.jks \
+               -storepass "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" \
+               -alias "${{ secrets.ANDROID_KEY_ALIAS }}" > /dev/null 2>&1; then
+            echo "::error::Cannot read keystore. Possible causes:"
+            echo "  - ANDROID_KEYSTORE_PASSWORD is incorrect"
+            echo "  - ANDROID_KEY_ALIAS doesn't exist in keystore"
+            echo "  - Keystore file is corrupted (check base64 encoding)"
+            echo ""
+            echo "To debug locally, run:"
+            echo "  keytool -list -v -keystore your-keystore.jks"
+            exit 1
+          fi
+          echo "✓ Keystore password verified"
+          echo "✓ Key alias '${{ secrets.ANDROID_KEY_ALIAS }}' exists"
+
+          echo "::endgroup::"
+
       - name: Create key.properties
         run: |
           cat > android/key.properties << EOF
@@ -82,6 +162,13 @@ jobs:
       - name: Setup Play Store credentials
         run: |
           echo "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}" | base64 --decode > android/fastlane/play-store-key.json
+
+          # Validate it's valid JSON
+          if ! python3 -c "import json; json.load(open('android/fastlane/play-store-key.json'))" 2>/dev/null; then
+            echo "::error::Play Store service account JSON is invalid. Check GOOGLE_PLAY_SERVICE_ACCOUNT_JSON encoding."
+            exit 1
+          fi
+          echo "✓ Play Store service account JSON is valid"
 
       - name: Deploy to Play Store Internal
         env:
@@ -102,6 +189,75 @@ jobs:
     name: Deploy iOS to TestFlight
     runs-on: macos-latest
     steps:
+      - name: Validate iOS secrets
+        run: |
+          echo "::group::Checking required secrets"
+          MISSING=""
+
+          if [ -z "${{ secrets.MATCH_GIT_URL }}" ]; then
+            echo "::error::MATCH_GIT_URL is not set"
+            MISSING="$MISSING MATCH_GIT_URL"
+          else
+            echo "✓ MATCH_GIT_URL is set"
+          fi
+
+          if [ -z "${{ secrets.MATCH_GIT_BASIC_AUTH }}" ]; then
+            echo "::error::MATCH_GIT_BASIC_AUTH is not set"
+            MISSING="$MISSING MATCH_GIT_BASIC_AUTH"
+          else
+            echo "✓ MATCH_GIT_BASIC_AUTH is set"
+          fi
+
+          if [ -z "${{ secrets.MATCH_PASSWORD }}" ]; then
+            echo "::error::MATCH_PASSWORD is not set"
+            MISSING="$MISSING MATCH_PASSWORD"
+          else
+            echo "✓ MATCH_PASSWORD is set"
+          fi
+
+          if [ -z "${{ secrets.KEYCHAIN_PASSWORD }}" ]; then
+            echo "::error::KEYCHAIN_PASSWORD is not set"
+            MISSING="$MISSING KEYCHAIN_PASSWORD"
+          else
+            echo "✓ KEYCHAIN_PASSWORD is set"
+          fi
+
+          if [ -z "${{ secrets.APP_STORE_CONNECT_KEY_ID }}" ]; then
+            echo "::error::APP_STORE_CONNECT_KEY_ID is not set"
+            MISSING="$MISSING APP_STORE_CONNECT_KEY_ID"
+          else
+            echo "✓ APP_STORE_CONNECT_KEY_ID is set"
+          fi
+
+          if [ -z "${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}" ]; then
+            echo "::error::APP_STORE_CONNECT_ISSUER_ID is not set"
+            MISSING="$MISSING APP_STORE_CONNECT_ISSUER_ID"
+          else
+            echo "✓ APP_STORE_CONNECT_ISSUER_ID is set"
+          fi
+
+          if [ -z "${{ secrets.APP_STORE_CONNECT_KEY_CONTENT }}" ]; then
+            echo "::error::APP_STORE_CONNECT_KEY_CONTENT is not set"
+            MISSING="$MISSING APP_STORE_CONNECT_KEY_CONTENT"
+          else
+            echo "✓ APP_STORE_CONNECT_KEY_CONTENT is set"
+          fi
+
+          echo "::endgroup::"
+
+          if [ -n "$MISSING" ]; then
+            echo ""
+            echo "::error::Missing required secrets:$MISSING"
+            echo ""
+            echo "Please configure these secrets in GitHub repository settings."
+            echo "See docs/DEPLOYMENT_SETUP.md for setup instructions."
+            echo ""
+            echo "IMPORTANT: Before running this workflow, you must first run locally:"
+            echo "  cd ios && bundle exec fastlane match appstore"
+            echo "This generates certificates and pushes them to your Match git repo."
+            exit 1
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
 
