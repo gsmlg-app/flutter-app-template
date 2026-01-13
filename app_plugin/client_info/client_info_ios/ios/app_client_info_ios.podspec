@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name             = 'client_info_ios'
+  s.name             = 'app_client_info_ios'
   s.version          = '0.1.0'
   s.summary          = 'iOS implementation of app_client_info'
   s.description      = <<-DESC
