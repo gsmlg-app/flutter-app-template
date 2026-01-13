@@ -130,6 +130,11 @@ jobs:
       - name: Prepare project
         run: melos run prepare
 
+      - name: Install CocoaPods dependencies
+        run: |
+          cd ios
+          bundle exec pod install --repo-update
+
       - name: Deploy to TestFlight
         env:
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
