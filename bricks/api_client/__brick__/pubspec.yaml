@@ -3,7 +3,7 @@ version: 1.0.0
 description: API client, generate from OpenAPI spec
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 resolution: workspace
 
 dependencies:
