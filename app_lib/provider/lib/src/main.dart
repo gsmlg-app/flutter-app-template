@@ -1,4 +1,5 @@
 import 'package:app_database/app_database.dart';
+import 'package:app_secure_storage/app_secure_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,11 +11,13 @@ class MainProvider extends StatelessWidget {
     required this.child,
     required this.sharedPrefs,
     required this.database,
+    required this.vault,
   });
 
   final Widget child;
   final SharedPreferences sharedPrefs;
   final AppDatabase database;
+  final VaultRepository vault;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +28,9 @@ class MainProvider extends StatelessWidget {
         ),
         RepositoryProvider<AppDatabase>(
           create: (BuildContext context) => database,
+        ),
+        RepositoryProvider<VaultRepository>(
+          create: (BuildContext context) => vault,
         ),
       ],
       child: MultiBlocProvider(

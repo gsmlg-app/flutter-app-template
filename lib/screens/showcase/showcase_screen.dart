@@ -6,6 +6,7 @@ import 'package:flutter_app_template/screens/showcase/artwork_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/client_info_screen.dart';
 import 'package:flutter_app_template/screens/showcase/feedback_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/form_demo_screen.dart';
+import 'package:flutter_app_template/screens/showcase/vault_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/webview_demo_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -97,6 +98,16 @@ class ShowcaseScreen extends StatelessWidget {
                 icon: Icons.edit_document,
                 color: Colors.teal,
                 onTap: () => context.goNamed(FormDemoScreen.name),
+              ),
+              const SizedBox(height: 12),
+              _buildDemoCard(
+                context,
+                title: 'Secure Storage',
+                subtitle: 'app_secure_storage',
+                description: 'Platform-native secure storage for secrets',
+                icon: Icons.security,
+                color: Colors.amber,
+                onTap: () => context.goNamed(VaultDemoScreen.name),
               ),
             ],
           ),

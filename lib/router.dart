@@ -12,6 +12,7 @@ import 'package:flutter_app_template/screens/showcase/client_info_screen.dart';
 import 'package:flutter_app_template/screens/showcase/feedback_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/form_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/showcase_screen.dart';
+import 'package:flutter_app_template/screens/showcase/vault_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/webview_demo_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -127,6 +128,17 @@ class AppRouter {
               key: state.pageKey,
               restorationId: state.pageKey.value,
               child: const FormDemoScreen(),
+            );
+          },
+        ),
+        GoRoute(
+          name: VaultDemoScreen.name,
+          path: VaultDemoScreen.path,
+          pageBuilder: (context, state) {
+            return NoTransitionPage<void>(
+              key: state.pageKey,
+              restorationId: state.pageKey.value,
+              child: const VaultDemoScreen(),
             );
           },
         ),

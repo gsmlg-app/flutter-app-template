@@ -1,5 +1,6 @@
-name: app_provider
+name: app_secure_storage
 version: 1.0.0
+description: Secure storage API for saving user secrets using platform-native secure storage.
 publish_to: "none"
 
 environment:
@@ -7,16 +8,9 @@ environment:
 resolution: workspace
 
 dependencies:
-  bloc: ^9.0.0
-  flutter_bloc: ^9.0.0
-  equatable: ^2.0.5
   flutter:
     sdk: flutter
-  shared_preferences: ^2.0.17
-
-  theme_bloc: any
-  app_database: any
-  app_secure_storage: any
+  flutter_secure_storage: ^9.2.4
 
 dev_dependencies:
   flutter_test:

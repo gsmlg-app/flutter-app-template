@@ -13,6 +13,7 @@ workspace:
   - app_lib/locale
   - app_lib/provider
   - app_lib/logging
+  - app_lib/secure_storage
   - app_bloc/theme
   - app_widget/adaptive
   - app_widget/artwork
@@ -64,6 +65,7 @@ dependencies:
   app_adaptive_widgets: any
   settings_ui: any
   app_logging: any
+  app_secure_storage: any
   app_web_view: any
   demo_form: any
   flutter_form_bloc: any

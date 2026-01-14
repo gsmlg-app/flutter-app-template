@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   app_client_info_windows
+  flutter_secure_storage_windows
   sqlite3_flutter_libs
 )
 
