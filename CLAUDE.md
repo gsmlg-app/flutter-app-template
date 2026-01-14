@@ -20,7 +20,7 @@ Flutter monorepo template with modular architecture, BLoC state management, and 
 ```
 
 **Workspace packages** (defined in root `pubspec.yaml` workspace section):
-- `app_lib/`: database, theme, locale, provider, logging
+- `app_lib/`: database, theme, locale, provider, logging, secure_storage
 - `app_bloc/`: theme
 - `app_widget/`: adaptive, artwork, feedback, web_view
 - `app_plugin/`: client_info/ (nested federated plugin containing: client_info, client_info_platform_interface, client_info_android, client_info_ios, client_info_linux, client_info_macos, client_info_windows)
@@ -35,6 +35,8 @@ Project-specific skills are available in `.claude/skills/`:
 - `/project-plugin` - Create native plugins (simple or federated)
 - `/project-locale` - Add localized text using l10n in app_lib/locale
 - `/project-metadata` - Update app name, bundle identifier, and company metadata across all platforms
+- `/project-secure-storage` - Store secrets securely using app_secure_storage package with platform-native storage
+- `/project-database` - Use app_database package with Drift for user settings, app config, and persistent data
 - `/template-mason-brick` - Create, update, or remove Mason bricks with tests
 
 ## Development Commands
