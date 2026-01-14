@@ -85,7 +85,9 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-# generate icon with `dart run flutter_launcher_icons:main``
+# generate icon with :
+# > dart pub global activate flutter_launcher_icons
+# > dart pub global run flutter_launcher_icons
 flutter_launcher_icons:
   image_path: "app_widget/artwork/assets/icon/app-icon.png"
   android: true
