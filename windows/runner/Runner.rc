@@ -89,11 +89,11 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "dev.gsmlg" "\0"
+            VALUE "CompanyName", "app.gsmlg" "\0"
             VALUE "FileDescription", "flutter_app_template" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "flutter_app_template" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2025 dev.gsmlg. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2025 app.gsmlg. All rights reserved." "\0"
             VALUE "OriginalFilename", "flutter_app_template.exe" "\0"
             VALUE "ProductName", "flutter_app_template" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"

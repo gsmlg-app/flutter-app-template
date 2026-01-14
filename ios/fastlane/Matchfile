@@ -1,5 +1,5 @@
 git_url(ENV["MATCH_GIT_URL"])
 storage_mode("git")
 type("appstore")
-app_identifier(["dev.gsmlg.flutterAppTemplate"])
+app_identifier(["app.gsmlg.flutterapptemplate"])
 team_id("S9A97JZ7MQ")
