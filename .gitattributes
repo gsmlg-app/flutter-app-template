@@ -1,3 +1,18 @@
+# Lock files - treat as binary to avoid merge conflicts
+*.lock binary
+*-lock.json binary
+*.lock.hcl binary
+
+# Common lock file patterns
+pubspec.lock binary
+Podfile.lock binary
+Gemfile.lock binary
+package-lock.json binary
+pnpm-lock.yaml binary
+yarn.lock binary
+composer.lock binary
+Cargo.lock binary
+flake.lock binary
 *.png filter=lfs diff=lfs merge=lfs -text
 *.jpg filter=lfs diff=lfs merge=lfs -text
 *.jpeg filter=lfs diff=lfs merge=lfs -text

@@ -77,4 +77,3 @@ android/.bundle/
 android/vendor/
 ios/.bundle/
 ios/vendor/
-Gemfile.lock
