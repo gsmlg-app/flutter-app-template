@@ -34,6 +34,7 @@ Project-specific skills are available in `.claude/skills/`:
 - `/project-widget` - Create reusable widgets with platform adaptive support
 - `/project-plugin` - Create native plugins (simple or federated)
 - `/project-locale` - Add localized text using l10n in app_lib/locale
+- `/project-metadata` - Update app name, bundle identifier, and company metadata across all platforms
 - `/template-mason-brick` - Create, update, or remove Mason bricks with tests
 
 ## Development Commands
