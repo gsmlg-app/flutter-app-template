@@ -152,6 +152,11 @@ Brick tests are in `test_bricks/` (one folder per brick) and run via GitHub Acti
 
 Uses Nix/Devenv for reproducible environment. Auto-loads via direnv (`.envrc`). Flutter SDK version managed through `devenv.nix`.
 
+## Git Configuration
+
+- **Git LFS**: Images (png, jpg, ico, etc.) tracked with LFS. Run `git lfs install` after cloning.
+- **Lock files**: Treated as binary in `.gitattributes` to avoid merge conflicts.
+
 ## Code Style
 
 - flutter_lints rules from analysis_options.yaml

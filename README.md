@@ -44,24 +44,34 @@ This project follows clean architecture principles with a monorepo structure man
 - Flutter SDK (latest stable version)
 - Dart SDK
 - Git
+- Git LFS (for image assets)
 
 ### Installation
 
 1.  **Clone the repository:**
 
     ```bash
-    git clone https://github.com/your-username/flutter-app-template.git
+    git clone https://github.com/gsmlg-app/flutter-app-template.git
     cd flutter-app-template
     ```
 
-2.  **Install global dependencies:**
+2.  **Initialize Git LFS:**
+
+    Images are tracked with Git LFS. Initialize it before working with assets:
+
+    ```bash
+    git lfs install
+    git lfs pull
+    ```
+
+3.  **Install global dependencies:**
 
     ```bash
     dart pub global activate melos
     dart pub global activate mason_cli
     ```
 
-3.  **Bootstrap the project:**
+4.  **Bootstrap the project:**
 
     This will install all the dependencies for the root project and all the packages in the workspace.
 
@@ -69,7 +79,7 @@ This project follows clean architecture principles with a monorepo structure man
     melos bootstrap
     ```
 
-4.  **Initialize Mason:**
+5.  **Initialize Mason:**
 
     ```bash
     mason get
