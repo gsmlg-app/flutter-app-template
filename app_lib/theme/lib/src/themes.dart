@@ -31,19 +31,19 @@ class VioletTheme extends AppTheme {
   }
 
   VioletTheme._()
-      : super(
-          name: 'Violet',
-          lightTheme: ThemeData(
-            useMaterial3: true,
-            colorScheme: violet.lightColorScheme,
-            // textTheme: textTheme,
-          ),
-          darkTheme: ThemeData(
-            useMaterial3: true,
-            colorScheme: violet.darkColorScheme,
-            // textTheme: textTheme,
-          ),
-        );
+    : super(
+        name: 'Violet',
+        lightTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: violet.lightColorScheme,
+          // textTheme: textTheme,
+        ),
+        darkTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: violet.darkColorScheme,
+          // textTheme: textTheme,
+        ),
+      );
 }
 
 @immutable
@@ -53,19 +53,19 @@ class GreenTheme extends AppTheme {
   }
 
   GreenTheme._()
-      : super(
-          name: 'Green',
-          lightTheme: ThemeData(
-            useMaterial3: true,
-            colorScheme: green.lightColorScheme,
-            // textTheme: textTheme,
-          ),
-          darkTheme: ThemeData(
-            useMaterial3: true,
-            colorScheme: green.darkColorScheme,
-            // textTheme: textTheme,
-          ),
-        );
+    : super(
+        name: 'Green',
+        lightTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: green.lightColorScheme,
+          // textTheme: textTheme,
+        ),
+        darkTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: green.darkColorScheme,
+          // textTheme: textTheme,
+        ),
+      );
 }
 
 @immutable
@@ -75,19 +75,19 @@ class FireTheme extends AppTheme {
   }
 
   FireTheme._()
-      : super(
-          name: 'Fire',
-          lightTheme: ThemeData(
-            useMaterial3: true,
-            colorScheme: fire.lightColorScheme,
-            // textTheme: textTheme,
-          ),
-          darkTheme: ThemeData(
-            useMaterial3: true,
-            colorScheme: fire.darkColorScheme,
-            // textTheme: textTheme,
-          ),
-        );
+    : super(
+        name: 'Fire',
+        lightTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: fire.lightColorScheme,
+          // textTheme: textTheme,
+        ),
+        darkTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: fire.darkColorScheme,
+          // textTheme: textTheme,
+        ),
+      );
 }
 
 @immutable
@@ -97,19 +97,19 @@ class WheatTheme extends AppTheme {
   }
 
   WheatTheme._()
-      : super(
-          name: 'Wheat',
-          lightTheme: ThemeData(
-            useMaterial3: true,
-            colorScheme: wheat.lightColorScheme,
-            // textTheme: textTheme,
-          ),
-          darkTheme: ThemeData(
-            useMaterial3: true,
-            colorScheme: wheat.darkColorScheme,
-            // textTheme: textTheme,
-          ),
-        );
+    : super(
+        name: 'Wheat',
+        lightTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: wheat.lightColorScheme,
+          // textTheme: textTheme,
+        ),
+        darkTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: wheat.darkColorScheme,
+          // textTheme: textTheme,
+        ),
+      );
 }
 
 @immutable
@@ -119,19 +119,23 @@ class DynamicTheme extends AppTheme {
   }
 
   DynamicTheme._(Color seedColor)
-      : super(
-          name: 'Dynamic',
-          lightTheme: ThemeData(
-            useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(
-                seedColor: seedColor, brightness: Brightness.light),
-            // textTheme: textTheme,
+    : super(
+        name: 'Dynamic',
+        lightTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: seedColor,
+            brightness: Brightness.light,
           ),
-          darkTheme: ThemeData(
-            useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(
-                seedColor: seedColor, brightness: Brightness.dark),
-            // textTheme: textTheme,
+          // textTheme: textTheme,
+        ),
+        darkTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: seedColor,
+            brightness: Brightness.dark,
           ),
-        );
+          // textTheme: textTheme,
+        ),
+      );
 }

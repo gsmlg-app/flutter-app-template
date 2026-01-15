@@ -15,11 +15,7 @@ export 'package:flutter_form_bloc/src/flutter_typeahead.dart'
 const double _kMenuItemHeight = 48.0;
 const EdgeInsets _kMenuItemPadding = EdgeInsets.symmetric(horizontal: 16.0);
 
-enum SuffixButton {
-  obscureText,
-  clearText,
-  asyncValidating,
-}
+enum SuffixButton { obscureText, clearText, asyncValidating }
 
 /// A material design text field that can show suggestions.
 class TextFieldBlocBuilder extends StatefulWidget {
@@ -142,27 +138,28 @@ class TextFieldBlocBuilder extends StatefulWidget {
       width: 24,
       child: Padding(
         padding: EdgeInsets.all(8.0),
-        child: CircularProgressIndicator(
-          strokeWidth: 2.0,
-        ),
+        child: CircularProgressIndicator(strokeWidth: 2.0),
       ),
     ),
-  })  : assert(maxLines == null || maxLines > 0),
-        assert(minLines == null || minLines > 0),
-        assert(
-          (maxLines == null) || (minLines == null) || (maxLines >= minLines),
-          "minLines can't be greater than maxLines",
-        ),
-        assert(
-          !expands || (minLines == null),
-          'minLines and maxLines must be null when expands is true.',
-        ),
-        assert(maxLength == null ||
-            maxLength == TextFieldBlocBuilder.noMaxLength ||
-            maxLength > 0),
-        keyboardType = keyboardType ??
-            (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
-        textStyle = textStyle ?? style;
+  }) : assert(maxLines == null || maxLines > 0),
+       assert(minLines == null || minLines > 0),
+       assert(
+         (maxLines == null) || (minLines == null) || (maxLines >= minLines),
+         "minLines can't be greater than maxLines",
+       ),
+       assert(
+         !expands || (minLines == null),
+         'minLines and maxLines must be null when expands is true.',
+       ),
+       assert(
+         maxLength == null ||
+             maxLength == TextFieldBlocBuilder.noMaxLength ||
+             maxLength > 0,
+       ),
+       keyboardType =
+           keyboardType ??
+           (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
+       textStyle = textStyle ?? style;
 
   /// {@template flutter_form_bloc.FieldBlocBuilder.fieldBloc}
   /// The `fieldBloc` for rebuild the widget
@@ -703,7 +700,8 @@ class TextFieldBlocBuilder extends StatefulWidget {
       textColor: textColor ?? resolver.textColor,
       textAlign: textAlign ?? fieldTheme.textAlign ?? TextAlign.start,
       clearSuffixButtonTheme: ClearSuffixButtonTheme(
-        visibleWithoutValue: cleanTheme.visibleWithoutValue ??
+        visibleWithoutValue:
+            cleanTheme.visibleWithoutValue ??
             formTheme.clearSuffixButtonTheme.visibleWithoutValue ??
             true,
         appearDuration: cleanTheme.appearDuration,
@@ -711,18 +709,22 @@ class TextFieldBlocBuilder extends StatefulWidget {
         icon: clearTextIcon ?? cleanTheme.icon ?? fieldTheme.clearIcon,
       ),
       obscureSuffixButtonTheme: ObscureSuffixButtonTheme(
-        trueIcon: obscureTextTrueIcon ??
+        trueIcon:
+            obscureTextTrueIcon ??
             obscureTheme.trueIcon ??
             // ignore: deprecated_member_use_from_same_package
             fieldTheme.obscureTrueIcon,
-        falseIcon: obscureTextFalseIcon ??
+        falseIcon:
+            obscureTextFalseIcon ??
             obscureTheme.falseIcon ??
             // ignore: deprecated_member_use_from_same_package
             fieldTheme.obscureFalseIcon,
       ),
-      suggestionsTextStyle: fieldTheme.suggestionsTextStyle ??
+      suggestionsTextStyle:
+          fieldTheme.suggestionsTextStyle ??
           theme.textTheme.titleMedium!.copyWith(
-            color: ThemeData.estimateBrightnessForColor(theme.canvasColor) ==
+            color:
+                ThemeData.estimateBrightnessForColor(theme.canvasColor) ==
                     Brightness.dark
                 ? Colors.white
                 : Colors.grey[800],
@@ -791,8 +793,9 @@ class _TextFieldBlocBuilderState extends State<TextFieldBlocBuilder> {
 
     // TODO: Find out why the cursor returns to the beginning.
     await Future.delayed(const Duration(milliseconds: 0));
-    _controller.selection =
-        TextSelection.collapsed(offset: _controller.text.length);
+    _controller.selection = TextSelection.collapsed(
+      offset: _controller.text.length,
+    );
   }
 
   void obscureText(bool value) {
@@ -807,7 +810,7 @@ class _TextFieldBlocBuilderState extends State<TextFieldBlocBuilder> {
       singleFieldBloc: widget.textFieldBloc,
       animateWhenCanShow: widget.animateWhenCanShow,
       focusOnValidationFailed: widget.focusOnValidationFailed,
-      builder: (_, __) {
+      builder: (_, _) {
         return BlocBuilder<TextFieldBloc, TextFieldBlocState>(
           bloc: widget.textFieldBloc,
           builder: (context, state) {
@@ -917,7 +920,8 @@ class _TextFieldBlocBuilderState extends State<TextFieldBlocBuilder> {
         autofillHints: widget.autofillHints,
         decoration: _buildDecoration(fieldTheme, state),
         keyboardType: widget.keyboardType,
-        textInputAction: widget.textInputAction ??
+        textInputAction:
+            widget.textInputAction ??
             (widget.nextFocusNode != null ? TextInputAction.next : null),
         textCapitalization: widget.textCapitalization,
         style: Style.resolveTextStyle(
@@ -969,7 +973,8 @@ class _TextFieldBlocBuilderState extends State<TextFieldBlocBuilder> {
       hideOnEmpty: widget.hideOnEmptySuggestions,
       hideOnError: widget.hideOnSuggestionsError,
       errorBuilder: widget.suggestionsErrorBuilder,
-      loadingBuilder: widget.loadingSuggestionsBuilder ??
+      loadingBuilder:
+          widget.loadingSuggestionsBuilder ??
           (context) {
             return Container(
               height: _kMenuItemHeight,
@@ -982,7 +987,8 @@ class _TextFieldBlocBuilderState extends State<TextFieldBlocBuilder> {
               ),
             );
           },
-      noItemsFoundBuilder: widget.suggestionsNotFoundBuilder ??
+      noItemsFoundBuilder:
+          widget.suggestionsNotFoundBuilder ??
           (context) {
             return Container(
               height: _kMenuItemHeight,
@@ -1022,7 +1028,8 @@ class _TextFieldBlocBuilderState extends State<TextFieldBlocBuilder> {
       },
       animationDuration: widget.suggestionsAnimationDuration,
       removeSuggestionOnLongPress: widget.removeSuggestionOnLongPress,
-      suggestionsBoxDecoration: widget.suggestionsBoxDecoration ??
+      suggestionsBoxDecoration:
+          widget.suggestionsBoxDecoration ??
           SuggestionsBoxDecoration(
             constraints: const BoxConstraints(minHeight: _kMenuItemHeight),
             borderRadius: BorderRadius.circular(4),

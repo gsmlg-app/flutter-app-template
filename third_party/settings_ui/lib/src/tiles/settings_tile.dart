@@ -103,14 +103,8 @@ class SettingsTile extends AbstractSettingsTile {
   Widget? addCheckedTrailing(BuildContext context) {
     if (checked != null) {
       return checked!
-          ? const Icon(
-              Icons.check,
-              color: Colors.lightGreen,
-            )
-          : const Icon(
-              Icons.check,
-              color: Colors.transparent,
-            );
+          ? const Icon(Icons.check, color: Colors.lightGreen)
+          : const Icon(Icons.check, color: Colors.transparent);
     }
     return trailing;
   }

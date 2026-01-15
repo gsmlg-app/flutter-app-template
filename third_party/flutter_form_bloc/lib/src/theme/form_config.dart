@@ -38,12 +38,13 @@ class ScrollableFormTheme extends Equatable {
   }
 
   @override
-  String toString() => (ToString(runtimeType)
-        ..add('duration', duration)
-        ..add('alignment', alignment)
-        ..add('curve', curve)
-        ..add('alignmentPolicy', alignmentPolicy))
-      .toString();
+  String toString() =>
+      (ToString(runtimeType)
+            ..add('duration', duration)
+            ..add('alignment', alignment)
+            ..add('curve', curve)
+            ..add('alignmentPolicy', alignmentPolicy))
+          .toString();
 
   @override
   List<Object?> get props => [duration, alignment, curve, alignmentPolicy];

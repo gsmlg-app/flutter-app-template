@@ -9,11 +9,7 @@ import 'package:flutter_form_bloc/src/theme/suffix_button_themes.dart';
 import 'package:flutter_form_bloc/src/utils/utils.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
-enum DateTimeFieldBlocBuilderBaseType {
-  date,
-  time,
-  both,
-}
+enum DateTimeFieldBlocBuilderBaseType { date, time, both }
 
 /// A material design date picker.
 class DateTimeFieldBlocBuilderBase<T> extends StatefulWidget {
@@ -124,7 +120,8 @@ class DateTimeFieldBlocBuilderBase<T> extends StatefulWidget {
       textAlign: textAlign ?? fieldTheme.textAlign ?? TextAlign.start,
       showClearIcon: showClearIcon ?? fieldTheme.showClearIcon ?? true,
       clearSuffixButtonTheme: ClearSuffixButtonTheme(
-        visibleWithoutValue: cleanTheme.visibleWithoutValue ??
+        visibleWithoutValue:
+            cleanTheme.visibleWithoutValue ??
             formTheme.clearSuffixButtonTheme.visibleWithoutValue ??
             false,
         appearDuration: cleanTheme.appearDuration,
@@ -199,9 +196,11 @@ class _DateTimeFieldBlocBuilderBaseState<T>
       child: SimpleFieldBlocBuilder(
         singleFieldBloc: widget.dateTimeFieldBloc,
         animateWhenCanShow: widget.animateWhenCanShow,
-        builder: (_, __) {
-          return BlocBuilder<InputFieldBloc<T, dynamic>,
-              InputFieldBlocState<T, dynamic>>(
+        builder: (_, _) {
+          return BlocBuilder<
+            InputFieldBloc<T, dynamic>,
+            InputFieldBlocState<T, dynamic>
+          >(
             bloc: widget.dateTimeFieldBloc,
             builder: (context, state) {
               final isEnabled = fieldBlocIsEnabled(
@@ -247,9 +246,14 @@ class _DateTimeFieldBlocBuilderBaseState<T>
                 child: GestureDetector(
                   onTap: !isEnabled ? null : () => _showPicker(context),
                   child: InputDecorator(
-                    decoration:
-                        _buildDecoration(context, fieldTheme, state, isEnabled),
-                    isEmpty: state.value == null &&
+                    decoration: _buildDecoration(
+                      context,
+                      fieldTheme,
+                      state,
+                      isEnabled,
+                    ),
+                    isEmpty:
+                        state.value == null &&
                         widget.decoration.hintText == null,
                     child: child,
                   ),
@@ -265,7 +269,8 @@ class _DateTimeFieldBlocBuilderBaseState<T>
   Future<DateTime?> _showDatePicker(BuildContext context) async {
     return await showDatePicker(
       context: context,
-      initialDate: widget.dateTimeFieldBloc.state.value as DateTime? ??
+      initialDate:
+          widget.dateTimeFieldBloc.state.value as DateTime? ??
           widget.initialDate!,
       firstDate: widget.firstDate!,
       lastDate: widget.lastDate!,
@@ -342,7 +347,8 @@ class _DateTimeFieldBlocBuilderBaseState<T>
         fieldBlocState: state,
         fieldBloc: widget.dateTimeFieldBloc,
       ),
-      suffixIcon: decoration.suffixIcon ??
+      suffixIcon:
+          decoration.suffixIcon ??
           (fieldTheme.showClearIcon!
               ? _buildClearSuffixButton(fieldTheme.clearSuffixButtonTheme)
               : null),

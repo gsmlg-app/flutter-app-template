@@ -228,8 +228,9 @@ class AppAdaptiveScaffold extends StatelessWidget {
     this.leadingUnextendedNavRail,
     this.leadingExtendedNavRail,
     this.trailingNavRail,
-    this.navigationRailPadding =
-        const EdgeInsets.all(kNavigationRailDefaultPadding),
+    this.navigationRailPadding = const EdgeInsets.all(
+      kNavigationRailDefaultPadding,
+    ),
     this.smallBody,
     this.body,
     this.mediumLargeBody,

@@ -41,9 +41,7 @@ class Style {
     required WidgetStateProperty<Color?> color,
   }) {
     return style.copyWith(
-      color: color.resolve({
-        if (!isEnabled) WidgetState.disabled,
-      }),
+      color: color.resolve({if (!isEnabled) WidgetState.disabled}),
     );
   }
 
@@ -54,14 +52,9 @@ class Style {
     var contentPadding = (decoration.contentPadding ?? EdgeInsets.zero);
 
     if (isVisible) {
-      return contentPadding.add(const EdgeInsets.only(
-        top: 4.0,
-        bottom: 4.0,
-      ));
+      return contentPadding.add(const EdgeInsets.only(top: 4.0, bottom: 4.0));
     } else {
-      return contentPadding.add(const EdgeInsets.only(
-        left: 15.0,
-      ));
+      return contentPadding.add(const EdgeInsets.only(left: 15.0));
     }
   }
 

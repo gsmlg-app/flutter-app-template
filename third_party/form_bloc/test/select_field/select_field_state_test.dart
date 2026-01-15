@@ -112,10 +112,7 @@ void main() {
           items: [1],
         );
 
-        expectState(
-          state1.copyWith(),
-          state1,
-        );
+        expectState(state1.copyWith(), state1);
       });
     });
   });

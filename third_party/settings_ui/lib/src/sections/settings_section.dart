@@ -34,18 +34,10 @@ class SettingsSection extends AbstractSettingsSection {
       case DevicePlatform.iOS:
       case DevicePlatform.macOS:
       case DevicePlatform.windows:
-        return IOSSettingsSection(
-          title: title,
-          tiles: tiles,
-          margin: margin,
-        );
+        return IOSSettingsSection(title: title, tiles: tiles, margin: margin);
       case DevicePlatform.web:
       case DevicePlatform.custom:
-        return WebSettingsSection(
-          title: title,
-          tiles: tiles,
-          margin: margin,
-        );
+        return WebSettingsSection(title: title, tiles: tiles, margin: margin);
     }
   }
 }

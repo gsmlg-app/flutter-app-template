@@ -40,10 +40,7 @@ void main() {
           // state1,
           state2,
         ];
-        expect(
-          fieldBloc.stream,
-          emitsInOrder(expectedStates),
-        );
+        expect(fieldBloc.stream, emitsInOrder(expectedStates));
 
         fieldBloc.updateValue(true);
       });
@@ -52,9 +49,7 @@ void main() {
         BooleanFieldBloc<dynamic> fieldBloc;
         BooleanFieldBlocState<dynamic> initialState;
 
-        fieldBloc = BooleanFieldBloc<dynamic>(
-          name: 'name',
-        );
+        fieldBloc = BooleanFieldBloc<dynamic>(name: 'name');
 
         initialState = createBooleanState<dynamic>(
           value: false,
@@ -66,10 +61,7 @@ void main() {
           name: 'name',
         );
 
-        expect(
-          fieldBloc.state,
-          initialState,
-        );
+        expect(fieldBloc.state, initialState);
 
         fieldBloc.close();
 
@@ -89,10 +81,7 @@ void main() {
           name: 'name',
         );
 
-        expect(
-          fieldBloc.state,
-          initialState,
-        );
+        expect(fieldBloc.state, initialState);
       });
 
       test('if the initialValue is not passed, it will be false', () {
@@ -111,10 +100,7 @@ void main() {
           name: 'name',
         );
 
-        expect(
-          fieldBloc.state,
-          initialState,
-        );
+        expect(fieldBloc.state, initialState);
       });
     });
 
@@ -129,10 +115,7 @@ void main() {
 
       final fieldBloc = BooleanFieldBloc<int>(extraData: 0);
 
-      expect(
-        fieldBloc.state.extraData,
-        expectedExtraData,
-      );
+      expect(fieldBloc.state.extraData, expectedExtraData);
     });
   });
 }

@@ -92,17 +92,13 @@ class ErrorScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.error_outline,
-                size: 64,
-                color: Colors.red[700],
-              ),
+              Icon(Icons.error_outline, size: 64, color: Colors.red[700]),
               const SizedBox(height: 24),
               Text(
                 'Oops! Something went wrong',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: Colors.red[700],
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.headlineSmall?.copyWith(color: Colors.red[700]),
               ),
               const SizedBox(height: 16),
               Text(
@@ -115,7 +111,8 @@ class ErrorScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: onRetry ??
+                    onPressed:
+                        onRetry ??
                         () {
                           // Restart app or navigate to home
                         },
@@ -123,7 +120,8 @@ class ErrorScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 16),
                   OutlinedButton(
-                    onPressed: onReport ??
+                    onPressed:
+                        onReport ??
                         () {
                           // Open error reporting dialog
                           _showReportDialog(context);
@@ -190,20 +188,13 @@ class ErrorBoundary extends StatelessWidget {
   final Widget child;
   final Widget Function(FlutterErrorDetails)? errorBuilder;
 
-  const ErrorBoundary({
-    super.key,
-    this.errorBuilder,
-    required this.child,
-  });
+  const ErrorBoundary({super.key, this.errorBuilder, required this.child});
 
   @override
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        return _ErrorBoundaryWidget(
-          errorBuilder: errorBuilder,
-          child: child,
-        );
+        return _ErrorBoundaryWidget(errorBuilder: errorBuilder, child: child);
       },
     );
   }
@@ -213,10 +204,7 @@ class _ErrorBoundaryWidget extends StatefulWidget {
   final Widget child;
   final Widget Function(FlutterErrorDetails)? errorBuilder;
 
-  const _ErrorBoundaryWidget({
-    required this.child,
-    this.errorBuilder,
-  });
+  const _ErrorBoundaryWidget({required this.child, this.errorBuilder});
 
   @override
   State<_ErrorBoundaryWidget> createState() => _ErrorBoundaryWidgetState();

@@ -50,11 +50,7 @@ abstract class FieldTheme extends Equatable {
   /// The theme for InputDecoration of this field
   final InputDecorationTheme? decorationTheme;
 
-  const FieldTheme({
-    this.textStyle,
-    this.textColor,
-    this.decorationTheme,
-  });
+  const FieldTheme({this.textStyle, this.textColor, this.decorationTheme});
 
   @override
   List<Object?> get props => [textStyle, textColor, decorationTheme];

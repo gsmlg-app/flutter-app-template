@@ -1,11 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:form_bloc/form_bloc.dart';
 
-typedef DefaultFieldBlocErrorBuilder = String? Function(
-  BuildContext context,
-  Object error,
-  FieldBloc fieldBloc,
-);
+typedef DefaultFieldBlocErrorBuilder =
+    String? Function(BuildContext context, Object error, FieldBloc fieldBloc);
 
 class FieldBlocBuilder {
   /// It must return a string error to display in the widget

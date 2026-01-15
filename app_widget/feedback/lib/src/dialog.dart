@@ -2,11 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppDialogAction extends StatelessWidget {
-  const AppDialogAction({
-    super.key,
-    this.onPressed,
-    required this.child,
-  });
+  const AppDialogAction({super.key, this.onPressed, required this.child});
 
   final Function(BuildContext context)? onPressed;
   final Widget child;
@@ -31,7 +27,9 @@ class AppDialogAction extends StatelessWidget {
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return CupertinoDialogAction(
-            onPressed: _onPressed(context), child: child);
+          onPressed: _onPressed(context),
+          child: child,
+        );
     }
   }
 }

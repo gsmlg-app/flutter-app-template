@@ -189,9 +189,11 @@ class FilterChipFieldBlocBuilder<T> extends StatelessWidget {
     final current = SimpleFieldBlocBuilder(
       singleFieldBloc: multiSelectFieldBloc,
       animateWhenCanShow: animateWhenCanShow,
-      builder: (_, __) {
-        return BlocBuilder<MultiSelectFieldBloc<T, dynamic>,
-            MultiSelectFieldBlocState<T, dynamic>>(
+      builder: (_, _) {
+        return BlocBuilder<
+          MultiSelectFieldBloc<T, dynamic>,
+          MultiSelectFieldBlocState<T, dynamic>
+        >(
           bloc: multiSelectFieldBloc,
           builder: (context, state) {
             final isEnabled = fieldBlocIsEnabled(
@@ -270,10 +272,7 @@ class FilterChipFieldBlocBuilder<T> extends StatelessWidget {
 
     if (fieldTheme.chipTheme == null) return current;
 
-    return ChipTheme(
-      data: fieldTheme.chipTheme!,
-      child: current,
-    );
+    return ChipTheme(data: fieldTheme.chipTheme!, child: current);
   }
 
   InputDecoration _buildDecoration(

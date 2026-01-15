@@ -13,15 +13,11 @@ void main() {
     testWidgets('returns size of rendered widget', (WidgetTester tester) async {
       final GlobalKey testKey = GlobalKey();
 
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: SizedBox(
-            key: testKey,
-            width: 200,
-            height: 100,
-          ),
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(body: SizedBox(key: testKey, width: 200, height: 100)),
         ),
-      ));
+      );
 
       final size = getWidgetSize(testKey);
 
@@ -33,11 +29,11 @@ void main() {
     testWidgets('returns null for invalid key', (WidgetTester tester) async {
       final GlobalKey unusedKey = GlobalKey();
 
-      await tester.pumpWidget(const MaterialApp(
-        home: Scaffold(
-          body: SizedBox(width: 100, height: 100),
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(body: SizedBox(width: 100, height: 100)),
         ),
-      ));
+      );
 
       final size = getWidgetSize(unusedKey);
 

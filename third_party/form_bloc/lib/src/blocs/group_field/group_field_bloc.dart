@@ -11,9 +11,7 @@ class GroupFieldBlocState<T extends FieldBloc, ExtraData>
     required super.isValid,
     required super.extraData,
     required Iterable<T> fieldBlocs,
-  }) : fieldBlocs = {
-          for (final fb in fieldBlocs) fb.state.name: fb,
-        };
+  }) : fieldBlocs = {for (final fb in fieldBlocs) fb.state.name: fb};
 
   @override
   GroupFieldBlocState<T, ExtraData> copyWith({
@@ -50,14 +48,16 @@ class GroupFieldBloc<T extends FieldBloc, ExtraData>
     String? name,
     List<T> fieldBlocs = const [],
     ExtraData? extraData,
-  }) : super(GroupFieldBlocState(
-          name: name ?? Uuid().v1(),
-          isValid: MultiFieldBloc.areFieldBlocsValid(fieldBlocs),
-          isValidating: MultiFieldBloc.areFieldBlocsValidating(fieldBlocs),
-          formBloc: null,
-          extraData: extraData,
-          fieldBlocs: fieldBlocs,
-        ));
+  }) : super(
+         GroupFieldBlocState(
+           name: name ?? Uuid().v1(),
+           isValid: MultiFieldBloc.areFieldBlocsValid(fieldBlocs),
+           isValidating: MultiFieldBloc.areFieldBlocsValidating(fieldBlocs),
+           formBloc: null,
+           extraData: extraData,
+           fieldBlocs: fieldBlocs,
+         ),
+       );
 
   @override
   String toString() {

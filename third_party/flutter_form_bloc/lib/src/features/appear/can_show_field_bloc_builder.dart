@@ -119,10 +119,7 @@ class _CanShowFieldBlocBuilderState extends State<CanShowFieldBlocBuilder>
     if (widget.animate) {
       child = FadeTransition(
         opacity: _controller,
-        child: SizeTransition(
-          sizeFactor: _controller,
-          child: child,
-        ),
+        child: SizeTransition(sizeFactor: _controller, child: child),
       );
     }
 

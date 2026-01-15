@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 
 export 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 
-enum AppAdaptiveActionSize {
-  small,
-  medium,
-  large,
-}
+enum AppAdaptiveActionSize { small, medium, large }
 
 class AppAdaptiveAction {
   final String title;
@@ -35,8 +31,8 @@ class AppAdaptiveActionList extends StatelessWidget {
     this.hideDisabled = true,
     this.direction = Axis.horizontal,
   }) : actions = hideDisabled
-            ? actions.where((action) => !action.disabled).toList()
-            : actions;
+           ? actions.where((action) => !action.disabled).toList()
+           : actions;
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +44,20 @@ class AppAdaptiveActionList extends StatelessWidget {
                 (action) => PopupMenuItem(
                   value: actions.indexOf(action),
                   child: Text.rich(
-                    TextSpan(children: [
-                      WidgetSpan(
-                          child: Icon(action.icon,
-                              color: action.disabled
-                                  ? Theme.of(context).disabledColor
-                                  : Theme.of(context).iconTheme.color)),
-                      const TextSpan(text: ' '),
-                      TextSpan(text: action.title),
-                    ]),
+                    TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Icon(
+                            action.icon,
+                            color: action.disabled
+                                ? Theme.of(context).disabledColor
+                                : Theme.of(context).iconTheme.color,
+                          ),
+                        ),
+                        const TextSpan(text: ' '),
+                        TextSpan(text: action.title),
+                      ],
+                    ),
                   ),
                 ),
               )

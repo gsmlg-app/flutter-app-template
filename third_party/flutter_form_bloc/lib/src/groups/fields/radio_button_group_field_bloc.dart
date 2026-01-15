@@ -119,15 +119,15 @@ class RadioButtonGroupFieldBlocBuilder<Value> extends StatelessWidget {
     final fieldTheme = themeStyleOf(context);
 
     return Theme(
-      data: Theme.of(context).copyWith(
-        radioTheme: fieldTheme.radioTheme,
-      ),
+      data: Theme.of(context).copyWith(radioTheme: fieldTheme.radioTheme),
       child: CanShowFieldBlocBuilder(
         fieldBloc: selectFieldBloc,
         animate: animateWhenCanShow,
-        builder: (_, __) {
-          return BlocBuilder<SelectFieldBloc<Value, dynamic>,
-              SelectFieldBlocState<Value, dynamic>>(
+        builder: (_, _) {
+          return BlocBuilder<
+            SelectFieldBloc<Value, dynamic>,
+            SelectFieldBlocState<Value, dynamic>
+          >(
             bloc: selectFieldBloc,
             builder: (context, state) {
               final isEnabled = fieldBlocIsEnabled(
@@ -140,10 +140,18 @@ class RadioButtonGroupFieldBlocBuilder<Value> extends StatelessWidget {
               return DefaultFieldBlocBuilderPadding(
                 padding: padding,
                 child: GroupInputDecorator(
-                  decoration:
-                      _buildDecoration(context, fieldTheme, state, isEnabled),
-                  child:
-                      _buildRadioButtons(context, state, fieldTheme, isEnabled),
+                  decoration: _buildDecoration(
+                    context,
+                    fieldTheme,
+                    state,
+                    isEnabled,
+                  ),
+                  child: _buildRadioButtons(
+                    context,
+                    state,
+                    fieldTheme,
+                    isEnabled,
+                  ),
                 ),
               );
             },
@@ -193,7 +201,8 @@ class RadioButtonGroupFieldBlocBuilder<Value> extends StatelessWidget {
             ),
             onTap: fieldTheme.canTapItemTile && onChanged != null
                 ? () => onChanged(
-                    fieldTheme.canDeselect && state.value == item ? null : item)
+                    fieldTheme.canDeselect && state.value == item ? null : item,
+                  )
                 : null,
             leading: Radio<Value>(
               value: item,

@@ -17,12 +17,14 @@ class IOSSettingsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = SettingsTheme.of(context);
-    final isLastNonDescriptive = tiles.last is SettingsTile &&
+    final isLastNonDescriptive =
+        tiles.last is SettingsTile &&
         (tiles.last as SettingsTile).description == null;
     final textScaler = MediaQuery.of(context).textScaler;
 
     return Padding(
-      padding: margin ??
+      padding:
+          margin ??
           EdgeInsets.only(
             top: textScaler.scale(14.0),
             bottom: isLastNonDescriptive

@@ -69,10 +69,7 @@ class ErrorDisplay {
         content: Text(message),
         actions: [
           if (onRetry != null)
-            TextButton(
-              onPressed: onRetry,
-              child: const Text('RETRY'),
-            ),
+            TextButton(onPressed: onRetry, child: const Text('RETRY')),
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('OK'),
@@ -94,10 +91,7 @@ class ErrorDisplay {
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Icon(
-              Icons.error,
-              color: theme.colorScheme.error,
-            ),
+            Icon(Icons.error, color: theme.colorScheme.error),
             const SizedBox(width: 8),
             const Text('Critical Error'),
           ],
@@ -130,9 +124,4 @@ class ErrorDisplay {
   }
 }
 
-enum ErrorSeverity {
-  low,
-  medium,
-  high,
-  critical,
-}
+enum ErrorSeverity { low, medium, high, critical }

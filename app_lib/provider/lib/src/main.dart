@@ -36,9 +36,8 @@ class MainProvider extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<ThemeBloc>(
-            create: (BuildContext context) => ThemeBloc(
-              context.read<SharedPreferences>(),
-            ),
+            create: (BuildContext context) =>
+                ThemeBloc(context.read<SharedPreferences>()),
           ),
         ],
         child: child,

@@ -42,10 +42,7 @@ void main() {
           // state1,
           state2,
         ];
-        expect(
-          fieldBloc.stream,
-          emitsInOrder(expectedStates),
-        );
+        expect(fieldBloc.stream, emitsInOrder(expectedStates));
 
         fieldBloc.updateValue([true]);
       });
@@ -55,9 +52,7 @@ void main() {
       MultiSelectFieldBloc<dynamic, dynamic> fieldBloc;
       MultiSelectFieldBlocState<dynamic, dynamic> initialState;
 
-      fieldBloc = MultiSelectFieldBloc<bool, dynamic>(
-        name: 'name',
-      );
+      fieldBloc = MultiSelectFieldBloc<bool, dynamic>(name: 'name');
 
       initialState = createMultiSelectState<bool, dynamic>(
         value: [],
@@ -70,10 +65,7 @@ void main() {
         items: [],
       );
 
-      expect(
-        fieldBloc.state,
-        initialState,
-      );
+      expect(fieldBloc.state, initialState);
 
       fieldBloc.close();
 
@@ -95,10 +87,7 @@ void main() {
         items: [true, false],
       );
 
-      expect(
-        fieldBloc.state,
-        initialState,
-      );
+      expect(fieldBloc.state, initialState);
     });
     test('if the initialValue is null, it will be an empty list', () {
       MultiSelectFieldBloc<dynamic, dynamic> fieldBloc;
@@ -117,16 +106,11 @@ void main() {
         items: [],
       );
 
-      expect(
-        fieldBloc.state,
-        initialState,
-      );
+      expect(fieldBloc.state, initialState);
     });
 
     test('updateItems method and UpdateFieldBlocItems event.', () {
-      final fieldBloc = MultiSelectFieldBloc<bool, dynamic>(
-        name: 'name',
-      );
+      final fieldBloc = MultiSelectFieldBloc<bool, dynamic>(name: 'name');
 
       final state1 = createMultiSelectState<bool, dynamic>(
         value: [],
@@ -138,22 +122,15 @@ void main() {
         name: 'name',
         items: [],
       );
-      final state2 = state1.copyWith(
-        items: [true],
-      );
-      final state3 = state2.copyWith(
-        items: [],
-      );
+      final state2 = state1.copyWith(items: [true]);
+      final state3 = state2.copyWith(items: []);
 
       final expectedStates = [
         // state1,
         state2,
         state3,
       ];
-      expect(
-        fieldBloc.stream,
-        emitsInOrder(expectedStates),
-      );
+      expect(fieldBloc.stream, emitsInOrder(expectedStates));
 
       fieldBloc.updateItems([true]);
       fieldBloc.updateItems([]);
@@ -175,15 +152,9 @@ void main() {
         name: 'name',
         items: [true],
       );
-      final state2 = state1.copyWith(
-        items: [true, false],
-      );
-      final state3 = state2.copyWith(
-        items: [],
-      );
-      final state4 = state3.copyWith(
-        items: [true],
-      );
+      final state2 = state1.copyWith(items: [true, false]);
+      final state3 = state2.copyWith(items: []);
+      final state4 = state3.copyWith(items: [true]);
 
       final expectedStates = [
         // state1,
@@ -191,10 +162,7 @@ void main() {
         state3,
         state4,
       ];
-      expect(
-        fieldBloc.stream,
-        emitsInOrder(expectedStates),
-      );
+      expect(fieldBloc.stream, emitsInOrder(expectedStates));
 
       fieldBloc.addItem(false);
       fieldBloc.updateItems([]);
@@ -217,12 +185,8 @@ void main() {
         name: 'name',
         items: [true, false],
       );
-      final state2 = state1.copyWith(
-        items: [false],
-      );
-      final state3 = state2.copyWith(
-        items: [],
-      );
+      final state2 = state1.copyWith(items: [false]);
+      final state3 = state2.copyWith(items: []);
 
       final expectedStates = [
         // state1,
@@ -230,19 +194,14 @@ void main() {
         state3,
       ];
 
-      expect(
-        fieldBloc.stream,
-        emitsInOrder(expectedStates),
-      );
+      expect(fieldBloc.stream, emitsInOrder(expectedStates));
 
       fieldBloc.removeItem(true);
       fieldBloc.removeItem(false);
     });
 
     test('updateValue method.', () {
-      final fieldBloc = MultiSelectFieldBloc<bool, dynamic>(
-        name: 'name',
-      );
+      final fieldBloc = MultiSelectFieldBloc<bool, dynamic>(name: 'name');
 
       final state1 = createMultiSelectState<bool, dynamic>(
         value: [],
@@ -262,10 +221,7 @@ void main() {
         updatedValue: Param([false, true]),
         value: Param([false, true]),
       );
-      final state4 = state3.copyWith(
-        updatedValue: Param([]),
-        value: Param([]),
-      );
+      final state4 = state3.copyWith(updatedValue: Param([]), value: Param([]));
 
       final expectedStates = [
         // state1,
@@ -274,19 +230,14 @@ void main() {
         state4,
       ];
 
-      expect(
-        fieldBloc.stream,
-        emitsInOrder(expectedStates),
-      );
+      expect(fieldBloc.stream, emitsInOrder(expectedStates));
 
       fieldBloc.updateValue([true]);
       fieldBloc.updateValue([false, true]);
       fieldBloc.updateValue([]);
     });
     test('updateInitialValue method.', () {
-      final fieldBloc = MultiSelectFieldBloc<bool, dynamic>(
-        name: 'name',
-      );
+      final fieldBloc = MultiSelectFieldBloc<bool, dynamic>(name: 'name');
 
       final state1 = createMultiSelectState<bool, dynamic>(
         value: [],
@@ -320,10 +271,7 @@ void main() {
         state4,
       ];
 
-      expect(
-        fieldBloc.stream,
-        emitsInOrder(expectedStates),
-      );
+      expect(fieldBloc.stream, emitsInOrder(expectedStates));
 
       fieldBloc.updateValue([true]);
       fieldBloc.updateInitialValue([false, true]);
@@ -350,9 +298,7 @@ void main() {
         error: Param(null),
         value: Param([true]),
       );
-      final state3 = state2.copyWith(
-        value: Param([true, false]),
-      );
+      final state3 = state2.copyWith(value: Param([true, false]));
       final state4 = state3.copyWith(
         isValueChanged: false,
         updatedValue: Param([]),
@@ -363,9 +309,7 @@ void main() {
         error: Param(null),
         value: Param([false]),
       );
-      final state6 = state5.copyWith(
-        value: Param([false, null]),
-      );
+      final state6 = state5.copyWith(value: Param([false, null]));
 
       final expectedStates = [
         // state1,
@@ -376,10 +320,7 @@ void main() {
         state6,
       ];
 
-      expect(
-        fieldBloc.stream,
-        emitsInOrder(expectedStates),
-      );
+      expect(fieldBloc.stream, emitsInOrder(expectedStates));
 
       fieldBloc.select(true);
       fieldBloc.select(false);
@@ -409,9 +350,7 @@ void main() {
         isValueChanged: true,
         value: Param([false]),
       );
-      final state3 = state2.copyWith(
-        value: Param([]),
-      );
+      final state3 = state2.copyWith(value: Param([]));
       final state4 = state3.copyWith(
         isValueChanged: false,
         updatedValue: Param([true, false, null]),
@@ -422,9 +361,7 @@ void main() {
         isValueChanged: true,
         value: Param([true, false]),
       );
-      final state6 = state5.copyWith(
-        value: Param([true]),
-      );
+      final state6 = state5.copyWith(value: Param([true]));
 
       final expectedStates = [
         // state1,
@@ -452,10 +389,7 @@ void main() {
 
       final fieldBloc = MultiSelectFieldBloc<bool, int>(extraData: 0);
 
-      expect(
-        fieldBloc.state.extraData,
-        expectedExtraData,
-      );
+      expect(fieldBloc.state.extraData, expectedExtraData);
     });
   });
 }

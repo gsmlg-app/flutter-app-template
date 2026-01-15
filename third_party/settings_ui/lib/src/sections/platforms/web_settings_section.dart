@@ -44,8 +44,9 @@ class WebSettingsSection extends StatelessWidget {
               ),
             ),
           Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             elevation: 4,
             color: theme.themeData.settingsSectionBackground,
             child: buildTileList(),
@@ -65,10 +66,7 @@ class WebSettingsSection extends StatelessWidget {
         return tiles[index];
       },
       separatorBuilder: (BuildContext context, int index) {
-        return Divider(
-          height: 0,
-          thickness: 1,
-        );
+        return Divider(height: 0, thickness: 1);
       },
     );
   }

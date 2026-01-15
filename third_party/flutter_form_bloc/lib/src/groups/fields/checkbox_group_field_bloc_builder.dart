@@ -127,15 +127,15 @@ class CheckboxGroupFieldBlocBuilder<Value> extends StatelessWidget {
     final fieldTheme = themeStyleOf(context);
 
     return Theme(
-      data: Theme.of(context).copyWith(
-        checkboxTheme: fieldTheme.checkboxTheme,
-      ),
+      data: Theme.of(context).copyWith(checkboxTheme: fieldTheme.checkboxTheme),
       child: SimpleFieldBlocBuilder(
         singleFieldBloc: multiSelectFieldBloc,
         animateWhenCanShow: animateWhenCanShow,
-        builder: (_, __) {
-          return BlocBuilder<MultiSelectFieldBloc<Value, dynamic>,
-              MultiSelectFieldBlocState<Value, dynamic>>(
+        builder: (_, _) {
+          return BlocBuilder<
+            MultiSelectFieldBloc<Value, dynamic>,
+            MultiSelectFieldBlocState<Value, dynamic>
+          >(
             bloc: multiSelectFieldBloc,
             builder: (context, state) {
               final isEnabled = fieldBlocIsEnabled(
@@ -148,10 +148,18 @@ class CheckboxGroupFieldBlocBuilder<Value> extends StatelessWidget {
               return DefaultFieldBlocBuilderPadding(
                 padding: padding,
                 child: GroupInputDecorator(
-                  decoration:
-                      _buildDecoration(context, state, isEnabled, fieldTheme),
-                  child:
-                      _buildCheckboxes(context, state, isEnabled, fieldTheme),
+                  decoration: _buildDecoration(
+                    context,
+                    state,
+                    isEnabled,
+                    fieldTheme,
+                  ),
+                  child: _buildCheckboxes(
+                    context,
+                    state,
+                    isEnabled,
+                    fieldTheme,
+                  ),
                 ),
               );
             },

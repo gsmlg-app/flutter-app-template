@@ -16,25 +16,31 @@ void showSuccessToast({
     content: SingleChildScrollView(
       child: Row(
         children: [
-          Icon(Icons.check,
-              size:
-                  (Theme.of(context).textTheme.titleMedium?.fontSize ?? 14) * 2,
-              color: Theme.of(context).colorScheme.onPrimary),
+          Icon(
+            Icons.check,
+            size: (Theme.of(context).textTheme.titleMedium?.fontSize ?? 14) * 2,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
           SizedBox(
-              width: Theme.of(context).textTheme.titleMedium?.fontSize ?? 14),
+            width: Theme.of(context).textTheme.titleMedium?.fontSize ?? 14,
+          ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary)),
-                const SizedBox(
-                  height: 8,
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
                 ),
-                Text(message,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary)),
+                const SizedBox(height: 8),
+                Text(
+                  message,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
               ],
             ),
           ),
@@ -69,26 +75,30 @@ void showErrorToast({
     content: SingleChildScrollView(
       child: Row(
         children: [
-          Icon(Icons.error,
-              size:
-                  (Theme.of(context).textTheme.titleMedium?.fontSize ?? 14) * 2,
-              color: Theme.of(context).colorScheme.onError),
+          Icon(
+            Icons.error,
+            size: (Theme.of(context).textTheme.titleMedium?.fontSize ?? 14) * 2,
+            color: Theme.of(context).colorScheme.onError,
+          ),
           SizedBox(
-              width: Theme.of(context).textTheme.titleMedium?.fontSize ?? 14),
+            width: Theme.of(context).textTheme.titleMedium?.fontSize ?? 14,
+          ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onError)),
-                const SizedBox(
-                  height: 8,
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onError,
+                  ),
                 ),
+                const SizedBox(height: 8),
                 SelectableText(
                   message,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onError),
+                    color: Theme.of(context).colorScheme.onError,
+                  ),
                 ),
               ],
             ),

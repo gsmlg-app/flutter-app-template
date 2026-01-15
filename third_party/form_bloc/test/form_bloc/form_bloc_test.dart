@@ -14,10 +14,7 @@ class _FormBlocImpl extends FormBloc<String, String> with Mock {
     validators: [FieldBlocValidators.required],
   );
 
-  _FormBlocImpl({
-    super.isLoading,
-    super.autoValidate,
-  });
+  _FormBlocImpl({super.isLoading, super.autoValidate});
 
   @override
   FutureOr<void> onLoading() {
@@ -47,9 +44,14 @@ class _FakeFormBloc extends Fake implements FormBloc<String, String> {}
 
 Map<int, Map<String, FieldBloc>> fbs(Map<int, List<FieldBloc>> fieldBlocs) {
   return fieldBlocs.map((step, fbs) {
-    return MapEntry(step, Map.fromEntries(fbs.map((fb) {
-      return MapEntry(fb.name, fb);
-    })));
+    return MapEntry(
+      step,
+      Map.fromEntries(
+        fbs.map((fb) {
+          return MapEntry(fb.name, fb);
+        }),
+      ),
+    );
   });
 }
 
@@ -70,7 +72,7 @@ void main() {
           FormBlocLoaded<String, String>(
             isValidByStep: {0: true},
             fieldBlocs: fbs({
-              0: [formBloc.optionalField]
+              0: [formBloc.optionalField],
             }),
           ),
         );
@@ -86,7 +88,7 @@ void main() {
           FormBlocLoaded<String, String>(
             isValidByStep: {0: false},
             fieldBlocs: fbs({
-              0: [formBloc.requiredField]
+              0: [formBloc.requiredField],
             }),
           ),
         );
@@ -144,7 +146,7 @@ void main() {
           FormBlocLoaded<String, String>(
             isValidByStep: {0: true},
             fieldBlocs: fbs({
-              0: [formBloc.optionalField]
+              0: [formBloc.optionalField],
             }),
           ),
         );
@@ -175,14 +177,15 @@ void main() {
     });
 
     test(
-        'when isLoading is true, onLoading is called after constructor initialization.',
-        () async {
-      final formBloc = _FormBlocImpl(isLoading: true);
+      'when isLoading is true, onLoading is called after constructor initialization.',
+      () async {
+        final formBloc = _FormBlocImpl(isLoading: true);
 
-      verifyNever(() => formBloc.onLoading());
-      await Future<void>.delayed(const Duration());
-      verify(() => formBloc.onLoading());
-    });
+        verifyNever(() => formBloc.onLoading());
+        await Future<void>.delayed(const Duration());
+        verify(() => formBloc.onLoading());
+      },
+    );
 
     test('when isLoading is false, onLoading is not called.', () async {
       final formBloc = _FormBlocImpl(isLoading: false);
@@ -197,13 +200,13 @@ void main() {
         FormBlocLoaded<String, String>(
           isValidByStep: {0: false},
           fieldBlocs: {
-            0: {formBloc.requiredField.name: formBloc.requiredField}
+            0: {formBloc.requiredField.name: formBloc.requiredField},
           },
         ),
         FormBlocLoaded<String, String>(
           isValidByStep: {0: true},
           fieldBlocs: {
-            0: {formBloc.requiredField.name: formBloc.requiredField}
+            0: {formBloc.requiredField.name: formBloc.requiredField},
           },
         ),
       ];
@@ -217,225 +220,229 @@ void main() {
 
     group('submit', () {
       test(
-          'when autoValidate is true and step is invalid, call validate for each field bloc.',
-          () async {
-        final formBloc = _FormBlocImpl();
+        'when autoValidate is true and step is invalid, call validate for each field bloc.',
+        () async {
+          final formBloc = _FormBlocImpl();
 
-        final expectedStates = [
-          FormBlocLoaded<String, String>(
-            isValidByStep: {0: false},
-            fieldBlocs: fbs({
-              0: [formBloc.requiredField]
-            }),
-          ),
-          FormBlocSubmitting<String, String>(
-            isValidByStep: {0: false},
-            fieldBlocs: fbs({
-              0: [formBloc.requiredField]
-            }),
-          ),
-          FormBlocSubmissionFailed<String, String>(
-            isValidByStep: {0: false},
-            fieldBlocs: fbs({
-              0: [formBloc.requiredField]
-            }),
-          ),
-          FormBlocLoaded<String, String>(
-            isValidByStep: {0: false},
-            fieldBlocs: fbs({
-              0: [formBloc.requiredField]
-            }),
-          ),
-        ];
+          final expectedStates = [
+            FormBlocLoaded<String, String>(
+              isValidByStep: {0: false},
+              fieldBlocs: fbs({
+                0: [formBloc.requiredField],
+              }),
+            ),
+            FormBlocSubmitting<String, String>(
+              isValidByStep: {0: false},
+              fieldBlocs: fbs({
+                0: [formBloc.requiredField],
+              }),
+            ),
+            FormBlocSubmissionFailed<String, String>(
+              isValidByStep: {0: false},
+              fieldBlocs: fbs({
+                0: [formBloc.requiredField],
+              }),
+            ),
+            FormBlocLoaded<String, String>(
+              isValidByStep: {0: false},
+              fieldBlocs: fbs({
+                0: [formBloc.requiredField],
+              }),
+            ),
+          ];
 
-        await expectBloc(
-          formBloc,
-          act: () {
-            formBloc.addFieldBloc(fieldBloc: formBloc.requiredField);
-            formBloc.submit();
-          },
-          stream: expectedStates,
-        );
-      });
-
-      test(
-          'when autoValidate is true and step is valid, not call validate for each field bloc.',
-          () async {
-        final formBloc = _FormBlocImpl();
-
-        when(() => formBloc.onSubmitting()).thenAnswer((_) {
-          formBloc.emitSuccess();
-        });
-
-        final expectedStates = [
-          FormBlocLoaded<String, String>(
-            isValidByStep: {0: true},
-            fieldBlocs: fbs({
-              0: [formBloc.optionalField]
-            }),
-          ),
-          FormBlocSubmitting<String, String>(
-            isValidByStep: {0: true},
-            fieldBlocs: fbs({
-              0: [formBloc.optionalField]
-            }),
-          ),
-          FormBlocSuccess<String, String>(
-            isValidByStep: {0: true},
-            fieldBlocs: fbs({
-              0: [formBloc.optionalField]
-            }),
-          ),
-        ];
-
-        await expectBloc(
-          formBloc,
-          act: () {
-            formBloc.addFieldBloc(fieldBloc: formBloc.optionalField);
-            formBloc.submit();
-          },
-          stream: expectedStates,
-        );
-      });
+          await expectBloc(
+            formBloc,
+            act: () {
+              formBloc.addFieldBloc(fieldBloc: formBloc.requiredField);
+              formBloc.submit();
+            },
+            stream: expectedStates,
+          );
+        },
+      );
 
       test(
-          'onSubmitting can add to state stream all states generated by to methods of state.',
-          () async {
-        final formBloc = _FormBlocImpl();
+        'when autoValidate is true and step is valid, not call validate for each field bloc.',
+        () async {
+          final formBloc = _FormBlocImpl();
 
-        when(() => formBloc.onSubmitting()).thenAnswer((_) {
-          formBloc.emitSubmitting(progress: 0.1);
-          formBloc.emitSubmitting(progress: 0.5);
-          formBloc.emitSubmitting(progress: 1.0);
-          formBloc.emitSuccess();
-        });
+          when(() => formBloc.onSubmitting()).thenAnswer((_) {
+            formBloc.emitSuccess();
+          });
 
-        final expectedStates = [
-          FormBlocLoaded<String, String>(
-            isValidByStep: {0: true},
-            fieldBlocs: fbs({
-              0: [formBloc.optionalField]
-            }),
-          ),
-          FormBlocSubmitting<String, String>(
-            isValidByStep: {0: true},
-            fieldBlocs: fbs({
-              0: [formBloc.optionalField]
-            }),
-          ),
-          FormBlocSubmitting<String, String>(
-            isValidByStep: {0: true},
-            fieldBlocs: fbs({
-              0: [formBloc.optionalField]
-            }),
-            progress: 0.1,
-          ),
-          FormBlocSubmitting<String, String>(
-            isValidByStep: {0: true},
-            fieldBlocs: fbs({
-              0: [formBloc.optionalField]
-            }),
-            progress: 0.5,
-          ),
-          FormBlocSubmitting<String, String>(
-            isValidByStep: {0: true},
-            fieldBlocs: fbs({
-              0: [formBloc.optionalField]
-            }),
-            progress: 1.0,
-          ),
-          FormBlocSuccess<String, String>(
-            isValidByStep: {0: true},
-            fieldBlocs: fbs({
-              0: [formBloc.optionalField]
-            }),
-          ),
-        ];
+          final expectedStates = [
+            FormBlocLoaded<String, String>(
+              isValidByStep: {0: true},
+              fieldBlocs: fbs({
+                0: [formBloc.optionalField],
+              }),
+            ),
+            FormBlocSubmitting<String, String>(
+              isValidByStep: {0: true},
+              fieldBlocs: fbs({
+                0: [formBloc.optionalField],
+              }),
+            ),
+            FormBlocSuccess<String, String>(
+              isValidByStep: {0: true},
+              fieldBlocs: fbs({
+                0: [formBloc.optionalField],
+              }),
+            ),
+          ];
 
-        expect(formBloc.stream, emitsInOrder(expectedStates));
-
-        formBloc.addFieldBloc(fieldBloc: formBloc.optionalField);
-
-        formBloc.submit();
-      });
+          await expectBloc(
+            formBloc,
+            act: () {
+              formBloc.addFieldBloc(fieldBloc: formBloc.optionalField);
+              formBloc.submit();
+            },
+            stream: expectedStates,
+          );
+        },
+      );
 
       test(
-          'when autoValidate is false, and submit, call validators and asyncValidators of each fieldBloc that is not validated or have errors.',
-          () async {
-        final formBloc = _FormBlocImpl(autoValidate: false);
+        'onSubmitting can add to state stream all states generated by to methods of state.',
+        () async {
+          final formBloc = _FormBlocImpl();
 
-        final fieldBloc1 = _MockInputFieldBloc();
-        final fieldBloc2 = _MockInputFieldBloc();
-        final fieldBloc3 = _MockInputFieldBloc();
-        final fieldBloc4 = _MockInputFieldBloc();
-        final initialState1 = createInputState<dynamic, dynamic>(
-          value: null,
-          error: null,
-          isDirty: false,
-          suggestions: null,
-          isValidated: true,
-          isValidating: false,
-          name: '1',
-        );
-        final initialState2 = createInputState<dynamic, dynamic>(
-          value: null,
-          error: null,
-          isDirty: false,
-          suggestions: null,
-          isValidated: false,
-          isValidating: false,
-          name: '2',
-        );
-        final initialState3 = createInputState<dynamic, dynamic>(
-          value: null,
-          error: 'error',
-          isDirty: false,
-          suggestions: null,
-          isValidated: true,
-          isValidating: false,
-          name: '3',
-        );
-        final initialState4 = createInputState<dynamic, dynamic>(
-          value: null,
-          error: 'error',
-          isDirty: false,
-          suggestions: null,
-          isValidated: false,
-          isValidating: false,
-          name: '4',
-        );
-        whenBloc(fieldBloc1, initialState: initialState1);
-        whenBloc(fieldBloc2, initialState: initialState2);
-        whenBloc(fieldBloc3, initialState: initialState3);
-        whenBloc(fieldBloc4, initialState: initialState4);
+          when(() => formBloc.onSubmitting()).thenAnswer((_) {
+            formBloc.emitSubmitting(progress: 0.1);
+            formBloc.emitSubmitting(progress: 0.5);
+            formBloc.emitSubmitting(progress: 1.0);
+            formBloc.emitSuccess();
+          });
 
-        // setup
-        final fieldBlocs = <FieldBloc>[
-          fieldBloc1,
-          fieldBloc2,
-          fieldBloc3,
-          fieldBloc4
-        ];
-        for (final fieldBloc in fieldBlocs) {
-          when(() {
-            return fieldBloc.updateFormBloc(
-              any(),
-              autoValidate: any(named: 'autoValidate'),
-            );
-          }).thenAnswer((_) {});
-          when(() => fieldBloc.validate()).thenAnswer((_) async => true);
-        }
-        formBloc.addFieldBlocs(fieldBlocs: fieldBlocs);
+          final expectedStates = [
+            FormBlocLoaded<String, String>(
+              isValidByStep: {0: true},
+              fieldBlocs: fbs({
+                0: [formBloc.optionalField],
+              }),
+            ),
+            FormBlocSubmitting<String, String>(
+              isValidByStep: {0: true},
+              fieldBlocs: fbs({
+                0: [formBloc.optionalField],
+              }),
+            ),
+            FormBlocSubmitting<String, String>(
+              isValidByStep: {0: true},
+              fieldBlocs: fbs({
+                0: [formBloc.optionalField],
+              }),
+              progress: 0.1,
+            ),
+            FormBlocSubmitting<String, String>(
+              isValidByStep: {0: true},
+              fieldBlocs: fbs({
+                0: [formBloc.optionalField],
+              }),
+              progress: 0.5,
+            ),
+            FormBlocSubmitting<String, String>(
+              isValidByStep: {0: true},
+              fieldBlocs: fbs({
+                0: [formBloc.optionalField],
+              }),
+              progress: 1.0,
+            ),
+            FormBlocSuccess<String, String>(
+              isValidByStep: {0: true},
+              fieldBlocs: fbs({
+                0: [formBloc.optionalField],
+              }),
+            ),
+          ];
 
-        formBloc.submit();
-        // wait for notify field blocs.
-        await Future<void>.delayed(Duration(milliseconds: 0));
+          expect(formBloc.stream, emitsInOrder(expectedStates));
 
-        verifyNever(() => fieldBloc1.validate());
-        verify(() => fieldBloc2.validate());
-        verify(() => fieldBloc3.validate());
-        verify(() => fieldBloc4.validate());
-      });
+          formBloc.addFieldBloc(fieldBloc: formBloc.optionalField);
+
+          formBloc.submit();
+        },
+      );
+
+      test(
+        'when autoValidate is false, and submit, call validators and asyncValidators of each fieldBloc that is not validated or have errors.',
+        () async {
+          final formBloc = _FormBlocImpl(autoValidate: false);
+
+          final fieldBloc1 = _MockInputFieldBloc();
+          final fieldBloc2 = _MockInputFieldBloc();
+          final fieldBloc3 = _MockInputFieldBloc();
+          final fieldBloc4 = _MockInputFieldBloc();
+          final initialState1 = createInputState<dynamic, dynamic>(
+            value: null,
+            error: null,
+            isDirty: false,
+            suggestions: null,
+            isValidated: true,
+            isValidating: false,
+            name: '1',
+          );
+          final initialState2 = createInputState<dynamic, dynamic>(
+            value: null,
+            error: null,
+            isDirty: false,
+            suggestions: null,
+            isValidated: false,
+            isValidating: false,
+            name: '2',
+          );
+          final initialState3 = createInputState<dynamic, dynamic>(
+            value: null,
+            error: 'error',
+            isDirty: false,
+            suggestions: null,
+            isValidated: true,
+            isValidating: false,
+            name: '3',
+          );
+          final initialState4 = createInputState<dynamic, dynamic>(
+            value: null,
+            error: 'error',
+            isDirty: false,
+            suggestions: null,
+            isValidated: false,
+            isValidating: false,
+            name: '4',
+          );
+          whenBloc(fieldBloc1, initialState: initialState1);
+          whenBloc(fieldBloc2, initialState: initialState2);
+          whenBloc(fieldBloc3, initialState: initialState3);
+          whenBloc(fieldBloc4, initialState: initialState4);
+
+          // setup
+          final fieldBlocs = <FieldBloc>[
+            fieldBloc1,
+            fieldBloc2,
+            fieldBloc3,
+            fieldBloc4,
+          ];
+          for (final fieldBloc in fieldBlocs) {
+            when(() {
+              return fieldBloc.updateFormBloc(
+                any(),
+                autoValidate: any(named: 'autoValidate'),
+              );
+            }).thenAnswer((_) {});
+            when(() => fieldBloc.validate()).thenAnswer((_) async => true);
+          }
+          formBloc.addFieldBlocs(fieldBlocs: fieldBlocs);
+
+          formBloc.submit();
+          // wait for notify field blocs.
+          await Future<void>.delayed(Duration(milliseconds: 0));
+
+          verifyNever(() => fieldBloc1.validate());
+          verify(() => fieldBloc2.validate());
+          verify(() => fieldBloc3.validate());
+          verify(() => fieldBloc4.validate());
+        },
+      );
     });
 
     test('success clear.', () async {
@@ -491,26 +498,26 @@ void main() {
         FormBlocLoaded<String, String>(
           isValidByStep: {0: true},
           fieldBlocs: fbs({
-            0: [formBloc.optionalField]
+            0: [formBloc.optionalField],
           }),
         ),
         FormBlocSubmitting<String, String>(
           isValidByStep: {0: true},
           fieldBlocs: fbs({
-            0: [formBloc.optionalField]
+            0: [formBloc.optionalField],
           }),
         ),
         FormBlocSubmitting<String, String>(
           isValidByStep: {0: true},
           fieldBlocs: fbs({
-            0: [formBloc.optionalField]
+            0: [formBloc.optionalField],
           }),
           isCanceling: true,
         ),
         FormBlocSubmissionCancelled<String, String>(
           isValidByStep: {0: true},
           fieldBlocs: fbs({
-            0: [formBloc.optionalField]
+            0: [formBloc.optionalField],
           }),
         ),
       ];
@@ -610,9 +617,7 @@ void main() {
 
         final expectedStates = [
           FormBlocDeleting<String, String>(),
-          FormBlocDeleteSuccessful<String, String>(
-            successResponse: 'success',
-          ),
+          FormBlocDeleteSuccessful<String, String>(successResponse: 'success'),
         ];
 
         expect(formBloc.stream, emitsInOrder(expectedStates));
@@ -629,9 +634,7 @@ void main() {
 
         final expectedStates = [
           FormBlocDeleting<String, String>(),
-          FormBlocDeleteFailed<String, String>(
-            failureResponse: 'fail',
-          ),
+          FormBlocDeleteFailed<String, String>(failureResponse: 'fail'),
         ];
 
         expect(formBloc.stream, emitsInOrder(expectedStates));

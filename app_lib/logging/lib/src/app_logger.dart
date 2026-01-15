@@ -64,8 +64,12 @@ class AppLogger {
   void f(String message, [Object? error, StackTrace? stackTrace]) =>
       _log(LogLevel.fatal, message, error, stackTrace);
 
-  void _log(LogLevel level, String message,
-      [Object? error, StackTrace? stackTrace]) {
+  void _log(
+    LogLevel level,
+    String message, [
+    Object? error,
+    StackTrace? stackTrace,
+  ]) {
     if (level < _currentLevel) return;
 
     final logger = logging.Logger('AppLogger');

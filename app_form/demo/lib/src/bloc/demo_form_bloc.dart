@@ -5,51 +5,31 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 /// Demo form bloc showcasing various field types and validation patterns.
 class DemoFormBloc extends FormBloc<String, String> {
   DemoFormBloc() : super(autoValidate: true) {
-    addFieldBlocs(fieldBlocs: [
-      name,
-      email,
-      password,
-      age,
-      country,
-      interests,
-      acceptTerms,
-    ]);
+    addFieldBlocs(
+      fieldBlocs: [name, email, password, age, country, interests, acceptTerms],
+    );
   }
 
   // Text field with required validation
   final name = TextFieldBloc(
     name: 'name',
-    validators: [
-      FieldBlocValidators.required,
-      _minLength(2),
-    ],
+    validators: [FieldBlocValidators.required, _minLength(2)],
   );
 
   // Text field with email validation
   final email = TextFieldBloc(
     name: 'email',
-    validators: [
-      FieldBlocValidators.required,
-      FieldBlocValidators.email,
-    ],
+    validators: [FieldBlocValidators.required, FieldBlocValidators.email],
   );
 
   // Password field with custom validation
   final password = TextFieldBloc(
     name: 'password',
-    validators: [
-      FieldBlocValidators.required,
-      _passwordValidator,
-    ],
+    validators: [FieldBlocValidators.required, _passwordValidator],
   );
 
   // Numeric input field
-  final age = TextFieldBloc(
-    name: 'age',
-    validators: [
-      _ageValidator,
-    ],
-  );
+  final age = TextFieldBloc(name: 'age', validators: [_ageValidator]);
 
   // Single select dropdown
   final country = SelectFieldBloc<String, dynamic>(
@@ -61,7 +41,7 @@ class DemoFormBloc extends FormBloc<String, String> {
       'Australia',
       'Germany',
       'Japan',
-      'Other'
+      'Other',
     ],
     validators: [FieldBlocValidators.required],
   );
@@ -76,9 +56,7 @@ class DemoFormBloc extends FormBloc<String, String> {
   final acceptTerms = BooleanFieldBloc(
     name: 'acceptTerms',
     initialValue: false,
-    validators: [
-      _requiredTrue,
-    ],
+    validators: [_requiredTrue],
   );
 
   // Custom validators
@@ -134,7 +112,8 @@ class DemoFormBloc extends FormBloc<String, String> {
       // await api.submitForm(...);
 
       emitSuccess(
-        successResponse: 'Form submitted successfully!\n\n'
+        successResponse:
+            'Form submitted successfully!\n\n'
             'Name: ${name.value}\n'
             'Email: ${email.value}\n'
             'Country: ${country.value}\n'

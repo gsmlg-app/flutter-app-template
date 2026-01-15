@@ -37,11 +37,12 @@ class FlexGroupStyle extends GroupStyle {
   }
 
   @override
-  String toString() => (ToString(runtimeType)
-        ..add('direction', direction)
-        ..add('textDirection', textDirection)
-        ..add('verticalDirection', verticalDirection))
-      .toString();
+  String toString() =>
+      (ToString(runtimeType)
+            ..add('direction', direction)
+            ..add('textDirection', textDirection)
+            ..add('verticalDirection', verticalDirection))
+          .toString();
 }
 
 /// Similar to [Table] without borders or [GridView] without scroll
@@ -62,8 +63,8 @@ class TableGroupStyle extends GroupStyle {
     this.mainVerticalDirection = VerticalDirection.down,
     this.crossVerticalDirection = VerticalDirection.down,
     this.crossAxisCount = 2,
-  })  : assert(crossAxisCount >= 2),
-        super._();
+  }) : assert(crossAxisCount >= 2),
+       super._();
 
   TableGroupStyle copyWith({
     TextDirection? textDirection,
@@ -82,12 +83,13 @@ class TableGroupStyle extends GroupStyle {
   }
 
   @override
-  String toString() => (ToString(runtimeType)
-        ..add('textDirection', textDirection)
-        ..add('mainVerticalDirection', mainVerticalDirection)
-        ..add('crossVerticalDirection', crossVerticalDirection)
-        ..add('crossAxisCount', crossAxisCount))
-      .toString();
+  String toString() =>
+      (ToString(runtimeType)
+            ..add('textDirection', textDirection)
+            ..add('mainVerticalDirection', mainVerticalDirection)
+            ..add('crossVerticalDirection', crossVerticalDirection)
+            ..add('crossAxisCount', crossAxisCount))
+          .toString();
 }
 
 /// [Wrap]
@@ -156,16 +158,17 @@ class WrapGroupStyle extends GroupStyle {
   }
 
   @override
-  String toString() => (ToString(runtimeType)
-        ..add('direction', direction)
-        ..add('alignment', alignment)
-        ..add('spacing', spacing)
-        ..add('runAlignment', runAlignment)
-        ..add('crossAxisAlignment', crossAxisAlignment)
-        ..add('textDirection', textDirection)
-        ..add('verticalDirection', verticalDirection)
-        ..add('clipBehavior', clipBehavior))
-      .toString();
+  String toString() =>
+      (ToString(runtimeType)
+            ..add('direction', direction)
+            ..add('alignment', alignment)
+            ..add('spacing', spacing)
+            ..add('runAlignment', runAlignment)
+            ..add('crossAxisAlignment', crossAxisAlignment)
+            ..add('textDirection', textDirection)
+            ..add('verticalDirection', verticalDirection)
+            ..add('clipBehavior', clipBehavior))
+          .toString();
 }
 
 /// [ListView]
@@ -201,8 +204,8 @@ class ListGroupStyle extends GroupStyle {
     this.physics,
     this.height,
     this.width,
-  })  : assert(height != null || width != null),
-        super._();
+  }) : assert(height != null || width != null),
+       super._();
 
   ListGroupStyle copyWith({
     ScrollController? controller,
@@ -225,15 +228,16 @@ class ListGroupStyle extends GroupStyle {
   }
 
   @override
-  String toString() => (ToString(runtimeType)
-        ..add('scrollDirection', scrollDirection)
-        ..add('reverse', reverse)
-        ..add('controller', controller)
-        ..add('primary', primary)
-        ..add('physics', physics)
-        ..add('height', height)
-        ..add('width', width))
-      .toString();
+  String toString() =>
+      (ToString(runtimeType)
+            ..add('scrollDirection', scrollDirection)
+            ..add('reverse', reverse)
+            ..add('controller', controller)
+            ..add('primary', primary)
+            ..add('physics', physics)
+            ..add('height', height)
+            ..add('width', width))
+          .toString();
 }
 
 /// [GridView]
@@ -273,8 +277,8 @@ class GridGroupStyle extends GroupStyle {
     required this.gridDelegate,
     this.height,
     this.width,
-  })  : assert(height != null || width != null),
-        super._();
+  }) : assert(height != null || width != null),
+       super._();
 
   GridGroupStyle copyWith({
     ScrollController? controller,
@@ -299,16 +303,17 @@ class GridGroupStyle extends GroupStyle {
   }
 
   @override
-  String toString() => (ToString(runtimeType)
-        ..add('scrollDirection', scrollDirection)
-        ..add('reverse', reverse)
-        ..add('controller', controller)
-        ..add('primary', primary)
-        ..add('physics', physics)
-        ..add('height', height)
-        ..add('gridDelegate', gridDelegate)
-        ..add('width', width))
-      .toString();
+  String toString() =>
+      (ToString(runtimeType)
+            ..add('scrollDirection', scrollDirection)
+            ..add('reverse', reverse)
+            ..add('controller', controller)
+            ..add('primary', primary)
+            ..add('physics', physics)
+            ..add('height', height)
+            ..add('gridDelegate', gridDelegate)
+            ..add('width', width))
+          .toString();
 }
 
 /// {@template flutter_form_bloc.FieldBlocBuilder.groupStyle}
@@ -348,55 +353,60 @@ class GroupView extends StatelessWidget {
 
   Widget _buildPadded(Widget child) {
     if (padding != null) {
-      return Padding(
-        padding: padding!,
-        child: child,
-      );
+      return Padding(padding: padding!, child: child);
     }
     return child;
   }
 
   Widget _buildLayout(BuildContext context, GroupStyle style) {
     if (style is FlexGroupStyle) {
-      return _buildPadded(Flex(
-        direction: style.direction,
-        textDirection: style.textDirection,
-        verticalDirection: style.verticalDirection,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: _generateChildren(context).toList(),
-      ));
+      return _buildPadded(
+        Flex(
+          direction: style.direction,
+          textDirection: style.textDirection,
+          verticalDirection: style.verticalDirection,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: _generateChildren(context).toList(),
+        ),
+      );
     } else if (style is TableGroupStyle) {
-      final children = _generateChildren(context).map((child) {
-        return Expanded(child: child);
-      }).splitBetweenIndexed((index, _, __) {
-        return (index % style.crossAxisCount) == 0;
-      });
-      return _buildPadded(Column(
-        textDirection: style.textDirection,
-        verticalDirection: style.mainVerticalDirection,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: children.map((children) {
-          return Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            verticalDirection: style.crossVerticalDirection,
-            children: children,
-          );
-        }).toList(),
-      ));
+      final children = _generateChildren(context)
+          .map((child) {
+            return Expanded(child: child);
+          })
+          .splitBetweenIndexed((index, _, _) {
+            return (index % style.crossAxisCount) == 0;
+          });
+      return _buildPadded(
+        Column(
+          textDirection: style.textDirection,
+          verticalDirection: style.mainVerticalDirection,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: children.map((children) {
+            return Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              verticalDirection: style.crossVerticalDirection,
+              children: children,
+            );
+          }).toList(),
+        ),
+      );
     } else if (style is WrapGroupStyle) {
-      return _buildPadded(Wrap(
-        direction: style.direction,
-        alignment: style.alignment,
-        spacing: style.spacing,
-        runAlignment: style.runAlignment,
-        runSpacing: style.runSpacing,
-        crossAxisAlignment: style.crossAxisAlignment,
-        textDirection: style.textDirection,
-        verticalDirection: style.verticalDirection,
-        children: _generateChildren(context).toList(),
-      ));
+      return _buildPadded(
+        Wrap(
+          direction: style.direction,
+          alignment: style.alignment,
+          spacing: style.spacing,
+          runAlignment: style.runAlignment,
+          runSpacing: style.runSpacing,
+          crossAxisAlignment: style.crossAxisAlignment,
+          textDirection: style.textDirection,
+          verticalDirection: style.verticalDirection,
+          children: _generateChildren(context).toList(),
+        ),
+      );
     } else if (style is ListGroupStyle) {
       return SizedBox(
         height: style.height,

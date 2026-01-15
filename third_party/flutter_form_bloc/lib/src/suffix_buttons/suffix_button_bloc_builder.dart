@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/src/utils/functions.dart';
 import 'package:form_bloc/form_bloc.dart';
 
-typedef BlocChildBuilder<FieldBlocState> = Widget Function(
-    BuildContext context, FieldBlocState state, Widget child);
+typedef BlocChildBuilder<FieldBlocState> =
+    Widget Function(BuildContext context, FieldBlocState state, Widget child);
 
 class SuffixButtonBuilderBase extends StatelessWidget {
   final SingleFieldBloc singleFieldBloc;

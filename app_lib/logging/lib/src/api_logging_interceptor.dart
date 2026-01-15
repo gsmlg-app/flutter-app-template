@@ -147,10 +147,7 @@ class ApiLoggingInterceptor {
   }
 
   // Network connectivity logging
-  void logConnectivity({
-    required bool isConnected,
-    String? networkType,
-  }) {
+  void logConnectivity({required bool isConnected, String? networkType}) {
     final message = isConnected
         ? 'Network connected${networkType != null ? ' ($networkType)' : ''}'
         : 'Network disconnected';

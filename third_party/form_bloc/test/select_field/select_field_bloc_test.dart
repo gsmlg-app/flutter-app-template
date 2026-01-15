@@ -41,10 +41,7 @@ void main() {
           // state1,
           state2,
         ];
-        expect(
-          fieldBloc.stream,
-          emitsInOrder(expectedStates),
-        );
+        expect(fieldBloc.stream, emitsInOrder(expectedStates));
 
         fieldBloc.updateValue(true);
       });
@@ -54,9 +51,7 @@ void main() {
       SelectFieldBloc<bool, dynamic> fieldBloc;
       SelectFieldBlocState<bool, dynamic> initialState;
 
-      fieldBloc = SelectFieldBloc<bool, dynamic>(
-        name: 'name',
-      );
+      fieldBloc = SelectFieldBloc<bool, dynamic>(name: 'name');
 
       initialState = createSelectState<bool, dynamic>(
         value: null,
@@ -69,10 +64,7 @@ void main() {
         items: [],
       );
 
-      expect(
-        fieldBloc.state,
-        initialState,
-      );
+      expect(fieldBloc.state, initialState);
 
       fieldBloc.close();
 
@@ -94,16 +86,11 @@ void main() {
         items: [true, false],
       );
 
-      expect(
-        fieldBloc.state,
-        initialState,
-      );
+      expect(fieldBloc.state, initialState);
     });
 
     test('updateItems method and UpdateFieldBlocItems event.', () {
-      final fieldBloc = SelectFieldBloc<bool, dynamic>(
-        name: 'name',
-      );
+      final fieldBloc = SelectFieldBloc<bool, dynamic>(name: 'name');
 
       final state1 = createSelectState<bool, dynamic>(
         value: null,
@@ -115,46 +102,41 @@ void main() {
         name: 'name',
         items: [],
       );
-      final state2 = state1.copyWith(
-        items: [true],
-      );
-      final state3 = state2.copyWith(
-        items: [],
-      );
+      final state2 = state1.copyWith(items: [true]);
+      final state3 = state2.copyWith(items: []);
 
       final expectedStates = [
         // state1,
         state2,
         state3,
       ];
-      expect(
-        fieldBloc.stream,
-        emitsInOrder(expectedStates),
-      );
+      expect(fieldBloc.stream, emitsInOrder(expectedStates));
 
       fieldBloc.updateItems([true]);
       fieldBloc.updateItems([]);
     });
 
-    test('updateItems method, if the value not is in the items it will be null',
-        () {
-      final fieldBloc = SelectFieldBloc<bool, dynamic>(
-        initialValue: true,
-        items: [true, false],
-      );
+    test(
+      'updateItems method, if the value not is in the items it will be null',
+      () {
+        final fieldBloc = SelectFieldBloc<bool, dynamic>(
+          initialValue: true,
+          items: [true, false],
+        );
 
-      final expectedState = fieldBloc.state.copyWith(
-        value: Param(null),
-        items: [false],
-      );
+        final expectedState = fieldBloc.state.copyWith(
+          value: Param(null),
+          items: [false],
+        );
 
-      expect(
-        fieldBloc.stream,
-        emitsInOrder(<SelectFieldBlocState<bool, dynamic>>[expectedState]),
-      );
+        expect(
+          fieldBloc.stream,
+          emitsInOrder(<SelectFieldBlocState<bool, dynamic>>[expectedState]),
+        );
 
-      fieldBloc.updateItems([false]);
-    });
+        fieldBloc.updateItems([false]);
+      },
+    );
 
     test('addItem method and  AddFieldBlocItem event.', () {
       final fieldBloc = SelectFieldBloc<bool, dynamic>(
@@ -172,15 +154,9 @@ void main() {
         name: 'name',
         items: [true],
       );
-      final state2 = state1.copyWith(
-        items: [true, false],
-      );
-      final state3 = state2.copyWith(
-        items: [],
-      );
-      final state4 = state3.copyWith(
-        items: [true],
-      );
+      final state2 = state1.copyWith(items: [true, false]);
+      final state3 = state2.copyWith(items: []);
+      final state4 = state3.copyWith(items: [true]);
 
       final expectedStates = [
         // state1,
@@ -188,10 +164,7 @@ void main() {
         state3,
         state4,
       ];
-      expect(
-        fieldBloc.stream,
-        emitsInOrder(expectedStates),
-      );
+      expect(fieldBloc.stream, emitsInOrder(expectedStates));
 
       fieldBloc.addItem(false);
       fieldBloc.updateItems([]);
@@ -214,12 +187,8 @@ void main() {
         name: 'name',
         items: [true, false],
       );
-      final state2 = state1.copyWith(
-        items: [false],
-      );
-      final state3 = state2.copyWith(
-        items: [],
-      );
+      final state2 = state1.copyWith(items: [false]);
+      final state3 = state2.copyWith(items: []);
 
       final expectedStates = [
         // state1,
@@ -227,46 +196,40 @@ void main() {
         state3,
       ];
 
-      expect(
-        fieldBloc.stream,
-        emitsInOrder(expectedStates),
-      );
+      expect(fieldBloc.stream, emitsInOrder(expectedStates));
 
       fieldBloc.removeItem(true);
       fieldBloc.removeItem(false);
     });
 
-    test('updateItems method, if the value not is in the items it will be null',
-        () {
-      final fieldBloc = SelectFieldBloc<bool, dynamic>(
-        initialValue: true,
-        items: [true, false],
-      );
+    test(
+      'updateItems method, if the value not is in the items it will be null',
+      () {
+        final fieldBloc = SelectFieldBloc<bool, dynamic>(
+          initialValue: true,
+          items: [true, false],
+        );
 
-      final expectedState = fieldBloc.state.copyWith(
-        value: Param(null),
-        items: [false],
-      );
+        final expectedState = fieldBloc.state.copyWith(
+          value: Param(null),
+          items: [false],
+        );
 
-      expect(
-        fieldBloc.stream,
-        emitsInOrder(<SelectFieldBlocState<bool, dynamic>>[expectedState]),
-      );
+        expect(
+          fieldBloc.stream,
+          emitsInOrder(<SelectFieldBlocState<bool, dynamic>>[expectedState]),
+        );
 
-      fieldBloc.removeItem(true);
-    });
+        fieldBloc.removeItem(true);
+      },
+    );
 
     test('If toJson is null, return value', () async {
       final expectedValue = 0;
 
-      final fieldBloc = SelectFieldBloc<int, dynamic>(
-        initialValue: 0,
-      );
+      final fieldBloc = SelectFieldBloc<int, dynamic>(initialValue: 0);
 
-      expect(
-        fieldBloc.state.toJson(),
-        expectedValue,
-      );
+      expect(fieldBloc.state.toJson(), expectedValue);
     });
 
     test('toJson is added to the state', () async {
@@ -277,10 +240,7 @@ void main() {
         toJson: (v) => v.toString(),
       );
 
-      expect(
-        fieldBloc.state.toJson(),
-        expectedValue,
-      );
+      expect(fieldBloc.state.toJson(), expectedValue);
     });
 
     test('extraData added to extraData in state', () async {
@@ -288,10 +248,7 @@ void main() {
 
       final fieldBloc = SelectFieldBloc<bool, int>(extraData: 0);
 
-      expect(
-        fieldBloc.state.extraData,
-        expectedExtraData,
-      );
+      expect(fieldBloc.state.extraData, expectedExtraData);
     });
   });
 }

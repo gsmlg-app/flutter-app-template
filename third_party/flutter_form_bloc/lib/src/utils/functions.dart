@@ -27,15 +27,12 @@ bool fieldBlocIsEnabled({
 }) {
   return isEnabled
       ? (enableOnlyWhenFormBlocCanSubmit ?? false)
-          ? fieldBlocState.formBloc?.state.canSubmit ?? true
-          : true
+            ? fieldBlocState.formBloc?.state.canSubmit ?? true
+            : true
       : false;
 }
 
-Widget widgetBasedOnPlatform({
-  required Widget mobile,
-  required Widget other,
-}) {
+Widget widgetBasedOnPlatform({required Widget mobile, required Widget other}) {
   if (kIsWeb) {
     return other;
   } else if (defaultTargetPlatform == TargetPlatform.android ||

@@ -24,7 +24,8 @@ class DefaultFieldBlocBuilderTextStyle extends StatelessWidget {
       style: Style.resolveTextStyle(
         isEnabled: isEnabled,
         style: style ?? formStyle.textStyle ?? theme.textTheme.titleMedium!,
-        color: formStyle.textColor ??
+        color:
+            formStyle.textColor ??
             SimpleMaterialStateProperty(
               normal: theme.textTheme.titleMedium!.color,
               disabled: theme.disabledColor,
@@ -82,10 +83,7 @@ class GroupInputDecorator extends StatelessWidget {
               decoration: decoration,
             ),
           ),
-          child: Opacity(
-            opacity: 0.0,
-            child: child,
-          ),
+          child: Opacity(opacity: 0.0, child: child),
         ),
         InputDecorator(
           decoration: Style.inputDecorationWithoutBorder.copyWith(

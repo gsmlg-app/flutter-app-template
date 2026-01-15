@@ -45,19 +45,23 @@ Future<void> expectBloc<State>(
   }
   if (stream != null) {
     final states = <State>[];
-    final expectDone =
-        expectLater(bloc.stream.doOnData(states.add), emitsInOrder(stream));
+    final expectDone = expectLater(
+      bloc.stream.doOnData(states.add),
+      emitsInOrder(stream),
+    );
     final actDone = act?.call();
     // ignore: void_checks
-    await Future.wait<void>([
-      expectDone,
-      Future.value(actDone),
-    ]).timeout(Duration(seconds: 5), onTimeout: () {
-      throw 'Timeout expect bloc';
-    }).catchError((Object error) {
-      print(_diffList(stream, states));
-      throw error;
-    });
+    await Future.wait<void>([expectDone, Future.value(actDone)])
+        .timeout(
+          Duration(seconds: 5),
+          onTimeout: () {
+            throw 'Timeout expect bloc';
+          },
+        )
+        .catchError((Object error) {
+          print(_diffList(stream, states));
+          throw error;
+        });
   }
 }
 
@@ -79,9 +83,10 @@ String _decorateDiffResult<L, R>(ItemResult<L, R> result) {
 }
 
 String _diff(Object? expected, Object? actual) {
-  return FireLineDiff.diff('$expected'.split('\n'), '$actual'.split('\n'))
-      .map(_decorateDiffResult)
-      .join('\n');
+  return FireLineDiff.diff(
+    '$expected'.split('\n'),
+    '$actual'.split('\n'),
+  ).map(_decorateDiffResult).join('\n');
 }
 
 String _diffList<T>(List<T> expected, List<T> actual) {

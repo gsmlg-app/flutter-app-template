@@ -122,7 +122,8 @@ class SwitchFieldBlocBuilder extends StatelessWidget {
         overlayColor: overlayColor,
         splashRadius: splashRadius,
       ),
-      controlAffinity: controlAffinity ??
+      controlAffinity:
+          controlAffinity ??
           fieldTheme.controlAffinity ??
           FieldBlocBuilderControlAffinity.leading,
     );
@@ -133,13 +134,11 @@ class SwitchFieldBlocBuilder extends StatelessWidget {
     final fieldTheme = themeStyleOf(context);
 
     return Theme(
-      data: Theme.of(context).copyWith(
-        switchTheme: fieldTheme.switchTheme!,
-      ),
+      data: Theme.of(context).copyWith(switchTheme: fieldTheme.switchTheme!),
       child: SimpleFieldBlocBuilder(
         singleFieldBloc: booleanFieldBloc,
         animateWhenCanShow: animateWhenCanShow,
-        builder: (_, __) {
+        builder: (_, _) {
           return BlocBuilder<BooleanFieldBloc, BooleanFieldBlocState>(
             bloc: booleanFieldBloc,
             builder: (context, state) {
@@ -154,11 +153,13 @@ class SwitchFieldBlocBuilder extends StatelessWidget {
                 padding: padding,
                 child: InputDecorator(
                   decoration: Style.inputDecorationWithoutBorder.copyWith(
-                    prefixIcon: fieldTheme.controlAffinity ==
+                    prefixIcon:
+                        fieldTheme.controlAffinity ==
                             FieldBlocBuilderControlAffinity.leading
                         ? _buildSwitch(context, state)
                         : null,
-                    suffixIcon: fieldTheme.controlAffinity ==
+                    suffixIcon:
+                        fieldTheme.controlAffinity ==
                             FieldBlocBuilderControlAffinity.trailing
                         ? _buildSwitch(context, state)
                         : null,
@@ -192,10 +193,7 @@ class SwitchFieldBlocBuilder extends StatelessWidget {
     );
   }
 
-  Switch _buildSwitch(
-    BuildContext context,
-    BooleanFieldBlocState state,
-  ) {
+  Switch _buildSwitch(BuildContext context, BooleanFieldBlocState state) {
     return Switch.adaptive(
       value: state.value,
       onChanged: fieldBlocBuilderOnChange<bool>(

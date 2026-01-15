@@ -154,7 +154,8 @@ class StepperFormBlocBuilder<T extends FormBloc> extends StatelessWidget {
     VoidCallback? onStepCancel,
     int step,
     FormBloc formBloc,
-  )? controlsBuilder;
+  )?
+  controlsBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -183,11 +184,12 @@ class StepperFormBlocBuilder<T extends FormBloc> extends StatelessWidget {
           steps: [
             for (var i = 0; i < formBlocSteps.length; i++)
               Step(
-                  title: formBlocSteps[i].title,
-                  isActive: formBlocSteps[i].isActive ?? i == state.currentStep,
-                  content: formBlocSteps[i].content,
-                  state: formBlocSteps[i].state,
-                  subtitle: formBlocSteps[i].subtitle)
+                title: formBlocSteps[i].title,
+                isActive: formBlocSteps[i].isActive ?? i == state.currentStep,
+                content: formBlocSteps[i].content,
+                state: formBlocSteps[i].state,
+                subtitle: formBlocSteps[i].subtitle,
+              ),
           ],
           controlsBuilder: controlsBuilder == null
               ? null
@@ -196,7 +198,8 @@ class StepperFormBlocBuilder<T extends FormBloc> extends StatelessWidget {
                   controlsDetails.onStepContinue,
                   controlsDetails.onStepCancel,
                   controlsDetails.stepIndex,
-                  formBloc),
+                  formBloc,
+                ),
         );
       },
     );

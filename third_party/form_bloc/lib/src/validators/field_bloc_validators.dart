@@ -40,8 +40,9 @@ class FieldBlocValidators {
   /// Returns [FieldBlocValidatorsErrors.email]
   /// if is not valid.
   static String? email(String? string) {
-    final emailRegExp =
-        RegExp(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
+    final emailRegExp = RegExp(
+      r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
+    );
     if (string == null || string.isEmpty || emailRegExp.hasMatch(string)) {
       return null;
     }

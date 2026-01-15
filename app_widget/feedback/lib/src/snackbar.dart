@@ -14,10 +14,7 @@ void showSnackbar({
     duration: duration,
     showCloseIcon: showCloseIcon,
     action: actionLabel != null && onActionPressed != null
-        ? SnackBarAction(
-            label: actionLabel,
-            onPressed: onActionPressed,
-          )
+        ? SnackBarAction(label: actionLabel, onPressed: onActionPressed)
         : null,
   );
 
@@ -35,10 +32,7 @@ void showUndoSnackbar({
     duration: duration,
     showCloseIcon: showCloseIcon,
     content: message,
-    action: SnackBarAction(
-      label: context.l10n.undo,
-      onPressed: onUndoPressed,
-    ),
+    action: SnackBarAction(label: context.l10n.undo, onPressed: onUndoPressed),
   );
 
   ScaffoldMessenger.of(context).showSnackBar(snackBar);

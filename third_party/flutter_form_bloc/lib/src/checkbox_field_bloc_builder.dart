@@ -113,7 +113,8 @@ class CheckboxFieldBlocBuilder extends StatelessWidget {
         shape: shape,
         side: side,
       ),
-      controlAffinity: controlAffinity ??
+      controlAffinity:
+          controlAffinity ??
           fieldTheme.controlAffinity ??
           FieldBlocBuilderControlAffinity.leading,
     );
@@ -124,13 +125,11 @@ class CheckboxFieldBlocBuilder extends StatelessWidget {
     final fieldTheme = themeStyleOf(context);
 
     return Theme(
-      data: Theme.of(context).copyWith(
-        checkboxTheme: fieldTheme.checkboxTheme,
-      ),
+      data: Theme.of(context).copyWith(checkboxTheme: fieldTheme.checkboxTheme),
       child: CanShowFieldBlocBuilder(
         fieldBloc: booleanFieldBloc,
         animate: animateWhenCanShow,
-        builder: (_, __) {
+        builder: (_, _) {
           return BlocBuilder<BooleanFieldBloc, BooleanFieldBlocState>(
             bloc: booleanFieldBloc,
             builder: (context, state) {
@@ -145,11 +144,13 @@ class CheckboxFieldBlocBuilder extends StatelessWidget {
                 padding: padding,
                 child: InputDecorator(
                   decoration: Style.inputDecorationWithoutBorder.copyWith(
-                    prefixIcon: fieldTheme.controlAffinity! ==
+                    prefixIcon:
+                        fieldTheme.controlAffinity! ==
                             FieldBlocBuilderControlAffinity.leading
                         ? _buildCheckbox(context, state)
                         : null,
-                    suffixIcon: fieldTheme.controlAffinity! ==
+                    suffixIcon:
+                        fieldTheme.controlAffinity! ==
                             FieldBlocBuilderControlAffinity.trailing
                         ? _buildCheckbox(context, state)
                         : null,

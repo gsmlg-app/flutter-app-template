@@ -27,14 +27,18 @@ class SettingsTheme extends InheritedWidget {
 
 class SettingsThemeData {
   static SettingsThemeData withContext(
-      BuildContext context, DevicePlatform? platform) {
+    BuildContext context,
+    DevicePlatform? platform,
+  ) {
     platform ??= DevicePlatform.detect();
     final colorScheme = Theme.of(context).colorScheme;
     return withColorScheme(colorScheme, platform);
   }
 
   static SettingsThemeData withColorScheme(
-      ColorScheme colorScheme, DevicePlatform? platform) {
+    ColorScheme colorScheme,
+    DevicePlatform? platform,
+  ) {
     platform ??= DevicePlatform.detect();
     switch (platform) {
       case DevicePlatform.android:
@@ -50,9 +54,7 @@ class SettingsThemeData {
     }
   }
 
-  static SettingsThemeData _androidTheme(
-    ColorScheme colorScheme,
-  ) {
+  static SettingsThemeData _androidTheme(ColorScheme colorScheme) {
     final listBackground = colorScheme.surface;
 
     final titleTextColor = colorScheme.onSecondaryContainer;
@@ -81,9 +83,7 @@ class SettingsThemeData {
     );
   }
 
-  static SettingsThemeData _iosTheme(
-    ColorScheme colorScheme,
-  ) {
+  static SettingsThemeData _iosTheme(ColorScheme colorScheme) {
     final listBackground = colorScheme.surface;
 
     final sectionBackground = colorScheme.secondaryContainer;
@@ -114,9 +114,7 @@ class SettingsThemeData {
     );
   }
 
-  static SettingsThemeData _webTheme(
-    ColorScheme colorScheme,
-  ) {
+  static SettingsThemeData _webTheme(ColorScheme colorScheme) {
     final listBackground = colorScheme.surface;
 
     final titleTextColor = colorScheme.onSecondaryContainer;
@@ -168,9 +166,7 @@ class SettingsThemeData {
   final Color? inactiveTitleColor;
   final Color? inactiveSubtitleColor;
 
-  SettingsThemeData merge({
-    SettingsThemeData? theme,
-  }) {
+  SettingsThemeData merge({SettingsThemeData? theme}) {
     if (theme == null) return this;
 
     return copyWith(

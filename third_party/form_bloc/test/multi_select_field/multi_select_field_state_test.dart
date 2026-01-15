@@ -112,24 +112,16 @@ void main() {
           items: [1],
         );
 
-        expectState(
-          state1.copyWith(),
-          state1,
-        );
+        expectState(state1.copyWith(), state1);
       });
     });
 
     test('If toJson is null, return value', () async {
       final expectedValue = [0];
 
-      final fieldBloc = MultiSelectFieldBloc<int, dynamic>(
-        initialValue: [0],
-      );
+      final fieldBloc = MultiSelectFieldBloc<int, dynamic>(initialValue: [0]);
 
-      expect(
-        fieldBloc.state.toJson(),
-        expectedValue,
-      );
+      expect(fieldBloc.state.toJson(), expectedValue);
     });
 
     test('toJson is added to the state', () async {
@@ -140,10 +132,7 @@ void main() {
         toJson: (v) => v.toString(),
       );
 
-      expect(
-        fieldBloc.state.toJson(),
-        expectedValue,
-      );
+      expect(fieldBloc.state.toJson(), expectedValue);
     });
   });
 }

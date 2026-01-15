@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-typedef ChipFieldItemBuilder<T> = ChipFieldItem Function(
-    BuildContext context, T value);
+typedef ChipFieldItemBuilder<T> =
+    ChipFieldItem Function(BuildContext context, T value);
 
 class ChipFieldItem {
   /// Whether or not a user can select this menu item.

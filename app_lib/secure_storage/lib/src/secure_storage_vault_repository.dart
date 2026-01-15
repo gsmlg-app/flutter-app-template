@@ -12,10 +12,8 @@ import 'vault_repository.dart';
 /// - Windows: Windows Credential Manager
 /// - Web: Uses encrypted local storage (less secure than native platforms)
 class SecureStorageVaultRepository implements VaultRepository {
-  SecureStorageVaultRepository({
-    FlutterSecureStorage? storage,
-    this.namespace,
-  }) : _storage = storage ?? const FlutterSecureStorage();
+  SecureStorageVaultRepository({FlutterSecureStorage? storage, this.namespace})
+    : _storage = storage ?? const FlutterSecureStorage();
 
   final FlutterSecureStorage _storage;
 

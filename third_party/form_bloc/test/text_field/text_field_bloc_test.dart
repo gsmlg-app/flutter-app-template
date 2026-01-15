@@ -43,10 +43,7 @@ void main() {
           // state1,
           state2,
         ];
-        expect(
-          fieldBloc.stream,
-          emitsInOrder(expectedStates),
-        );
+        expect(fieldBloc.stream, emitsInOrder(expectedStates));
 
         fieldBloc.updateValue('1');
       });
@@ -56,9 +53,7 @@ void main() {
       TextFieldBloc<dynamic> fieldBloc;
       TextFieldBlocState<dynamic> initialState;
 
-      fieldBloc = TextFieldBloc<dynamic>(
-        name: 'name',
-      );
+      fieldBloc = TextFieldBloc<dynamic>(name: 'name');
 
       initialState = createTextState<dynamic>(
         value: '',
@@ -70,10 +65,7 @@ void main() {
         name: 'name',
       );
 
-      expect(
-        fieldBloc.state,
-        initialState,
-      );
+      expect(fieldBloc.state, initialState);
 
       fieldBloc.close();
 
@@ -93,10 +85,7 @@ void main() {
         name: 'name',
       );
 
-      expect(
-        fieldBloc.state,
-        initialState,
-      );
+      expect(fieldBloc.state, initialState);
     });
 
     test('toJson return value', () async {
@@ -110,10 +99,7 @@ void main() {
 
       final fieldBloc = TextFieldBloc<int>(extraData: 0);
 
-      expect(
-        fieldBloc.state.extraData,
-        expectedExtraData,
-      );
+      expect(fieldBloc.state.extraData, expectedExtraData);
     });
   });
 }

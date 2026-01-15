@@ -100,9 +100,8 @@ class DemoFormWidget extends StatelessWidget {
                       labelText: 'Country *',
                       prefixIcon: Icon(Icons.public),
                     ),
-                    itemBuilder: (context, value) => FieldItem(
-                      child: Text(value),
-                    ),
+                    itemBuilder: (context, value) =>
+                        FieldItem(child: Text(value)),
                   ),
 
                   const SizedBox(height: 24),
@@ -113,15 +112,14 @@ class DemoFormWidget extends StatelessWidget {
                   Text(
                     'Select your interests (optional)',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   CheckboxGroupFieldBlocBuilder<String>(
                     multiSelectFieldBloc: formBloc.interests,
-                    itemBuilder: (context, value) => FieldItem(
-                      child: Text(value),
-                    ),
+                    itemBuilder: (context, value) =>
+                        FieldItem(child: Text(value)),
                   ),
 
                   const SizedBox(height: 24),
@@ -181,9 +179,9 @@ class DemoFormWidget extends StatelessWidget {
     return Text(
       title,
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+        fontWeight: FontWeight.bold,
+        color: Theme.of(context).colorScheme.primary,
+      ),
     );
   }
 
@@ -200,8 +198,9 @@ class DemoFormWidget extends StatelessWidget {
           children: [
             Icon(
               isError ? Icons.error_outline : Icons.check_circle_outline,
-              color:
-                  isError ? Theme.of(context).colorScheme.error : Colors.green,
+              color: isError
+                  ? Theme.of(context).colorScheme.error
+                  : Colors.green,
             ),
             const SizedBox(width: 8),
             Text(title),

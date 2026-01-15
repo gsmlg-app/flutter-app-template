@@ -9,10 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class LocalHtmlViewer extends StatefulWidget {
-  const LocalHtmlViewer({
-    super.key,
-    required this.indexFile,
-  });
+  const LocalHtmlViewer({super.key, required this.indexFile});
 
   final String indexFile;
 
@@ -38,12 +35,14 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
 
     while (attempt < maxRetries) {
       _logger.d(
-          'LocalHtmlViewer: Attempt ${attempt + 1} of $maxRetries at ${DateTime.now()}');
+        'LocalHtmlViewer: Attempt ${attempt + 1} of $maxRetries at ${DateTime.now()}',
+      );
 
       final success = await _initializeWebView();
       if (success) {
         _logger.d(
-            'LocalHtmlViewer: Successfully loaded on attempt ${attempt + 1}');
+          'LocalHtmlViewer: Successfully loaded on attempt ${attempt + 1}',
+        );
         return;
       }
 
@@ -67,7 +66,8 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
     try {
       _logger.d('LocalHtmlViewer: Loading file ${widget.indexFile}');
       _logger.d(
-          'LocalHtmlViewer: File exists: ${File(widget.indexFile).existsSync()}');
+        'LocalHtmlViewer: File exists: ${File(widget.indexFile).existsSync()}',
+      );
 
       // Normalize the file path for the platform
       final normalizedPath = Uri.file(widget.indexFile).toFilePath();
@@ -94,8 +94,9 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
         return false; // Return failure instead of setting final error
       }
 
-      _logger
-          .d('LocalHtmlViewer: File found, size: ${file.lengthSync()} bytes');
+      _logger.d(
+        'LocalHtmlViewer: File found, size: ${file.lengthSync()} bytes',
+      );
 
       // Additional wait time to ensure file is fully released by OS
       await Future.delayed(Duration(milliseconds: 500));
@@ -133,7 +134,8 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
       // Load the file with proper error handling
       await controller.loadFile(widget.indexFile);
       _logger.d(
-          'LocalHtmlViewer: WebView loadFile completed for: ${widget.indexFile}');
+        'LocalHtmlViewer: WebView loadFile completed for: ${widget.indexFile}',
+      );
 
       // Set the controller and mark as initialized
       setState(() {
@@ -196,12 +198,8 @@ class _LocalHtmlViewerState extends State<LocalHtmlViewer> {
         Factory<HorizontalDragGestureRecognizer>(
           () => HorizontalDragGestureRecognizer(),
         ),
-        Factory<ScaleGestureRecognizer>(
-          () => ScaleGestureRecognizer(),
-        ),
-        Factory<TapGestureRecognizer>(
-          () => TapGestureRecognizer(),
-        ),
+        Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()),
+        Factory<TapGestureRecognizer>(() => TapGestureRecognizer()),
       },
     );
   }

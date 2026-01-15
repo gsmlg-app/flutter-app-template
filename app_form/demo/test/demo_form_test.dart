@@ -119,10 +119,7 @@ void main() {
 
       formBloc.submit();
 
-      await expectLater(
-        formBloc.stream,
-        emitsThrough(isA<FormBlocSuccess>()),
-      );
+      await expectLater(formBloc.stream, emitsThrough(isA<FormBlocSuccess>()));
     });
 
     test('form submission with invalid data fails', () async {

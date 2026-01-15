@@ -54,15 +54,9 @@ class ObscureSuffixButtonTheme extends Equatable {
   /// This icon will be displayed when obscure text is `false`.
   final Widget? falseIcon;
 
-  const ObscureSuffixButtonTheme({
-    this.trueIcon,
-    this.falseIcon,
-  });
+  const ObscureSuffixButtonTheme({this.trueIcon, this.falseIcon});
 
-  ObscureSuffixButtonTheme copyWith({
-    Widget? trueIcon,
-    Widget? falseIcon,
-  }) {
+  ObscureSuffixButtonTheme copyWith({Widget? trueIcon, Widget? falseIcon}) {
     return ObscureSuffixButtonTheme(
       trueIcon: trueIcon ?? this.trueIcon,
       falseIcon: falseIcon ?? this.falseIcon,

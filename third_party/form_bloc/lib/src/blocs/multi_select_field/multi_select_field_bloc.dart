@@ -2,11 +2,14 @@ part of '../field/field_bloc.dart';
 
 /// A `FieldBloc` used to select multiple items
 /// from multiple items.
-class MultiSelectFieldBloc<Value, ExtraData> extends SingleFieldBloc<
-    List<Value>,
-    Value,
-    MultiSelectFieldBlocState<Value, ExtraData>,
-    ExtraData?> {
+class MultiSelectFieldBloc<Value, ExtraData>
+    extends
+        SingleFieldBloc<
+          List<Value>,
+          Value,
+          MultiSelectFieldBlocState<Value, ExtraData>,
+          ExtraData?
+        > {
   /// ## MultiSelectFieldBloc<Value, ExtraData>
   ///
   /// ### Properties:
@@ -53,36 +56,36 @@ class MultiSelectFieldBloc<Value, ExtraData> extends SingleFieldBloc<
     dynamic Function(List<Value> value)? toJson,
     ExtraData? extraData,
   }) : super(
-          equality: const ListEquality<Never>(),
-          initialState: MultiSelectFieldBlocState(
-            isValueChanged: false,
-            initialValue: initialValue,
-            updatedValue: initialValue,
-            value: initialValue,
-            error: FieldBlocUtils.getInitialStateError(
-              validators: validators,
-              value: initialValue,
-            ),
-            isDirty: false,
-            suggestions: suggestions,
-            isValidated: FieldBlocUtils.getInitialIsValidated(
-              FieldBlocUtils.getInitialStateIsValidating(
-                asyncValidators: asyncValidators,
-                validators: validators,
-                value: initialValue,
-              ),
-            ),
-            isValidating: FieldBlocUtils.getInitialStateIsValidating(
-              asyncValidators: asyncValidators,
-              validators: validators,
-              value: initialValue,
-            ),
-            name: FieldBlocUtils.generateName(name),
-            items: SingleFieldBloc._itemsWithoutDuplicates(items),
-            toJson: toJson,
-            extraData: extraData,
-          ),
-        );
+         equality: const ListEquality<Never>(),
+         initialState: MultiSelectFieldBlocState(
+           isValueChanged: false,
+           initialValue: initialValue,
+           updatedValue: initialValue,
+           value: initialValue,
+           error: FieldBlocUtils.getInitialStateError(
+             validators: validators,
+             value: initialValue,
+           ),
+           isDirty: false,
+           suggestions: suggestions,
+           isValidated: FieldBlocUtils.getInitialIsValidated(
+             FieldBlocUtils.getInitialStateIsValidating(
+               asyncValidators: asyncValidators,
+               validators: validators,
+               value: initialValue,
+             ),
+           ),
+           isValidating: FieldBlocUtils.getInitialStateIsValidating(
+             asyncValidators: asyncValidators,
+             validators: validators,
+             value: initialValue,
+           ),
+           name: FieldBlocUtils.generateName(name),
+           items: SingleFieldBloc._itemsWithoutDuplicates(items),
+           toJson: toJson,
+           extraData: extraData,
+         ),
+       );
 
   /// Set [items] to the `items` of the current state.
   ///
@@ -92,21 +95,22 @@ class MultiSelectFieldBloc<Value, ExtraData> extends SingleFieldBloc<
   void updateItems(List<Value> items) {
     items = SingleFieldBloc._itemsWithoutDuplicates(items);
 
-    emit(state.copyWith(
-      items: items,
-      value: items.contains(value) ? null : Param([]),
-    ));
+    emit(
+      state.copyWith(
+        items: items,
+        value: items.contains(value) ? null : Param([]),
+      ),
+    );
   }
 
   /// Add [item] to the current `items`
   /// of the current state.
   void addItem(Value item) {
-    emit(state.copyWith(
-      items: SingleFieldBloc._itemsWithoutDuplicates([
-        ...state.items,
-        item,
-      ]),
-    ));
+    emit(
+      state.copyWith(
+        items: SingleFieldBloc._itemsWithoutDuplicates([...state.items, item]),
+      ),
+    );
   }
 
   /// Remove [item] to the current `items`
@@ -114,13 +118,13 @@ class MultiSelectFieldBloc<Value, ExtraData> extends SingleFieldBloc<
   void removeItem(Value item) {
     var items = state.items;
     if (items.isNotEmpty) {
-      items = SingleFieldBloc._itemsWithoutDuplicates(
-        [...items]..remove(item),
+      items = SingleFieldBloc._itemsWithoutDuplicates([...items]..remove(item));
+      emit(
+        state.copyWith(
+          items: items,
+          value: items.contains(value) ? null : Param([]),
+        ),
       );
-      emit(state.copyWith(
-        items: items,
-        value: items.contains(value) ? null : Param([]),
-      ));
     }
   }
 
@@ -155,20 +159,26 @@ class MultiSelectFieldBloc<Value, ExtraData> extends SingleFieldBloc<
   /// {@macro form_bloc.field_bloc.update_value}
   void select(Value valueToSelect) {
     var newValue = state.value;
-    newValue =
-        SingleFieldBloc._itemsWithoutDuplicates([...newValue, valueToSelect]);
+    newValue = SingleFieldBloc._itemsWithoutDuplicates([
+      ...newValue,
+      valueToSelect,
+    ]);
     if (_canUpdateValue(value: newValue, isInitialValue: false)) {
       final error = _getError(value: newValue);
-      final isValidating =
-          _getAsyncValidatorsError(value: newValue, error: error);
+      final isValidating = _getAsyncValidatorsError(
+        value: newValue,
+        error: error,
+      );
 
-      emit(state.copyWith(
-        isValueChanged: true,
-        value: Param(newValue),
-        error: Param(error),
-        isValidated: _isValidated(isValidating),
-        isValidating: isValidating,
-      ));
+      emit(
+        state.copyWith(
+          isValueChanged: true,
+          value: Param(newValue),
+          error: Param(error),
+          isValidated: _isValidated(isValidating),
+          isValidating: isValidating,
+        ),
+      );
     }
   }
 
@@ -183,16 +193,20 @@ class MultiSelectFieldBloc<Value, ExtraData> extends SingleFieldBloc<
     if (_canUpdateValue(value: newValue, isInitialValue: false)) {
       final error = _getError(value: newValue);
 
-      final isValidating =
-          _getAsyncValidatorsError(value: newValue, error: error);
+      final isValidating = _getAsyncValidatorsError(
+        value: newValue,
+        error: error,
+      );
 
-      emit(state.copyWith(
-        isValueChanged: true,
-        value: Param(newValue),
-        error: Param(error),
-        isValidated: _isValidated(isValidating),
-        isValidating: isValidating,
-      ));
+      emit(
+        state.copyWith(
+          isValueChanged: true,
+          value: Param(newValue),
+          error: Param(error),
+          isValidated: _isValidated(isValidating),
+          isValidating: isValidating,
+        ),
+      );
     }
   }
 }

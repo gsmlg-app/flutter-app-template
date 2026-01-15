@@ -107,19 +107,19 @@ class FormTheme extends Equatable {
 
   @override
   List<Object?> get props => [
-        textStyle,
-        textColor,
-        decorationTheme,
-        padding,
-        checkboxTheme,
-        choiceChipTheme,
-        filterChipTheme,
-        dateTimeTheme,
-        dropdownTheme,
-        switchTheme,
-        radioTheme,
-        textTheme.hashCode
-      ];
+    textStyle,
+    textColor,
+    decorationTheme,
+    padding,
+    checkboxTheme,
+    choiceChipTheme,
+    filterChipTheme,
+    dateTimeTheme,
+    dropdownTheme,
+    switchTheme,
+    radioTheme,
+    textTheme.hashCode,
+  ];
 
   @override
   String toString() {
@@ -180,15 +180,21 @@ class CheckboxFieldTheme extends FieldTheme {
   }
 
   @override
-  List<Object?> get props =>
-      [super.props, checkboxTheme, controlAffinity, canTapItemTile];
+  List<Object?> get props => [
+    super.props,
+    checkboxTheme,
+    controlAffinity,
+    canTapItemTile,
+  ];
 
   @override
   String toString([ToString? toString]) {
-    return super.toString(ToString(runtimeType)
-      ..add('checkboxTheme', checkboxTheme)
-      ..add('controlAffinity', controlAffinity)
-      ..add('canTapItemTile', canTapItemTile));
+    return super.toString(
+      ToString(runtimeType)
+        ..add('checkboxTheme', checkboxTheme)
+        ..add('controlAffinity', controlAffinity)
+        ..add('canTapItemTile', canTapItemTile),
+    );
   }
 }
 
@@ -201,15 +207,9 @@ class WrapChipFieldTheme extends Equatable {
   /// Defaults value is `8.0`
   final double? runSpacing;
 
-  const WrapChipFieldTheme({
-    this.spacing,
-    this.runSpacing,
-  });
+  const WrapChipFieldTheme({this.spacing, this.runSpacing});
 
-  WrapChipFieldTheme copyWith({
-    double? spacing,
-    double? runSpacing,
-  }) {
+  WrapChipFieldTheme copyWith({double? spacing, double? runSpacing}) {
     return WrapChipFieldTheme(
       spacing: spacing ?? this.spacing,
       runSpacing: runSpacing ?? this.runSpacing,
@@ -336,20 +336,22 @@ class DateTimeFieldTheme extends FieldTheme {
 
   @override
   List<Object?> get props => [
-        super.props,
-        textAlign,
-        showClearIcon,
-        clearIcon,
-        clearSuffixButtonTheme
-      ];
+    super.props,
+    textAlign,
+    showClearIcon,
+    clearIcon,
+    clearSuffixButtonTheme,
+  ];
 
   @override
   String toString([ToString? toString]) {
-    return super.toString(ToString(runtimeType)
-      ..add('textAlign', textAlign)
-      ..add('showClearIcon', showClearIcon)
-      ..add('clearIcon', clearIcon)
-      ..add('clearSuffixButtonTheme', clearSuffixButtonTheme));
+    return super.toString(
+      ToString(runtimeType)
+        ..add('textAlign', textAlign)
+        ..add('showClearIcon', showClearIcon)
+        ..add('clearIcon', clearIcon)
+        ..add('clearSuffixButtonTheme', clearSuffixButtonTheme),
+    );
   }
 }
 
@@ -405,31 +407,31 @@ class DropdownFieldTheme extends FieldTheme {
 
   @override
   List<Object?> get props => [
-        super.props,
-        textOverflow,
-        maxLines,
-        selectedTextStyle,
-        selectedMaxLines,
-        moreIcon
-      ];
+    super.props,
+    textOverflow,
+    maxLines,
+    selectedTextStyle,
+    selectedMaxLines,
+    moreIcon,
+  ];
 
   @override
   String toString([ToString? toString]) {
-    return super.toString(ToString(runtimeType)
-      ..add('textOverflow', textOverflow)
-      ..add('maxLines', maxLines)
-      ..add('selectedTextStyle', selectedTextStyle)
-      ..add('selectedMaxLines', selectedMaxLines)
-      ..add('moreIcon', moreIcon));
+    return super.toString(
+      ToString(runtimeType)
+        ..add('textOverflow', textOverflow)
+        ..add('maxLines', maxLines)
+        ..add('selectedTextStyle', selectedTextStyle)
+        ..add('selectedMaxLines', selectedMaxLines)
+        ..add('moreIcon', moreIcon),
+    );
   }
 }
 
 class SliderFieldTheme extends Equatable {
   final SliderThemeData? sliderTheme;
 
-  const SliderFieldTheme({
-    this.sliderTheme,
-  });
+  const SliderFieldTheme({this.sliderTheme});
 
   @override
   List<Object?> get props => [sliderTheme];
@@ -477,9 +479,11 @@ class SwitchFieldTheme extends FieldTheme {
 
   @override
   String toString([ToString? toString]) {
-    return super.toString(ToString(runtimeType)
-      ..add('switchTheme', switchTheme)
-      ..add('controlAffinity', controlAffinity));
+    return super.toString(
+      ToString(runtimeType)
+        ..add('switchTheme', switchTheme)
+        ..add('controlAffinity', controlAffinity),
+    );
   }
 }
 
@@ -525,18 +529,20 @@ class RadioFieldTheme extends FieldTheme {
 
   @override
   List<Object?> get props => [
-        super.props,
-        radioTheme,
-        canTapItemTile,
-        canDeselect,
-      ];
+    super.props,
+    radioTheme,
+    canTapItemTile,
+    canDeselect,
+  ];
 
   @override
   String toString([ToString? toString]) {
-    return super.toString(ToString(runtimeType)
-      ..add('radioTheme', radioTheme)
-      ..add('canTapItemTile', canTapItemTile)
-      ..add('canDeselect', canDeselect));
+    return super.toString(
+      ToString(runtimeType)
+        ..add('radioTheme', radioTheme)
+        ..add('canTapItemTile', canTapItemTile)
+        ..add('canDeselect', canDeselect),
+    );
   }
 }
 
@@ -603,25 +609,27 @@ class TextFieldTheme extends FieldTheme {
 
   @override
   List<Object?> get props => [
-        super.props,
-        textAlign,
-        clearIcon,
-        clearSuffixButtonTheme,
-        obscureTrueIcon,
-        obscureFalseIcon,
-        obscureSuffixButtonTheme,
-        suggestionsTextStyle
-      ];
+    super.props,
+    textAlign,
+    clearIcon,
+    clearSuffixButtonTheme,
+    obscureTrueIcon,
+    obscureFalseIcon,
+    obscureSuffixButtonTheme,
+    suggestionsTextStyle,
+  ];
 
   @override
   String toString([ToString? toString]) {
-    return super.toString(ToString(runtimeType)
-      ..add('textAlign', textAlign)
-      ..add('clearIcon', clearIcon)
-      ..add('clearSuffixButtonTheme', clearSuffixButtonTheme)
-      ..add('obscureTrueIcon', obscureTrueIcon)
-      ..add('obscureFalseIcon', obscureFalseIcon)
-      ..add('obscureSuffixButtonTheme', obscureSuffixButtonTheme)
-      ..add('suggestionsTextStyle', suggestionsTextStyle));
+    return super.toString(
+      ToString(runtimeType)
+        ..add('textAlign', textAlign)
+        ..add('clearIcon', clearIcon)
+        ..add('clearSuffixButtonTheme', clearSuffixButtonTheme)
+        ..add('obscureTrueIcon', obscureTrueIcon)
+        ..add('obscureFalseIcon', obscureFalseIcon)
+        ..add('obscureSuffixButtonTheme', obscureSuffixButtonTheme)
+        ..add('suggestionsTextStyle', suggestionsTextStyle),
+    );
   }
 }

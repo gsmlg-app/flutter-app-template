@@ -78,7 +78,7 @@ SelectFieldBlocState<Value, ExtraData> createSelectState<Value, ExtraData>({
 }
 
 MultiSelectFieldBlocState<Value, ExtraData>
-    createMultiSelectState<Value, ExtraData>({
+createMultiSelectState<Value, ExtraData>({
   FormBloc<dynamic, dynamic>? formBloc,
   String name = 'fieldName',
   List<Value>? value,
@@ -131,7 +131,7 @@ InputFieldBlocState<Value, ExtraData> createInputState<Value, ExtraData>({
 }
 
 ListFieldBlocState<T, ExtraData>
-    createListState<T extends FieldBloc, ExtraData>({
+createListState<T extends FieldBloc, ExtraData>({
   FormBloc<dynamic, dynamic>? formBloc,
   required String name,
   bool isValidating = false,
@@ -150,7 +150,7 @@ ListFieldBlocState<T, ExtraData>
 }
 
 GroupFieldBlocState<T, ExtraData>
-    createGroupState<T extends FieldBloc, ExtraData>({
+createGroupState<T extends FieldBloc, ExtraData>({
   FormBloc<dynamic, dynamic>? formBloc,
   required String name,
   bool isValidating = false,

@@ -58,13 +58,11 @@ class WebSettingsTile extends StatelessWidget {
               children: [
                 if (leading != null)
                   Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                      start: 24,
-                    ),
+                    padding: const EdgeInsetsDirectional.only(start: 24),
                     child: IconTheme(
-                      data: IconTheme.of(context).copyWith(
-                        color: theme.themeData.leadingIconsColor,
-                      ),
+                      data: IconTheme.of(
+                        context,
+                      ).copyWith(color: theme.themeData.leadingIconsColor),
                       child: leading!,
                     ),
                   ),
@@ -131,7 +129,8 @@ class WebSettingsTile extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsetsDirectional.only(end: 8),
                         child: Switch(
-                          activeThumbColor: activeSwitchColor ??
+                          activeThumbColor:
+                              activeSwitchColor ??
                               Color.fromRGBO(138, 180, 248, 1.0),
                           value: initialValue,
                           onChanged: onToggle,
@@ -141,11 +140,14 @@ class WebSettingsTile extends StatelessWidget {
                   )
                 else if (tileType == SettingsTileType.switchTile)
                   Padding(
-                    padding:
-                        const EdgeInsetsDirectional.only(start: 16, end: 8),
+                    padding: const EdgeInsetsDirectional.only(
+                      start: 16,
+                      end: 8,
+                    ),
                     child: Switch(
                       value: initialValue,
-                      activeThumbColor: activeSwitchColor ??
+                      activeThumbColor:
+                          activeSwitchColor ??
                           Color.fromRGBO(138, 180, 248, 1.0),
                       onChanged: onToggle,
                     ),

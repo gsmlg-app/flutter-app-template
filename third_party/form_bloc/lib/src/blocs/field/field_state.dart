@@ -174,18 +174,18 @@ abstract class FieldBlocState<Value, Suggestion, ExtraData> extends Equatable
 
   @override
   List<Object?> get props => [
-        isValueChanged,
-        updatedValue,
-        initialValue,
-        value,
-        error,
-        suggestions,
-        isDirty,
-        isValidated,
-        isValidating,
-        extraData,
-        formBloc,
-      ];
+    isValueChanged,
+    updatedValue,
+    initialValue,
+    value,
+    error,
+    suggestions,
+    isDirty,
+    isValidated,
+    isValidating,
+    extraData,
+    formBloc,
+  ];
 }
 
 abstract class MultiFieldBlocState<ExtraData> extends Equatable

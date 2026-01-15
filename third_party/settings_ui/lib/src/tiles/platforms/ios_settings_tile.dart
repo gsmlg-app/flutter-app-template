@@ -71,10 +71,7 @@ class _IOSSettingsTileState extends State<IOSSettingsTile> {
   }) {
     Widget content = buildTileContent(context, theme, additionalInfo);
     if (!Platform.isIOS) {
-      content = Material(
-        color: Colors.transparent,
-        child: content,
-      );
+      content = Material(color: Colors.transparent, child: content);
     }
 
     return ClipRRect(
@@ -105,14 +102,9 @@ class _IOSSettingsTileState extends State<IOSSettingsTile> {
         top: textScaler.scale(8),
         bottom: additionalInfo.needToShowDivider ? 24 : textScaler.scale(8),
       ),
-      decoration: BoxDecoration(
-        color: theme.themeData.settingsListBackground,
-      ),
+      decoration: BoxDecoration(color: theme.themeData.settingsListBackground),
       child: DefaultTextStyle(
-        style: TextStyle(
-          color: theme.themeData.titleTextColor,
-          fontSize: 13,
-        ),
+        style: TextStyle(color: theme.themeData.titleTextColor, fontSize: 13),
         child: widget.description!,
       ),
     );
@@ -125,33 +117,35 @@ class _IOSSettingsTileState extends State<IOSSettingsTile> {
     final textScaler = MediaQuery.of(context).textScaler;
     return switch (widget.tileType) {
       SettingsTileType.switchTile => CupertinoSwitch(
-          value: widget.initialValue ?? true,
-          onChanged: widget.onToggle,
-          activeTrackColor: widget.enabled
-              ? widget.activeSwitchColor
-              : theme.themeData.inactiveTitleColor,
-        ),
-      SettingsTileType.navigationTile => widget.value != null
-          ? DefaultTextStyle(
-              style: TextStyle(
-                color: widget.enabled
-                    ? theme.themeData.trailingTextColor
-                    : theme.themeData.inactiveTitleColor,
-                fontSize: 17,
-              ),
-              child: widget.value!,
-            )
-          : Padding(
-              padding: const EdgeInsetsDirectional.only(start: 6, end: 2),
-              child: IconTheme(
-                data: IconTheme.of(context)
-                    .copyWith(color: theme.themeData.leadingIconsColor),
-                child: Icon(
-                  CupertinoIcons.chevron_forward,
-                  size: textScaler.scale(18),
+        value: widget.initialValue ?? true,
+        onChanged: widget.onToggle,
+        activeTrackColor: widget.enabled
+            ? widget.activeSwitchColor
+            : theme.themeData.inactiveTitleColor,
+      ),
+      SettingsTileType.navigationTile =>
+        widget.value != null
+            ? DefaultTextStyle(
+                style: TextStyle(
+                  color: widget.enabled
+                      ? theme.themeData.trailingTextColor
+                      : theme.themeData.inactiveTitleColor,
+                  fontSize: 17,
+                ),
+                child: widget.value!,
+              )
+            : Padding(
+                padding: const EdgeInsetsDirectional.only(start: 6, end: 2),
+                child: IconTheme(
+                  data: IconTheme.of(
+                    context,
+                  ).copyWith(color: theme.themeData.leadingIconsColor),
+                  child: Icon(
+                    CupertinoIcons.chevron_forward,
+                    size: textScaler.scale(18),
+                  ),
                 ),
               ),
-            ),
       _ => widget.trailing ?? const SizedBox(),
     };
   }
@@ -238,20 +232,24 @@ class _IOSSettingsTileState extends State<IOSSettingsTile> {
                           ),
                         ),
                         SizedBox(
-                            width: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.fontSize),
+                          width: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.fontSize,
+                        ),
                         const Spacer(),
                         Expanded(
-                            child: Container(
-                          padding: EdgeInsetsDirectional.only(
-                            top: textScaler.scale(12.5),
-                            bottom: textScaler.scale(12.5),
+                          child: Container(
+                            padding: EdgeInsetsDirectional.only(
+                              top: textScaler.scale(12.5),
+                              bottom: textScaler.scale(12.5),
+                            ),
+                            alignment: Alignment.topRight,
+                            child: buildTrailing(
+                              context: context,
+                              theme: theme,
+                            ),
                           ),
-                          alignment: Alignment.topRight,
-                          child: buildTrailing(context: context, theme: theme),
-                        )),
+                        ),
                       ],
                     ),
                   ),

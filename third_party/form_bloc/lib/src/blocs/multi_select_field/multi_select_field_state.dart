@@ -20,10 +20,10 @@ class MultiSelectFieldBlocState<Value, ExtraData>
     super.toJson,
     super.extraData,
   }) : super(
-          initialValue: EquatableList(initialValue),
-          updatedValue: EquatableList(updatedValue),
-          value: EquatableList(value),
-        );
+         initialValue: EquatableList(initialValue),
+         updatedValue: EquatableList(updatedValue),
+         value: EquatableList(value),
+       );
 
   @override
   MultiSelectFieldBlocState<Value, ExtraData> copyWith({

@@ -34,11 +34,7 @@ class ErrorReportingService {
       additionalData: additionalData,
     );
 
-    _logger.e(
-      'Error: ${errorRecord['message']}',
-      error,
-      stackTrace,
-    );
+    _logger.e('Error: ${errorRecord['message']}', error, stackTrace);
 
     await _storeError(errorRecord);
 

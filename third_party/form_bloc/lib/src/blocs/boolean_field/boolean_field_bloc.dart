@@ -1,8 +1,14 @@
 part of '../field/field_bloc.dart';
 
 /// A `FieldBloc` used for `bool` type.
-class BooleanFieldBloc<ExtraData> extends SingleFieldBloc<bool, bool,
-    BooleanFieldBlocState<ExtraData>, ExtraData?> {
+class BooleanFieldBloc<ExtraData>
+    extends
+        SingleFieldBloc<
+          bool,
+          bool,
+          BooleanFieldBlocState<ExtraData>,
+          ExtraData?
+        > {
   /// ## BooleanFieldBloc<ExtraData>
   ///
   /// ### Properties:
@@ -43,34 +49,34 @@ class BooleanFieldBloc<ExtraData> extends SingleFieldBloc<bool, bool,
     Suggestions<bool>? suggestions,
     ExtraData? extraData,
   }) : super(
-          initialState: BooleanFieldBlocState(
-            isValueChanged: false,
-            initialValue: initialValue,
-            updatedValue: initialValue,
-            value: initialValue,
-            error: FieldBlocUtils.getInitialStateError(
-              validators: validators,
-              value: initialValue,
-            ),
-            isDirty: false,
-            suggestions: suggestions,
-            isValidated: FieldBlocUtils.getInitialIsValidated(
-              FieldBlocUtils.getInitialStateIsValidating(
-                asyncValidators: asyncValidators,
-                validators: validators,
-                value: initialValue,
-              ),
-            ),
-            isValidating: FieldBlocUtils.getInitialStateIsValidating(
-              asyncValidators: asyncValidators,
-              validators: validators,
-              value: initialValue,
-            ),
-            name: FieldBlocUtils.generateName(name),
-            toJson: (value) => value,
-            extraData: extraData,
-          ),
-        );
+         initialState: BooleanFieldBlocState(
+           isValueChanged: false,
+           initialValue: initialValue,
+           updatedValue: initialValue,
+           value: initialValue,
+           error: FieldBlocUtils.getInitialStateError(
+             validators: validators,
+             value: initialValue,
+           ),
+           isDirty: false,
+           suggestions: suggestions,
+           isValidated: FieldBlocUtils.getInitialIsValidated(
+             FieldBlocUtils.getInitialStateIsValidating(
+               asyncValidators: asyncValidators,
+               validators: validators,
+               value: initialValue,
+             ),
+           ),
+           isValidating: FieldBlocUtils.getInitialStateIsValidating(
+             asyncValidators: asyncValidators,
+             validators: validators,
+             value: initialValue,
+           ),
+           name: FieldBlocUtils.generateName(name),
+           toJson: (value) => value,
+           extraData: extraData,
+         ),
+       );
 
   /// Set the `value` to `false` of the current state.
   ///

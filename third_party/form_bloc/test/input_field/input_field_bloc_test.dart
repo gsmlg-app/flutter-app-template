@@ -40,10 +40,7 @@ void main() {
           // state1,
           state2,
         ];
-        expect(
-          fieldBloc.stream,
-          emitsInOrder(expectedStates),
-        );
+        expect(fieldBloc.stream, emitsInOrder(expectedStates));
 
         fieldBloc.updateValue(true);
       });
@@ -68,10 +65,7 @@ void main() {
         name: 'name',
       );
 
-      expect(
-        fieldBloc.state,
-        initialState,
-      );
+      expect(fieldBloc.state, initialState);
 
       fieldBloc.close();
 
@@ -91,23 +85,15 @@ void main() {
         name: 'name',
       );
 
-      expect(
-        fieldBloc.state,
-        initialState,
-      );
+      expect(fieldBloc.state, initialState);
     });
 
     test('If toJson is null, return value', () async {
       final expectedValue = 0;
 
-      final fieldBloc = InputFieldBloc<int, dynamic>(
-        initialValue: 0,
-      );
+      final fieldBloc = InputFieldBloc<int, dynamic>(initialValue: 0);
 
-      expect(
-        fieldBloc.state.toJson(),
-        expectedValue,
-      );
+      expect(fieldBloc.state.toJson(), expectedValue);
     });
 
     test('toJson is added to the state', () async {
@@ -118,22 +104,18 @@ void main() {
         toJson: (v) => v.toString(),
       );
 
-      expect(
-        fieldBloc.state.toJson(),
-        expectedValue,
-      );
+      expect(fieldBloc.state.toJson(), expectedValue);
     });
 
     test('extraData added to extraData in state', () async {
       final expectedExtraData = 0;
 
-      final fieldBloc =
-          InputFieldBloc<int?, int>(initialValue: null, extraData: 0);
-
-      expect(
-        fieldBloc.state.extraData,
-        expectedExtraData,
+      final fieldBloc = InputFieldBloc<int?, int>(
+        initialValue: null,
+        extraData: 0,
       );
+
+      expect(fieldBloc.state.extraData, expectedExtraData);
     });
   });
 }

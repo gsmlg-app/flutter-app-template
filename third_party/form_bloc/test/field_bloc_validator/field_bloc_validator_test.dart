@@ -43,31 +43,19 @@ void main() {
 
       group('valid:', () {
         test('Object', () {
-          expect(
-            FieldBlocValidators.required(Object()),
-            isNull,
-          );
+          expect(FieldBlocValidators.required(Object()), isNull);
         });
 
         test('true', () {
-          expect(
-            FieldBlocValidators.required(true),
-            isNull,
-          );
+          expect(FieldBlocValidators.required(true), isNull);
         });
 
         test('not empty String', () {
-          expect(
-            FieldBlocValidators.required(' '),
-            isNull,
-          );
+          expect(FieldBlocValidators.required(' '), isNull);
         });
 
         test('not empty List', () {
-          expect(
-            FieldBlocValidators.required(<dynamic>[1]),
-            isNull,
-          );
+          expect(FieldBlocValidators.required(<dynamic>[1]), isNull);
         });
 
         test('not empty Map', () {
@@ -101,19 +89,11 @@ void main() {
       });
 
       group('valid:', () {
-        var emails = [
-          null,
-          '',
-          'example@domain.c',
-          'example@domain.com',
-        ];
+        var emails = [null, '', 'example@domain.c', 'example@domain.com'];
 
         for (var email in emails) {
           test('${email == null ? null : '"$email"'} ', () {
-            expect(
-              FieldBlocValidators.email(email),
-              isNull,
-            );
+            expect(FieldBlocValidators.email(email), isNull);
           });
         }
       });
@@ -121,10 +101,7 @@ void main() {
 
     group('passwordMin6Chars:', () {
       group('not valid:', () {
-        var passwords = <String?>[
-          '1',
-          '12345',
-        ];
+        var passwords = <String?>['1', '12345'];
 
         for (var password in passwords) {
           test('${password == null ? null : '"$password"'} ', () {
@@ -137,19 +114,11 @@ void main() {
       });
 
       group('valid:', () {
-        var passwords = [
-          null,
-          '',
-          '123456',
-          '1234567',
-        ];
+        var passwords = [null, '', '123456', '1234567'];
 
         for (var password in passwords) {
           test('${password == null ? null : '"$password"'} ', () {
-            expect(
-              FieldBlocValidators.passwordMin6Chars(password),
-              isNull,
-            );
+            expect(FieldBlocValidators.passwordMin6Chars(password), isNull);
           });
         }
       });

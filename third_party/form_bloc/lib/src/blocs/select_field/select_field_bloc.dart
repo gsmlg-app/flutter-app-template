@@ -2,8 +2,14 @@ part of '../field/field_bloc.dart';
 
 /// A `FieldBloc` used to select one item
 /// from multiple items.
-class SelectFieldBloc<Value, ExtraData> extends SingleFieldBloc<Value?, Value,
-    SelectFieldBlocState<Value, ExtraData>, ExtraData?> {
+class SelectFieldBloc<Value, ExtraData>
+    extends
+        SingleFieldBloc<
+          Value?,
+          Value,
+          SelectFieldBlocState<Value, ExtraData>,
+          ExtraData?
+        > {
   /// ## SelectFieldBloc<Value, ExtraData>
   ///
   /// ### Properties:
@@ -49,35 +55,35 @@ class SelectFieldBloc<Value, ExtraData> extends SingleFieldBloc<Value?, Value,
     dynamic Function(Value? value)? toJson,
     ExtraData? extraData,
   }) : super(
-          initialState: SelectFieldBlocState(
-            isValueChanged: false,
-            initialValue: initialValue,
-            updatedValue: initialValue,
-            value: initialValue,
-            error: FieldBlocUtils.getInitialStateError(
-              validators: validators,
-              value: initialValue,
-            ),
-            isDirty: false,
-            suggestions: suggestions,
-            isValidated: FieldBlocUtils.getInitialIsValidated(
-              FieldBlocUtils.getInitialStateIsValidating(
-                asyncValidators: asyncValidators,
-                validators: validators,
-                value: initialValue,
-              ),
-            ),
-            isValidating: FieldBlocUtils.getInitialStateIsValidating(
-              asyncValidators: asyncValidators,
-              validators: validators,
-              value: initialValue,
-            ),
-            name: FieldBlocUtils.generateName(name),
-            items: SingleFieldBloc._itemsWithoutDuplicates(items),
-            toJson: toJson,
-            extraData: extraData,
-          ),
-        );
+         initialState: SelectFieldBlocState(
+           isValueChanged: false,
+           initialValue: initialValue,
+           updatedValue: initialValue,
+           value: initialValue,
+           error: FieldBlocUtils.getInitialStateError(
+             validators: validators,
+             value: initialValue,
+           ),
+           isDirty: false,
+           suggestions: suggestions,
+           isValidated: FieldBlocUtils.getInitialIsValidated(
+             FieldBlocUtils.getInitialStateIsValidating(
+               asyncValidators: asyncValidators,
+               validators: validators,
+               value: initialValue,
+             ),
+           ),
+           isValidating: FieldBlocUtils.getInitialStateIsValidating(
+             asyncValidators: asyncValidators,
+             validators: validators,
+             value: initialValue,
+           ),
+           name: FieldBlocUtils.generateName(name),
+           items: SingleFieldBloc._itemsWithoutDuplicates(items),
+           toJson: toJson,
+           extraData: extraData,
+         ),
+       );
 
   /// Set [items] to the `items` of the current state.
   ///
@@ -87,18 +93,22 @@ class SelectFieldBloc<Value, ExtraData> extends SingleFieldBloc<Value?, Value,
   void updateItems(List<Value> items) {
     items = SingleFieldBloc._itemsWithoutDuplicates(items);
 
-    emit(state.copyWith(
-      items: items,
-      value: items.contains(value) ? null : Param(null),
-    ));
+    emit(
+      state.copyWith(
+        items: items,
+        value: items.contains(value) ? null : Param(null),
+      ),
+    );
   }
 
   /// Add [item] to the current `items`
   /// of the current state.
   void addItem(Value item) {
-    emit(state.copyWith(
-      items: SingleFieldBloc._itemsWithoutDuplicates([...state.items, item]),
-    ));
+    emit(
+      state.copyWith(
+        items: SingleFieldBloc._itemsWithoutDuplicates([...state.items, item]),
+      ),
+    );
   }
 
   /// Remove [item] to the current `items`
@@ -107,10 +117,12 @@ class SelectFieldBloc<Value, ExtraData> extends SingleFieldBloc<Value?, Value,
     var items = state.items;
     if (items.isNotEmpty) {
       items = SingleFieldBloc._itemsWithoutDuplicates([...items]..remove(item));
-      emit(state.copyWith(
-        items: items,
-        value: items.contains(value) ? null : Param(null),
-      ));
+      emit(
+        state.copyWith(
+          items: items,
+          value: items.contains(value) ? null : Param(null),
+        ),
+      );
     }
   }
 }

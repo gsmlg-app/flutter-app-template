@@ -33,10 +33,11 @@ const double kNavigationRailDefaultPadding = 8;
 
 /// Signature for a builder used by [AdaptiveScaffold.navigationRailDestinationBuilder] that converts a
 /// [NavigationDestination] to a [NavigationRailDestination].
-typedef NavigationRailDestinationBuilder = NavigationRailDestination Function(
-  int index,
-  NavigationDestination destination,
-);
+typedef NavigationRailDestinationBuilder =
+    NavigationRailDestination Function(
+      int index,
+      NavigationDestination destination,
+    );
 
 /// Implements the basic visual layout structure for
 /// [Material Design 3](https://m3.material.io/foundations/adaptive-design/overview)
@@ -97,8 +98,9 @@ class AdaptiveScaffold extends StatefulWidget {
     this.leadingUnextendedNavRail,
     this.leadingExtendedNavRail,
     this.trailingNavRail,
-    this.navigationRailPadding =
-        const EdgeInsets.all(kNavigationRailDefaultPadding),
+    this.navigationRailPadding = const EdgeInsets.all(
+      kNavigationRailDefaultPadding,
+    ),
     this.smallBody,
     this.body,
     this.mediumLargeBody,
@@ -133,9 +135,9 @@ class AdaptiveScaffold extends StatefulWidget {
     this.collapseIcon = Icons.menu_open,
     this.expandIcon = Icons.menu,
   }) : assert(
-          destinations.length >= 2,
-          'At least two destinations are required',
-        );
+         destinations.length >= 2,
+         'At least two destinations are required',
+       );
 
   /// The destinations to be used in navigation items. These are converted to
   /// [NavigationRailDestination]s and [BottomNavigationBarItem]s and inserted
@@ -380,8 +382,9 @@ class AdaptiveScaffold extends StatefulWidget {
     int? selectedIndex,
     bool extended = false,
     Color? backgroundColor,
-    EdgeInsetsGeometry padding =
-        const EdgeInsets.all(kNavigationRailDefaultPadding),
+    EdgeInsetsGeometry padding = const EdgeInsets.all(
+      kNavigationRailDefaultPadding,
+    ),
     Widget? leading,
     Widget? trailing,
     void Function(int)? onDestinationSelected,
@@ -395,41 +398,45 @@ class AdaptiveScaffold extends StatefulWidget {
     if (extended && width == 72) {
       width = 192;
     }
-    return Builder(builder: (BuildContext context) {
-      return Padding(
-        padding: padding,
-        child: SizedBox(
-          width: width,
-          height: MediaQuery.sizeOf(context).height,
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              return SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                  child: IntrinsicHeight(
-                    child: NavigationRail(
-                      labelType: labelType,
-                      leading: leading,
-                      trailing: trailing,
-                      onDestinationSelected: onDestinationSelected,
-                      groupAlignment: groupAlignment,
-                      backgroundColor: backgroundColor,
-                      extended: extended,
-                      selectedIndex: selectedIndex,
-                      selectedIconTheme: selectedIconTheme,
-                      unselectedIconTheme: unselectedIconTheme,
-                      selectedLabelTextStyle: selectedLabelTextStyle,
-                      unselectedLabelTextStyle: unSelectedLabelTextStyle,
-                      destinations: destinations,
+    return Builder(
+      builder: (BuildContext context) {
+        return Padding(
+          padding: padding,
+          child: SizedBox(
+            width: width,
+            height: MediaQuery.sizeOf(context).height,
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: IntrinsicHeight(
+                      child: NavigationRail(
+                        labelType: labelType,
+                        leading: leading,
+                        trailing: trailing,
+                        onDestinationSelected: onDestinationSelected,
+                        groupAlignment: groupAlignment,
+                        backgroundColor: backgroundColor,
+                        extended: extended,
+                        selectedIndex: selectedIndex,
+                        selectedIconTheme: selectedIconTheme,
+                        unselectedIconTheme: unselectedIconTheme,
+                        selectedLabelTextStyle: selectedLabelTextStyle,
+                        unselectedLabelTextStyle: unSelectedLabelTextStyle,
+                        destinations: destinations,
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   /// Public helper method to be used for creating a [BottomNavigationBar] from
@@ -442,18 +449,19 @@ class AdaptiveScaffold extends StatefulWidget {
   }) {
     return Builder(
       builder: (BuildContext context) {
-        final NavigationBarThemeData currentNavBarTheme =
-            NavigationBarTheme.of(context);
+        final NavigationBarThemeData currentNavBarTheme = NavigationBarTheme.of(
+          context,
+        );
         return NavigationBarTheme(
           data: currentNavBarTheme.copyWith(
-            iconTheme: WidgetStateProperty.resolveWith(
-              (Set<WidgetState> states) {
-                return currentNavBarTheme.iconTheme
-                        ?.resolve(states)
-                        ?.copyWith(size: iconSize) ??
-                    IconTheme.of(context).copyWith(size: iconSize);
-              },
-            ),
+            iconTheme: WidgetStateProperty.resolveWith((
+              Set<WidgetState> states,
+            ) {
+              return currentNavBarTheme.iconTheme
+                      ?.resolve(states)
+                      ?.copyWith(size: iconSize) ??
+                  IconTheme.of(context).copyWith(size: iconSize);
+            }),
           ),
           child: MediaQuery(
             data: MediaQuery.of(context).removePadding(removeTop: true),
@@ -476,34 +484,38 @@ class AdaptiveScaffold extends StatefulWidget {
     double? margin,
     int? itemColumns,
   }) {
-    return Builder(builder: (BuildContext context) {
-      final Breakpoint? currentBreakpoint =
-          Breakpoint.activeBreakpointIn(context, breakpoints);
-      final double thisMargin =
-          margin ?? currentBreakpoint?.margin ?? kMaterialCompactMargin;
-      final int thisColumns =
-          itemColumns ?? currentBreakpoint?.recommendedPanes ?? 1;
+    return Builder(
+      builder: (BuildContext context) {
+        final Breakpoint? currentBreakpoint = Breakpoint.activeBreakpointIn(
+          context,
+          breakpoints,
+        );
+        final double thisMargin =
+            margin ?? currentBreakpoint?.margin ?? kMaterialCompactMargin;
+        final int thisColumns =
+            itemColumns ?? currentBreakpoint?.recommendedPanes ?? 1;
 
-      return CustomScrollView(
-        primary: false,
-        controller: ScrollController(),
-        shrinkWrap: true,
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: <Widget>[
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(thisMargin),
-              child: _BrickLayout(
-                columns: thisColumns,
-                columnSpacing: thisMargin,
-                itemPadding: EdgeInsets.only(bottom: thisMargin),
-                children: widgets,
+        return CustomScrollView(
+          primary: false,
+          controller: ScrollController(),
+          shrinkWrap: true,
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: <Widget>[
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.all(thisMargin),
+                child: _BrickLayout(
+                  columns: thisColumns,
+                  columnSpacing: thisMargin,
+                  itemPadding: EdgeInsets.only(bottom: thisMargin),
+                  children: widgets,
+                ),
               ),
             ),
-          ),
-        ],
-      );
-    });
+          ],
+        );
+      },
+    );
   }
 
   /// Animation from bottom offscreen up onto the screen.
@@ -640,24 +652,25 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
     // Combine toggle button with existing leading widget
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        toggleButton,
-        const SizedBox(height: 8),
-        existingLeading,
-      ],
+      children: [toggleButton, const SizedBox(height: 8), existingLeading],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final NavigationRailThemeData navRailTheme =
-        Theme.of(context).navigationRailTheme;
+    final NavigationRailThemeData navRailTheme = Theme.of(
+      context,
+    ).navigationRailTheme;
 
     final List<NavigationRailDestination> destinations = widget.destinations
-        .map((NavigationDestination destination) =>
-            widget.navigationRailDestinationBuilder
-                ?.call(widget.destinations.indexOf(destination), destination) ??
-            AdaptiveScaffold.toRailDestination(destination))
+        .map(
+          (NavigationDestination destination) =>
+              widget.navigationRailDestinationBuilder?.call(
+                widget.destinations.indexOf(destination),
+                destination,
+              ) ??
+              AdaptiveScaffold.toRailDestination(destination),
+        )
         .toList();
 
     // Determine extended state for large breakpoints
@@ -668,7 +681,8 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: widget.drawerBreakpoint.isActive(context) && widget.useDrawer ||
+      appBar:
+          widget.drawerBreakpoint.isActive(context) && widget.useDrawer ||
               (widget.appBarBreakpoint?.isActive(context) ?? false)
           ? widget.appBar ?? AppBar()
           : null,
@@ -777,20 +791,20 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
         ),
         bottomNavigation:
             !widget.drawerBreakpoint.isActive(context) || !widget.useDrawer
-                ? SlotLayout(
-                    config: <Breakpoint, SlotLayoutConfig>{
-                      widget.smallBreakpoint: SlotLayout.from(
-                        key: const Key('bottomNavigation'),
-                        builder: (_) =>
-                            AdaptiveScaffold.standardBottomNavigationBar(
+            ? SlotLayout(
+                config: <Breakpoint, SlotLayoutConfig>{
+                  widget.smallBreakpoint: SlotLayout.from(
+                    key: const Key('bottomNavigation'),
+                    builder: (_) =>
+                        AdaptiveScaffold.standardBottomNavigationBar(
                           currentIndex: widget.selectedIndex,
                           destinations: widget.destinations,
                           onDestinationSelected: widget.onSelectedIndexChange,
                         ),
-                      ),
-                    },
-                  )
-                : null,
+                  ),
+                },
+              )
+            : null,
         body: SlotLayout(
           config: <Breakpoint, SlotLayoutConfig?>{
             Breakpoints.standard: SlotLayout.from(
@@ -802,53 +816,53 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
             if (widget.smallBody != null)
               widget.smallBreakpoint:
                   (widget.smallBody != AdaptiveScaffold.emptyBuilder)
-                      ? SlotLayout.from(
-                          key: const Key('smallBody'),
-                          inAnimation: AdaptiveScaffold.fadeIn,
-                          outAnimation: AdaptiveScaffold.fadeOut,
-                          builder: widget.smallBody,
-                        )
-                      : null,
+                  ? SlotLayout.from(
+                      key: const Key('smallBody'),
+                      inAnimation: AdaptiveScaffold.fadeIn,
+                      outAnimation: AdaptiveScaffold.fadeOut,
+                      builder: widget.smallBody,
+                    )
+                  : null,
             if (widget.body != null)
               widget.mediumBreakpoint:
                   (widget.body != AdaptiveScaffold.emptyBuilder)
-                      ? SlotLayout.from(
-                          key: const Key('body'),
-                          inAnimation: AdaptiveScaffold.fadeIn,
-                          outAnimation: AdaptiveScaffold.fadeOut,
-                          builder: widget.body,
-                        )
-                      : null,
+                  ? SlotLayout.from(
+                      key: const Key('body'),
+                      inAnimation: AdaptiveScaffold.fadeIn,
+                      outAnimation: AdaptiveScaffold.fadeOut,
+                      builder: widget.body,
+                    )
+                  : null,
             if (widget.mediumLargeBody != null)
               widget.mediumLargeBreakpoint:
                   (widget.mediumLargeBody != AdaptiveScaffold.emptyBuilder)
-                      ? SlotLayout.from(
-                          key: const Key('mediumLargeBody'),
-                          inAnimation: AdaptiveScaffold.fadeIn,
-                          outAnimation: AdaptiveScaffold.fadeOut,
-                          builder: widget.mediumLargeBody,
-                        )
-                      : null,
+                  ? SlotLayout.from(
+                      key: const Key('mediumLargeBody'),
+                      inAnimation: AdaptiveScaffold.fadeIn,
+                      outAnimation: AdaptiveScaffold.fadeOut,
+                      builder: widget.mediumLargeBody,
+                    )
+                  : null,
             if (widget.largeBody != null)
               widget.largeBreakpoint:
                   (widget.largeBody != AdaptiveScaffold.emptyBuilder)
-                      ? SlotLayout.from(
-                          key: const Key('largeBody'),
-                          inAnimation: AdaptiveScaffold.fadeIn,
-                          outAnimation: AdaptiveScaffold.fadeOut,
-                          builder: widget.largeBody,
-                        )
-                      : null,
+                  ? SlotLayout.from(
+                      key: const Key('largeBody'),
+                      inAnimation: AdaptiveScaffold.fadeIn,
+                      outAnimation: AdaptiveScaffold.fadeOut,
+                      builder: widget.largeBody,
+                    )
+                  : null,
             if (widget.extraLargeBody != null)
               widget.extraLargeBreakpoint:
                   (widget.extraLargeBody != AdaptiveScaffold.emptyBuilder)
-                      ? SlotLayout.from(
-                          key: const Key('extraLargeBody'),
-                          inAnimation: AdaptiveScaffold.fadeIn,
-                          outAnimation: AdaptiveScaffold.fadeOut,
-                          builder: widget.extraLargeBody,
-                        )
-                      : null,
+                  ? SlotLayout.from(
+                      key: const Key('extraLargeBody'),
+                      inAnimation: AdaptiveScaffold.fadeIn,
+                      outAnimation: AdaptiveScaffold.fadeOut,
+                      builder: widget.extraLargeBody,
+                    )
+                  : null,
           },
         ),
         secondaryBody: SlotLayout(
@@ -861,23 +875,24 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
             if (widget.smallSecondaryBody != null)
               widget.smallBreakpoint:
                   (widget.smallSecondaryBody != AdaptiveScaffold.emptyBuilder)
-                      ? SlotLayout.from(
-                          key: const Key('smallSBody'),
-                          outAnimation: AdaptiveScaffold.stayOnScreen,
-                          builder: widget.smallSecondaryBody,
-                        )
-                      : null,
+                  ? SlotLayout.from(
+                      key: const Key('smallSBody'),
+                      outAnimation: AdaptiveScaffold.stayOnScreen,
+                      builder: widget.smallSecondaryBody,
+                    )
+                  : null,
             if (widget.secondaryBody != null)
               widget.mediumBreakpoint:
                   (widget.secondaryBody != AdaptiveScaffold.emptyBuilder)
-                      ? SlotLayout.from(
-                          key: const Key('sBody'),
-                          outAnimation: AdaptiveScaffold.stayOnScreen,
-                          builder: widget.secondaryBody,
-                        )
-                      : null,
+                  ? SlotLayout.from(
+                      key: const Key('sBody'),
+                      outAnimation: AdaptiveScaffold.stayOnScreen,
+                      builder: widget.secondaryBody,
+                    )
+                  : null,
             if (widget.mediumLargeSecondaryBody != null)
-              widget.mediumLargeBreakpoint: (widget.mediumLargeSecondaryBody !=
+              widget.mediumLargeBreakpoint:
+                  (widget.mediumLargeSecondaryBody !=
                       AdaptiveScaffold.emptyBuilder)
                   ? SlotLayout.from(
                       key: const Key('mediumLargeSBody'),
@@ -888,14 +903,15 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
             if (widget.largeSecondaryBody != null)
               widget.largeBreakpoint:
                   (widget.largeSecondaryBody != AdaptiveScaffold.emptyBuilder)
-                      ? SlotLayout.from(
-                          key: const Key('largeSBody'),
-                          outAnimation: AdaptiveScaffold.stayOnScreen,
-                          builder: widget.largeSecondaryBody,
-                        )
-                      : null,
+                  ? SlotLayout.from(
+                      key: const Key('largeSBody'),
+                      outAnimation: AdaptiveScaffold.stayOnScreen,
+                      builder: widget.largeSecondaryBody,
+                    )
+                  : null,
             if (widget.extraLargeSecondaryBody != null)
-              widget.extraLargeBreakpoint: (widget.extraLargeSecondaryBody !=
+              widget.extraLargeBreakpoint:
+                  (widget.extraLargeSecondaryBody !=
                       AdaptiveScaffold.emptyBuilder)
                   ? SlotLayout.from(
                       key: const Key('extraLargeSBody'),
@@ -976,15 +992,17 @@ class _BrickLayoutDelegate extends MultiChildLayoutDelegate {
   @override
   void performLayout(Size size) {
     final BoxConstraints looseConstraints = BoxConstraints.loose(size);
-    final BoxConstraints fullWidthConstraints =
-        looseConstraints.tighten(width: size.width);
+    final BoxConstraints fullWidthConstraints = looseConstraints.tighten(
+      width: size.width,
+    );
 
     final List<Size> childSizes = <Size>[];
     int childCount = 0;
     // Count how many children we have.
     for (; hasChild(childCount); childCount += 1) {}
     final BoxConstraints itemConstraints = BoxConstraints(
-      maxWidth: fullWidthConstraints.maxWidth / columns -
+      maxWidth:
+          fullWidthConstraints.maxWidth / columns -
           columnSpacing / 2 -
           itemPadding.horizontal,
     );
@@ -998,8 +1016,10 @@ class _BrickLayoutDelegate extends MultiChildLayoutDelegate {
     final double totalColumnSpacing = columnSpacing * (columns - 1);
     final double columnWidth = (size.width - totalColumnSpacing) / columns;
     final double topPadding = itemPadding.resolve(TextDirection.ltr).top;
-    final List<double> columnUsage =
-        List<double>.generate(columns, (int index) => topPadding);
+    final List<double> columnUsage = List<double>.generate(
+      columns,
+      (int index) => topPadding,
+    );
     for (final Size childSize in childSizes) {
       positionChild(
         childId,
