@@ -76,9 +76,7 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
               ),
               SliverPadding(
                 padding: const EdgeInsets.all(16),
-                sliver: SliverToBoxAdapter(
-                  child: _buildContent(context),
-                ),
+                sliver: SliverToBoxAdapter(child: _buildContent(context)),
               ),
             ],
           ),
@@ -103,9 +101,7 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
     }
 
     if (_clientInfo == null) {
-      return const Center(
-        child: Text('No client info available'),
-      );
+      return const Center(child: Text('No client info available'));
     }
 
     return Column(
@@ -163,15 +159,15 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
             Text(
               'Failed to load client info',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onErrorContainer,
-                  ),
+                color: Theme.of(context).colorScheme.onErrorContainer,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
               _error!,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onErrorContainer,
-                  ),
+                color: Theme.of(context).colorScheme.onErrorContainer,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -214,8 +210,8 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -238,16 +234,16 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
             child: Text(
               label,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
           Expanded(
             child: SelectableText(
               value,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
             ),
           ),
         ],
@@ -280,8 +276,8 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
                   child: Text(
                     'Raw Data',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 IconButton(
@@ -309,9 +305,9 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
               ),
               child: SelectableText(
                 rawData,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontFamily: 'monospace',
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(fontFamily: 'monospace'),
               ),
             ),
           ],
@@ -334,8 +330,11 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
         )
         .replaceAll('_', ' ')
         .split(' ')
-        .map((word) =>
-            word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : word)
+        .map(
+          (word) => word.isNotEmpty
+              ? word[0].toUpperCase() + word.substring(1)
+              : word,
+        )
         .join(' ');
   }
 

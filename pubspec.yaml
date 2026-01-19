@@ -9,11 +9,13 @@ environment:
 
 workspace:
   - app_lib/database
+  - app_lib/gamepad
   - app_lib/theme
   - app_lib/locale
   - app_lib/provider
   - app_lib/logging
   - app_lib/secure_storage
+  - app_bloc/navigation
   - app_bloc/theme
   - app_widget/adaptive
   - app_widget/artwork
@@ -42,6 +44,7 @@ dependencies:
 
   bloc: ^9.0.0
   flutter_bloc: ^9.0.0
+  provider: ^6.1.5
   equatable: ^2.0.7
 
   shared_preferences: ^2.3.5
@@ -55,9 +58,11 @@ dependencies:
 
   # workspace packages
   app_database: any
+  app_gamepad: any
   app_theme: any
   app_locale: any
   app_provider: any
+  nav_bloc: any
   theme_bloc: any
   app_artwork: any
   app_client_info: any

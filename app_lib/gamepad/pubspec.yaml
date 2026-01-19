@@ -1,0 +1,19 @@
+name: app_gamepad
+description: Gamepad input handling and navigation for Flutter apps
+version: 1.0.0
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  gamepads: any
+  nav_bloc: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

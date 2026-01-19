@@ -36,15 +36,16 @@ class ShowcaseScreen extends StatelessWidget {
               Text(
                 'Explore the widgets available in this template',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
               const SizedBox(height: 24),
               _buildDemoCard(
                 context,
                 title: 'Feedback Widgets',
                 subtitle: 'app_feedback',
-                description: 'Dialogs, Snackbars, Toasts, Bottom Sheets, Fullscreen Dialogs',
+                description:
+                    'Dialogs, Snackbars, Toasts, Bottom Sheets, Fullscreen Dialogs',
                 icon: Icons.notifications_active,
                 color: Colors.orange,
                 onTap: () => context.goNamed(FeedbackDemoScreen.name),
@@ -140,11 +141,7 @@ class ShowcaseScreen extends StatelessWidget {
                   color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
-                  icon,
-                  color: color,
-                  size: 28,
-                ),
+                child: Icon(icon, color: color, size: 28),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -154,23 +151,23 @@ class ShowcaseScreen extends StatelessWidget {
                     Text(
                       title,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       subtitle,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: color,
-                            fontFamily: 'monospace',
-                          ),
+                        color: color,
+                        fontFamily: 'monospace',
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       description,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),

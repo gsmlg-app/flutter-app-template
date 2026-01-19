@@ -92,7 +92,8 @@ class AdaptiveDemoScreen extends StatelessWidget {
                     _buildSection(
                       context,
                       title: 'Direction Options',
-                      description: 'Actions can be laid out horizontally or vertically',
+                      description:
+                          'Actions can be laid out horizontally or vertically',
                       children: [
                         _buildDirectionDemo(
                           context,
@@ -146,16 +147,13 @@ class AdaptiveDemoScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        Text(title, style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 4),
         Text(
           description,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
         const SizedBox(height: 16),
         ...children,
@@ -174,10 +172,7 @@ class AdaptiveDemoScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text(title, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             AppAdaptiveActionList(
               size: size,
@@ -201,10 +196,7 @@ class AdaptiveDemoScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text(title, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             AppAdaptiveActionList(
               size: AppAdaptiveActionSize.large,
@@ -229,10 +221,7 @@ class AdaptiveDemoScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text(title, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             AppAdaptiveActionList(
               size: AppAdaptiveActionSize.large,

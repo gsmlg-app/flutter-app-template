@@ -119,10 +119,7 @@ class FeedbackDemoScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        Text(title, style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 12),
         ...children,
       ],
@@ -136,10 +133,7 @@ class FeedbackDemoScreen extends StatelessWidget {
   }) {
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        child: Text(label),
-      ),
+      child: ElevatedButton(onPressed: onPressed, child: Text(label)),
     );
   }
 
@@ -147,8 +141,10 @@ class FeedbackDemoScreen extends StatelessWidget {
     showAppDialog(
       context: context,
       title: const Text('Dialog Title'),
-      content: const Text('This is a platform-adaptive dialog. '
-          'It uses AlertDialog.adaptive to match the platform style.'),
+      content: const Text(
+        'This is a platform-adaptive dialog. '
+        'It uses AlertDialog.adaptive to match the platform style.',
+      ),
       actions: [
         AppDialogAction(
           onPressed: (ctx) => Navigator.of(ctx).pop(),
@@ -206,14 +202,8 @@ class FeedbackDemoScreen extends StatelessWidget {
     showBottomSheetActionList(
       context: context,
       actions: [
-        BottomSheetAction(
-          title: const Text('Option 1'),
-          onTap: () {},
-        ),
-        BottomSheetAction(
-          title: const Text('Option 2'),
-          onTap: () {},
-        ),
+        BottomSheetAction(title: const Text('Option 1'), onTap: () {}),
+        BottomSheetAction(title: const Text('Option 2'), onTap: () {}),
         BottomSheetAction(
           title: const Text('Option 3'),
           onTap: () {},

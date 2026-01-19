@@ -58,8 +58,9 @@ class AccentColorSettingsScreen extends StatelessWidget {
                                 ),
                               ),
                               title: Text(appTheme.name),
-                              trailing:
-                                  isSelected ? const Icon(Icons.check) : null,
+                              trailing: isSelected
+                                  ? const Icon(Icons.check)
+                                  : null,
                               value: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [

@@ -197,9 +197,7 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
               ),
               SliverPadding(
                 padding: const EdgeInsets.all(16),
-                sliver: SliverToBoxAdapter(
-                  child: _buildContent(context),
-                ),
+                sliver: SliverToBoxAdapter(child: _buildContent(context)),
               ),
             ],
           ),
@@ -242,14 +240,18 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
                     color: Colors.amber.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(Icons.info_outline, color: Colors.amber, size: 24),
+                  child: const Icon(
+                    Icons.info_outline,
+                    color: Colors.amber,
+                    size: 24,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Text(
                   'About Vault',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -270,7 +272,11 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
     );
   }
 
-  Widget _buildPlatformRow(BuildContext context, String platform, String storage) {
+  Widget _buildPlatformRow(
+    BuildContext context,
+    String platform,
+    String storage,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -284,14 +290,11 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
           const SizedBox(width: 8),
           Text(
             '$platform: ',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
           ),
-          Text(
-            storage,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(storage, style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
     );
@@ -315,14 +318,18 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
                       color: Colors.blue.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(Icons.add_circle, color: Colors.blue, size: 24),
+                    child: const Icon(
+                      Icons.add_circle,
+                      color: Colors.blue,
+                      size: 24,
+                    ),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     'Store Secret',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
@@ -401,10 +408,10 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
               child: Text(
                 _lastResult!,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: _lastResultSuccess
-                          ? Theme.of(context).colorScheme.onPrimaryContainer
-                          : Theme.of(context).colorScheme.onErrorContainer,
-                    ),
+                  color: _lastResultSuccess
+                      ? Theme.of(context).colorScheme.onPrimaryContainer
+                      : Theme.of(context).colorScheme.onErrorContainer,
+                ),
               ),
             ),
             IconButton(
@@ -434,21 +441,25 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
                     color: Colors.green.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(Icons.folder_special, color: Colors.green, size: 24),
+                  child: const Icon(
+                    Icons.folder_special,
+                    color: Colors.green,
+                    size: 24,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Text(
                   'Stored Secrets',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const Spacer(),
                 Text(
                   '${_storedSecrets.length} items',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
@@ -475,8 +486,8 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
                       Text(
                         'No secrets stored',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
@@ -514,15 +525,15 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
       title: Text(
         key,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-              fontFamily: 'monospace',
-            ),
+          fontWeight: FontWeight.w500,
+          fontFamily: 'monospace',
+        ),
       ),
       subtitle: Text(
         '\u2022' * value.length.clamp(4, 16),
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

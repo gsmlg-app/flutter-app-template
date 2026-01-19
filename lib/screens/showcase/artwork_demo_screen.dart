@@ -66,7 +66,8 @@ class _ArtworkDemoScreenState extends State<ArtworkDemoScreen>
                     _buildSection(
                       context,
                       title: 'LaddingPageLottie',
-                      description: 'Lottie animation widget for loading/landing pages',
+                      description:
+                          'Lottie animation widget for loading/landing pages',
                       children: [
                         Card(
                           child: Padding(
@@ -77,9 +78,9 @@ class _ArtworkDemoScreenState extends State<ArtworkDemoScreen>
                                   width: 200,
                                   height: 200,
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .secondaryContainer,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.secondaryContainer,
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: const Center(
@@ -90,7 +91,9 @@ class _ArtworkDemoScreenState extends State<ArtworkDemoScreen>
                                   ),
                                 ),
                                 const SizedBox(height: 16),
-                                const Text('Default animation (auto-play, repeat)'),
+                                const Text(
+                                  'Default animation (auto-play, repeat)',
+                                ),
                               ],
                             ),
                           ),
@@ -105,8 +108,9 @@ class _ArtworkDemoScreenState extends State<ArtworkDemoScreen>
                                   width: 200,
                                   height: 200,
                                   decoration: BoxDecoration(
-                                    color:
-                                        Theme.of(context).colorScheme.primaryContainer,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primaryContainer,
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: Center(
@@ -123,7 +127,8 @@ class _ArtworkDemoScreenState extends State<ArtworkDemoScreen>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                        'Controlled animation: ${_isPlaying ? "Playing" : "Paused"}'),
+                                      'Controlled animation: ${_isPlaying ? "Playing" : "Paused"}',
+                                    ),
                                     const SizedBox(width: 8),
                                     IconButton.filled(
                                       onPressed: _toggleAnimation,
@@ -156,12 +161,14 @@ class _ArtworkDemoScreenState extends State<ArtworkDemoScreen>
                                   width: double.infinity,
                                   padding: const EdgeInsets.all(24),
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.surface,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.surface,
                                     borderRadius: BorderRadius.circular(16),
                                     border: Border.all(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .outlineVariant,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.outlineVariant,
                                     ),
                                   ),
                                   child: const LogoGSMLGDEV(),
@@ -179,15 +186,16 @@ class _ArtworkDemoScreenState extends State<ArtworkDemoScreen>
                             child: Column(
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Container(
                                       width: 100,
                                       padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .inverseSurface,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.inverseSurface,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: const LogoGSMLGDEV(),
@@ -196,9 +204,9 @@ class _ArtworkDemoScreenState extends State<ArtworkDemoScreen>
                                       width: 150,
                                       padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primaryContainer,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primaryContainer,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: const LogoGSMLGDEV(),
@@ -233,16 +241,13 @@ class _ArtworkDemoScreenState extends State<ArtworkDemoScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        Text(title, style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 4),
         Text(
           description,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
         const SizedBox(height: 16),
         ...children,

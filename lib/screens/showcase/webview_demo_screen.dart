@@ -221,9 +221,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
                   ),
                 ],
               ),
-              Expanded(
-                child: _buildContent(),
-              ),
+              Expanded(child: _buildContent()),
             ],
           ),
         );
@@ -265,9 +263,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
     }
 
     if (_htmlFilePath == null) {
-      return const Center(
-        child: Text('No HTML file available'),
-      );
+      return const Center(child: Text('No HTML file available'));
     }
 
     return LocalHtmlViewer(indexFile: _htmlFilePath!);
