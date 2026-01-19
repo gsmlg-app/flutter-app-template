@@ -29,14 +29,18 @@ Flutter monorepo template with modular architecture, BLoC state management, and 
 ## Custom Skills (Claude Code)
 
 Project-specific skills are available in `.claude/skills/`:
+- `/project-development` - **Start here!** Workflow guide for choosing the right skill based on your task
+- `/project-api` - Create API client packages from OpenAPI specs
 - `/project-bloc` - Create BLoC packages with events, states, and proper structure
-- `/project-screen` - Create screens with routing conventions and adaptive scaffold
-- `/project-widget` - Create reusable widgets with platform adaptive support
-- `/project-plugin` - Create native plugins (simple or federated)
+- `/project-database` - Use app_database package with Drift for user settings, app config, and persistent data
+- `/project-feedback` - Show user feedback using toasts, snackbars, dialogs, bottom sheets
+- `/project-form` - Create form modules with FormBloc state management and validation
 - `/project-locale` - Add localized text using l10n in app_lib/locale
 - `/project-metadata` - Update app name, bundle identifier, and company metadata across all platforms
+- `/project-plugin` - Create native plugins (simple or federated)
+- `/project-screen` - Create screens with routing conventions and adaptive scaffold
 - `/project-secure-storage` - Store secrets securely using app_secure_storage package with platform-native storage
-- `/project-database` - Use app_database package with Drift for user settings, app config, and persistent data
+- `/project-widget` - Create reusable widgets with platform adaptive support
 - `/template-mason-brick` - Create, update, or remove Mason bricks with tests
 
 ## Development Commands
