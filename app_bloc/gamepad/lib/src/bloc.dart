@@ -43,10 +43,17 @@ class GamepadBloc extends Bloc<GamepadEvent, GamepadState> {
     if (state.isListening) return;
 
     _gamepadService.addListener(_handleGamepadAction);
+    _gamepadService.addControllerChangeListener(_handleControllerChange);
     _gamepadService.startListening();
     emit(state.copyWith(isListening: true));
 
     // Also refresh connected controllers
+    add(const GamepadRefreshControllers());
+  }
+
+  void _handleControllerChange() {
+    // Refresh controllers when a new one is detected
+    debugPrint('GamepadBloc: Controller change detected, refreshing...');
     add(const GamepadRefreshControllers());
   }
 
@@ -57,6 +64,7 @@ class GamepadBloc extends Bloc<GamepadEvent, GamepadState> {
     if (!state.isListening) return;
 
     _gamepadService.removeListener(_handleGamepadAction);
+    _gamepadService.removeControllerChangeListener(_handleControllerChange);
     _gamepadService.stopListening();
     emit(state.copyWith(isListening: false));
   }
@@ -65,15 +73,21 @@ class GamepadBloc extends Bloc<GamepadEvent, GamepadState> {
     GamepadRefreshControllers event,
     Emitter<GamepadState> emit,
   ) async {
-    final gamepads = await _gamepadService.getConnectedGamepads();
-    final controllers = gamepads.map((gp) {
+    debugPrint('GamepadBloc: Refreshing controllers...');
+    final detected = await _gamepadService.getConnectedGamepads();
+    debugPrint('GamepadBloc: Got ${detected.length} controllers from service');
+    final controllers = detected.map((dc) {
+      debugPrint('GamepadBloc: Controller ${dc.id} - ${dc.name}');
       return ControllerInfo(
-        id: gp.id,
-        name: gp.name,
-        type: _detectControllerType(gp.name),
+        id: dc.id,
+        name: dc.name,
+        type: _detectControllerType(dc.name),
       );
     }).toList();
 
+    debugPrint(
+      'GamepadBloc: Emitting state with ${controllers.length} controllers',
+    );
     emit(state.copyWith(connectedControllers: controllers));
   }
 
@@ -145,14 +159,16 @@ class GamepadBloc extends Bloc<GamepadEvent, GamepadState> {
   }
 
   void _navigateNext() {
-    final nextIndex =
-        _currentIndex < routeNames.length - 1 ? _currentIndex + 1 : 0;
+    final nextIndex = _currentIndex < routeNames.length - 1
+        ? _currentIndex + 1
+        : 0;
     _navigateToIndex(nextIndex);
   }
 
   void _navigatePrevious() {
-    final prevIndex =
-        _currentIndex > 0 ? _currentIndex - 1 : routeNames.length - 1;
+    final prevIndex = _currentIndex > 0
+        ? _currentIndex - 1
+        : routeNames.length - 1;
     _navigateToIndex(prevIndex);
   }
 
@@ -243,6 +259,7 @@ class GamepadBloc extends Bloc<GamepadEvent, GamepadState> {
   Future<void> close() {
     if (state.isListening) {
       _gamepadService.removeListener(_handleGamepadAction);
+      _gamepadService.removeControllerChangeListener(_handleControllerChange);
     }
     return super.close();
   }

@@ -37,5 +37,6 @@
   "nextTabButton": "Next Tab",
   "analogDeadzone": "Analog Stick Deadzone",
   "lastInput": "Last Input",
+  "controllerDebug": "Debug",
   "@@description": "App description"
 }

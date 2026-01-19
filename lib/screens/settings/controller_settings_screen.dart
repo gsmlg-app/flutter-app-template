@@ -3,15 +3,31 @@ import 'package:app_locale/app_locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
+import 'package:flutter_app_template/screens/settings/widgets/gamepad_visualizer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gamepad_bloc/gamepad_bloc.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-class ControllerSettingsScreen extends StatelessWidget {
+class ControllerSettingsScreen extends StatefulWidget {
   static const name = 'Controller Settings';
   static const path = 'controller';
 
   const ControllerSettingsScreen({super.key});
+
+  @override
+  State<ControllerSettingsScreen> createState() =>
+      _ControllerSettingsScreenState();
+}
+
+class _ControllerSettingsScreenState extends State<ControllerSettingsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Refresh controllers when screen opens
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<GamepadBloc>().add(const GamepadRefreshControllers());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +39,22 @@ class ControllerSettingsScreen extends StatelessWidget {
       onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs(context),
       body: (context) {
-        return SafeArea(
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverAppBar(title: Text(context.l10n.controllerSettingsTitle)),
-              SliverFillRemaining(
-                child: BlocBuilder<GamepadBloc, GamepadState>(
+        return DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text(context.l10n.controllerSettingsTitle),
+              bottom: TabBar(
+                tabs: [
+                  Tab(text: context.l10n.controllerSettings),
+                  Tab(text: context.l10n.controllerDebug),
+                ],
+              ),
+            ),
+            body: TabBarView(
+              children: [
+                // Settings tab
+                BlocBuilder<GamepadBloc, GamepadState>(
                   builder: (context, state) {
                     return SettingsList(
                       sections: [
@@ -42,8 +68,13 @@ class ControllerSettingsScreen extends StatelessWidget {
                     );
                   },
                 ),
-              ),
-            ],
+                // Debug/Visualizer tab
+                const SingleChildScrollView(
+                  padding: EdgeInsets.all(16),
+                  child: GamepadVisualizer(),
+                ),
+              ],
+            ),
           ),
         );
       },

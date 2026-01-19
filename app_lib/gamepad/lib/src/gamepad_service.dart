@@ -36,6 +36,18 @@ enum GamepadAction {
 /// Callback type for gamepad actions
 typedef GamepadActionCallback = void Function(GamepadAction action);
 
+/// Callback type for raw gamepad events (for debugging)
+typedef GamepadRawEventCallback =
+    void Function(String gamepadId, String key, double value);
+
+/// Simple data class for detected controller info
+class DetectedController {
+  const DetectedController({required this.id, required this.name});
+
+  final String id;
+  final String name;
+}
+
 /// Service for handling gamepad input and converting to navigation actions
 class GamepadService {
   GamepadService._();
@@ -47,6 +59,11 @@ class GamepadService {
 
   StreamSubscription<GamepadEvent>? _subscription;
   final List<GamepadActionCallback> _listeners = [];
+  final List<GamepadRawEventCallback> _rawListeners = [];
+  final List<VoidCallback> _controllerChangeListeners = [];
+
+  /// Controllers detected from events (more reliable than Gamepads.list())
+  final Map<String, DetectedController> _detectedControllers = {};
 
   /// Threshold for analog stick/trigger activation
   static const double _axisThreshold = 0.5;
@@ -85,12 +102,85 @@ class GamepadService {
     _listeners.remove(callback);
   }
 
-  /// Get list of connected gamepads
-  Future<List<GamepadController>> getConnectedGamepads() async {
-    return Gamepads.list();
+  /// Add a raw event listener (for debugging)
+  void addRawListener(GamepadRawEventCallback callback) {
+    _rawListeners.add(callback);
   }
 
+  /// Remove a raw event listener
+  void removeRawListener(GamepadRawEventCallback callback) {
+    _rawListeners.remove(callback);
+  }
+
+  /// Add a controller change listener (called when new controller detected)
+  void addControllerChangeListener(VoidCallback callback) {
+    _controllerChangeListeners.add(callback);
+  }
+
+  /// Remove a controller change listener
+  void removeControllerChangeListener(VoidCallback callback) {
+    _controllerChangeListeners.remove(callback);
+  }
+
+  /// Get list of connected gamepads
+  /// Combines results from Gamepads.list() with controllers detected from events
+  Future<List<DetectedController>> getConnectedGamepads() async {
+    final listed = await Gamepads.list();
+    debugPrint(
+      'GamepadService: Gamepads.list() returned ${listed.length} controllers',
+    );
+
+    // Merge listed controllers with detected ones
+    final controllers = <String, DetectedController>{};
+
+    // Add controllers from Gamepads.list()
+    for (final controller in listed) {
+      debugPrint(
+        'GamepadService: Listed controller: ${controller.id} - ${controller.name}',
+      );
+      controllers[controller.id] = DetectedController(
+        id: controller.id,
+        name: controller.name,
+      );
+    }
+
+    // Add controllers detected from events (may not be in list)
+    debugPrint(
+      'GamepadService: _detectedControllers has ${_detectedControllers.length} entries',
+    );
+    for (final entry in _detectedControllers.entries) {
+      debugPrint(
+        'GamepadService: Detected controller: ${entry.key} - ${entry.value.name}',
+      );
+      controllers.putIfAbsent(entry.key, () => entry.value);
+    }
+
+    debugPrint(
+      'GamepadService: Returning ${controllers.length} total controllers',
+    );
+    return controllers.values.toList();
+  }
+
+  /// Get controllers detected from events only
+  List<DetectedController> get detectedControllers =>
+      _detectedControllers.values.toList();
+
   void _handleEvent(GamepadEvent event) {
+    // Track controller from event if not already known
+    if (!_detectedControllers.containsKey(event.gamepadId)) {
+      _detectedControllers[event.gamepadId] = DetectedController(
+        id: event.gamepadId,
+        name: 'Controller ${event.gamepadId}',
+      );
+      debugPrint(
+        'GamepadService: Detected controller from event: ${event.gamepadId}',
+      );
+      _notifyControllerChangeListeners();
+    }
+
+    // Always notify raw listeners (no debounce for debugging)
+    _notifyRawListeners(event.gamepadId, event.key, event.value);
+
     // Debounce to prevent rapid-fire
     final now = DateTime.now();
     if (_lastEventTime != null &&
@@ -271,9 +361,27 @@ class GamepadService {
     }
   }
 
+  void _notifyRawListeners(String gamepadId, String key, double value) {
+    for (final listener in _rawListeners) {
+      listener(gamepadId, key, value);
+    }
+  }
+
+  void _notifyControllerChangeListeners() {
+    debugPrint(
+      'GamepadService: Notifying ${_controllerChangeListeners.length} controller change listeners',
+    );
+    for (final listener in _controllerChangeListeners) {
+      listener();
+    }
+  }
+
   /// Dispose resources
   void dispose() {
     stopListening();
     _listeners.clear();
+    _rawListeners.clear();
+    _controllerChangeListeners.clear();
+    _detectedControllers.clear();
   }
 }
