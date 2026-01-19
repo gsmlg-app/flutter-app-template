@@ -15,6 +15,7 @@ workspace:
   - app_lib/provider
   - app_lib/logging
   - app_lib/secure_storage
+  - app_bloc/gamepad
   - app_bloc/navigation
   - app_bloc/theme
   - app_widget/adaptive
@@ -62,6 +63,7 @@ dependencies:
   app_theme: any
   app_locale: any
   app_provider: any
+  gamepad_bloc: any
   nav_bloc: any
   theme_bloc: any
   app_artwork: any

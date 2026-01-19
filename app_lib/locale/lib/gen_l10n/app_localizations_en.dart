@@ -73,4 +73,50 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get systemTheme => 'System';
+
+  @override
+  String get controllerSettings => 'Controller';
+
+  @override
+  String get controllerSettingsTitle => 'Controller Settings';
+
+  @override
+  String get controllerEnabled => 'Enable Controller Input';
+
+  @override
+  String get controllerEnabledDesc =>
+      'Allow navigation using a gamepad controller';
+
+  @override
+  String get connectedControllers => 'Connected Controllers';
+
+  @override
+  String get noControllersConnected => 'No controllers connected';
+
+  @override
+  String get refreshControllers => 'Refresh';
+
+  @override
+  String get buttonMapping => 'Button Mapping';
+
+  @override
+  String get confirmButton => 'Confirm Button';
+
+  @override
+  String get backButton => 'Back Button';
+
+  @override
+  String get menuButton => 'Menu Button';
+
+  @override
+  String get prevTabButton => 'Previous Tab';
+
+  @override
+  String get nextTabButton => 'Next Tab';
+
+  @override
+  String get analogDeadzone => 'Analog Stick Deadzone';
+
+  @override
+  String get lastInput => 'Last Input';
 }

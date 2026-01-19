@@ -225,6 +225,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System'**
   String get systemTheme;
+
+  /// No description provided for @controllerSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Controller'**
+  String get controllerSettings;
+
+  /// No description provided for @controllerSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Controller Settings'**
+  String get controllerSettingsTitle;
+
+  /// No description provided for @controllerEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Controller Input'**
+  String get controllerEnabled;
+
+  /// No description provided for @controllerEnabledDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow navigation using a gamepad controller'**
+  String get controllerEnabledDesc;
+
+  /// No description provided for @connectedControllers.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected Controllers'**
+  String get connectedControllers;
+
+  /// No description provided for @noControllersConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'No controllers connected'**
+  String get noControllersConnected;
+
+  /// No description provided for @refreshControllers.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get refreshControllers;
+
+  /// No description provided for @buttonMapping.
+  ///
+  /// In en, this message translates to:
+  /// **'Button Mapping'**
+  String get buttonMapping;
+
+  /// No description provided for @confirmButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Button'**
+  String get confirmButton;
+
+  /// No description provided for @backButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Back Button'**
+  String get backButton;
+
+  /// No description provided for @menuButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu Button'**
+  String get menuButton;
+
+  /// No description provided for @prevTabButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous Tab'**
+  String get prevTabButton;
+
+  /// No description provided for @nextTabButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Tab'**
+  String get nextTabButton;
+
+  /// No description provided for @analogDeadzone.
+  ///
+  /// In en, this message translates to:
+  /// **'Analog Stick Deadzone'**
+  String get analogDeadzone;
+
+  /// No description provided for @lastInput.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Input'**
+  String get lastInput;
 }
 
 class _AppLocalizationsDelegate

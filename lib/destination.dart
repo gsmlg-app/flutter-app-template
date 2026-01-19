@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_template/screens/home/home_screen.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
 import 'package:flutter_app_template/screens/showcase/showcase_screen.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nav_bloc/nav_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class Destinations {
+  /// List of route names corresponding to navigation destinations
+  static const List<String> routeNames = [
+    HomeScreen.name,
+    ShowcaseScreen.name,
+    SettingsScreen.name,
+  ];
+
   static List<NavigationDestination> navs(BuildContext context) =>
       <NavigationDestination>[
         NavigationDestination(
@@ -33,8 +39,10 @@ class Destinations {
     return navs(context).indexWhere((element) => element.key == key);
   }
 
-  /// Handle navigation index change - dispatches to NavigationBloc
+  /// Handle navigation index change using GoRouter
   static void changeHandler(int idx, BuildContext context) {
-    context.read<NavigationBloc>().add(NavigateToIndex(idx));
+    if (idx >= 0 && idx < routeNames.length) {
+      context.goNamed(routeNames[idx]);
+    }
   }
 }

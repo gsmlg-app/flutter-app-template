@@ -5,6 +5,7 @@ import 'package:flutter_app_template/screens/home/home_screen.dart';
 import 'package:flutter_app_template/screens/settings/accent_color_settings_screen.dart';
 import 'package:flutter_app_template/screens/settings/app_settings_screen.dart';
 import 'package:flutter_app_template/screens/settings/appearance_settings_screen.dart';
+import 'package:flutter_app_template/screens/settings/controller_settings_screen.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
 import 'package:flutter_app_template/screens/showcase/adaptive_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/artwork_demo_screen.dart';
@@ -185,6 +186,17 @@ class AppRouter {
               key: state.pageKey,
               restorationId: state.pageKey.value,
               child: const AccentColorSettingsScreen(),
+            );
+          },
+        ),
+        GoRoute(
+          name: ControllerSettingsScreen.name,
+          path: ControllerSettingsScreen.path,
+          pageBuilder: (context, state) {
+            return NoTransitionPage<void>(
+              key: state.pageKey,
+              restorationId: state.pageKey.value,
+              child: const ControllerSettingsScreen(),
             );
           },
         ),
