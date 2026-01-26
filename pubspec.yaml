@@ -20,6 +20,7 @@ workspace:
   - app_bloc/theme
   - app_widget/adaptive
   - app_widget/artwork
+  - app_widget/chart
   - app_widget/feedback
   - app_widget/web_view
   - app_form/demo
@@ -67,6 +68,7 @@ dependencies:
   nav_bloc: any
   theme_bloc: any
   app_artwork: any
+  app_chart: any
   app_client_info: any
   app_feedback: any
   app_adaptive_widgets: any

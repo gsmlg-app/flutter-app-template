@@ -1,0 +1,21 @@
+name: app_chart
+description: Chart widgets using data_visualization package for Flutter apps.
+version: 1.0.0
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  data_visualization: ^1.0.0
+  dv_curve: ^1.0.0
+  dv_point: ^1.0.0
+  dv_scale: ^1.0.0
+  dv_shape: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
