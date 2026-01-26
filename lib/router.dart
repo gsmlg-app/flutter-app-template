@@ -9,6 +9,7 @@ import 'package:flutter_app_template/screens/settings/controller_settings_screen
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
 import 'package:flutter_app_template/screens/showcase/adaptive_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/artwork_demo_screen.dart';
+import 'package:flutter_app_template/screens/showcase/chart_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/client_info_screen.dart';
 import 'package:flutter_app_template/screens/showcase/feedback_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/form_demo_screen.dart';
@@ -96,6 +97,17 @@ class AppRouter {
               key: state.pageKey,
               restorationId: state.pageKey.value,
               child: const ArtworkDemoScreen(),
+            );
+          },
+        ),
+        GoRoute(
+          name: ChartDemoScreen.name,
+          path: ChartDemoScreen.path,
+          pageBuilder: (context, state) {
+            return NoTransitionPage<void>(
+              key: state.pageKey,
+              restorationId: state.pageKey.value,
+              child: const ChartDemoScreen(),
             );
           },
         ),

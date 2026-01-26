@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/showcase/adaptive_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/artwork_demo_screen.dart';
+import 'package:flutter_app_template/screens/showcase/chart_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/client_info_screen.dart';
 import 'package:flutter_app_template/screens/showcase/feedback_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/form_demo_screen.dart';
@@ -69,6 +70,17 @@ class ShowcaseScreen extends StatelessWidget {
                 icon: Icons.palette,
                 color: Colors.purple,
                 onTap: () => context.goNamed(ArtworkDemoScreen.name),
+              ),
+              const SizedBox(height: 12),
+              _buildDemoCard(
+                context,
+                title: 'Chart Widgets',
+                subtitle: 'app_chart',
+                description:
+                    'Line, bar, and pie charts with data_visualization',
+                icon: Icons.bar_chart,
+                color: Colors.cyan,
+                onTap: () => context.goNamed(ChartDemoScreen.name),
               ),
               const SizedBox(height: 12),
               _buildDemoCard(
