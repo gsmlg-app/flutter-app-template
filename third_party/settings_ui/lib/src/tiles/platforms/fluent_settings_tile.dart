@@ -1,33 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:settings_ui/settings_ui.dart';
+import 'package:settings_ui/src/tiles/abstract_settings_tile.dart';
+import 'package:settings_ui/src/utils/settings_theme.dart';
 
-class AndroidSettingsTile extends StatelessWidget {
-  const AndroidSettingsTile({
-    required this.tileType,
-    required this.leading,
-    required this.title,
-    required this.description,
-    required this.onPressed,
-    required this.onToggle,
-    required this.value,
-    required this.initialValue,
-    required this.activeSwitchColor,
-    required this.enabled,
-    required this.trailing,
+class FluentSettingsTile extends AbstractSettingsTile {
+  const FluentSettingsTile({
+    required super.tileType,
+    required super.title,
+    super.leading,
+    super.description,
+    super.onPressed,
+    super.onToggle,
+    super.value,
+    super.initialValue,
+    super.activeSwitchColor,
+    super.enabled,
+    super.trailing,
     super.key,
   });
-
-  final SettingsTileType tileType;
-  final Widget? leading;
-  final Widget? title;
-  final Widget? description;
-  final Function(BuildContext context)? onPressed;
-  final Function(bool value)? onToggle;
-  final Widget? value;
-  final bool initialValue;
-  final bool enabled;
-  final Color? activeSwitchColor;
-  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +36,7 @@ class AndroidSettingsTile extends StatelessWidget {
               ? null
               : () {
                   if (tileType == SettingsTileType.switchTile) {
-                    onToggle?.call(!initialValue);
+                    onToggle?.call(!(initialValue ?? false));
                   } else {
                     onPressed?.call(context);
                   }
@@ -60,11 +49,9 @@ class AndroidSettingsTile extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsetsDirectional.only(start: 24),
                     child: IconTheme(
-                      data: IconTheme.of(context).copyWith(
-                        color: enabled
-                            ? theme.themeData.leadingIconsColor
-                            : theme.themeData.inactiveTitleColor,
-                      ),
+                      data: IconTheme.of(
+                        context,
+                      ).copyWith(color: theme.themeData.leadingIconsColor),
                       child: leading!,
                     ),
                   ),
@@ -81,9 +68,7 @@ class AndroidSettingsTile extends StatelessWidget {
                       children: [
                         DefaultTextStyle(
                           style: TextStyle(
-                            color: enabled
-                                ? theme.themeData.settingsTileTextColor
-                                : theme.themeData.inactiveTitleColor,
+                            color: theme.themeData.settingsTileTextColor,
                             fontSize: 18,
                             fontWeight: FontWeight.w400,
                           ),
@@ -94,9 +79,7 @@ class AndroidSettingsTile extends StatelessWidget {
                             padding: EdgeInsets.only(top: 4.0),
                             child: DefaultTextStyle(
                               style: TextStyle(
-                                color: enabled
-                                    ? theme.themeData.tileDescriptionTextColor
-                                    : theme.themeData.inactiveSubtitleColor,
+                                color: theme.themeData.tileDescriptionTextColor,
                               ),
                               child: value!,
                             ),
@@ -106,9 +89,7 @@ class AndroidSettingsTile extends StatelessWidget {
                             padding: EdgeInsets.only(top: 4.0),
                             child: DefaultTextStyle(
                               style: TextStyle(
-                                color: enabled
-                                    ? theme.themeData.tileDescriptionTextColor
-                                    : theme.themeData.inactiveSubtitleColor,
+                                color: theme.themeData.tileDescriptionTextColor,
                               ),
                               child: description!,
                             ),
@@ -117,6 +98,19 @@ class AndroidSettingsTile extends StatelessWidget {
                     ),
                   ),
                 ),
+                // if (tileType == SettingsTileType.navigationTile)
+                //   Padding(
+                //     padding:
+                //         const EdgeInsetsDirectional.only(start: 6, end: 15),
+                //     child: IconTheme(
+                //       data: IconTheme.of(context)
+                //           .copyWith(color: theme.themeData.leadingIconsColor),
+                //       child: Icon(
+                //         CupertinoIcons.chevron_forward,
+                //         size: 18 * scaleFactor,
+                //       ),
+                //     ),
+                //   ),
                 if (trailing != null && tileType == SettingsTileType.switchTile)
                   Row(
                     children: [
@@ -124,11 +118,11 @@ class AndroidSettingsTile extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsetsDirectional.only(end: 8),
                         child: Switch(
-                          value: initialValue,
+                          activeThumbColor:
+                              activeSwitchColor ??
+                              Color.fromRGBO(138, 180, 248, 1.0),
+                          value: initialValue ?? false,
                           onChanged: onToggle,
-                          activeThumbColor: enabled
-                              ? activeSwitchColor
-                              : theme.themeData.inactiveTitleColor,
                         ),
                       ),
                     ],
@@ -140,11 +134,11 @@ class AndroidSettingsTile extends StatelessWidget {
                       end: 8,
                     ),
                     child: Switch(
-                      value: initialValue,
+                      value: initialValue ?? false,
+                      activeThumbColor:
+                          activeSwitchColor ??
+                          Color.fromRGBO(138, 180, 248, 1.0),
                       onChanged: onToggle,
-                      activeThumbColor: enabled
-                          ? activeSwitchColor
-                          : theme.themeData.inactiveTitleColor,
                     ),
                   )
                 else if (trailing != null)

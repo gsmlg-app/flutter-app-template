@@ -67,9 +67,8 @@ The Setting section is the block of your settings tiles located in your `Setting
 
 | Type | Description |
 |--|--|
-| AbstractSettingsSection | An abstract entity. Just an OOP's thing (so you can expand it yourself) |
-| CustomSettingsSection | You asked a lot. We implemented this for you. Now you can put anything you want as a child inside this custom section. Just paste the image of your cat or the weather widget inside the `SettingsList`. Feel free and enjoy |
-| SettingsSection | The default section widget, contains `Widget title`, `EdgeInsetsDirectional margin` and the required list of `AbstractSettingsTile` we called `tiles` |
+| AbstractSettingsSection | An abstract base class with full interface (tiles, margin, title). Platform implementations extend this. |
+| SettingsSection | The default section widget that delegates to platform-specific implementations (Android, iOS, Web) |
 
 ## Settings Tile
 
@@ -77,9 +76,8 @@ Here it is. The section tile. It displays the elements you want to show.
 
 | Type | Description |
 |--|--|
-| AbstractSettingsTile | One more OOP's thing (so you can expand it yourself) |
-| CustomSettingsTile | The main idea is the same as for the `CustomSettingsSection`. You can put anything as a child inside your `SettingsSection`.
-| SettingsTile | I think that we need to discuss this deeper. See below for the details.
+| AbstractSettingsTile | An abstract base class with full interface (title, leading, trailing, etc.). Platform implementations extend this. |
+| SettingsTile | The default tile widget that delegates to platform-specific implementations. See below for details. |
 
 ### Settings tile
 

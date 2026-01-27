@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:settings_ui/src/sections/abstract_settings_section.dart';
 import 'package:settings_ui/src/utils/settings_theme.dart';
 
-class AndroidSettingsSection extends StatelessWidget {
-  const AndroidSettingsSection({
-    required this.tiles,
-    required this.margin,
-    this.title,
+class MaterialSettingsSection extends AbstractSettingsSection {
+  const MaterialSettingsSection({
+    required super.tiles,
+    super.margin,
+    super.title,
     super.key,
   });
-
-  final List<Widget> tiles;
-  final EdgeInsetsDirectional? margin;
-  final Widget? title;
 
   @override
   Widget build(BuildContext context) {

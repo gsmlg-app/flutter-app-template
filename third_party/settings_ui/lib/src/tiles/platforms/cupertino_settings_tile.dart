@@ -2,10 +2,11 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:settings_ui/settings_ui.dart';
+import 'package:settings_ui/src/tiles/abstract_settings_tile.dart';
+import 'package:settings_ui/src/utils/settings_theme.dart';
 
-class IOSSettingsTile extends StatefulWidget {
-  const IOSSettingsTile({
+class CupertinoSettingsTile extends StatefulWidget {
+  const CupertinoSettingsTile({
     required this.tileType,
     required this.leading,
     required this.title,
@@ -33,15 +34,15 @@ class IOSSettingsTile extends StatefulWidget {
   final Widget? trailing;
 
   @override
-  State<IOSSettingsTile> createState() => _IOSSettingsTileState();
+  State<CupertinoSettingsTile> createState() => _CupertinoSettingsTileState();
 }
 
-class _IOSSettingsTileState extends State<IOSSettingsTile> {
+class _CupertinoSettingsTileState extends State<CupertinoSettingsTile> {
   bool isPressed = false;
 
   @override
   Widget build(BuildContext context) {
-    final additionalInfo = IOSSettingsTileAdditionalInfo.of(context);
+    final additionalInfo = CupertinoSettingsTileAdditionalInfo.of(context);
     final theme = SettingsTheme.of(context);
 
     return IgnorePointer(
@@ -67,7 +68,7 @@ class _IOSSettingsTileState extends State<IOSSettingsTile> {
   Widget buildTitle({
     required BuildContext context,
     required SettingsTheme theme,
-    required IOSSettingsTileAdditionalInfo additionalInfo,
+    required CupertinoSettingsTileAdditionalInfo additionalInfo,
   }) {
     Widget content = buildTileContent(context, theme, additionalInfo);
     if (!Platform.isIOS) {
@@ -90,7 +91,7 @@ class _IOSSettingsTileState extends State<IOSSettingsTile> {
   Widget buildDescription({
     required BuildContext context,
     required SettingsTheme theme,
-    required IOSSettingsTileAdditionalInfo additionalInfo,
+    required CupertinoSettingsTileAdditionalInfo additionalInfo,
   }) {
     final textScaler = MediaQuery.of(context).textScaler;
 
@@ -161,7 +162,7 @@ class _IOSSettingsTileState extends State<IOSSettingsTile> {
   Widget buildTileContent(
     BuildContext context,
     SettingsTheme theme,
-    IOSSettingsTileAdditionalInfo additionalInfo,
+    CupertinoSettingsTileAdditionalInfo additionalInfo,
   ) {
     final textScaler = MediaQuery.of(context).textScaler;
 
@@ -270,12 +271,12 @@ class _IOSSettingsTileState extends State<IOSSettingsTile> {
   }
 }
 
-class IOSSettingsTileAdditionalInfo extends InheritedWidget {
+class CupertinoSettingsTileAdditionalInfo extends InheritedWidget {
   final bool needToShowDivider;
   final bool enableTopBorderRadius;
   final bool enableBottomBorderRadius;
 
-  IOSSettingsTileAdditionalInfo({
+  CupertinoSettingsTileAdditionalInfo({
     required this.needToShowDivider,
     required this.enableTopBorderRadius,
     required this.enableBottomBorderRadius,
@@ -283,14 +284,14 @@ class IOSSettingsTileAdditionalInfo extends InheritedWidget {
   });
 
   @override
-  bool updateShouldNotify(IOSSettingsTileAdditionalInfo oldWidget) => true;
+  bool updateShouldNotify(CupertinoSettingsTileAdditionalInfo oldWidget) => true;
 
-  static IOSSettingsTileAdditionalInfo of(BuildContext context) {
-    final IOSSettingsTileAdditionalInfo? result = context
-        .dependOnInheritedWidgetOfExactType<IOSSettingsTileAdditionalInfo>();
-    // assert(result != null, 'No IOSSettingsTileAdditionalInfo found in context');
+  static CupertinoSettingsTileAdditionalInfo of(BuildContext context) {
+    final CupertinoSettingsTileAdditionalInfo? result = context
+        .dependOnInheritedWidgetOfExactType<CupertinoSettingsTileAdditionalInfo>();
+    // assert(result != null, 'No CupertinoSettingsTileAdditionalInfo found in context');
     return result ??
-        IOSSettingsTileAdditionalInfo(
+        CupertinoSettingsTileAdditionalInfo(
           needToShowDivider: true,
           enableBottomBorderRadius: true,
           enableTopBorderRadius: true,

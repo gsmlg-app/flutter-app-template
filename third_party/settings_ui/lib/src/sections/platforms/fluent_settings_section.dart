@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-class WebSettingsSection extends StatelessWidget {
-  const WebSettingsSection({
-    required this.tiles,
-    required this.margin,
-    required this.title,
+class FluentSettingsSection extends AbstractSettingsSection {
+  const FluentSettingsSection({
+    required super.tiles,
+    super.margin,
+    super.title,
     super.key,
   });
-
-  final List<Widget> tiles;
-  final EdgeInsetsDirectional? margin;
-  final Widget? title;
 
   @override
   Widget build(BuildContext context) {

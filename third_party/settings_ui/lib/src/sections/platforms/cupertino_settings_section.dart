@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:settings_ui/src/tiles/platforms/ios_settings_tile.dart';
+import 'package:settings_ui/src/tiles/platforms/cupertino_settings_tile.dart';
 
-class IOSSettingsSection extends StatelessWidget {
-  const IOSSettingsSection({
-    required this.tiles,
-    required this.margin,
-    required this.title,
+class CupertinoSettingsSection extends AbstractSettingsSection {
+  const CupertinoSettingsSection({
+    required super.tiles,
+    super.margin,
+    super.title,
     super.key,
   });
-
-  final List<Widget> tiles;
-  final EdgeInsetsDirectional? margin;
-  final Widget? title;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +79,7 @@ class IOSSettingsSection extends StatelessWidget {
           enableBottom = true;
         }
 
-        return IOSSettingsTileAdditionalInfo(
+        return CupertinoSettingsTileAdditionalInfo(
           enableTopBorderRadius: enableTop,
           enableBottomBorderRadius: enableBottom,
           needToShowDivider: index != tiles.length - 1,

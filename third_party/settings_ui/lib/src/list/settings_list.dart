@@ -1,85 +1,60 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:settings_ui/src/sections/abstract_settings_section.dart';
+import 'package:settings_ui/src/list/abstract_settings_list.dart';
+import 'package:settings_ui/src/list/platforms/cupertino_settings_list.dart';
+import 'package:settings_ui/src/list/platforms/fluent_settings_list.dart';
+import 'package:settings_ui/src/list/platforms/material_settings_list.dart';
 import 'package:settings_ui/src/utils/platform_utils.dart';
-import 'package:settings_ui/src/utils/settings_theme.dart';
 
-class SettingsList extends StatelessWidget {
+/// Compositor widget that creates platform-specific settings lists.
+///
+/// Delegates to design system implementations:
+/// - [MaterialSettingsList] for Android, Linux, Web, Fuchsia
+/// - [CupertinoSettingsList] for iOS, macOS
+/// - [FluentSettingsList] for Windows
+class SettingsList extends AbstractSettingsList {
   const SettingsList({
-    required this.sections,
-    this.shrinkWrap = false,
-    this.physics,
-    this.platform,
-    this.contentPadding,
+    required super.sections,
+    super.shrinkWrap,
+    super.physics,
+    super.platform,
+    super.contentPadding,
     super.key,
   });
 
-  final bool shrinkWrap;
-  final ScrollPhysics? physics;
-  final DevicePlatform? platform;
-  final EdgeInsetsGeometry? contentPadding;
-  final List<AbstractSettingsSection> sections;
-
   @override
   Widget build(BuildContext context) {
-    final platform = this.platform ?? DevicePlatform.detect();
-    final themeData = SettingsThemeData.withContext(context, platform);
+    final effectivePlatform = platform ?? DevicePlatform.detect();
 
-    return LayoutBuilder(
-      builder: ((context, constraints) => Container(
-        color: themeData.settingsListBackground,
-        width: constraints.maxWidth,
-        alignment: Alignment.center,
-        child: SettingsTheme(
-          themeData: themeData,
-          platform: platform,
-          child: ListView.builder(
-            physics: physics,
-            shrinkWrap: shrinkWrap,
-            itemCount: sections.length,
-            padding:
-                contentPadding ??
-                calculateDefaultPadding(platform, constraints),
-            itemBuilder: (BuildContext context, int index) {
-              return sections[index];
-            },
-          ),
-        ),
-      )),
-    );
-  }
-
-  static EdgeInsets calculateDefaultPadding(
-    DevicePlatform platform,
-    BoxConstraints constraints,
-  ) {
-    final maxWidth = constraints.maxWidth;
-    if (maxWidth > 810) {
-      double padding = (maxWidth - 810) / 2;
-      switch (platform) {
-        case DevicePlatform.android:
-        case DevicePlatform.fuchsia:
-        case DevicePlatform.linux:
-        case DevicePlatform.iOS:
-        case DevicePlatform.macOS:
-        case DevicePlatform.windows:
-          return EdgeInsets.symmetric(horizontal: padding);
-        case DevicePlatform.web:
-        default:
-          return EdgeInsets.symmetric(vertical: 20, horizontal: padding);
-      }
-    }
-    switch (platform) {
+    switch (effectivePlatform) {
       case DevicePlatform.android:
       case DevicePlatform.fuchsia:
       case DevicePlatform.linux:
-      case DevicePlatform.iOS:
-      case DevicePlatform.macOS:
-      case DevicePlatform.windows:
-        return EdgeInsets.symmetric(vertical: 0);
       case DevicePlatform.web:
       case DevicePlatform.custom:
-        return EdgeInsets.symmetric(vertical: 20);
+        return MaterialSettingsList(
+          sections: sections,
+          shrinkWrap: shrinkWrap,
+          physics: physics,
+          platform: effectivePlatform,
+          contentPadding: contentPadding,
+        );
+      case DevicePlatform.iOS:
+      case DevicePlatform.macOS:
+        return CupertinoSettingsList(
+          sections: sections,
+          shrinkWrap: shrinkWrap,
+          physics: physics,
+          platform: effectivePlatform,
+          contentPadding: contentPadding,
+        );
+      case DevicePlatform.windows:
+        return FluentSettingsList(
+          sections: sections,
+          shrinkWrap: shrinkWrap,
+          physics: physics,
+          platform: effectivePlatform,
+          contentPadding: contentPadding,
+        );
     }
   }
 }

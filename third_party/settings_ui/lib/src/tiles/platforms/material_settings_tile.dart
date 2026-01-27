@@ -1,33 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:settings_ui/settings_ui.dart';
+import 'package:settings_ui/src/tiles/abstract_settings_tile.dart';
+import 'package:settings_ui/src/utils/settings_theme.dart';
 
-class WebSettingsTile extends StatelessWidget {
-  const WebSettingsTile({
-    required this.tileType,
-    required this.leading,
-    required this.title,
-    required this.description,
-    required this.onPressed,
-    required this.onToggle,
-    required this.value,
-    required this.initialValue,
-    required this.activeSwitchColor,
-    required this.enabled,
-    required this.trailing,
+class MaterialSettingsTile extends AbstractSettingsTile {
+  const MaterialSettingsTile({
+    required super.tileType,
+    required super.title,
+    super.leading,
+    super.description,
+    super.onPressed,
+    super.onToggle,
+    super.value,
+    super.initialValue,
+    super.activeSwitchColor,
+    super.enabled,
+    super.trailing,
     super.key,
   });
-
-  final SettingsTileType tileType;
-  final Widget? leading;
-  final Widget? title;
-  final Widget? description;
-  final Function(BuildContext context)? onPressed;
-  final Function(bool value)? onToggle;
-  final Widget? value;
-  final bool initialValue;
-  final bool enabled;
-  final Widget? trailing;
-  final Color? activeSwitchColor;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +36,7 @@ class WebSettingsTile extends StatelessWidget {
               ? null
               : () {
                   if (tileType == SettingsTileType.switchTile) {
-                    onToggle?.call(!initialValue);
+                    onToggle?.call(!(initialValue ?? false));
                   } else {
                     onPressed?.call(context);
                   }
@@ -60,9 +49,11 @@ class WebSettingsTile extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsetsDirectional.only(start: 24),
                     child: IconTheme(
-                      data: IconTheme.of(
-                        context,
-                      ).copyWith(color: theme.themeData.leadingIconsColor),
+                      data: IconTheme.of(context).copyWith(
+                        color: enabled
+                            ? theme.themeData.leadingIconsColor
+                            : theme.themeData.inactiveTitleColor,
+                      ),
                       child: leading!,
                     ),
                   ),
@@ -79,7 +70,9 @@ class WebSettingsTile extends StatelessWidget {
                       children: [
                         DefaultTextStyle(
                           style: TextStyle(
-                            color: theme.themeData.settingsTileTextColor,
+                            color: enabled
+                                ? theme.themeData.settingsTileTextColor
+                                : theme.themeData.inactiveTitleColor,
                             fontSize: 18,
                             fontWeight: FontWeight.w400,
                           ),
@@ -90,7 +83,9 @@ class WebSettingsTile extends StatelessWidget {
                             padding: EdgeInsets.only(top: 4.0),
                             child: DefaultTextStyle(
                               style: TextStyle(
-                                color: theme.themeData.tileDescriptionTextColor,
+                                color: enabled
+                                    ? theme.themeData.tileDescriptionTextColor
+                                    : theme.themeData.inactiveSubtitleColor,
                               ),
                               child: value!,
                             ),
@@ -100,7 +95,9 @@ class WebSettingsTile extends StatelessWidget {
                             padding: EdgeInsets.only(top: 4.0),
                             child: DefaultTextStyle(
                               style: TextStyle(
-                                color: theme.themeData.tileDescriptionTextColor,
+                                color: enabled
+                                    ? theme.themeData.tileDescriptionTextColor
+                                    : theme.themeData.inactiveSubtitleColor,
                               ),
                               child: description!,
                             ),
@@ -109,19 +106,6 @@ class WebSettingsTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                // if (tileType == SettingsTileType.navigationTile)
-                //   Padding(
-                //     padding:
-                //         const EdgeInsetsDirectional.only(start: 6, end: 15),
-                //     child: IconTheme(
-                //       data: IconTheme.of(context)
-                //           .copyWith(color: theme.themeData.leadingIconsColor),
-                //       child: Icon(
-                //         CupertinoIcons.chevron_forward,
-                //         size: 18 * scaleFactor,
-                //       ),
-                //     ),
-                //   ),
                 if (trailing != null && tileType == SettingsTileType.switchTile)
                   Row(
                     children: [
@@ -129,11 +113,11 @@ class WebSettingsTile extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsetsDirectional.only(end: 8),
                         child: Switch(
-                          activeThumbColor:
-                              activeSwitchColor ??
-                              Color.fromRGBO(138, 180, 248, 1.0),
-                          value: initialValue,
+                          value: initialValue ?? false,
                           onChanged: onToggle,
+                          activeThumbColor: enabled
+                              ? activeSwitchColor
+                              : theme.themeData.inactiveTitleColor,
                         ),
                       ),
                     ],
@@ -145,11 +129,11 @@ class WebSettingsTile extends StatelessWidget {
                       end: 8,
                     ),
                     child: Switch(
-                      value: initialValue,
-                      activeThumbColor:
-                          activeSwitchColor ??
-                          Color.fromRGBO(138, 180, 248, 1.0),
+                      value: initialValue ?? false,
                       onChanged: onToggle,
+                      activeThumbColor: enabled
+                          ? activeSwitchColor
+                          : theme.themeData.inactiveTitleColor,
                     ),
                   )
                 else if (trailing != null)
