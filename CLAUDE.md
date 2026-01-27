@@ -20,9 +20,10 @@ Flutter monorepo template with modular architecture, BLoC state management, and 
 ```
 
 **Workspace packages** (defined in root `pubspec.yaml` workspace section):
-- `app_lib/`: database, theme, locale, provider, logging, secure_storage
-- `app_bloc/`: theme
-- `app_widget/`: adaptive, artwork, feedback, web_view
+- `app_lib/`: database, gamepad, theme, locale, provider, logging, secure_storage
+- `app_bloc/`: gamepad, navigation, theme
+- `app_widget/`: adaptive, artwork, chart, feedback, web_view
+- `app_form/`: demo
 - `app_plugin/`: client_info/ (nested federated plugin containing: client_info, client_info_platform_interface, client_info_android, client_info_ios, client_info_linux, client_info_macos, client_info_windows)
 - `third_party/`: form_bloc, flutter_form_bloc, flutter_adaptive_scaffold, settings_ui
 
@@ -33,6 +34,7 @@ Project-specific skills are available in `.claude/skills/`:
 - `/project-api` - Create API client packages from OpenAPI specs
 - `/project-bloc` - Create BLoC packages with events, states, and proper structure
 - `/project-database` - Use app_database package with Drift for user settings, app config, and persistent data
+- `/project-data-visualization` - Build charts, graphs, and maps using the data_visualization package suite
 - `/project-feedback` - Show user feedback using toasts, snackbars, dialogs, bottom sheets
 - `/project-form` - Create form modules with FormBloc state management and validation
 - `/project-locale` - Add localized text using l10n in app_lib/locale
