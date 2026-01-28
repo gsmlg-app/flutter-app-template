@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
 
+/// Fluent Design (Windows 11) settings section implementation.
+///
+/// Follows Windows 11 Settings app specifications:
+/// - Section header: 14sp semibold, text-primary color
+/// - 4dp vertical spacing between tiles (individual cards)
+/// - No card wrapper around section (tiles are individual cards)
+/// - Header padding: 24dp top (first section), 8dp bottom
+///
+/// Note: Unlike Material (flat) and Cupertino (grouped), Fluent Design
+/// uses individual card-based tiles with spacing between them.
+///
+/// See: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/windows/settingscontrols/settingsexpander
 class FluentSettingsSection extends AbstractSettingsSection {
   const FluentSettingsSection({
     required super.tiles,
@@ -9,6 +21,12 @@ class FluentSettingsSection extends AbstractSettingsSection {
     super.key,
   });
 
+  // Fluent Design specifications
+  static const double _headerFontSize = 14.0;
+  static const double _headerTopPadding = 24.0;
+  static const double _headerBottomPadding = 8.0;
+  static const double _tileSpacing = 4.0;
+
   @override
   Widget build(BuildContext context) {
     return buildSectionBody(context);
@@ -16,6 +34,7 @@ class FluentSettingsSection extends AbstractSettingsSection {
 
   Widget buildSectionBody(BuildContext context) {
     final theme = SettingsTheme.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
     final textScaler = MediaQuery.of(context).textScaler;
 
     return Padding(
@@ -23,46 +42,45 @@ class FluentSettingsSection extends AbstractSettingsSection {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Section header (Fluent style)
           if (title != null)
-            Container(
-              height: textScaler.scale(65),
+            Padding(
               padding: EdgeInsetsDirectional.only(
-                bottom: textScaler.scale(5),
-                start: 6,
-                top: textScaler.scale(40),
+                top: textScaler.scale(_headerTopPadding),
+                bottom: textScaler.scale(_headerBottomPadding),
+                start: 4,
               ),
               child: DefaultTextStyle(
                 style: TextStyle(
-                  color: theme.themeData.titleTextColor,
-                  fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+                  color: theme.themeData.titleTextColor ?? colorScheme.onSurface,
+                  fontSize: _headerFontSize,
+                  fontWeight: FontWeight.w600,
                 ),
                 child: title!,
               ),
             ),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            elevation: 4,
-            color: theme.themeData.settingsSectionBackground,
-            child: buildTileList(),
-          ),
+
+          // Tiles with spacing (no wrapper card)
+          buildTileList(context),
         ],
       ),
     );
   }
 
-  Widget buildTileList() {
+  Widget buildTileList(BuildContext context) {
+    // Use Column with spacing instead of ListView for Fluent Design
+    // This allows individual card styling per tile
     return ListView.separated(
       shrinkWrap: true,
       itemCount: tiles.length,
       padding: EdgeInsets.zero,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
         return tiles[index];
       },
       separatorBuilder: (BuildContext context, int index) {
-        return Divider(height: 0, thickness: 1);
+        // Fluent uses spacing between cards, not dividers
+        return SizedBox(height: _tileSpacing);
       },
     );
   }

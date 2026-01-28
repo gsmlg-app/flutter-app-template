@@ -5,6 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:settings_ui/src/tiles/abstract_settings_tile.dart';
 import 'package:settings_ui/src/utils/settings_theme.dart';
 
+/// Cupertino (iOS/macOS) settings tile implementation.
+///
+/// Follows Apple Human Interface Guidelines for iOS Settings:
+/// - Minimum row height: 44pt (touch target)
+/// - Horizontal padding: 16pt (leading) + 16pt (trailing)
+/// - Corner radius: 10pt for inset grouped style
+/// - Title: SF Pro Text 17pt (-0.4 letter spacing)
+/// - Secondary text: SF Pro Text 15pt, secondary label color
+/// - Uses CupertinoSwitch for toggle tiles
+/// - Chevron (14pt) for navigation tiles
+///
+/// See: https://developer.apple.com/design/human-interface-guidelines/lists
 class CupertinoSettingsTile extends StatefulWidget {
   const CupertinoSettingsTile({
     required this.tileType,
@@ -20,6 +32,17 @@ class CupertinoSettingsTile extends StatefulWidget {
     required this.trailing,
     super.key,
   });
+
+  // Apple HIG specifications
+  static const double _minRowHeight = 44.0;
+  static const double _horizontalPadding = 16.0;
+  static const double _cornerRadius = 10.0;
+  static const double _leadingIconSize = 29.0;
+  static const double _leadingGap = 12.0;
+  static const double _titleFontSize = 17.0;
+  static const double _secondaryFontSize = 15.0;
+  static const double _descriptionFontSize = 13.0;
+  static const double _chevronSize = 14.0;
 
   final SettingsTileType tileType;
   final Widget? leading;
@@ -78,10 +101,10 @@ class _CupertinoSettingsTileState extends State<CupertinoSettingsTile> {
     return ClipRRect(
       borderRadius: BorderRadius.vertical(
         top: additionalInfo.enableTopBorderRadius
-            ? Radius.circular(12)
+            ? Radius.circular(CupertinoSettingsTile._cornerRadius)
             : Radius.zero,
         bottom: additionalInfo.enableBottomBorderRadius
-            ? Radius.circular(12)
+            ? Radius.circular(CupertinoSettingsTile._cornerRadius)
             : Radius.zero,
       ),
       child: content,
@@ -98,14 +121,18 @@ class _CupertinoSettingsTileState extends State<CupertinoSettingsTile> {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.only(
-        left: 18,
-        right: 18,
-        top: textScaler.scale(8),
-        bottom: additionalInfo.needToShowDivider ? 24 : textScaler.scale(8),
+        left: CupertinoSettingsTile._horizontalPadding + 2,
+        right: CupertinoSettingsTile._horizontalPadding + 2,
+        top: textScaler.scale(6),
+        bottom: additionalInfo.needToShowDivider ? 20 : textScaler.scale(6),
       ),
       decoration: BoxDecoration(color: theme.themeData.settingsListBackground),
       child: DefaultTextStyle(
-        style: TextStyle(color: theme.themeData.titleTextColor, fontSize: 13),
+        style: TextStyle(
+          color: theme.themeData.titleTextColor ??
+              CupertinoColors.secondaryLabel.resolveFrom(context),
+          fontSize: CupertinoSettingsTile._descriptionFontSize,
+        ),
         child: widget.description!,
       ),
     );
@@ -116,37 +143,40 @@ class _CupertinoSettingsTileState extends State<CupertinoSettingsTile> {
     required SettingsTheme theme,
   }) {
     final textScaler = MediaQuery.of(context).textScaler;
+    final secondaryLabelColor =
+        CupertinoColors.secondaryLabel.resolveFrom(context);
+
     return switch (widget.tileType) {
       SettingsTileType.switchTile => CupertinoSwitch(
         value: widget.initialValue ?? true,
-        onChanged: widget.onToggle,
-        activeTrackColor: widget.enabled
-            ? widget.activeSwitchColor
-            : theme.themeData.inactiveTitleColor,
+        onChanged: widget.enabled ? widget.onToggle : null,
+        activeTrackColor: widget.activeSwitchColor,
       ),
-      SettingsTileType.navigationTile =>
-        widget.value != null
-            ? DefaultTextStyle(
-                style: TextStyle(
-                  color: widget.enabled
-                      ? theme.themeData.trailingTextColor
-                      : theme.themeData.inactiveTitleColor,
-                  fontSize: 17,
-                ),
-                child: widget.value!,
-              )
-            : Padding(
-                padding: const EdgeInsetsDirectional.only(start: 6, end: 2),
-                child: IconTheme(
-                  data: IconTheme.of(
-                    context,
-                  ).copyWith(color: theme.themeData.leadingIconsColor),
-                  child: Icon(
-                    CupertinoIcons.chevron_forward,
-                    size: textScaler.scale(18),
-                  ),
-                ),
+      SettingsTileType.navigationTile => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.value != null)
+            DefaultTextStyle(
+              style: TextStyle(
+                color: widget.enabled
+                    ? theme.themeData.trailingTextColor ?? secondaryLabelColor
+                    : theme.themeData.inactiveTitleColor,
+                fontSize: CupertinoSettingsTile._secondaryFontSize,
               ),
+              child: widget.value!,
+            ),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 6),
+            child: Icon(
+              CupertinoIcons.chevron_forward,
+              size: textScaler.scale(CupertinoSettingsTile._chevronSize),
+              color: widget.enabled
+                  ? theme.themeData.leadingIconsColor ?? secondaryLabelColor
+                  : theme.themeData.inactiveTitleColor,
+            ),
+          ),
+        ],
+      ),
       _ => widget.trailing ?? const SizedBox(),
     };
   }
@@ -165,103 +195,128 @@ class _CupertinoSettingsTileState extends State<CupertinoSettingsTile> {
     CupertinoSettingsTileAdditionalInfo additionalInfo,
   ) {
     final textScaler = MediaQuery.of(context).textScaler;
+    final labelColor = CupertinoColors.label.resolveFrom(context);
+    final secondaryLabelColor =
+        CupertinoColors.secondaryLabel.resolveFrom(context);
+
+    final isInteractive = widget.tileType == SettingsTileType.switchTile
+        ? widget.onToggle != null || widget.onPressed != null
+        : widget.onPressed != null;
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: widget.onPressed == null
+      onTap: !isInteractive
           ? null
           : () {
               changePressState(isPressed: true);
-
-              widget.onPressed!.call(context);
-
+              if (widget.tileType == SettingsTileType.switchTile) {
+                widget.onToggle?.call(!(widget.initialValue ?? false));
+              } else {
+                widget.onPressed?.call(context);
+              }
               Future.delayed(
                 Duration(milliseconds: 100),
                 () => changePressState(isPressed: false),
               );
             },
       onTapDown: (_) =>
-          widget.onPressed == null ? null : changePressState(isPressed: true),
+          isInteractive ? changePressState(isPressed: true) : null,
       onTapUp: (_) =>
-          widget.onPressed == null ? null : changePressState(isPressed: false),
+          isInteractive ? changePressState(isPressed: false) : null,
       onTapCancel: () =>
-          widget.onPressed == null ? null : changePressState(isPressed: false),
+          isInteractive ? changePressState(isPressed: false) : null,
       child: Container(
+        constraints: BoxConstraints(
+          minHeight: textScaler.scale(CupertinoSettingsTile._minRowHeight),
+        ),
         color: isPressed
-            ? theme.themeData.tileHighlightColor
+            ? theme.themeData.tileHighlightColor ??
+                CupertinoColors.systemGrey4.resolveFrom(context)
             : theme.themeData.settingsSectionBackground,
-        padding: EdgeInsetsDirectional.only(start: 18),
+        padding: EdgeInsetsDirectional.only(
+          start: CupertinoSettingsTile._horizontalPadding,
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            // Leading icon
             if (widget.leading != null)
               Padding(
-                padding: const EdgeInsetsDirectional.only(end: 12.0),
-                child: IconTheme.merge(
-                  data: IconThemeData(
-                    color: widget.enabled
-                        ? theme.themeData.leadingIconsColor
-                        : theme.themeData.inactiveTitleColor,
+                padding: EdgeInsetsDirectional.only(
+                  end: CupertinoSettingsTile._leadingGap,
+                ),
+                child: SizedBox(
+                  width: CupertinoSettingsTile._leadingIconSize,
+                  height: CupertinoSettingsTile._leadingIconSize,
+                  child: IconTheme.merge(
+                    data: IconThemeData(
+                      size: CupertinoSettingsTile._leadingIconSize,
+                      color: widget.enabled
+                          ? theme.themeData.leadingIconsColor
+                          : theme.themeData.inactiveTitleColor ??
+                              secondaryLabelColor,
+                    ),
+                    child: Center(child: widget.leading!),
                   ),
-                  child: widget.leading!,
                 ),
               ),
+
+            // Content area
             Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(end: 16),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          alignment: Alignment.topLeft,
-                          padding: EdgeInsetsDirectional.only(
-                            top: textScaler.scale(12.5),
-                            bottom: textScaler.scale(12.5),
-                          ),
-                          child: DefaultTextStyle(
-                            style: TextStyle(
-                              color: widget.enabled
-                                  ? theme.themeData.settingsTileTextColor
-                                  : theme.themeData.inactiveTitleColor,
-                              fontSize: 16,
-                            ),
-                            child: widget.title!,
-                          ),
-                        ),
-                        SizedBox(
-                          width: Theme.of(
-                            context,
-                          ).textTheme.bodyMedium?.fontSize,
-                        ),
-                        const Spacer(),
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsetsDirectional.only(
-                              top: textScaler.scale(12.5),
-                              bottom: textScaler.scale(12.5),
-                            ),
-                            alignment: Alignment.topRight,
-                            child: buildTrailing(
-                              context: context,
-                              theme: theme,
+              child: Container(
+                padding: EdgeInsetsDirectional.only(
+                  end: CupertinoSettingsTile._horizontalPadding,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Main row: title + trailing
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight:
+                            textScaler.scale(CupertinoSettingsTile._minRowHeight),
+                      ),
+                      child: Row(
+                        children: [
+                          // Title
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.only(
+                                top: textScaler.scale(11),
+                                bottom: textScaler.scale(11),
+                              ),
+                              child: DefaultTextStyle(
+                                style: TextStyle(
+                                  color: widget.enabled
+                                      ? theme.themeData.settingsTileTextColor ??
+                                          labelColor
+                                      : theme.themeData.inactiveTitleColor ??
+                                          secondaryLabelColor,
+                                  fontSize: CupertinoSettingsTile._titleFontSize,
+                                  letterSpacing: -0.4,
+                                ),
+                                child: widget.title ?? const SizedBox.shrink(),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+
+                          // Trailing
+                          buildTrailing(context: context, theme: theme),
+                        ],
+                      ),
                     ),
-                  ),
-                  if (widget.description == null &&
-                      additionalInfo.needToShowDivider)
-                    Divider(
-                      height: 0,
-                      thickness: 0.7,
-                      color: theme.themeData.dividerColor,
-                    ),
-                ],
+
+                    // Divider (iOS-style, inset from leading edge)
+                    if (widget.description == null &&
+                        additionalInfo.needToShowDivider)
+                      Divider(
+                        height: 0.5,
+                        thickness: 0.5,
+                        color: theme.themeData.dividerColor ??
+                            CupertinoColors.separator.resolveFrom(context),
+                      ),
+                  ],
+                ),
               ),
             ),
           ],

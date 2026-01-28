@@ -41,102 +41,67 @@ class SettingsThemeData {
   ) {
     platform ??= DevicePlatform.detect();
     switch (platform) {
+      // Material Design (Android, Linux, Web, Fuchsia)
       case DevicePlatform.android:
       case DevicePlatform.fuchsia:
       case DevicePlatform.linux:
-        return _androidTheme(colorScheme);
+      case DevicePlatform.web:
+      case DevicePlatform.custom:
+        return _materialTheme(colorScheme);
+      // Cupertino (iOS, macOS)
       case DevicePlatform.iOS:
       case DevicePlatform.macOS:
+        return _cupertinoTheme(colorScheme);
+      // Fluent Design (Windows)
       case DevicePlatform.windows:
-        return _iosTheme(colorScheme);
-      default:
-        return _webTheme(colorScheme);
+        return _fluentTheme(colorScheme);
     }
   }
 
-  static SettingsThemeData _androidTheme(ColorScheme colorScheme) {
-    final listBackground = colorScheme.surface;
-
-    final titleTextColor = colorScheme.onSecondaryContainer;
-
-    final settingsTileTextColor = colorScheme.secondary;
-
-    final tileHighlightColor = colorScheme.onSecondaryContainer;
-
-    final tileDescriptionTextColor = colorScheme.tertiary;
-
-    final leadingIconsColor = colorScheme.primary;
-
-    final inactiveTitleColor = colorScheme.onSurfaceVariant;
-
-    final inactiveSubtitleColor = colorScheme.onSurfaceVariant;
-
+  /// Material Design 3 theme for Android, Linux, Web, Fuchsia.
+  static SettingsThemeData _materialTheme(ColorScheme colorScheme) {
     return SettingsThemeData(
-      tileHighlightColor: tileHighlightColor,
-      settingsListBackground: listBackground,
-      titleTextColor: titleTextColor,
-      settingsTileTextColor: settingsTileTextColor,
-      tileDescriptionTextColor: tileDescriptionTextColor,
-      leadingIconsColor: leadingIconsColor,
-      inactiveTitleColor: inactiveTitleColor,
-      inactiveSubtitleColor: inactiveSubtitleColor,
+      settingsListBackground: colorScheme.surface,
+      settingsSectionBackground: colorScheme.surface,
+      titleTextColor: colorScheme.primary,
+      settingsTileTextColor: colorScheme.onSurface,
+      tileDescriptionTextColor: colorScheme.onSurfaceVariant,
+      tileHighlightColor: colorScheme.surfaceContainerHighest,
+      leadingIconsColor: colorScheme.onSurfaceVariant,
+      inactiveTitleColor: colorScheme.onSurface.withValues(alpha: 0.38),
+      inactiveSubtitleColor: colorScheme.onSurfaceVariant.withValues(alpha: 0.38),
     );
   }
 
-  static SettingsThemeData _iosTheme(ColorScheme colorScheme) {
-    final listBackground = colorScheme.surface;
-
-    final sectionBackground = colorScheme.secondaryContainer;
-
-    final titleTextColor = colorScheme.onSecondaryContainer;
-
-    final settingsTileTextColor = colorScheme.secondary;
-
-    final dividerColor = colorScheme.onSecondaryContainer;
-
-    final trailingTextColor = colorScheme.tertiary;
-
-    final tileHighlightColor = colorScheme.onTertiaryContainer;
-
-    final leadingIconsColor = colorScheme.primary;
-
+  /// Cupertino theme for iOS and macOS.
+  static SettingsThemeData _cupertinoTheme(ColorScheme colorScheme) {
     return SettingsThemeData(
-      tileHighlightColor: tileHighlightColor,
-      settingsListBackground: listBackground,
-      settingsSectionBackground: sectionBackground,
-      titleTextColor: titleTextColor,
-      dividerColor: dividerColor,
-      trailingTextColor: trailingTextColor,
-      settingsTileTextColor: settingsTileTextColor,
-      leadingIconsColor: leadingIconsColor,
-      inactiveTitleColor: colorScheme.onSurfaceVariant,
-      inactiveSubtitleColor: colorScheme.onSurfaceVariant,
+      settingsListBackground: colorScheme.surfaceContainerLow,
+      settingsSectionBackground: colorScheme.surface,
+      titleTextColor: colorScheme.onSurfaceVariant,
+      settingsTileTextColor: colorScheme.onSurface,
+      tileDescriptionTextColor: colorScheme.onSurfaceVariant,
+      dividerColor: colorScheme.outlineVariant,
+      trailingTextColor: colorScheme.onSurfaceVariant,
+      tileHighlightColor: colorScheme.surfaceContainerHighest,
+      leadingIconsColor: colorScheme.primary,
+      inactiveTitleColor: colorScheme.onSurface.withValues(alpha: 0.38),
+      inactiveSubtitleColor: colorScheme.onSurfaceVariant.withValues(alpha: 0.38),
     );
   }
 
-  static SettingsThemeData _webTheme(ColorScheme colorScheme) {
-    final listBackground = colorScheme.surface;
-
-    final titleTextColor = colorScheme.onSecondaryContainer;
-
-    final settingsTileTextColor = colorScheme.secondary;
-
-    final tileHighlightColor = colorScheme.onTertiaryContainer;
-
-    final tileDescriptionTextColor = colorScheme.tertiary;
-
-    final leadingIconsColor = colorScheme.primary;
-
-    final sectionBackground = colorScheme.secondaryContainer;
-
+  /// Fluent Design theme for Windows.
+  static SettingsThemeData _fluentTheme(ColorScheme colorScheme) {
     return SettingsThemeData(
-      tileHighlightColor: tileHighlightColor,
-      settingsListBackground: listBackground,
-      titleTextColor: titleTextColor,
-      settingsSectionBackground: sectionBackground,
-      settingsTileTextColor: settingsTileTextColor,
-      tileDescriptionTextColor: tileDescriptionTextColor,
-      leadingIconsColor: leadingIconsColor,
+      settingsListBackground: colorScheme.surfaceContainerLow,
+      settingsSectionBackground: colorScheme.surfaceContainerHighest,
+      titleTextColor: colorScheme.onSurface,
+      settingsTileTextColor: colorScheme.onSurface,
+      tileDescriptionTextColor: colorScheme.onSurfaceVariant,
+      tileHighlightColor: colorScheme.surfaceContainerHigh,
+      leadingIconsColor: colorScheme.primary,
+      inactiveTitleColor: colorScheme.onSurface.withValues(alpha: 0.38),
+      inactiveSubtitleColor: colorScheme.onSurfaceVariant.withValues(alpha: 0.38),
     );
   }
 

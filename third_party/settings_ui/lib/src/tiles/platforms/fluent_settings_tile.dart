@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:settings_ui/src/tiles/abstract_settings_tile.dart';
 import 'package:settings_ui/src/utils/settings_theme.dart';
 
+/// Fluent Design (Windows 11) settings tile implementation.
+///
+/// Follows Windows 11 SettingsCard specifications:
+/// - Card-based layout with subtle elevation
+/// - Rounded corners (4dp radius)
+/// - Icon (36dp container) + Header + Description layout
+/// - Content aligned right by default
+/// - Hover/press states with subtle background change
+///
+/// See: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/windows/settingscontrols/settingsexpander
 class FluentSettingsTile extends AbstractSettingsTile {
   const FluentSettingsTile({
     required super.tileType,
@@ -18,134 +28,146 @@ class FluentSettingsTile extends AbstractSettingsTile {
     super.key,
   });
 
+  // Fluent Design specifications
+  static const double _borderRadius = 4.0;
+  static const double _horizontalPadding = 16.0;
+  static const double _verticalPadding = 14.0;
+  static const double _iconContainerSize = 36.0;
+  static const double _iconSize = 20.0;
+  static const double _contentGap = 16.0;
+  static const double _headerFontSize = 14.0;
+  static const double _descriptionFontSize = 12.0;
+
   @override
   Widget build(BuildContext context) {
     final theme = SettingsTheme.of(context);
-    final textScaler = MediaQuery.of(context).textScaler;
+    final colorScheme = Theme.of(context).colorScheme;
+    final brightness = Theme.of(context).brightness;
 
-    final cantShowAnimation = tileType == SettingsTileType.switchTile
-        ? onToggle == null && onPressed == null
-        : onPressed == null;
+    final isInteractive = tileType == SettingsTileType.switchTile
+        ? onToggle != null || onPressed != null
+        : onPressed != null;
+
+    // Fluent Design uses subtle surface colors
+    final cardColor = brightness == Brightness.dark
+        ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.7)
+        : colorScheme.surfaceContainerLowest;
+
+    final hoverColor = brightness == Brightness.dark
+        ? colorScheme.surfaceContainerHighest
+        : colorScheme.surfaceContainerLow;
 
     return IgnorePointer(
       ignoring: !enabled,
       child: Material(
-        color: Colors.transparent,
+        color: cardColor,
+        borderRadius: BorderRadius.circular(_borderRadius),
+        clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: cantShowAnimation
-              ? null
-              : () {
+          onTap: isInteractive
+              ? () {
                   if (tileType == SettingsTileType.switchTile) {
                     onToggle?.call(!(initialValue ?? false));
                   } else {
                     onPressed?.call(context);
                   }
-                },
-          highlightColor: theme.themeData.tileHighlightColor,
-          child: Container(
+                }
+              : null,
+          hoverColor: hoverColor,
+          highlightColor: theme.themeData.tileHighlightColor ?? hoverColor,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: _horizontalPadding,
+              vertical: _verticalPadding,
+            ),
             child: Row(
               children: [
-                if (leading != null)
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(start: 24),
+                // Leading icon in container
+                if (leading != null) ...[
+                  Container(
+                    width: _iconContainerSize,
+                    height: _iconContainerSize,
+                    decoration: BoxDecoration(
+                      color: colorScheme.primaryContainer.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(_borderRadius),
+                    ),
                     child: IconTheme(
-                      data: IconTheme.of(
-                        context,
-                      ).copyWith(color: theme.themeData.leadingIconsColor),
-                      child: leading!,
+                      data: IconThemeData(
+                        size: _iconSize,
+                        color: enabled
+                            ? theme.themeData.leadingIconsColor ??
+                                colorScheme.primary
+                            : colorScheme.onSurface.withValues(alpha: 0.38),
+                      ),
+                      child: Center(child: leading!),
                     ),
                   ),
+                  const SizedBox(width: _contentGap),
+                ],
+
+                // Content (header + description)
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.only(
-                      start: 24,
-                      end: 24,
-                      bottom: textScaler.scale(19),
-                      top: textScaler.scale(19),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        DefaultTextStyle(
-                          style: TextStyle(
-                            color: theme.themeData.settingsTileTextColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          child: title ?? Container(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Header (title)
+                      DefaultTextStyle(
+                        style: TextStyle(
+                          color: enabled
+                              ? theme.themeData.settingsTileTextColor ??
+                                  colorScheme.onSurface
+                              : colorScheme.onSurface.withValues(alpha: 0.38),
+                          fontSize: _headerFontSize,
+                          fontWeight: FontWeight.w600,
                         ),
-                        if (value != null)
-                          Padding(
-                            padding: EdgeInsets.only(top: 4.0),
-                            child: DefaultTextStyle(
-                              style: TextStyle(
-                                color: theme.themeData.tileDescriptionTextColor,
-                              ),
-                              child: value!,
+                        child: title ?? const SizedBox.shrink(),
+                      ),
+
+                      // Description
+                      if (description != null || value != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2.0),
+                          child: DefaultTextStyle(
+                            style: TextStyle(
+                              color: enabled
+                                  ? theme.themeData.tileDescriptionTextColor ??
+                                      colorScheme.onSurfaceVariant
+                                  : colorScheme.onSurfaceVariant
+                                      .withValues(alpha: 0.38),
+                              fontSize: _descriptionFontSize,
                             ),
-                          )
-                        else if (description != null)
-                          Padding(
-                            padding: EdgeInsets.only(top: 4.0),
-                            child: DefaultTextStyle(
-                              style: TextStyle(
-                                color: theme.themeData.tileDescriptionTextColor,
-                              ),
-                              child: description!,
-                            ),
+                            child: value ?? description!,
                           ),
-                      ],
-                    ),
+                        ),
+                    ],
                   ),
                 ),
-                // if (tileType == SettingsTileType.navigationTile)
-                //   Padding(
-                //     padding:
-                //         const EdgeInsetsDirectional.only(start: 6, end: 15),
-                //     child: IconTheme(
-                //       data: IconTheme.of(context)
-                //           .copyWith(color: theme.themeData.leadingIconsColor),
-                //       child: Icon(
-                //         CupertinoIcons.chevron_forward,
-                //         size: 18 * scaleFactor,
-                //       ),
-                //     ),
-                //   ),
-                if (trailing != null && tileType == SettingsTileType.switchTile)
-                  Row(
-                    children: [
-                      trailing!,
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(end: 8),
-                        child: Switch(
-                          activeThumbColor:
-                              activeSwitchColor ??
-                              Color.fromRGBO(138, 180, 248, 1.0),
-                          value: initialValue ?? false,
-                          onChanged: onToggle,
-                        ),
-                      ),
-                    ],
-                  )
-                else if (tileType == SettingsTileType.switchTile)
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                      start: 16,
-                      end: 8,
-                    ),
-                    child: Switch(
-                      value: initialValue ?? false,
-                      activeThumbColor:
-                          activeSwitchColor ??
-                          Color.fromRGBO(138, 180, 248, 1.0),
-                      onChanged: onToggle,
-                    ),
-                  )
-                else if (trailing != null)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: trailing!,
+
+                // Trailing content
+                if (tileType == SettingsTileType.switchTile) ...[
+                  if (trailing != null) ...[
+                    trailing!,
+                    const SizedBox(width: 12),
+                  ],
+                  Switch(
+                    value: initialValue ?? false,
+                    onChanged: enabled ? onToggle : null,
+                    activeTrackColor: activeSwitchColor ?? colorScheme.primary,
                   ),
+                ] else if (tileType == SettingsTileType.navigationTile) ...[
+                  const SizedBox(width: _contentGap),
+                  Icon(
+                    Icons.chevron_right,
+                    size: 20,
+                    color: enabled
+                        ? colorScheme.onSurfaceVariant
+                        : colorScheme.onSurface.withValues(alpha: 0.38),
+                  ),
+                ] else if (trailing != null) ...[
+                  const SizedBox(width: _contentGap),
+                  trailing!,
+                ],
               ],
             ),
           ),
