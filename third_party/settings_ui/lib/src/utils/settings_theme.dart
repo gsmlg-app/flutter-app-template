@@ -74,16 +74,20 @@ class SettingsThemeData {
   }
 
   /// Cupertino theme for iOS and macOS.
+  /// Uses the surface values that are actually defined in app's ColorScheme:
+  /// - List background: surfaceContainerHighest (grayer, outer)
+  /// - Section background: surface (whiter, inner)
   static SettingsThemeData _cupertinoTheme(ColorScheme colorScheme) {
     return SettingsThemeData(
-      settingsListBackground: colorScheme.surfaceContainerLow,
+      // Use surfaceContainerHighest (grayer) for list, surface (whiter) for sections
+      settingsListBackground: colorScheme.surfaceContainerHighest,
       settingsSectionBackground: colorScheme.surface,
       titleTextColor: colorScheme.onSurfaceVariant,
       settingsTileTextColor: colorScheme.onSurface,
       tileDescriptionTextColor: colorScheme.onSurfaceVariant,
       dividerColor: colorScheme.outlineVariant,
       trailingTextColor: colorScheme.onSurfaceVariant,
-      tileHighlightColor: colorScheme.surfaceContainerHighest,
+      tileHighlightColor: colorScheme.surfaceTint.withValues(alpha: 0.12),
       leadingIconsColor: colorScheme.primary,
       inactiveTitleColor: colorScheme.onSurface.withValues(alpha: 0.38),
       inactiveSubtitleColor: colorScheme.onSurfaceVariant.withValues(alpha: 0.38),

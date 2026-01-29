@@ -3,6 +3,13 @@ import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_ui/src/tiles/abstract_settings_tile.dart';
+import 'package:settings_ui/src/tiles/checkbox_group/cupertino_checkbox_group_tile.dart';
+import 'package:settings_ui/src/tiles/input/cupertino_input_tile.dart';
+import 'package:settings_ui/src/tiles/radio_group/cupertino_radio_group_tile.dart';
+import 'package:settings_ui/src/tiles/select/cupertino_select_tile.dart';
+import 'package:settings_ui/src/tiles/slider/cupertino_slider_tile.dart';
+import 'package:settings_ui/src/tiles/textarea/cupertino_textarea_tile.dart';
+import 'package:settings_ui/src/utils/settings_option.dart';
 import 'package:settings_ui/src/utils/settings_theme.dart';
 
 /// Cupertino (iOS/macOS) settings tile implementation.
@@ -30,6 +37,31 @@ class CupertinoSettingsTile extends StatefulWidget {
     required this.activeSwitchColor,
     required this.enabled,
     required this.trailing,
+    // New tile properties
+    this.inputValue,
+    this.onInputChanged,
+    this.inputHint,
+    this.inputKeyboardType,
+    this.inputMaxLength,
+    this.sliderValue,
+    this.onSliderChanged,
+    this.sliderMin = 0,
+    this.sliderMax = 1,
+    this.sliderDivisions,
+    this.selectOptions,
+    this.selectValue,
+    this.onSelectChanged,
+    this.textareaValue,
+    this.onTextareaChanged,
+    this.textareaHint,
+    this.textareaMaxLines = 3,
+    this.textareaMaxLength,
+    this.radioOptions,
+    this.radioValue,
+    this.onRadioChanged,
+    this.checkboxOptions,
+    this.checkboxValues,
+    this.onCheckboxChanged,
     super.key,
   });
 
@@ -56,6 +88,37 @@ class CupertinoSettingsTile extends StatefulWidget {
   final Color? activeSwitchColor;
   final Widget? trailing;
 
+  // New tile properties
+  final String? inputValue;
+  final void Function(String)? onInputChanged;
+  final String? inputHint;
+  final TextInputType? inputKeyboardType;
+  final int? inputMaxLength;
+
+  final double? sliderValue;
+  final void Function(double)? onSliderChanged;
+  final double sliderMin;
+  final double sliderMax;
+  final int? sliderDivisions;
+
+  final List<SettingsOption>? selectOptions;
+  final String? selectValue;
+  final void Function(String?)? onSelectChanged;
+
+  final String? textareaValue;
+  final void Function(String)? onTextareaChanged;
+  final String? textareaHint;
+  final int textareaMaxLines;
+  final int? textareaMaxLength;
+
+  final List<SettingsOption>? radioOptions;
+  final String? radioValue;
+  final void Function(String?)? onRadioChanged;
+
+  final List<SettingsOption>? checkboxOptions;
+  final Set<String>? checkboxValues;
+  final void Function(Set<String>)? onCheckboxChanged;
+
   @override
   State<CupertinoSettingsTile> createState() => _CupertinoSettingsTileState();
 }
@@ -68,6 +131,90 @@ class _CupertinoSettingsTileState extends State<CupertinoSettingsTile> {
     final additionalInfo = CupertinoSettingsTileAdditionalInfo.of(context);
     final theme = SettingsTheme.of(context);
 
+    // Delegate to specialized standalone tile widgets
+    switch (widget.tileType) {
+      case SettingsTileType.inputTile:
+        return CupertinoInputTile(
+          title: widget.title,
+          leading: widget.leading,
+          description: widget.description,
+          enabled: widget.enabled,
+          additionalInfo: additionalInfo,
+          inputValue: widget.inputValue,
+          onInputChanged: widget.onInputChanged,
+          inputHint: widget.inputHint,
+          inputKeyboardType: widget.inputKeyboardType,
+          inputMaxLength: widget.inputMaxLength,
+        );
+      case SettingsTileType.sliderTile:
+        return CupertinoSliderTile(
+          title: widget.title,
+          leading: widget.leading,
+          description: widget.description,
+          enabled: widget.enabled,
+          additionalInfo: additionalInfo,
+          sliderValue: widget.sliderValue,
+          onSliderChanged: widget.onSliderChanged,
+          sliderMin: widget.sliderMin,
+          sliderMax: widget.sliderMax,
+          sliderDivisions: widget.sliderDivisions,
+        );
+      case SettingsTileType.selectTile:
+        return CupertinoSelectTile(
+          title: widget.title,
+          leading: widget.leading,
+          description: widget.description,
+          enabled: widget.enabled,
+          additionalInfo: additionalInfo,
+          selectOptions: widget.selectOptions,
+          selectValue: widget.selectValue,
+          onSelectChanged: widget.onSelectChanged,
+        );
+      case SettingsTileType.textareaTile:
+        return CupertinoTextareaTile(
+          title: widget.title,
+          leading: widget.leading,
+          description: widget.description,
+          enabled: widget.enabled,
+          additionalInfo: additionalInfo,
+          textareaValue: widget.textareaValue,
+          onTextareaChanged: widget.onTextareaChanged,
+          textareaHint: widget.textareaHint,
+          textareaMaxLines: widget.textareaMaxLines,
+          textareaMaxLength: widget.textareaMaxLength,
+        );
+      case SettingsTileType.radioGroupTile:
+        return CupertinoRadioGroupTile(
+          title: widget.title,
+          leading: widget.leading,
+          description: widget.description,
+          enabled: widget.enabled,
+          additionalInfo: additionalInfo,
+          radioOptions: widget.radioOptions,
+          radioValue: widget.radioValue,
+          onRadioChanged: widget.onRadioChanged,
+        );
+      case SettingsTileType.checkboxGroupTile:
+        return CupertinoCheckboxGroupTile(
+          title: widget.title,
+          leading: widget.leading,
+          description: widget.description,
+          enabled: widget.enabled,
+          additionalInfo: additionalInfo,
+          checkboxOptions: widget.checkboxOptions,
+          checkboxValues: widget.checkboxValues,
+          onCheckboxChanged: widget.onCheckboxChanged,
+        );
+      default:
+        return _buildStandardTile(context, theme, additionalInfo);
+    }
+  }
+
+  Widget _buildStandardTile(
+    BuildContext context,
+    SettingsTheme theme,
+    CupertinoSettingsTileAdditionalInfo additionalInfo,
+  ) {
     return IgnorePointer(
       ignoring: !widget.enabled,
       child: Column(
@@ -232,7 +379,9 @@ class _CupertinoSettingsTileState extends State<CupertinoSettingsTile> {
         color: isPressed
             ? theme.themeData.tileHighlightColor ??
                 CupertinoColors.systemGrey4.resolveFrom(context)
-            : theme.themeData.settingsSectionBackground,
+            : theme.themeData.settingsSectionBackground ??
+                CupertinoColors.secondarySystemGroupedBackground
+                    .resolveFrom(context),
         padding: EdgeInsetsDirectional.only(
           start: CupertinoSettingsTile._horizontalPadding,
         ),
@@ -324,6 +473,7 @@ class _CupertinoSettingsTileState extends State<CupertinoSettingsTile> {
       ),
     );
   }
+
 }
 
 class CupertinoSettingsTileAdditionalInfo extends InheritedWidget {

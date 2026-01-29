@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/src/tiles/abstract_settings_tile.dart';
+import 'package:settings_ui/src/tiles/checkbox_group/material_checkbox_group_tile.dart';
+import 'package:settings_ui/src/tiles/input/material_input_tile.dart';
+import 'package:settings_ui/src/tiles/radio_group/material_radio_group_tile.dart';
+import 'package:settings_ui/src/tiles/select/material_select_tile.dart';
+import 'package:settings_ui/src/tiles/slider/material_slider_tile.dart';
+import 'package:settings_ui/src/tiles/textarea/material_textarea_tile.dart';
 import 'package:settings_ui/src/utils/settings_theme.dart';
 
 /// Material Design 3 settings tile implementation.
@@ -27,6 +33,31 @@ class MaterialSettingsTile extends AbstractSettingsTile {
     super.activeSwitchColor,
     super.enabled,
     super.trailing,
+    // New tile properties
+    super.inputValue,
+    super.onInputChanged,
+    super.inputHint,
+    super.inputKeyboardType,
+    super.inputMaxLength,
+    super.sliderValue,
+    super.onSliderChanged,
+    super.sliderMin,
+    super.sliderMax,
+    super.sliderDivisions,
+    super.selectOptions,
+    super.selectValue,
+    super.onSelectChanged,
+    super.textareaValue,
+    super.onTextareaChanged,
+    super.textareaHint,
+    super.textareaMaxLines,
+    super.textareaMaxLength,
+    super.radioOptions,
+    super.radioValue,
+    super.onRadioChanged,
+    super.checkboxOptions,
+    super.checkboxValues,
+    super.onCheckboxChanged,
     super.key,
   });
 
@@ -44,6 +75,81 @@ class MaterialSettingsTile extends AbstractSettingsTile {
 
   @override
   Widget build(BuildContext context) {
+    // Delegate to specialized standalone tile widgets
+    switch (tileType) {
+      case SettingsTileType.inputTile:
+        return MaterialInputTile(
+          title: title,
+          leading: leading,
+          description: description,
+          enabled: enabled,
+          inputValue: inputValue,
+          onInputChanged: onInputChanged,
+          inputHint: inputHint,
+          inputKeyboardType: inputKeyboardType,
+          inputMaxLength: inputMaxLength,
+        );
+      case SettingsTileType.sliderTile:
+        return MaterialSliderTile(
+          title: title,
+          leading: leading,
+          description: description,
+          enabled: enabled,
+          sliderValue: sliderValue,
+          onSliderChanged: onSliderChanged,
+          sliderMin: sliderMin,
+          sliderMax: sliderMax,
+          sliderDivisions: sliderDivisions,
+        );
+      case SettingsTileType.selectTile:
+        return MaterialSelectTile(
+          title: title,
+          leading: leading,
+          description: description,
+          enabled: enabled,
+          selectOptions: selectOptions,
+          selectValue: selectValue,
+          onSelectChanged: onSelectChanged,
+        );
+      case SettingsTileType.textareaTile:
+        return MaterialTextareaTile(
+          title: title,
+          leading: leading,
+          description: description,
+          enabled: enabled,
+          textareaValue: textareaValue,
+          onTextareaChanged: onTextareaChanged,
+          textareaHint: textareaHint,
+          textareaMaxLines: textareaMaxLines,
+          textareaMaxLength: textareaMaxLength,
+        );
+      case SettingsTileType.radioGroupTile:
+        return MaterialRadioGroupTile(
+          title: title,
+          leading: leading,
+          description: description,
+          enabled: enabled,
+          radioOptions: radioOptions,
+          radioValue: radioValue,
+          onRadioChanged: onRadioChanged,
+        );
+      case SettingsTileType.checkboxGroupTile:
+        return MaterialCheckboxGroupTile(
+          title: title,
+          leading: leading,
+          description: description,
+          enabled: enabled,
+          checkboxOptions: checkboxOptions,
+          checkboxValues: checkboxValues,
+          onCheckboxChanged: onCheckboxChanged,
+        );
+      default:
+        return _buildStandardTile(context);
+    }
+  }
+
+  /// Builds the standard tile layout (simple, switch, navigation, check).
+  Widget _buildStandardTile(BuildContext context) {
     final theme = SettingsTheme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
