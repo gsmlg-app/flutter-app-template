@@ -60,7 +60,7 @@ class Style {
 
   static InputBorder getInputBorder({
     required InputDecoration decoration,
-    required InputDecorationTheme decorationTheme,
+    required InputDecorationThemeData decorationTheme,
   }) {
     return decoration.border ??
         decorationTheme.border ??
