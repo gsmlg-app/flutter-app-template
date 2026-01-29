@@ -8,6 +8,38 @@ import 'package:flutter/material.dart';
 
 final themeList = [VioletTheme(), GreenTheme(), FireTheme(), WheatTheme()];
 
+/// Creates a ThemeData with proper visual hierarchy for macOS/desktop.
+/// - AppBar: uses surface with subtle tint
+/// - NavigationRail: uses secondaryContainer for branded, colorful navigation
+ThemeData _buildThemeData(ColorScheme colorScheme) {
+  return ThemeData(
+    useMaterial3: true,
+    colorScheme: colorScheme,
+    // AppBar styling - clean with subtle tint
+    appBarTheme: AppBarTheme(
+      backgroundColor: colorScheme.surface,
+      foregroundColor: colorScheme.onSurface,
+      elevation: 0,
+      scrolledUnderElevation: 1,
+      surfaceTintColor: colorScheme.surfaceTint,
+    ),
+    // NavigationRail styling - uses secondary color for branded look
+    navigationRailTheme: NavigationRailThemeData(
+      backgroundColor: colorScheme.secondaryContainer,
+      indicatorColor: colorScheme.primary,
+      selectedIconTheme: IconThemeData(color: colorScheme.onPrimary),
+      unselectedIconTheme: IconThemeData(color: colorScheme.onSecondaryContainer),
+      selectedLabelTextStyle: TextStyle(color: colorScheme.onSecondaryContainer),
+      unselectedLabelTextStyle: TextStyle(color: colorScheme.onSecondaryContainer),
+    ),
+    // NavigationDrawer styling - same as rail for consistency
+    navigationDrawerTheme: NavigationDrawerThemeData(
+      backgroundColor: colorScheme.secondaryContainer,
+      indicatorColor: colorScheme.primary,
+    ),
+  );
+}
+
 abstract class AppTheme {
   const AppTheme({
     required this.name,
@@ -33,16 +65,8 @@ class VioletTheme extends AppTheme {
   VioletTheme._()
     : super(
         name: 'Violet',
-        lightTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: violet.lightColorScheme,
-          // textTheme: textTheme,
-        ),
-        darkTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: violet.darkColorScheme,
-          // textTheme: textTheme,
-        ),
+        lightTheme: _buildThemeData(violet.lightColorScheme),
+        darkTheme: _buildThemeData(violet.darkColorScheme),
       );
 }
 
@@ -55,16 +79,8 @@ class GreenTheme extends AppTheme {
   GreenTheme._()
     : super(
         name: 'Green',
-        lightTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: green.lightColorScheme,
-          // textTheme: textTheme,
-        ),
-        darkTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: green.darkColorScheme,
-          // textTheme: textTheme,
-        ),
+        lightTheme: _buildThemeData(green.lightColorScheme),
+        darkTheme: _buildThemeData(green.darkColorScheme),
       );
 }
 
@@ -77,16 +93,8 @@ class FireTheme extends AppTheme {
   FireTheme._()
     : super(
         name: 'Fire',
-        lightTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: fire.lightColorScheme,
-          // textTheme: textTheme,
-        ),
-        darkTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: fire.darkColorScheme,
-          // textTheme: textTheme,
-        ),
+        lightTheme: _buildThemeData(fire.lightColorScheme),
+        darkTheme: _buildThemeData(fire.darkColorScheme),
       );
 }
 
@@ -99,16 +107,8 @@ class WheatTheme extends AppTheme {
   WheatTheme._()
     : super(
         name: 'Wheat',
-        lightTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: wheat.lightColorScheme,
-          // textTheme: textTheme,
-        ),
-        darkTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: wheat.darkColorScheme,
-          // textTheme: textTheme,
-        ),
+        lightTheme: _buildThemeData(wheat.lightColorScheme),
+        darkTheme: _buildThemeData(wheat.darkColorScheme),
       );
 }
 
@@ -121,21 +121,17 @@ class DynamicTheme extends AppTheme {
   DynamicTheme._(Color seedColor)
     : super(
         name: 'Dynamic',
-        lightTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
+        lightTheme: _buildThemeData(
+          ColorScheme.fromSeed(
             seedColor: seedColor,
             brightness: Brightness.light,
           ),
-          // textTheme: textTheme,
         ),
-        darkTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
+        darkTheme: _buildThemeData(
+          ColorScheme.fromSeed(
             seedColor: seedColor,
             brightness: Brightness.dark,
           ),
-          // textTheme: textTheme,
         ),
       );
 }
