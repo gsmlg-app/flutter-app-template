@@ -1,6 +1,7 @@
 import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
 import 'package:app_locale/app_locale.dart';
 import 'package:app_theme/app_theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
@@ -41,63 +42,18 @@ class AccentColorSettingsScreen extends StatelessWidget {
                       sections: [
                         SettingsSection(
                           title: Text(context.l10n.accentColor),
-                          tiles: themeList.map<SettingsTile>((appTheme) {
-                            final isSelected =
-                                currentTheme.name == appTheme.name;
-                            final colorScheme = isLight
-                                ? appTheme.lightTheme.colorScheme
-                                : appTheme.darkTheme.colorScheme;
-
-                            return SettingsTile(
-                              leading: Container(
-                                width: 24,
-                                height: 24,
-                                decoration: BoxDecoration(
-                                  color: colorScheme.primary,
-                                  shape: BoxShape.circle,
-                                ),
+                          tiles: <AbstractSettingsTile>[
+                            CustomSettingsTile(
+                              child: _AccentColorPicker(
+                                themes: themeList,
+                                currentTheme: currentTheme,
+                                isLight: isLight,
+                                onThemeChanged: (theme) {
+                                  themeBloc.add(ChangeTheme(theme));
+                                },
                               ),
-                              title: Text(appTheme.name),
-                              trailing: isSelected
-                                  ? const Icon(Icons.check)
-                                  : null,
-                              value: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    width: 16,
-                                    height: 16,
-                                    decoration: BoxDecoration(
-                                      color: colorScheme.primary,
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4),
-                                        bottomLeft: Radius.circular(4),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 16,
-                                    height: 16,
-                                    color: colorScheme.secondary,
-                                  ),
-                                  Container(
-                                    width: 16,
-                                    height: 16,
-                                    decoration: BoxDecoration(
-                                      color: colorScheme.tertiary,
-                                      borderRadius: const BorderRadius.only(
-                                        topRight: Radius.circular(4),
-                                        bottomRight: Radius.circular(4),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              onPressed: (context) {
-                                themeBloc.add(ChangeTheme(appTheme));
-                              },
-                            );
-                          }).toList(),
+                            ),
+                          ],
                         ),
                       ],
                     );
@@ -109,6 +65,111 @@ class AccentColorSettingsScreen extends StatelessWidget {
         );
       },
       smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
+    );
+  }
+}
+
+/// A horizontal accent color picker with colored circles.
+class _AccentColorPicker extends StatelessWidget {
+  const _AccentColorPicker({
+    required this.themes,
+    required this.currentTheme,
+    required this.isLight,
+    required this.onThemeChanged,
+  });
+
+  final List<AppTheme> themes;
+  final AppTheme currentTheme;
+  final bool isLight;
+  final ValueChanged<AppTheme> onThemeChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final labelColor = isDark ? CupertinoColors.white : CupertinoColors.black;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Color circles row
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: themes.map((theme) {
+              final colorScheme = isLight
+                  ? theme.lightTheme.colorScheme
+                  : theme.darkTheme.colorScheme;
+              final isSelected = currentTheme.name == theme.name;
+
+              return _ColorOption(
+                color: colorScheme.primary,
+                isSelected: isSelected,
+                onTap: () => onThemeChanged(theme),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 12),
+          // Current theme name
+          Text(
+            currentTheme.name,
+            style: TextStyle(
+              fontSize: 13,
+              color: labelColor.withValues(alpha: 0.7),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ColorOption extends StatelessWidget {
+  const _ColorOption({
+    required this.color,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final Color color;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 28,
+        height: 28,
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+          border: isSelected
+              ? Border.all(
+                  color: CupertinoColors.white,
+                  width: 2,
+                )
+              : null,
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: color.withValues(alpha: 0.5),
+                    blurRadius: 4,
+                    spreadRadius: 1,
+                  ),
+                ]
+              : null,
+        ),
+        child: isSelected
+            ? const Icon(
+                CupertinoIcons.checkmark,
+                color: CupertinoColors.white,
+                size: 16,
+              )
+            : null,
+      ),
     );
   }
 }
