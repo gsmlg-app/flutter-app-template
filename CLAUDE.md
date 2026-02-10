@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Flutter monorepo template with modular architecture, BLoC state management, and comprehensive tooling. Follows clean architecture principles with separation of concerns across specialized packages.
 
+**Requirements**: Flutter SDK >=3.8.0, Dart >=3.8.0
+
 ## Architecture Structure
 
 ```
@@ -19,7 +21,7 @@ Flutter monorepo template with modular architecture, BLoC state management, and 
 └── third_party/            # Modified third-party packages
 ```
 
-**Workspace packages** (defined in root `pubspec.yaml` workspace section):
+**Workspace packages** (defined in root `pubspec.yaml` `workspace:` section—there is no separate melos.yaml):
 - `app_lib/`: database, gamepad, theme, locale, provider, logging, secure_storage
 - `app_bloc/`: gamepad, navigation, theme
 - `app_widget/`: adaptive, artwork, chart, feedback, web_view
@@ -159,6 +161,8 @@ Brick tests are in `test_bricks/` (one folder per brick) and run via GitHub Acti
 ## Development Environment
 
 Uses Nix/Devenv for reproducible environment. Auto-loads via direnv (`.envrc`). Flutter SDK version managed through `devenv.nix`.
+
+**macOS Entitlements**: When using `flutter_secure_storage`, the app requires `keychain-access-groups` entitlement in both `macos/Runner/DebugProfile.entitlements` and `macos/Runner/Release.entitlements`.
 
 ## Git Configuration
 
