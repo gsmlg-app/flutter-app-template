@@ -2,10 +2,11 @@ import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
 import 'package:app_locale/app_locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
+import 'package:flutter_app_template/screens/settings/controller_test_screen.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
-import 'package:flutter_app_template/screens/settings/widgets/gamepad_visualizer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gamepad_bloc/gamepad_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class ControllerSettingsScreen extends StatefulWidget {
@@ -23,7 +24,6 @@ class _ControllerSettingsScreenState extends State<ControllerSettingsScreen> {
   @override
   void initState() {
     super.initState();
-    // Refresh controllers when screen opens
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<GamepadBloc>().add(const GamepadRefreshControllers());
     });
@@ -39,22 +39,14 @@ class _ControllerSettingsScreenState extends State<ControllerSettingsScreen> {
       onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs(context),
       body: (context) {
-        return DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text(context.l10n.controllerSettingsTitle),
-              bottom: TabBar(
-                tabs: [
-                  Tab(text: context.l10n.controllerSettings),
-                  Tab(text: context.l10n.controllerDebug),
-                ],
+        return SafeArea(
+          child: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                title: Text(context.l10n.controllerSettingsTitle),
               ),
-            ),
-            body: TabBarView(
-              children: [
-                // Settings tab
-                BlocBuilder<GamepadBloc, GamepadState>(
+              SliverFillRemaining(
+                child: BlocBuilder<GamepadBloc, GamepadState>(
                   builder: (context, state) {
                     return SettingsList(
                       sections: [
@@ -68,13 +60,8 @@ class _ControllerSettingsScreenState extends State<ControllerSettingsScreen> {
                     );
                   },
                 ),
-                // Debug/Visualizer tab
-                const SingleChildScrollView(
-                  padding: EdgeInsets.all(16),
-                  child: GamepadVisualizer(),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
@@ -112,16 +99,19 @@ class _ControllerSettingsScreenState extends State<ControllerSettingsScreen> {
       title: Text(context.l10n.connectedControllers),
       tiles: <SettingsTile>[
         if (controllers.isEmpty)
-          SettingsTile(
+          SettingsTile.navigation(
             leading: const Icon(Icons.info_outline),
             title: Text(context.l10n.noControllersConnected),
+            description: Text(context.l10n.controllerTestDesc),
+            onPressed: (_) => context.goNamed(ControllerTestScreen.name),
           )
         else
           ...controllers.map(
-            (controller) => SettingsTile(
+            (controller) => SettingsTile.navigation(
               leading: Icon(_getControllerIcon(controller.type)),
               title: Text(controller.name),
               description: Text(controller.type.displayName),
+              onPressed: (_) => context.goNamed(ControllerTestScreen.name),
             ),
           ),
         SettingsTile(

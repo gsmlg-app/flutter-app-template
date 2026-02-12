@@ -38,3 +38,13 @@ final class GamepadActionReceived extends GamepadEvent {
 
   final GamepadAction action;
 }
+
+/// Enter key binding test mode (suppresses navigation/focus actions)
+final class GamepadEnterTestMode extends GamepadEvent {
+  const GamepadEnterTestMode();
+}
+
+/// Exit key binding test mode
+final class GamepadExitTestMode extends GamepadEvent {
+  const GamepadExitTestMode();
+}

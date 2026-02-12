@@ -23,6 +23,8 @@ class GamepadBloc extends Bloc<GamepadEvent, GamepadState> {
     on<GamepadUpdateConfig>(_onUpdateConfig);
     on<GamepadToggleEnabled>(_onToggleEnabled);
     on<GamepadActionReceived>(_onActionReceived);
+    on<GamepadEnterTestMode>(_onEnterTestMode);
+    on<GamepadExitTestMode>(_onExitTestMode);
   }
 
   /// The navigator key for accessing navigation context
@@ -107,8 +109,25 @@ class GamepadBloc extends Bloc<GamepadEvent, GamepadState> {
     GamepadActionReceived event,
     Emitter<GamepadState> emit,
   ) {
-    // Update last action for UI feedback
-    emit(state.copyWith(lastAction: event.action));
+    // Update last action for UI feedback, incrementing counter for unique states
+    emit(state.copyWith(
+      lastAction: event.action,
+      actionCounter: state.actionCounter + 1,
+    ));
+  }
+
+  void _onEnterTestMode(
+    GamepadEnterTestMode event,
+    Emitter<GamepadState> emit,
+  ) {
+    emit(state.copyWith(isTestingMode: true));
+  }
+
+  void _onExitTestMode(
+    GamepadExitTestMode event,
+    Emitter<GamepadState> emit,
+  ) {
+    emit(state.copyWith(isTestingMode: false));
   }
 
   void _handleGamepadAction(GamepadAction action) {
@@ -117,6 +136,9 @@ class GamepadBloc extends Bloc<GamepadEvent, GamepadState> {
 
     // Don't process if disabled
     if (!state.config.enabled) return;
+
+    // In test mode, suppress navigation/focus but action is already emitted above
+    if (state.isTestingMode) return;
 
     switch (action) {
       case GamepadAction.shoulderLeft:

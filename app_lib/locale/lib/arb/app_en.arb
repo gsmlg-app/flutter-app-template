@@ -38,5 +38,10 @@
   "analogDeadzone": "Analog Stick Deadzone",
   "lastInput": "Last Input",
   "controllerDebug": "Debug",
+  "controllerBindingTest": "Test",
+  "controllerTest": "Controller Test",
+  "controllerTestDesc": "Test button mappings and inputs",
+  "noControllerDetected": "No Controller Detected",
+  "showRawData": "Show Raw Data",
   "@@description": "App description"
 }
