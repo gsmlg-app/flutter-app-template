@@ -11,7 +11,7 @@ dependencies:
   equatable: ^2.0.5
   flutter:
     sdk: flutter
-  google_fonts: ^6.2.0
+  google_fonts: ^8.0.2
   shared_preferences: ^2.0.17
 
 dev_dependencies:
