@@ -176,27 +176,51 @@ class GamepadService {
       _notifyControllerChangeListeners();
     }
 
+    // On Linux, the gamepads plugin sends bare numeric keys (e.g. "0", "1")
+    // with the type in a separate field. Prefix with "button"/"analog" so
+    // downstream matchers (which expect names like "button 0", "analog 0")
+    // can identify them.
+    final key = _normalizeKey(event);
+
     // Always notify raw listeners (no debounce for debugging)
-    _notifyRawListeners(event.gamepadId, event.key, event.value);
+    _notifyRawListeners(event.gamepadId, key, event.value);
 
     // Debounce to prevent rapid-fire
     final now = DateTime.now();
     if (_lastEventTime != null &&
-        _lastKey == event.key &&
+        _lastKey == key &&
         now.difference(_lastEventTime!) < _debounceDuration) {
       return;
     }
 
-    final action = _mapEventToAction(event);
+    final action = _mapEventToAction(event, key);
     if (action != null) {
       _lastEventTime = now;
-      _lastKey = event.key;
+      _lastKey = key;
       _notifyListeners(action);
     }
   }
 
-  GamepadAction? _mapEventToAction(GamepadEvent event) {
-    final key = event.key.toLowerCase();
+  /// Normalizes the event key for cross-platform consistency.
+  ///
+  /// On Linux the gamepads plugin sends bare numeric keys (e.g. "0", "1").
+  /// This prefixes them with the event type so they match the patterns used
+  /// by [accumulateRawEvent] and the action matchers ("button 0", "analog 0").
+  String _normalizeKey(GamepadEvent event) {
+    final key = event.key;
+    // If the key is already a named string (Android, Web), return as-is.
+    if (int.tryParse(key) == null) return key;
+    // Bare number → prefix with type name.
+    switch (event.type) {
+      case KeyType.button:
+        return 'button $key';
+      case KeyType.analog:
+        return 'analog $key';
+    }
+  }
+
+  GamepadAction? _mapEventToAction(GamepadEvent event, String normalizedKey) {
+    final key = normalizedKey.toLowerCase();
     final value = event.value;
 
     // Determine if button is pressed (Android KEYCODE_ uses inverted values:
@@ -277,8 +301,10 @@ class GamepadService {
         (key.contains('pov') && key.contains('down'));
   }
 
-  bool _isDpadHatX(String key) => key == 'axis_hat_x';
-  bool _isDpadHatY(String key) => key == 'axis_hat_y';
+  bool _isDpadHatX(String key) =>
+      key == 'axis_hat_x' || key == 'analog 6' || key == 'analog6';
+  bool _isDpadHatY(String key) =>
+      key == 'axis_hat_y' || key == 'analog 7' || key == 'analog7';
 
   // ── Confirm button (A on Xbox, Cross on PlayStation) ──
 
@@ -363,24 +389,30 @@ class GamepadService {
 
   bool _isRightStickX(String key) {
     return key == 'axis_z' ||
+        key == 'axis_rx' ||
         key == 'rightx' ||
         key == 'right x' ||
         key == 'rightstickx' ||
         key == 'axis 2' ||
         key == 'axis2' ||
         key == 'analog 2' ||
-        key == 'analog2';
+        key == 'analog2' ||
+        key == 'analog 3' || // ABS_RX on some Linux controllers
+        key == 'analog3';
   }
 
   bool _isRightStickY(String key) {
     return key == 'axis_rz' ||
+        key == 'axis_ry' ||
         key == 'righty' ||
         key == 'right y' ||
         key == 'rightsticky' ||
         key == 'axis 3' ||
         key == 'axis3' ||
-        key == 'analog 3' ||
-        key == 'analog3';
+        key == 'analog 4' || // ABS_RY on some Linux controllers
+        key == 'analog4' ||
+        key == 'analog 5' || // ABS_RZ on some Linux controllers
+        key == 'analog5';
   }
 
   void _notifyListeners(GamepadAction action) {
