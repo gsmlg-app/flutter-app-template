@@ -82,8 +82,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  test: ^1.26.3
-
   flutter_lints: ^6.0.0
 
   build_runner: ^2.4.15
@@ -92,6 +90,13 @@ dev_dependencies:
   mason: ^0.1.1
   mason_cli: ^0.1.1
   dependency_validator: ^5.0.2
+
+dependency_overrides:
+  # Override analyzer and meta to resolve conflict between drift_dev (>=10.0.0)
+  # and test 1.26.3 (<9.0.0) / Flutter SDK meta pin.
+  # Safe because test only uses analyzer for optional static analysis features.
+  analyzer: ^12.0.0
+  meta: ^1.18.0
 
 flutter:
   uses-material-design: true
