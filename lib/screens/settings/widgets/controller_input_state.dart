@@ -276,46 +276,59 @@ bool _isLeftStickY(String k) =>
     k == 'analog 1' ||
     k == 'analog1';
 
+// Linux joystick axis layout varies by controller:
+//   Layout A: 0=LX, 1=LY, 2=RX, 3=RY, 4=LT, 5=RT  (e.g. some Xbox clones)
+//   Layout B: 0=LX, 1=LY, 2=RX, 3=RX', 4=RY', 5=RY, 6=DX, 7=DY  (e.g. PS4/DualSense)
+// We match both layouts; the duplicates are harmless (same physical axis).
+
 bool _isRightStickX(String k) =>
     k == 'axis_z' ||
+    k == 'axis_rx' ||
     k == 'rightx' ||
     k == 'right x' ||
     k == 'rightstickx' ||
     k == 'axis 2' ||
     k == 'axis2' ||
     k == 'analog 2' ||
-    k == 'analog2';
+    k == 'analog2' ||
+    k == 'analog 3' || // ABS_RX on Layout B controllers
+    k == 'analog3';
 
 bool _isRightStickY(String k) =>
     k == 'axis_rz' ||
+    k == 'axis_ry' ||
     k == 'righty' ||
     k == 'right y' ||
     k == 'rightsticky' ||
     k == 'axis 3' ||
     k == 'axis3' ||
-    k == 'analog 3' ||
-    k == 'analog3';
+    k == 'analog 4' || // ABS_RY on Layout B controllers
+    k == 'analog4' ||
+    k == 'analog 5' || // ABS_RZ on Layout B controllers
+    k == 'analog5';
 
 bool _isLeftTriggerAxis(String k) =>
     k == 'axis_ltrigger' ||
     k == 'axis_brake' ||
     k == 'lefttrigger' ||
     k == 'axis 4' ||
-    k == 'axis4' ||
-    k == 'analog 4' ||
-    k == 'analog4';
+    k == 'axis4';
 
 bool _isRightTriggerAxis(String k) =>
     k == 'axis_rtrigger' ||
     k == 'axis_gas' ||
     k == 'righttrigger' ||
     k == 'axis 5' ||
-    k == 'axis5' ||
-    k == 'analog 5' ||
-    k == 'analog5';
+    k == 'axis5';
 
-bool _isDpadHatX(String k) => k == 'axis_hat_x';
-bool _isDpadHatY(String k) => k == 'axis_hat_y';
+bool _isDpadHatX(String k) =>
+    k == 'axis_hat_x' ||
+    k == 'analog 6' || // Linux joystick HAT0X
+    k == 'analog6';
+bool _isDpadHatY(String k) =>
+    k == 'axis_hat_y' ||
+    k == 'analog 7' || // Linux joystick HAT0Y
+    k == 'analog7';
 
 /// Accumulates a raw event into an existing [ControllerInputState].
 ControllerInputState accumulateRawEvent(
@@ -330,13 +343,13 @@ ControllerInputState accumulateRawEvent(
     return state.copyWith(leftStickX: value);
   }
   if (_isLeftStickY(k)) {
-    return state.copyWith(leftStickY: value);
+    return state.copyWith(leftStickY: -value);
   }
   if (_isRightStickX(k)) {
     return state.copyWith(rightStickX: value);
   }
   if (_isRightStickY(k)) {
-    return state.copyWith(rightStickY: value);
+    return state.copyWith(rightStickY: -value);
   }
   if (_isLeftTriggerAxis(k)) {
     return state.copyWith(leftTrigger: value.clamp(0, 1));
@@ -380,11 +393,26 @@ ControllerInputState accumulateRawEvent(
   // ── Digital buttons ──
   final id = identifyButton(rawKey);
   if (id != null) {
+    final isDown = _isPressed(rawKey, value);
     final pressed = Set<String>.of(state.pressedButtons);
-    if (_isPressed(rawKey, value)) {
+    if (isDown) {
       pressed.add(id);
     } else {
       pressed.remove(id);
+    }
+    // When triggers arrive as digital buttons (Linux), also drive the
+    // analog trigger bar so the visualizer shows feedback.
+    if (id == ButtonId.lt) {
+      return state.copyWith(
+        pressedButtons: pressed,
+        leftTrigger: isDown ? 1.0 : 0.0,
+      );
+    }
+    if (id == ButtonId.rt) {
+      return state.copyWith(
+        pressedButtons: pressed,
+        rightTrigger: isDown ? 1.0 : 0.0,
+      );
     }
     return state.copyWith(pressedButtons: pressed);
   }
