@@ -7,12 +7,21 @@ in
 {
   env.GREET = "Flutter APP Template";
 
-  packages = [
-    pkgs-stable.git
-    pkgs-stable.figlet
-    pkgs-stable.lolcat
-    pkgs-stable.watchman
-    pkgs-stable.inotify-tools
+  packages = with pkgs-stable; [
+    git
+    figlet
+    lolcat
+    watchman
+    inotify-tools
+    # Linux desktop build & runtime dependencies
+    pkg-config
+    gtk3
+    glib
+    libsecret
+    sqlite
+    cmake
+    ninja
+    clang
   ];
 
   android = {

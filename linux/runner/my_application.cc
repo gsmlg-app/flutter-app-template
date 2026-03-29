@@ -47,6 +47,10 @@ static void my_application_activate(GApplication* application) {
     gtk_window_set_title(window, "flutter_app_template");
   }
 
+  // Apply dark theme to GTK to match the terminal app aesthetic.
+  GtkSettings* settings = gtk_settings_get_default();
+  g_object_set(settings, "gtk-application-prefer-dark-theme", TRUE, nullptr);
+
   gtk_window_set_default_size(window, 1280, 720);
   gtk_widget_show(GTK_WIDGET(window));
 
