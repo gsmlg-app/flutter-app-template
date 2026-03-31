@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_template/screens/settings/app_settings_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:theme_bloc/theme_bloc.dart';
+import 'package:duskmoon_theme_bloc/duskmoon_theme_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_locale/app_locale.dart';
 
 void main() {
   group('AppSettingsScreen', () {
     late SharedPreferences sharedPreferences;
-    late ThemeBloc themeBloc;
+    late DmThemeBloc themeBloc;
 
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
       sharedPreferences = await SharedPreferences.getInstance();
-      themeBloc = ThemeBloc(sharedPreferences);
+      themeBloc = DmThemeBloc(sharedPreferences);
     });
 
     tearDown(() {
@@ -28,7 +28,7 @@ void main() {
       await tester.pumpWidget(
         RepositoryProvider<SharedPreferences>(
           create: (context) => sharedPreferences,
-          child: BlocProvider<ThemeBloc>(
+          child: BlocProvider<DmThemeBloc>(
             create: (context) => themeBloc,
             child: MaterialApp(
               localizationsDelegates: AppLocale.localizationsDelegates,
@@ -47,7 +47,7 @@ void main() {
       await tester.pumpWidget(
         RepositoryProvider<SharedPreferences>(
           create: (context) => sharedPreferences,
-          child: BlocProvider<ThemeBloc>(
+          child: BlocProvider<DmThemeBloc>(
             create: (context) => themeBloc,
             child: MaterialApp(
               localizationsDelegates: AppLocale.localizationsDelegates,
@@ -67,7 +67,7 @@ void main() {
       await tester.pumpWidget(
         RepositoryProvider<SharedPreferences>(
           create: (context) => sharedPreferences,
-          child: BlocProvider<ThemeBloc>(
+          child: BlocProvider<DmThemeBloc>(
             create: (context) => themeBloc,
             child: MaterialApp(
               localizationsDelegates: AppLocale.localizationsDelegates,
@@ -89,7 +89,7 @@ void main() {
       await tester.pumpWidget(
         RepositoryProvider<SharedPreferences>(
           create: (context) => sharedPreferences,
-          child: BlocProvider<ThemeBloc>(
+          child: BlocProvider<DmThemeBloc>(
             create: (context) => themeBloc,
             child: MaterialApp(
               localizationsDelegates: AppLocale.localizationsDelegates,
@@ -110,7 +110,7 @@ void main() {
       await tester.pumpWidget(
         RepositoryProvider<SharedPreferences>(
           create: (context) => sharedPreferences,
-          child: BlocProvider<ThemeBloc>(
+          child: BlocProvider<DmThemeBloc>(
             create: (context) => themeBloc,
             child: MaterialApp(
               localizationsDelegates: AppLocale.localizationsDelegates,
@@ -141,7 +141,7 @@ void main() {
       await tester.pumpWidget(
         RepositoryProvider<SharedPreferences>(
           create: (context) => sharedPreferences,
-          child: BlocProvider<ThemeBloc>(
+          child: BlocProvider<DmThemeBloc>(
             create: (context) => themeBloc,
             child: MaterialApp(
               localizationsDelegates: AppLocale.localizationsDelegates,
@@ -171,7 +171,7 @@ void main() {
       await tester.pumpWidget(
         RepositoryProvider<SharedPreferences>(
           create: (context) => sharedPreferences,
-          child: BlocProvider<ThemeBloc>(
+          child: BlocProvider<DmThemeBloc>(
             create: (context) => themeBloc,
             child: MaterialApp(
               localizationsDelegates: AppLocale.localizationsDelegates,
@@ -194,7 +194,7 @@ void main() {
       await tester.pumpWidget(
         RepositoryProvider<SharedPreferences>(
           create: (context) => emptyPrefs,
-          child: BlocProvider<ThemeBloc>(
+          child: BlocProvider<DmThemeBloc>(
             create: (context) => themeBloc,
             child: MaterialApp(
               localizationsDelegates: AppLocale.localizationsDelegates,
