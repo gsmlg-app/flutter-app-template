@@ -1,13 +1,12 @@
 import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
 import 'package:app_locale/app_locale.dart';
-import 'package:app_theme/app_theme.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:settings_ui/settings_ui.dart';
-import 'package:theme_bloc/theme_bloc.dart';
+import 'package:duskmoon_theme_bloc/duskmoon_theme_bloc.dart';
 
 class AccentColorSettingsScreen extends StatelessWidget {
   static const name = 'Accent Color Settings';
@@ -25,7 +24,7 @@ class AccentColorSettingsScreen extends StatelessWidget {
       onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs(context),
       body: (context) {
-        final themeBloc = context.read<ThemeBloc>();
+        final themeBloc = context.read<DmThemeBloc>();
         final isLight = Theme.of(context).brightness == Brightness.light;
 
         return SafeArea(
@@ -33,10 +32,10 @@ class AccentColorSettingsScreen extends StatelessWidget {
             slivers: <Widget>[
               SliverAppBar(title: Text(context.l10n.accentColor)),
               SliverFillRemaining(
-                child: BlocBuilder<ThemeBloc, ThemeState>(
+                child: BlocBuilder<DmThemeBloc, DmThemeState>(
                   bloc: themeBloc,
                   builder: (context, state) {
-                    final currentTheme = state.theme;
+                    final currentTheme = state.entry;
 
                     return SettingsList(
                       sections: [
@@ -45,11 +44,11 @@ class AccentColorSettingsScreen extends StatelessWidget {
                           tiles: <AbstractSettingsTile>[
                             CustomSettingsTile(
                               child: _AccentColorPicker(
-                                themes: themeList,
+                                themes: DmThemeData.themes,
                                 currentTheme: currentTheme,
                                 isLight: isLight,
                                 onThemeChanged: (theme) {
-                                  themeBloc.add(ChangeTheme(theme));
+                                  themeBloc.add(DmSetTheme(theme.name));
                                 },
                               ),
                             ),
@@ -78,10 +77,10 @@ class _AccentColorPicker extends StatelessWidget {
     required this.onThemeChanged,
   });
 
-  final List<AppTheme> themes;
-  final AppTheme currentTheme;
+  final List<DmThemeEntry> themes;
+  final DmThemeEntry currentTheme;
   final bool isLight;
-  final ValueChanged<AppTheme> onThemeChanged;
+  final ValueChanged<DmThemeEntry> onThemeChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -99,8 +98,8 @@ class _AccentColorPicker extends StatelessWidget {
             runSpacing: 12,
             children: themes.map((theme) {
               final colorScheme = isLight
-                  ? theme.lightTheme.colorScheme
-                  : theme.darkTheme.colorScheme;
+                  ? theme.light.colorScheme
+                  : theme.dark.colorScheme;
               final isSelected = currentTheme.name == theme.name;
 
               return _ColorOption(
