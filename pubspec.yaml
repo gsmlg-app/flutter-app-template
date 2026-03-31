@@ -10,18 +10,14 @@ environment:
 workspace:
   - app_lib/database
   - app_lib/gamepad
-  - app_lib/theme
   - app_lib/locale
   - app_lib/provider
   - app_lib/logging
   - app_lib/secure_storage
   - app_bloc/gamepad
   - app_bloc/navigation
-  - app_bloc/theme
-  - app_widget/adaptive
   - app_widget/artwork
   - app_widget/chart
-  - app_widget/feedback
   - app_widget/web_view
   - app_form/demo
   - app_plugin/client_info/client_info
@@ -33,8 +29,6 @@ workspace:
   - app_plugin/client_info/client_info_windows
   - third_party/form_bloc
   - third_party/flutter_form_bloc
-  - third_party/flutter_adaptive_scaffold
-  - third_party/settings_ui
 
 dependencies:
   flutter:
@@ -68,18 +62,13 @@ dependencies:
   # workspace packages
   app_database: any
   app_gamepad: any
-  app_theme: any
   app_locale: any
   app_provider: any
   gamepad_bloc: any
   nav_bloc: any
-  theme_bloc: any
   app_artwork: any
   app_chart: any
   app_client_info: any
-  app_feedback: any
-  app_adaptive_widgets: any
-  settings_ui: any
   app_logging: any
   app_secure_storage: any
   app_web_view: any
