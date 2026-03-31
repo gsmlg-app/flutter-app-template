@@ -1,4 +1,3 @@
-import 'package:app_feedback/app_feedback.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
@@ -15,7 +14,7 @@ class AdaptiveDemoScreen extends StatelessWidget {
       DmAction(
         title: 'Edit',
         icon: Icons.edit,
-        onPressed: () => showSnackbar(
+        onPressed: () => showDmSnackbar(
           context: context,
           message: const Text('Edit action pressed'),
         ),
@@ -23,7 +22,7 @@ class AdaptiveDemoScreen extends StatelessWidget {
       DmAction(
         title: 'Share',
         icon: Icons.share,
-        onPressed: () => showSnackbar(
+        onPressed: () => showDmSnackbar(
           context: context,
           message: const Text('Share action pressed'),
         ),
@@ -31,7 +30,7 @@ class AdaptiveDemoScreen extends StatelessWidget {
       DmAction(
         title: 'Delete',
         icon: Icons.delete,
-        onPressed: () => showSnackbar(
+        onPressed: () => showDmSnackbar(
           context: context,
           message: const Text('Delete action pressed'),
         ),

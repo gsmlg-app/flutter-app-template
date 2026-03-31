@@ -1,4 +1,3 @@
-import 'package:app_feedback/app_feedback.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:app_locale/app_locale.dart';
 import 'package:flutter/material.dart';
@@ -138,7 +137,7 @@ class FeedbackDemoScreen extends StatelessWidget {
   }
 
   void _showDialog(BuildContext context) {
-    showAppDialog(
+    showDmDialog(
       context: context,
       title: const Text('Dialog Title'),
       content: const Text(
@@ -146,11 +145,11 @@ class FeedbackDemoScreen extends StatelessWidget {
         'It uses AlertDialog.adaptive to match the platform style.',
       ),
       actions: [
-        AppDialogAction(
+        DmDialogAction(
           onPressed: (ctx) => Navigator.of(ctx).pop(),
           child: Text(context.l10n.cancel),
         ),
-        AppDialogAction(
+        DmDialogAction(
           onPressed: (ctx) => Navigator.of(ctx).pop(),
           child: Text(context.l10n.ok),
         ),
@@ -159,7 +158,7 @@ class FeedbackDemoScreen extends StatelessWidget {
   }
 
   void _showSnackbar(BuildContext context) {
-    showSnackbar(
+    showDmSnackbar(
       context: context,
       message: const Text('This is a simple snackbar message'),
       showCloseIcon: true,
@@ -169,11 +168,11 @@ class FeedbackDemoScreen extends StatelessWidget {
   }
 
   void _showUndoSnackbar(BuildContext context) {
-    showUndoSnackbar(
+    showDmUndoSnackbar(
       context: context,
       message: const Text('Item deleted'),
       onUndoPressed: () {
-        showSnackbar(
+        showDmSnackbar(
           context: context,
           message: const Text('Undo action triggered!'),
         );
@@ -182,7 +181,7 @@ class FeedbackDemoScreen extends StatelessWidget {
   }
 
   void _showSuccessToast(BuildContext context) {
-    showSuccessToast(
+    showDmSuccessToast(
       context: context,
       title: 'Success!',
       message: 'Operation completed successfully.',
@@ -191,7 +190,7 @@ class FeedbackDemoScreen extends StatelessWidget {
   }
 
   void _showErrorToast(BuildContext context) {
-    showErrorToast(
+    showDmErrorToast(
       context: context,
       title: 'Error!',
       message: 'Something went wrong. Please try again.',
@@ -199,12 +198,12 @@ class FeedbackDemoScreen extends StatelessWidget {
   }
 
   void _showBottomSheet(BuildContext context) {
-    showBottomSheetActionList(
+    showDmBottomSheetActionList(
       context: context,
       actions: [
-        BottomSheetAction(title: const Text('Option 1'), onTap: () {}),
-        BottomSheetAction(title: const Text('Option 2'), onTap: () {}),
-        BottomSheetAction(
+        DmBottomSheetAction(title: const Text('Option 1'), onTap: () {}),
+        DmBottomSheetAction(title: const Text('Option 2'), onTap: () {}),
+        DmBottomSheetAction(
           title: const Text('Option 3'),
           onTap: () {},
           style: ElevatedButton.styleFrom(
@@ -217,7 +216,7 @@ class FeedbackDemoScreen extends StatelessWidget {
   }
 
   void _showFullscreen(BuildContext context) {
-    showFullScreenDialog(
+    showDmFullscreenDialog(
       context: context,
       title: const Text('Fullscreen Dialog'),
       builder: (context) {

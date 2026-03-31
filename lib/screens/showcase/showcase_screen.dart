@@ -44,7 +44,7 @@ class ShowcaseScreen extends StatelessWidget {
               _buildDemoCard(
                 context,
                 title: 'Feedback Widgets',
-                subtitle: 'app_feedback',
+                subtitle: 'duskmoon_feedback',
                 description:
                     'Dialogs, Snackbars, Toasts, Bottom Sheets, Fullscreen Dialogs',
                 icon: Icons.notifications_active,

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:app_feedback/app_feedback.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:app_web_view/app_web_view.dart';
 import 'package:flutter/material.dart';
@@ -270,7 +269,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
   }
 
   void _showInfo(BuildContext context) {
-    showAppDialog(
+    showDmDialog(
       context: context,
       title: const Text('LocalHtmlViewer'),
       content: const SingleChildScrollView(
@@ -303,7 +302,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
         ),
       ),
       actions: [
-        AppDialogAction(
+        DmDialogAction(
           onPressed: (ctx) => Navigator.of(ctx).pop(),
           child: const Text('Close'),
         ),
