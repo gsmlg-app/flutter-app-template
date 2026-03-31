@@ -13,8 +13,8 @@ Flutter monorepo template with modular architecture, BLoC state management, and 
 ```
 ├── lib/                    # Main app entry point
 ├── app_bloc/               # BLoC state management packages
-├── app_lib/                # Core utilities (database, theme, locale, logging, provider)
-├── app_widget/             # Reusable UI components (adaptive, artwork, feedback, web_view)
+├── app_lib/                # Core utilities (database, locale, logging, provider)
+├── app_widget/             # Reusable UI components (artwork, chart, web_view)
 ├── app_plugin/             # Native platform plugins with federated architecture
 ├── bricks/                 # Mason templates for code generation
 ├── test_bricks/            # Brick tests (one folder per brick)
@@ -22,12 +22,16 @@ Flutter monorepo template with modular architecture, BLoC state management, and 
 ```
 
 **Workspace packages** (defined in root `pubspec.yaml` `workspace:` section—there is no separate melos.yaml):
-- `app_lib/`: database, gamepad, theme, locale, provider, logging, secure_storage
-- `app_bloc/`: gamepad, navigation, theme
-- `app_widget/`: adaptive, artwork, chart, feedback, web_view
+- `app_lib/`: database, gamepad, locale, provider, logging, secure_storage
+- `app_bloc/`: gamepad, navigation
+- `app_widget/`: artwork, chart, web_view
 - `app_form/`: demo
 - `app_plugin/`: client_info/ (nested federated plugin containing: client_info, client_info_platform_interface, client_info_android, client_info_ios, client_info_linux, client_info_macos, client_info_windows)
-- `third_party/`: form_bloc, flutter_form_bloc, flutter_adaptive_scaffold, settings_ui
+- `third_party/`: form_bloc, flutter_form_bloc
+
+**External UI packages** (from pub.dev):
+- `duskmoon_ui` — umbrella re-exporting theme, widgets, settings, and feedback
+- `duskmoon_theme_bloc` — BLoC for theme persistence via SharedPreferences
 
 ## Custom Skills (Claude Code)
 
@@ -73,8 +77,8 @@ melos run test             # Run all tests (flutter + dart)
 flutter test test/screens/splash_screen_test.dart
 
 # Package-specific commands
-cd app_lib/theme && flutter test
-cd app_lib/theme && dart run build_runner build --delete-conflicting-outputs
+cd app_lib/database && flutter test
+cd app_lib/database && dart run build_runner build --delete-conflicting-outputs
 ```
 
 ### Code Generation with Mason
@@ -113,7 +117,7 @@ dart run bin/update_bricks.dart --force  # Force update all bricks
 ## Key Entry Points
 
 - `lib/main.dart` - App initialization: MainProvider, AppLogger, AppDatabase, SharedPreferences
-- `lib/app.dart` - Root widget with ThemeBloc and MaterialApp.router
+- `lib/app.dart` - Root widget with DmThemeBloc and MaterialApp.router
 - `lib/router.dart` - GoRouter configuration with NoTransitionPage
 - `lib/screens/` - Feature screens (app/, home/, settings/)
 
@@ -145,7 +149,7 @@ class HomeScreen extends StatelessWidget {
 Use `AppLogger` from `app_logging` package with configurable levels (debug, info, warning, error). Logs to file in application support directory.
 
 ### Theme
-`ThemeBloc` manages theme state. Available color schemes: fire, green, violet, wheat. Supports light/dark modes.
+`DmThemeBloc` (from `duskmoon_theme_bloc`) manages theme state with automatic SharedPreferences persistence. Available themes are defined by `DmThemeData.themes`. Events: `DmSetTheme(name)`, `DmSetThemeMode(mode)`. State: `DmThemeState` with `.themeName`, `.themeMode`, `.entry` (DmThemeEntry with `.light`/`.dark` ThemeData).
 
 ## Testing
 
