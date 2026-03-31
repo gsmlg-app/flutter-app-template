@@ -58,6 +58,13 @@ dependencies:
   lottie: ^3.3.1
   google_fonts: ^8.0.2
 
+  duskmoon_ui: ^1.0.0
+  # WORKAROUND(upstream): duskmoon-dev/flutter-duskmoon-ui#1
+  duskmoon_theme_bloc:
+    git:
+      url: https://github.com/duskmoon-dev/flutter-duskmoon-ui.git
+      path: packages/duskmoon_theme_bloc
+
   # workspace packages
   app_database: any
   app_gamepad: any

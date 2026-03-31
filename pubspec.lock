@@ -305,6 +305,55 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.0"
+  duskmoon_feedback:
+    dependency: transitive
+    description:
+      name: duskmoon_feedback
+      sha256: bf3c26fe9e8a01d963297dd49963d063c5ed554f577b94644492e5ec66a1791a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  duskmoon_settings:
+    dependency: transitive
+    description:
+      name: duskmoon_settings
+      sha256: "7ba38bf14eefd90f71d76f24e337bce7da81b8f20031febdece71f4e183415ce"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  duskmoon_theme:
+    dependency: transitive
+    description:
+      name: duskmoon_theme
+      sha256: "5c43001181e5b772e466b6b273caa678c52afd72f2ead59feae889474fb8e512"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  duskmoon_theme_bloc:
+    dependency: "direct main"
+    description:
+      path: "packages/duskmoon_theme_bloc"
+      ref: HEAD
+      resolved-ref: "5bcf3ddf7425b2a2585ce1f3c2cb7af24dcb3a69"
+      url: "https://github.com/duskmoon-dev/flutter-duskmoon-ui.git"
+    source: git
+    version: "1.0.1"
+  duskmoon_ui:
+    dependency: "direct main"
+    description:
+      name: duskmoon_ui
+      sha256: f64c8832987550619333a397ff90f73aa0979cd384174520ea101d998a75ad2b
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  duskmoon_widgets:
+    dependency: transitive
+    description:
+      name: duskmoon_widgets
+      sha256: "3f0671aaf9e2108b33baeea4307221404d1aa2292620994e9b4f838f2eb16fb9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   dv_annotation:
     dependency: transitive
     description:
