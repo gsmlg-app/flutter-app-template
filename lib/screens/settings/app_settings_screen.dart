@@ -1,4 +1,3 @@
-import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:app_locale/app_locale.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,7 @@ class AppSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppAdaptiveScaffold(
+    return DmScaffold(
       selectedIndex: Destinations.indexOf(
         const Key(SettingsScreen.name),
         context,
