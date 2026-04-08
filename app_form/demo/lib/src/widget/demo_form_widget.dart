@@ -1,5 +1,6 @@
+import 'package:duskmoon_feedback/duskmoon_feedback.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:duskmoon_form/duskmoon_form.dart';
 
 import '../bloc/demo_form_bloc.dart';
 
@@ -17,7 +18,7 @@ class DemoFormWidget extends StatelessWidget {
         builder: (context) {
           final formBloc = context.read<DemoFormBloc>();
 
-          return FormBlocListener<DemoFormBloc, String, String>(
+          return DmFormBlocListener<DemoFormBloc, String, String>(
             onSubmitting: (context, state) {
               // Loading dialog is shown by BlocBuilder below
             },
@@ -46,7 +47,7 @@ class DemoFormWidget extends StatelessWidget {
                   // Section: Personal Information
                   _buildSectionHeader(context, 'Personal Information'),
                   const SizedBox(height: 12),
-                  TextFieldBlocBuilder(
+                  DmTextFieldBlocBuilder(
                     textFieldBloc: formBloc.name,
                     decoration: const InputDecoration(
                       labelText: 'Full Name *',
@@ -56,7 +57,7 @@ class DemoFormWidget extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                   ),
                   const SizedBox(height: 8),
-                  TextFieldBlocBuilder(
+                  DmTextFieldBlocBuilder(
                     textFieldBloc: formBloc.email,
                     decoration: const InputDecoration(
                       labelText: 'Email Address *',
@@ -67,7 +68,7 @@ class DemoFormWidget extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                   ),
                   const SizedBox(height: 8),
-                  TextFieldBlocBuilder(
+                  DmTextFieldBlocBuilder(
                     textFieldBloc: formBloc.password,
                     decoration: const InputDecoration(
                       labelText: 'Password *',
@@ -78,7 +79,7 @@ class DemoFormWidget extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                   ),
                   const SizedBox(height: 8),
-                  TextFieldBlocBuilder(
+                  DmTextFieldBlocBuilder(
                     textFieldBloc: formBloc.age,
                     decoration: const InputDecoration(
                       labelText: 'Age (optional)',
@@ -94,7 +95,7 @@ class DemoFormWidget extends StatelessWidget {
                   // Section: Location
                   _buildSectionHeader(context, 'Location'),
                   const SizedBox(height: 12),
-                  DropdownFieldBlocBuilder<String>(
+                  DmDropdownFieldBlocBuilder<String>(
                     selectFieldBloc: formBloc.country,
                     decoration: const InputDecoration(
                       labelText: 'Country *',
@@ -116,7 +117,7 @@ class DemoFormWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  CheckboxGroupFieldBlocBuilder<String>(
+                  DmCheckboxGroupFieldBlocBuilder<String>(
                     multiSelectFieldBloc: formBloc.interests,
                     itemBuilder: (context, value) =>
                         FieldItem(child: Text(value)),
@@ -127,7 +128,7 @@ class DemoFormWidget extends StatelessWidget {
                   // Section: Terms
                   _buildSectionHeader(context, 'Terms & Conditions'),
                   const SizedBox(height: 8),
-                  CheckboxFieldBlocBuilder(
+                  DmCheckboxFieldBlocBuilder(
                     booleanFieldBloc: formBloc.acceptTerms,
                     body: Container(
                       alignment: Alignment.centerLeft,
@@ -191,29 +192,25 @@ class DemoFormWidget extends StatelessWidget {
     required String message,
     required bool isError,
   }) {
-    showDialog(
+    showDmDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Row(
-          children: [
-            Icon(
-              isError ? Icons.error_outline : Icons.check_circle_outline,
-              color: isError
-                  ? Theme.of(context).colorScheme.error
-                  : Colors.green,
-            ),
-            const SizedBox(width: 8),
-            Text(title),
-          ],
-        ),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
+      title: Row(
+        children: [
+          Icon(
+            isError ? Icons.error_outline : Icons.check_circle_outline,
+            color: isError ? Theme.of(context).colorScheme.error : Colors.green,
           ),
+          const SizedBox(width: 8),
+          Text(title),
         ],
       ),
+      content: Text(message),
+      actions: [
+        DmDialogAction(
+          onPressed: (ctx) => Navigator.of(ctx).pop(),
+          child: const Text('OK'),
+        ),
+      ],
     );
   }
 }

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/settings/controller_test_screen.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gamepad_bloc/gamepad_bloc.dart';
 import 'package:go_router/go_router.dart';
 class ControllerSettingsScreen extends StatefulWidget {

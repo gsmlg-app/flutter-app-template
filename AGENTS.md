@@ -1,34 +1,195 @@
-# Build/Lint/Test Commands
-- Run single test: `flutter test test/widget_test.dart`
-- Run all tests: `melos run test` (dart + flutter tests) or `flutter test`
-- Lint: `melos run analyze` + `melos run format` (no lint:all command)
-- Format: `melos run format`
-- Analyze: `melos run analyze`
-- Build: `melos run build-runner`
-- Prepare: `melos run prepare` (bootstrap + gen-l10n + build-runner)
-- Fix code: `melos run fix` (applies dart fix --apply)
-- Check dependencies: `melos run validate-dependencies`
+# AGENTS.md
 
-# Mason Bricks
-- Usage documentation for mason bricks can be found in BRICKS.md
+## Project Overview
 
-# Code Style Guidelines
-- Use flutter_lints from analysis_options.yaml
-- Import order: dart, package, local (standard Dart convention)
-- Use single quotes for strings (prefer_single_quotes rule available)
-- Prefer const constructors for performance
-- Use BLoC pattern for state management (flutter_bloc in dependencies)
-- Error handling: try/catch with logging (use app_logging package in app_lib/logging)
-- Naming: PascalCase for classes, camelCase for variables
-- Types: always specify return types and parameter types
-- Workspace structure: multi-package with melos, use workspace packages
+Flutter monorepo template with modular architecture, BLoC state management, and comprehensive tooling. Follows clean architecture principles with separation of concerns across specialized packages.
 
-# Package Management
-- This project uses Melos for mono-repo management
-- When including packages in this project, use `<package_name>: any` in pubspec.yaml
-- Do not use path dependencies for workspace packages
+**Requirements**: Flutter SDK >=3.8.0, Dart >=3.8.0
 
-# Additional Notes
-- Generated files (*.g.dart, *.freezed.dart) are excluded from analysis
-- Localization: use `melos run gen-l10n` to generate from ARB files
-- Brick testing: use `melos run brick-test` for Mason template tests
+## Architecture Structure
+
+```
+├── lib/                    # Main app entry point
+├── app_bloc/               # BLoC state management packages
+├── app_lib/                # Core utilities (database, locale, logging, provider)
+├── app_widget/             # Reusable UI components (artwork, chart, web_view)
+├── app_plugin/             # Native platform plugins with federated architecture
+├── bricks/                 # Mason templates for code generation
+├── test_bricks/            # Brick tests (one folder per brick)
+└── third_party/            # Modified third-party packages
+```
+
+**Workspace packages** (defined in root `pubspec.yaml` `workspace:` section—there is no separate melos.yaml):
+- `app_lib/`: database, gamepad, locale, provider, logging, secure_storage
+- `app_bloc/`: gamepad, navigation
+- `app_widget/`: artwork, chart, web_view
+- `app_form/`: demo
+- `app_plugin/`: client_info/ (nested federated plugin containing: client_info, client_info_platform_interface, client_info_android, client_info_ios, client_info_linux, client_info_macos, client_info_windows)
+- `third_party/`: form_bloc, flutter_form_bloc
+
+**External UI packages** (from pub.dev):
+- `duskmoon_ui` — umbrella re-exporting theme, widgets, settings, and feedback
+- `duskmoon_theme_bloc` — BLoC for theme persistence via SharedPreferences
+
+## Custom Skills
+
+Project-specific skills are available in `.claude/skills/`:
+- `/project-development` - **Start here!** Workflow guide for choosing the right skill based on your task
+- `/project-api` - Create API client packages from OpenAPI specs
+- `/project-bloc` - Create BLoC packages with events, states, and proper structure
+- `/project-database` - Use app_database package with Drift for user settings, app config, and persistent data
+- `/project-data-visualization` - Build charts, graphs, and maps using the data_visualization package suite
+- `/project-feedback` - Show user feedback using toasts, snackbars, dialogs, bottom sheets
+- `/project-form` - Create form modules with FormBloc state management and validation
+- `/project-locale` - Add localized text using l10n in app_lib/locale
+- `/project-metadata` - Update app name, bundle identifier, and company metadata across all platforms
+- `/project-plugin` - Create native plugins (simple or federated)
+- `/project-screen` - Create screens with routing conventions and adaptive scaffold
+- `/project-secure-storage` - Store secrets securely using app_secure_storage package with platform-native storage
+- `/project-widget` - Create reusable widgets with platform adaptive support
+- `/template-mason-brick` - Create, update, or remove Mason bricks with tests
+
+## Development Commands
+
+### Setup
+```bash
+dart pub global activate melos
+dart pub global activate mason_cli
+melos bootstrap
+mason get
+```
+
+### Common Workflows
+```bash
+melos run prepare          # Bootstrap + gen-l10n + build-runner (full setup)
+melos run analyze          # Lint all packages (--fatal-warnings)
+melos run format           # Format all packages
+melos run format-check     # Check formatting (CI uses this, exits non-zero if changes needed)
+melos run fix              # Apply dart fix --apply
+melos run test             # Run all tests (flutter + dart)
+```
+
+### Individual Package Operations
+```bash
+# Test single file
+flutter test test/screens/splash_screen_test.dart
+
+# Package-specific commands
+cd app_lib/database && flutter test
+cd app_lib/database && dart run build_runner build --delete-conflicting-outputs
+```
+
+### Code Generation with Mason
+```bash
+# Screens and widgets
+mason make screen --name ScreenName --folder subfolder
+mason make widget --name WidgetName --type stateless --folder components
+
+# BLoC patterns
+mason make simple_bloc -o app_bloc/feature_name --name=feature_name
+mason make list_bloc -o app_bloc/feature_name --name=feature_name
+mason make form_bloc --name Login --field_names "email,password"
+
+# Other generators
+mason make repository -o app_lib/feature_name --name=feature_name
+mason make api_client -o app_api/app_api --package_name=app_api
+
+# Native plugins (prefer native_plugin for simplicity)
+mason make native_plugin --name plugin_name --description "Description" --package_prefix app -o app_plugin
+# Use native_federation_plugin only when publishing separate platform packages
+mason make native_federation_plugin --name plugin_name --description "Description" --package_prefix app -o app_plugin
+```
+
+See [BRICKS.md](./docs/BRICKS.md) for complete brick documentation.
+
+### Template Scripts
+```bash
+# Rename template to your project name (run once after cloning)
+dart run bin/setup_project.dart my_project_name
+
+# Update bricks from upstream template (only works after renaming)
+dart run bin/update_bricks.dart
+dart run bin/update_bricks.dart --force  # Force update all bricks
+```
+
+## Key Entry Points
+
+- `lib/main.dart` - App initialization: MainProvider, AppLogger, AppDatabase, SharedPreferences
+- `lib/app.dart` - Root widget with DmThemeBloc and MaterialApp.router
+- `lib/router.dart` - GoRouter configuration with NoTransitionPage
+- `lib/screens/` - Feature screens (app/, home/, settings/)
+
+## Package Dependencies
+
+Use `<package_name>: any` for workspace packages in pubspec.yaml dependencies. Melos resolves internal dependencies through the workspace configuration. Never use path dependencies.
+
+## Architecture Patterns
+
+### App Initialization (lib/main.dart)
+```dart
+MainProvider(
+  sharedPrefs: sharedPrefs,
+  database: database,
+  child: MaterialApp(...),
+)
+```
+
+### Routing Pattern
+Screens define static `name` and `path` constants for GoRouter integration:
+```dart
+class HomeScreen extends StatelessWidget {
+  static const name = 'home';
+  static const path = '/home';
+}
+```
+
+### Logging
+Use `AppLogger` from `app_logging` package with configurable levels (debug, info, warning, error). Logs to file in application support directory.
+
+### Theme
+`DmThemeBloc` (from `duskmoon_theme_bloc`) manages theme state with automatic SharedPreferences persistence. Available themes are defined by `DmThemeData.themes`. Events: `DmSetTheme(name)`, `DmSetThemeMode(mode)`. State: `DmThemeState` with `.themeName`, `.themeMode`, `.entry` (DmThemeEntry with `.light`/`.dark` ThemeData).
+
+## Testing
+
+Tests co-located with packages in `test/` directories. Main app has comprehensive screen tests in `test/screens/`.
+
+```bash
+melos run test:dart       # Non-Flutter packages only
+melos run test:flutter    # Flutter packages only
+```
+
+Brick tests are in `test_bricks/` (one folder per brick) and run via GitHub Actions workflow `brick-test.yml`.
+
+## Development Environment
+
+Uses Nix/Devenv for reproducible environment. Auto-loads via direnv (`.envrc`). Flutter SDK version managed through `devenv.nix`.
+
+**macOS Entitlements**: When using `flutter_secure_storage`, the app requires `keychain-access-groups` entitlement in both `macos/Runner/DebugProfile.entitlements` and `macos/Runner/Release.entitlements`.
+
+## Git Configuration
+
+- **Git LFS**: Images (png, jpg, ico, etc.) tracked with LFS. Run `git lfs install` after cloning.
+- **Lock files**: Treated as binary in `.gitattributes` to avoid merge conflicts.
+
+## Code Style
+
+- flutter_lints rules from analysis_options.yaml
+- BLoC pattern for state management
+- Repository pattern for data layer
+- Prefer const constructors
+- Use AppLogger for error handling with logging
+
+## Running the App
+
+```bash
+flutter run                # Default device
+flutter run -d chrome      # Web
+flutter run -d macos       # macOS
+flutter run -d linux       # Linux
+```
+
+## CI Workflows
+
+- `ci.yml` - Format check, analyze, test, and build (skips for docs/config changes)
+- `brick-test.yml` - Tests Mason bricks (only runs when brick files change)
+- `release.yml` - Manual workflow for creating releases with platform builds

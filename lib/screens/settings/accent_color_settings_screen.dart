@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:duskmoon_theme_bloc/duskmoon_theme_bloc.dart';
 
 class AccentColorSettingsScreen extends StatelessWidget {
   static const name = 'Accent Color Settings';

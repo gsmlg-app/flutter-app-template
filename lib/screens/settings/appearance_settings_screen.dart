@@ -3,9 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
-import 'package:duskmoon_theme_bloc/duskmoon_theme_bloc.dart';
 
 class AppearanceSettingsScreen extends StatelessWidget {
   static const name = 'Appearance Settings';

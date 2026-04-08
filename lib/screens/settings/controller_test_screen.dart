@@ -9,7 +9,6 @@ import 'package:flutter_app_template/screens/settings/widgets/controller_input_s
 import 'package:flutter_app_template/screens/settings/widgets/stick_visualizer.dart';
 import 'package:flutter_app_template/screens/settings/widgets/trigger_bar.dart';
 import 'package:flutter_app_template/screens/settings/widgets/xbox_controller_painter.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gamepad_bloc/gamepad_bloc.dart';
 
 class ControllerTestScreen extends StatefulWidget {

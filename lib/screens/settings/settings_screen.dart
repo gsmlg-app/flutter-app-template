@@ -6,10 +6,8 @@ import 'package:flutter_app_template/screens/settings/app_settings_screen.dart';
 import 'package:flutter_app_template/screens/settings/appearance_settings_screen.dart';
 import 'package:flutter_app_template/screens/settings/controller_settings_screen.dart';
 import 'package:gamepad_bloc/gamepad_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
-import 'package:duskmoon_theme_bloc/duskmoon_theme_bloc.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const name = 'Settings';

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/showcase/showcase_screen.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VaultDemoScreen extends StatefulWidget {
   static const name = 'Vault Demo';

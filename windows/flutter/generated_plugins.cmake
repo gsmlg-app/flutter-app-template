@@ -6,9 +6,11 @@ list(APPEND FLUTTER_PLUGIN_LIST
   app_client_info_windows
   flutter_secure_storage_windows
   gamepads_windows
+  url_launcher_windows
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
+  jni
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)
