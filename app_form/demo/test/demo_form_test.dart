@@ -14,14 +14,23 @@ void main() {
       formBloc.close();
     });
 
-    test('initial state has all fields empty', () {
+    test('initial state has correct defaults', () {
       expect(formBloc.name.value, isEmpty);
       expect(formBloc.email.value, isEmpty);
       expect(formBloc.password.value, isEmpty);
       expect(formBloc.age.value, isEmpty);
       expect(formBloc.country.value, isNull);
+      expect(formBloc.priority.value, equals('Medium'));
+      expect(formBloc.experienceLevel.value, isNull);
       expect(formBloc.interests.value, isEmpty);
+      expect(formBloc.skills.value, isEmpty);
       expect(formBloc.acceptTerms.value, isFalse);
+      expect(formBloc.enableNotifications.value, isTrue);
+      expect(formBloc.satisfaction.value, equals(0.5));
+      expect(formBloc.birthDate.value, isNull);
+      expect(formBloc.preferredTime.value, isNull);
+      expect(formBloc.bio.value, contains('About Me'));
+      expect(formBloc.codeSnippet.value, contains('Hello, World!'));
     });
 
     group('name field', () {
