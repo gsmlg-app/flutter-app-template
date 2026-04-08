@@ -36,8 +36,8 @@ class FormDemoScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'This demo showcases various form field types and '
-                        'validation patterns using form_bloc and flutter_form_bloc.',
+                        'This demo showcases all available form field types '
+                        'and validation patterns using duskmoon_form.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
@@ -64,8 +64,18 @@ class FormDemoScreen extends StatelessWidget {
       'SelectFieldBloc',
       'MultiSelectFieldBloc',
       'BooleanFieldBloc',
-      'Custom Validators',
-      'Async Submit',
+      'InputFieldBloc',
+      'MarkdownFieldBloc',
+      'CodeEditorFieldBloc',
+      'Dropdown',
+      'ChoiceChips',
+      'FilterChips',
+      'RadioButtons',
+      'CheckboxGroup',
+      'Switch',
+      'Slider',
+      'DatePicker',
+      'TimePicker',
     ];
 
     return Wrap(
