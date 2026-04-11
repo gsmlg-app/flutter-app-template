@@ -50,8 +50,8 @@ dependencies:
   lottie: ^3.3.1
   google_fonts: ^8.0.2
 
-  duskmoon_ui: ^1.3.0
-  duskmoon_theme_bloc: ^1.3.0
+  duskmoon_ui: ^1.4.2
+  duskmoon_theme_bloc: ^1.4.2
 
   # workspace packages
   app_database: any
