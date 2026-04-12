@@ -19,7 +19,6 @@ dependencies:
   
   # Core dependencies from workspace
   app_logging: any
-  app_theme: any
 
 dev_dependencies:
   flutter_test:

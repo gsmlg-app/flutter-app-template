@@ -36,9 +36,9 @@ vars:
 
   has_adaptive_scaffold:
     type: boolean
-    description: Use AppAdaptiveScaffold for responsive layout
+    description: Use DmAdaptiveScaffold for responsive layout
     default: true
-    prompt: Use AppAdaptiveScaffold?
+    prompt: Use DmAdaptiveScaffold?
 
   has_app_bar:
     type: boolean
