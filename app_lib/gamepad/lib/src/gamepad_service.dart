@@ -226,8 +226,9 @@ class GamepadService {
     // Determine if button is pressed (Android KEYCODE_ uses inverted values:
     // ACTION_DOWN=0, ACTION_UP=1)
     final isAndroidButton = event.key.startsWith('KEYCODE_');
-    final buttonPressed =
-        isAndroidButton ? value < _axisThreshold : value > _axisThreshold;
+    final buttonPressed = isAndroidButton
+        ? value < _axisThreshold
+        : value > _axisThreshold;
 
     // Handle button presses
     if (buttonPressed) {

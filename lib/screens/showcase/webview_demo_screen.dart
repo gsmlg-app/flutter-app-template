@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
-import 'package:app_feedback/app_feedback.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:app_web_view/app_web_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
@@ -195,7 +194,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AppAdaptiveScaffold(
+    return DmAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(
         const Key(ShowcaseScreen.name),
         context,
@@ -206,7 +205,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
         return SafeArea(
           child: Column(
             children: [
-              AppBar(
+              DmAppBar(
                 title: Text(WebViewDemoScreen.name),
                 actions: [
                   IconButton(
@@ -226,7 +225,6 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 
@@ -253,7 +251,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
             const SizedBox(height: 16),
             Text('Error: $_error'),
             const SizedBox(height: 16),
-            ElevatedButton(
+            DmButton(
               onPressed: _createSampleHtmlFile,
               child: const Text('Retry'),
             ),
@@ -270,7 +268,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
   }
 
   void _showInfo(BuildContext context) {
-    showAppDialog(
+    showDmDialog(
       context: context,
       title: const Text('LocalHtmlViewer'),
       content: const SingleChildScrollView(
@@ -303,7 +301,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
         ),
       ),
       actions: [
-        AppDialogAction(
+        DmDialogAction(
           onPressed: (ctx) => Navigator.of(ctx).pop(),
           child: const Text('Close'),
         ),

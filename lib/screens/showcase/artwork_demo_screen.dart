@@ -1,5 +1,5 @@
-import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
 import 'package:app_artwork/app_artwork.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/showcase/showcase_screen.dart';
@@ -47,7 +47,7 @@ class _ArtworkDemoScreenState extends State<ArtworkDemoScreen>
 
   @override
   Widget build(BuildContext context) {
-    return AppAdaptiveScaffold(
+    return DmAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(
         const Key(ShowcaseScreen.name),
         context,
@@ -228,7 +228,6 @@ class _ArtworkDemoScreenState extends State<ArtworkDemoScreen>
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 

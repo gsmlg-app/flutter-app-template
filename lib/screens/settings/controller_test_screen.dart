@@ -1,5 +1,5 @@
-import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
 import 'package:app_gamepad/app_gamepad.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:app_locale/app_locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -9,7 +9,6 @@ import 'package:flutter_app_template/screens/settings/widgets/controller_input_s
 import 'package:flutter_app_template/screens/settings/widgets/stick_visualizer.dart';
 import 'package:flutter_app_template/screens/settings/widgets/trigger_bar.dart';
 import 'package:flutter_app_template/screens/settings/widgets/xbox_controller_painter.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gamepad_bloc/gamepad_bloc.dart';
 
 class ControllerTestScreen extends StatefulWidget {
@@ -92,7 +91,7 @@ class _ControllerTestScreenState extends State<ControllerTestScreen>
 
   @override
   Widget build(BuildContext context) {
-    return AppAdaptiveScaffold(
+    return DmAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(
         const Key(SettingsScreen.name),
         context,
@@ -188,7 +187,6 @@ class _ControllerTestScreenState extends State<ControllerTestScreen>
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 
@@ -242,12 +240,11 @@ class _ControllerTestScreenState extends State<ControllerTestScreen>
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         Expanded(
-          child: Slider(
+          child: DmSlider(
             value: _deadzone,
             min: 0,
             max: 0.5,
             divisions: 10,
-            label: '${(_deadzone * 100).toInt()}%',
             onChanged: (v) {
               setState(() => _deadzone = v);
               final newConfig =

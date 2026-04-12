@@ -10,8 +10,8 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
-  form_bloc: any
-  flutter_form_bloc: any
+  duskmoon_feedback: any
+  duskmoon_form: any
 
 dev_dependencies:
   flutter_test:

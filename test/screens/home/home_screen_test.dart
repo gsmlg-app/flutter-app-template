@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_template/screens/home/home_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:app_locale/app_locale.dart';
-import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
-import 'package:provider/provider.dart';
-import 'package:app_theme/app_theme.dart';
-import 'package:app_provider/app_provider.dart';
 
 void main() {
   group('HomeScreen', () {

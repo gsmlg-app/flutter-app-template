@@ -110,10 +110,12 @@ class GamepadBloc extends Bloc<GamepadEvent, GamepadState> {
     Emitter<GamepadState> emit,
   ) {
     // Update last action for UI feedback, incrementing counter for unique states
-    emit(state.copyWith(
-      lastAction: event.action,
-      actionCounter: state.actionCounter + 1,
-    ));
+    emit(
+      state.copyWith(
+        lastAction: event.action,
+        actionCounter: state.actionCounter + 1,
+      ),
+    );
   }
 
   void _onEnterTestMode(
@@ -123,10 +125,7 @@ class GamepadBloc extends Bloc<GamepadEvent, GamepadState> {
     emit(state.copyWith(isTestingMode: true));
   }
 
-  void _onExitTestMode(
-    GamepadExitTestMode event,
-    Emitter<GamepadState> emit,
-  ) {
+  void _onExitTestMode(GamepadExitTestMode event, Emitter<GamepadState> emit) {
     emit(state.copyWith(isTestingMode: false));
   }
 

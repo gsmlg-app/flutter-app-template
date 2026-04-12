@@ -1,12 +1,9 @@
-import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
 import 'package:app_locale/app_locale.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:settings_ui/settings_ui.dart';
-import 'package:theme_bloc/theme_bloc.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 
 class AppearanceSettingsScreen extends StatelessWidget {
   static const name = 'Appearance Settings';
@@ -16,7 +13,7 @@ class AppearanceSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppAdaptiveScaffold(
+    return DmAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(
         const Key(SettingsScreen.name),
         context,
@@ -24,14 +21,14 @@ class AppearanceSettingsScreen extends StatelessWidget {
       onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs(context),
       body: (context) {
-        final themeBloc = context.read<ThemeBloc>();
+        final themeBloc = context.read<DmThemeBloc>();
 
         return SafeArea(
           child: CustomScrollView(
             slivers: <Widget>[
               SliverAppBar(title: Text(context.l10n.appearance)),
               SliverFillRemaining(
-                child: BlocBuilder<ThemeBloc, ThemeState>(
+                child: BlocBuilder<DmThemeBloc, DmThemeState>(
                   bloc: themeBloc,
                   builder: (context, state) {
                     return SettingsList(
@@ -43,7 +40,7 @@ class AppearanceSettingsScreen extends StatelessWidget {
                               child: _AppearancePicker(
                                 currentMode: state.themeMode,
                                 onModeChanged: (mode) {
-                                  themeBloc.add(ChangeThemeMode(mode));
+                                  themeBloc.add(DmSetThemeMode(mode));
                                 },
                               ),
                             ),
@@ -58,7 +55,6 @@ class AppearanceSettingsScreen extends StatelessWidget {
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 }

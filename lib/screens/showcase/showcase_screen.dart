@@ -1,4 +1,4 @@
-import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/showcase/adaptive_demo_screen.dart';
@@ -19,15 +19,12 @@ class ShowcaseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppAdaptiveScaffold(
+    return DmAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(const Key(name), context),
       onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs(context),
-      appBar: AppBar(
+      appBar: DmAppBar(
         title: const Text('Widget Showcase'),
-        centerTitle: true,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: (context) {
         return SafeArea(
@@ -44,7 +41,7 @@ class ShowcaseScreen extends StatelessWidget {
               _buildDemoCard(
                 context,
                 title: 'Feedback Widgets',
-                subtitle: 'app_feedback',
+                subtitle: 'duskmoon_feedback',
                 description:
                     'Dialogs, Snackbars, Toasts, Bottom Sheets, Fullscreen Dialogs',
                 icon: Icons.notifications_active,
@@ -55,7 +52,7 @@ class ShowcaseScreen extends StatelessWidget {
               _buildDemoCard(
                 context,
                 title: 'Adaptive Widgets',
-                subtitle: 'app_adaptive_widgets',
+                subtitle: 'duskmoon_widgets',
                 description: 'Responsive action lists, adaptive scaffolds',
                 icon: Icons.devices,
                 color: Colors.blue,

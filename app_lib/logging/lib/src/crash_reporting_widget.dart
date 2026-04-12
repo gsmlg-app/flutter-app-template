@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 
 import 'error_reporting_service.dart';
@@ -138,48 +139,47 @@ class ErrorScreen extends StatelessWidget {
   }
 
   void _showReportDialog(BuildContext context) {
-    showDialog(
+    showDmDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Report Error'),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text('Error details:'),
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  errorDetails.exceptionAsString(),
-                  style: const TextStyle(fontSize: 12),
-                ),
+      title: const Text('Report Error'),
+      content: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Error details:'),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(4),
               ),
-            ],
-          ),
+              child: Text(
+                errorDetails.exceptionAsString(),
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // TODO: Implement actual error reporting
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Error report submitted')),
-              );
-            },
-            child: const Text('Send Report'),
-          ),
-        ],
       ),
+      actions: [
+        DmDialogAction(
+          onPressed: (ctx) => Navigator.pop(ctx),
+          child: const Text('Cancel'),
+        ),
+        DmDialogAction(
+          onPressed: (ctx) {
+            // TODO: Implement actual error reporting
+            Navigator.pop(ctx);
+            showDmSuccessToast(
+              context: context,
+              message: 'Error report submitted',
+            );
+          },
+          child: const Text('Send Report'),
+        ),
+      ],
     );
   }
 }

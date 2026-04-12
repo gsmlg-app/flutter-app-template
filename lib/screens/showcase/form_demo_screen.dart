@@ -1,5 +1,5 @@
-import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
 import 'package:demo_form/demo_form.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/showcase/showcase_screen.dart';
@@ -12,7 +12,7 @@ class FormDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppAdaptiveScaffold(
+    return DmAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(
         const Key(ShowcaseScreen.name),
         context,
@@ -36,8 +36,8 @@ class FormDemoScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'This demo showcases various form field types and '
-                        'validation patterns using form_bloc and flutter_form_bloc.',
+                        'This demo showcases all available form field types '
+                        'and validation patterns using duskmoon_form.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
@@ -54,7 +54,6 @@ class FormDemoScreen extends StatelessWidget {
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 
@@ -64,8 +63,18 @@ class FormDemoScreen extends StatelessWidget {
       'SelectFieldBloc',
       'MultiSelectFieldBloc',
       'BooleanFieldBloc',
-      'Custom Validators',
-      'Async Submit',
+      'InputFieldBloc',
+      'MarkdownFieldBloc',
+      'CodeEditorFieldBloc',
+      'Dropdown',
+      'ChoiceChips',
+      'FilterChips',
+      'RadioButtons',
+      'CheckboxGroup',
+      'Switch',
+      'Slider',
+      'DatePicker',
+      'TimePicker',
     ];
 
     return Wrap(

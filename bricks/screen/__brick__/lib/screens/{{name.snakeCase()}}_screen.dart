@@ -1,4 +1,4 @@
-import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';{{#has_adaptive_scaffold}}
+{{#has_adaptive_scaffold}}import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:app_locale/app_locale.dart';{{/has_adaptive_scaffold}}
 import 'package:flutter/material.dart';{{#has_adaptive_scaffold}}
 import 'package:{{package_name.snakeCase()}}/destination.dart';{{/has_adaptive_scaffold}}
@@ -13,7 +13,7 @@ class {{name.pascalCase()}}Screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    {{#has_adaptive_scaffold}}return AppAdaptiveScaffold(
+    {{#has_adaptive_scaffold}}return DmAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(const Key(name), context),
       onSelectedIndexChange: (idx) => Destinations.changeHandler(
         idx,
@@ -37,7 +37,6 @@ class {{name.pascalCase()}}Screen extends StatelessWidget {
           ],
         ),
       ),
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );{{/has_adaptive_scaffold}}{{^has_adaptive_scaffold}}return Scaffold(
       {{#has_app_bar}}appBar: AppBar(
         title: const Text('{{name.titleCase()}}'),

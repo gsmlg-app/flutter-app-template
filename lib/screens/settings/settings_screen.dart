@@ -1,6 +1,4 @@
-import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
 import 'package:app_locale/app_locale.dart';
-import 'package:app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/settings/accent_color_settings_screen.dart';
@@ -8,10 +6,8 @@ import 'package:flutter_app_template/screens/settings/app_settings_screen.dart';
 import 'package:flutter_app_template/screens/settings/appearance_settings_screen.dart';
 import 'package:flutter_app_template/screens/settings/controller_settings_screen.dart';
 import 'package:gamepad_bloc/gamepad_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:settings_ui/settings_ui.dart';
-import 'package:theme_bloc/theme_bloc.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const name = 'Settings';
@@ -21,19 +17,19 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppAdaptiveScaffold(
+    return DmAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(const Key(name), context),
       onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs(context),
       body: (context) {
-        final themeBloc = context.read<ThemeBloc>();
+        final themeBloc = context.read<DmThemeBloc>();
 
         return SafeArea(
           child: CustomScrollView(
             slivers: <Widget>[
               SliverAppBar(title: Text(context.l10n.settingsTitle)),
               SliverFillRemaining(
-                child: BlocBuilder<ThemeBloc, ThemeState>(
+                child: BlocBuilder<DmThemeBloc, DmThemeState>(
                   bloc: themeBloc,
                   builder: (context, themeState) {
                     return BlocBuilder<GamepadBloc, GamepadState>(
@@ -68,7 +64,7 @@ class SettingsScreen extends StatelessWidget {
                                 SettingsTile.navigation(
                                   leading: const Icon(Icons.palette),
                                   title: Text(context.l10n.accentColor),
-                                  value: Text(themeState.theme.name),
+                                  value: Text(themeState.themeName),
                                   onPressed: (context) {
                                     context.goNamed(
                                       AccentColorSettingsScreen.name,
@@ -107,7 +103,6 @@ class SettingsScreen extends StatelessWidget {
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 }

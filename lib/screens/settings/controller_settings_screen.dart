@@ -1,14 +1,11 @@
-import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
 import 'package:app_locale/app_locale.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/settings/controller_test_screen.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gamepad_bloc/gamepad_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:settings_ui/settings_ui.dart';
-
 class ControllerSettingsScreen extends StatefulWidget {
   static const name = 'Controller Settings';
   static const path = 'controller';
@@ -31,7 +28,7 @@ class _ControllerSettingsScreenState extends State<ControllerSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AppAdaptiveScaffold(
+    return DmAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(
         const Key(SettingsScreen.name),
         context,
@@ -65,7 +62,6 @@ class _ControllerSettingsScreenState extends State<ControllerSettingsScreen> {
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 
@@ -202,39 +198,35 @@ class _ControllerSettingsScreenState extends State<ControllerSettingsScreen> {
     GamepadButton currentButton,
     ValueChanged<GamepadButton> onChanged,
   ) {
-    showDialog<void>(
+    showDmDialog<void>(
       context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          title: const Text('Select Button'),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: GamepadButton.values.length,
-              itemBuilder: (context, index) {
-                final button = GamepadButton.values[index];
-                return ListTile(
-                  leading: button == currentButton
-                      ? const Icon(Icons.check, color: Colors.green)
-                      : const SizedBox(width: 24),
-                  title: Text(button.displayName),
-                  onTap: () {
-                    onChanged(button);
-                    Navigator.of(dialogContext).pop();
-                  },
-                );
+      title: const Text('Select Button'),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: GamepadButton.values.length,
+          itemBuilder: (ctx, index) {
+            final button = GamepadButton.values[index];
+            return ListTile(
+              leading: button == currentButton
+                  ? const Icon(Icons.check, color: Colors.green)
+                  : const SizedBox(width: 24),
+              title: Text(button.displayName),
+              onTap: () {
+                onChanged(button);
+                Navigator.of(ctx).pop();
               },
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: Text(context.l10n.cancel),
-            ),
-          ],
-        );
-      },
+            );
+          },
+        ),
+      ),
+      actions: [
+        DmDialogAction(
+          onPressed: (ctx) => Navigator.of(ctx).pop(),
+          child: Text(context.l10n.cancel),
+        ),
+      ],
     );
   }
 
@@ -251,12 +243,11 @@ class _ControllerSettingsScreenState extends State<ControllerSettingsScreen> {
           description: Text('${(state.config.deadzone * 100).toInt()}%'),
           trailing: SizedBox(
             width: 200,
-            child: Slider(
+            child: DmSlider(
               value: state.config.deadzone,
               min: 0.0,
               max: 0.5,
               divisions: 10,
-              label: '${(state.config.deadzone * 100).toInt()}%',
               onChanged: (value) {
                 final newConfig = state.config.copyWith(deadzone: value);
                 context.read<GamepadBloc>().add(GamepadUpdateConfig(newConfig));

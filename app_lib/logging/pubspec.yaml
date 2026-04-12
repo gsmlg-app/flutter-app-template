@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  duskmoon_ui: any
   logging: ^1.2.0
   stack_trace: ^1.11.1
   shared_preferences: ^2.0.17

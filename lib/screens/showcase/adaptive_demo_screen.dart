@@ -1,5 +1,4 @@
-import 'package:app_adaptive_widgets/app_adaptive_widgets.dart';
-import 'package:app_feedback/app_feedback.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/showcase/showcase_screen.dart';
@@ -10,33 +9,33 @@ class AdaptiveDemoScreen extends StatelessWidget {
 
   const AdaptiveDemoScreen({super.key});
 
-  List<AppAdaptiveAction> _buildActions(BuildContext context) {
+  List<DmAction> _buildActions(BuildContext context) {
     return [
-      AppAdaptiveAction(
+      DmAction(
         title: 'Edit',
         icon: Icons.edit,
-        onPressed: () => showSnackbar(
+        onPressed: () => showDmSnackbar(
           context: context,
           message: const Text('Edit action pressed'),
         ),
       ),
-      AppAdaptiveAction(
+      DmAction(
         title: 'Share',
         icon: Icons.share,
-        onPressed: () => showSnackbar(
+        onPressed: () => showDmSnackbar(
           context: context,
           message: const Text('Share action pressed'),
         ),
       ),
-      AppAdaptiveAction(
+      DmAction(
         title: 'Delete',
         icon: Icons.delete,
-        onPressed: () => showSnackbar(
+        onPressed: () => showDmSnackbar(
           context: context,
           message: const Text('Delete action pressed'),
         ),
       ),
-      AppAdaptiveAction(
+      DmAction(
         title: 'Disabled',
         icon: Icons.block,
         onPressed: () {},
@@ -47,7 +46,7 @@ class AdaptiveDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppAdaptiveScaffold(
+    return DmAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(
         const Key(ShowcaseScreen.name),
         context,
@@ -65,26 +64,26 @@ class AdaptiveDemoScreen extends StatelessWidget {
                   delegate: SliverChildListDelegate([
                     _buildSection(
                       context,
-                      title: 'AppAdaptiveActionList',
+                      title: 'DmActionList',
                       description:
                           'Responsive action list that adapts to different sizes',
                       children: [
                         _buildSizeDemo(
                           context,
                           title: 'Small (PopupMenu)',
-                          size: AppAdaptiveActionSize.small,
+                          size: DmActionSize.small,
                         ),
                         const SizedBox(height: 16),
                         _buildSizeDemo(
                           context,
                           title: 'Medium (IconButtons)',
-                          size: AppAdaptiveActionSize.medium,
+                          size: DmActionSize.medium,
                         ),
                         const SizedBox(height: 16),
                         _buildSizeDemo(
                           context,
                           title: 'Large (TextButtons with icons)',
-                          size: AppAdaptiveActionSize.large,
+                          size: DmActionSize.large,
                         ),
                       ],
                     ),
@@ -134,7 +133,6 @@ class AdaptiveDemoScreen extends StatelessWidget {
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 
@@ -164,7 +162,7 @@ class AdaptiveDemoScreen extends StatelessWidget {
   Widget _buildSizeDemo(
     BuildContext context, {
     required String title,
-    required AppAdaptiveActionSize size,
+    required DmActionSize size,
   }) {
     return Card(
       child: Padding(
@@ -174,7 +172,7 @@ class AdaptiveDemoScreen extends StatelessWidget {
           children: [
             Text(title, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
-            AppAdaptiveActionList(
+            DmActionList(
               size: size,
               actions: _buildActions(context),
               hideDisabled: true,
@@ -198,8 +196,8 @@ class AdaptiveDemoScreen extends StatelessWidget {
           children: [
             Text(title, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
-            AppAdaptiveActionList(
-              size: AppAdaptiveActionSize.large,
+            DmActionList(
+              size: DmActionSize.large,
               direction: direction,
               actions: _buildActions(context),
               hideDisabled: true,
@@ -223,8 +221,8 @@ class AdaptiveDemoScreen extends StatelessWidget {
           children: [
             Text(title, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
-            AppAdaptiveActionList(
-              size: AppAdaptiveActionSize.large,
+            DmActionList(
+              size: DmActionSize.large,
               actions: _buildActions(context),
               hideDisabled: hideDisabled,
             ),

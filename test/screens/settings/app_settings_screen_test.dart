@@ -2,61 +2,63 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_template/screens/settings/app_settings_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:theme_bloc/theme_bloc.dart';
+import 'package:duskmoon_theme_bloc/duskmoon_theme_bloc.dart';
+import 'package:gamepad_bloc/gamepad_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_locale/app_locale.dart';
 
 void main() {
   group('AppSettingsScreen', () {
     late SharedPreferences sharedPreferences;
-    late ThemeBloc themeBloc;
+    late DmThemeBloc themeBloc;
+    late GamepadBloc gamepadBloc;
+    final navigatorKey = GlobalKey<NavigatorState>();
 
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
       sharedPreferences = await SharedPreferences.getInstance();
-      themeBloc = ThemeBloc(sharedPreferences);
+      themeBloc = DmThemeBloc(prefs: sharedPreferences);
+      gamepadBloc = GamepadBloc(
+        navigatorKey: navigatorKey,
+        routeNames: const [],
+      );
     });
 
     tearDown(() {
       themeBloc.close();
+      gamepadBloc.close();
       sharedPreferences.clear();
     });
+
+    Widget buildWidget() {
+      return RepositoryProvider<SharedPreferences>(
+        create: (context) => sharedPreferences,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<DmThemeBloc>.value(value: themeBloc),
+            BlocProvider<GamepadBloc>.value(value: gamepadBloc),
+          ],
+          child: MaterialApp(
+            navigatorKey: navigatorKey,
+            localizationsDelegates: AppLocale.localizationsDelegates,
+            supportedLocales: AppLocale.supportedLocales,
+            home: const AppSettingsScreen(),
+          ),
+        ),
+      );
+    }
 
     testWidgets('renders correctly with basic components', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        RepositoryProvider<SharedPreferences>(
-          create: (context) => sharedPreferences,
-          child: BlocProvider<ThemeBloc>(
-            create: (context) => themeBloc,
-            child: MaterialApp(
-              localizationsDelegates: AppLocale.localizationsDelegates,
-              supportedLocales: AppLocale.supportedLocales,
-              home: const AppSettingsScreen(),
-            ),
-          ),
-        ),
-      );
+      await tester.pumpWidget(buildWidget());
 
       expect(find.byType(AppSettingsScreen), findsOneWidget);
       expect(find.byType(SliverAppBar), findsOneWidget);
     });
 
     testWidgets('displays APP_NAME section', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        RepositoryProvider<SharedPreferences>(
-          create: (context) => sharedPreferences,
-          child: BlocProvider<ThemeBloc>(
-            create: (context) => themeBloc,
-            child: MaterialApp(
-              localizationsDelegates: AppLocale.localizationsDelegates,
-              supportedLocales: AppLocale.supportedLocales,
-              home: const AppSettingsScreen(),
-            ),
-          ),
-        ),
-      );
+      await tester.pumpWidget(buildWidget());
 
       expect(find.text('APP_NAME'), findsWidgets);
     });
@@ -64,19 +66,7 @@ void main() {
     testWidgets('displays N/A when APP_NAME is not set', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        RepositoryProvider<SharedPreferences>(
-          create: (context) => sharedPreferences,
-          child: BlocProvider<ThemeBloc>(
-            create: (context) => themeBloc,
-            child: MaterialApp(
-              localizationsDelegates: AppLocale.localizationsDelegates,
-              supportedLocales: AppLocale.supportedLocales,
-              home: const AppSettingsScreen(),
-            ),
-          ),
-        ),
-      );
+      await tester.pumpWidget(buildWidget());
 
       expect(find.text('N/A'), findsOneWidget);
     });
@@ -86,19 +76,7 @@ void main() {
     ) async {
       await sharedPreferences.setString('APP_NAME', 'Test App Name');
 
-      await tester.pumpWidget(
-        RepositoryProvider<SharedPreferences>(
-          create: (context) => sharedPreferences,
-          child: BlocProvider<ThemeBloc>(
-            create: (context) => themeBloc,
-            child: MaterialApp(
-              localizationsDelegates: AppLocale.localizationsDelegates,
-              supportedLocales: AppLocale.supportedLocales,
-              home: const AppSettingsScreen(),
-            ),
-          ),
-        ),
-      );
+      await tester.pumpWidget(buildWidget());
 
       expect(find.text('Test App Name'), findsOneWidget);
       expect(find.text('N/A'), findsNothing);
@@ -107,19 +85,7 @@ void main() {
     testWidgets('opens dialog when APP_NAME tile is tapped', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        RepositoryProvider<SharedPreferences>(
-          create: (context) => sharedPreferences,
-          child: BlocProvider<ThemeBloc>(
-            create: (context) => themeBloc,
-            child: MaterialApp(
-              localizationsDelegates: AppLocale.localizationsDelegates,
-              supportedLocales: AppLocale.supportedLocales,
-              home: const AppSettingsScreen(),
-            ),
-          ),
-        ),
-      );
+      await tester.pumpWidget(buildWidget());
 
       // Find the APP_NAME tile and tap it
       final appNameTile = find.text('APP_NAME').first;
@@ -138,19 +104,7 @@ void main() {
     testWidgets('dialog closes when button is pressed', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        RepositoryProvider<SharedPreferences>(
-          create: (context) => sharedPreferences,
-          child: BlocProvider<ThemeBloc>(
-            create: (context) => themeBloc,
-            child: MaterialApp(
-              localizationsDelegates: AppLocale.localizationsDelegates,
-              supportedLocales: AppLocale.supportedLocales,
-              home: const AppSettingsScreen(),
-            ),
-          ),
-        ),
-      );
+      await tester.pumpWidget(buildWidget());
 
       // Find the APP_NAME tile and tap it
       final appNameTiles = find.text('APP_NAME');
@@ -168,19 +122,7 @@ void main() {
     });
 
     testWidgets('APP_NAME tile has correct icon', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        RepositoryProvider<SharedPreferences>(
-          create: (context) => sharedPreferences,
-          child: BlocProvider<ThemeBloc>(
-            create: (context) => themeBloc,
-            child: MaterialApp(
-              localizationsDelegates: AppLocale.localizationsDelegates,
-              supportedLocales: AppLocale.supportedLocales,
-              home: const AppSettingsScreen(),
-            ),
-          ),
-        ),
-      );
+      await tester.pumpWidget(buildWidget());
 
       expect(find.byIcon(Icons.api), findsOneWidget);
     });
@@ -189,21 +131,8 @@ void main() {
       WidgetTester tester,
     ) async {
       SharedPreferences.setMockInitialValues({});
-      final emptyPrefs = await SharedPreferences.getInstance();
 
-      await tester.pumpWidget(
-        RepositoryProvider<SharedPreferences>(
-          create: (context) => emptyPrefs,
-          child: BlocProvider<ThemeBloc>(
-            create: (context) => themeBloc,
-            child: MaterialApp(
-              localizationsDelegates: AppLocale.localizationsDelegates,
-              supportedLocales: AppLocale.supportedLocales,
-              home: const AppSettingsScreen(),
-            ),
-          ),
-        ),
-      );
+      await tester.pumpWidget(buildWidget());
 
       expect(find.text('N/A'), findsOneWidget);
     });
