@@ -225,7 +225,6 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 

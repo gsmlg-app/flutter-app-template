@@ -228,7 +228,6 @@ class _ArtworkDemoScreenState extends State<ArtworkDemoScreen>
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 

@@ -62,7 +62,6 @@ class _ControllerSettingsScreenState extends State<ControllerSettingsScreen> {
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 

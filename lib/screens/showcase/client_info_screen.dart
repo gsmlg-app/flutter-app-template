@@ -82,7 +82,6 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 

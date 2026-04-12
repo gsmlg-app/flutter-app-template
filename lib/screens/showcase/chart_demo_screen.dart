@@ -349,7 +349,6 @@ class _ChartDemoScreenState extends State<ChartDemoScreen> {
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 

@@ -187,7 +187,6 @@ class _ControllerTestScreenState extends State<ControllerTestScreen>
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 

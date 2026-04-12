@@ -202,7 +202,6 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
           ),
         );
       },
-      smallSecondaryBody: AdaptiveScaffold.emptyBuilder,
     );
   }
 
