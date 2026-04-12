@@ -15,10 +15,10 @@ Flutter monorepo template with modular architecture, BLoC state management, and 
 ├── app_bloc/               # BLoC state management packages
 ├── app_lib/                # Core utilities (database, locale, logging, provider)
 ├── app_widget/             # Reusable UI components (artwork, chart, web_view)
+├── app_form/               # Form modules with BLoC state management
 ├── app_plugin/             # Native platform plugins with federated architecture
 ├── bricks/                 # Mason templates for code generation
-├── test_bricks/            # Brick tests (one folder per brick)
-└── third_party/            # Modified third-party packages
+└── test_bricks/            # Brick tests (one folder per brick)
 ```
 
 **Workspace packages** (defined in root `pubspec.yaml` `workspace:` section—there is no separate melos.yaml):
@@ -27,29 +27,27 @@ Flutter monorepo template with modular architecture, BLoC state management, and 
 - `app_widget/`: artwork, chart, web_view
 - `app_form/`: demo
 - `app_plugin/`: client_info/ (nested federated plugin containing: client_info, client_info_platform_interface, client_info_android, client_info_ios, client_info_linux, client_info_macos, client_info_windows)
-- `third_party/`: form_bloc, flutter_form_bloc
 
-**External UI packages** (from pub.dev):
-- `duskmoon_ui` — umbrella re-exporting theme, widgets, settings, and feedback
-- `duskmoon_theme_bloc` — BLoC for theme persistence via SharedPreferences
+**External UI packages** (from pub.dev, pinned in root pubspec.yaml):
+- `duskmoon_ui` (^1.4.2) — umbrella re-exporting all duskmoon packages below
+- `duskmoon_theme_bloc` (^1.4.2) — BLoC for theme persistence via SharedPreferences
+- Sub-packages (re-exported by `duskmoon_ui`):
+  - `duskmoon_theme` — theme system, color schemes (sunshine/moonlight/forest/ocean), DmThemeData
+  - `duskmoon_widgets` — 19 adaptive widgets (DmButton, DmAppBar, DmSwitch, DmSlider, DmTextField, DmCheckbox, DmDropdown, DmCard, etc.), DmMarkdown, DmCodeEditor
+  - `duskmoon_settings` — platform-aware settings UI (SettingsList, SettingsSection, SettingsTile)
+  - `duskmoon_feedback` — showDmDialog, showDmSnackbar, showDmSuccessToast, showDmErrorToast, showDmBottomSheetActionList
+  - `duskmoon_form` — BLoC-based form management (FormBloc, TextFieldBloc, DmTextFieldBlocBuilder, etc.)
+  - `duskmoon_visualization` — data visualization charts (line, bar, scatter, heatmap, network, map)
+  - `duskmoon_adaptive_scaffold` — DmAdaptiveScaffold with responsive M3 layout and breakpoints
+  - `duskmoon_code_engine` — pure Dart code editor with 19 language grammars
 
 ## Custom Skills (Claude Code)
 
-Project-specific skills are available in `.claude/skills/`:
-- `/project-development` - **Start here!** Workflow guide for choosing the right skill based on your task
-- `/project-api` - Create API client packages from OpenAPI specs
-- `/project-bloc` - Create BLoC packages with events, states, and proper structure
-- `/project-database` - Use app_database package with Drift for user settings, app config, and persistent data
-- `/project-data-visualization` - Build charts, graphs, and maps using the data_visualization package suite
-- `/project-feedback` - Show user feedback using toasts, snackbars, dialogs, bottom sheets
-- `/project-form` - Create form modules with FormBloc state management and validation
-- `/project-locale` - Add localized text using l10n in app_lib/locale
-- `/project-metadata` - Update app name, bundle identifier, and company metadata across all platforms
-- `/project-plugin` - Create native plugins (simple or federated)
-- `/project-screen` - Create screens with routing conventions and adaptive scaffold
-- `/project-secure-storage` - Store secrets securely using app_secure_storage package with platform-native storage
-- `/project-widget` - Create reusable widgets with platform adaptive support
+Project-specific skill available in `.claude/skills/`:
 - `/template-mason-brick` - Create, update, or remove Mason bricks with tests
+
+External skills (from plugins):
+- `/gsmlg-app:flutter-duskmoon` - DuskMoon UI design system reference for all duskmoon_* packages
 
 ## Development Commands
 
@@ -150,6 +148,19 @@ Use `AppLogger` from `app_logging` package with configurable levels (debug, info
 
 ### Theme
 `DmThemeBloc` (from `duskmoon_theme_bloc`) manages theme state with automatic SharedPreferences persistence. Available themes are defined by `DmThemeData.themes`. Events: `DmSetTheme(name)`, `DmSetThemeMode(mode)`. State: `DmThemeState` with `.themeName`, `.themeMode`, `.entry` (DmThemeEntry with `.light`/`.dark` ThemeData).
+
+### DuskMoon UI Conventions
+All screens use `duskmoon_ui` widgets. Prefer Dm-prefixed widgets over plain Flutter equivalents:
+- **Scaffold**: `DmAdaptiveScaffold` with `destinations`, `selectedIndex`, `body` builder
+- **Buttons**: `DmButton` (replaces ElevatedButton/FilledButton/TextButton via `variant: DmButtonVariant`)
+- **AppBar**: `DmAppBar` (adaptive Material/Cupertino)
+- **Inputs**: `DmTextField`, `DmSwitch`, `DmCheckbox`, `DmSlider`, `DmDropdown`
+- **Dialogs**: `showDmDialog` with `DmDialogAction` (replaces showDialog+AlertDialog)
+- **Snackbars**: `showDmSnackbar` (replaces ScaffoldMessenger.showSnackBar)
+- **Toasts**: `showDmSuccessToast`, `showDmErrorToast`
+- **Settings**: `SettingsList`, `SettingsSection`, `SettingsTile` (from `duskmoon_settings`)
+- **Forms**: `DmTextFieldBlocBuilder`, `DmCheckboxFieldBlocBuilder`, etc. (from `duskmoon_form`)
+- **Import**: `import 'package:duskmoon_ui/duskmoon_ui.dart';` (umbrella, includes flutter_bloc re-export)
 
 ## Testing
 

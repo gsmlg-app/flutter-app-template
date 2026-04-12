@@ -213,14 +213,24 @@ mason make brick_name -o /tmp/test_output --var1=value1
 
 | Brick | Purpose | Key Variables |
 |-------|---------|---------------|
-| `screen` | Flutter screen with routing | `name`, `folder`, `has_adaptive_scaffold` |
+| `screen` | Flutter screen with DmAdaptiveScaffold | `name`, `folder`, `has_adaptive_scaffold` |
 | `widget` | Reusable widget | `name`, `type`, `folder` |
 | `simple_bloc` | Basic BLoC package | `name` |
 | `list_bloc` | List management BLoC | `name` |
-| `form_bloc` | Form validation BLoC | `name`, `field_names` |
+| `form_bloc` | Form BLoC (uses `duskmoon_form`) | `name`, `field_names` |
 | `repository` | Data repository | `name` |
 | `api_client` | API client package | `package_name` |
+| `native_plugin` | Simple native plugin | `name`, `package_prefix`, `description` |
 | `native_federation_plugin` | Federated native plugin | `name`, `package_prefix`, `support_*` |
+
+## Package Conventions for Bricks
+
+When generating brick templates that produce Dart/Flutter packages:
+- Use `duskmoon_ui: any` or specific sub-packages (`duskmoon_form: any`, `duskmoon_feedback: any`) for UI dependencies
+- Use `DmAdaptiveScaffold` (not `AppAdaptiveScaffold` or `DmScaffold`) for screen scaffolds
+- Import `package:duskmoon_ui/duskmoon_ui.dart` as the umbrella import
+- Use `DmButton` instead of `ElevatedButton`/`TextButton`/`FilledButton`
+- Use `showDmDialog`/`showDmSnackbar` instead of plain Flutter dialog/snackbar APIs
 
 ## Checklist
 
