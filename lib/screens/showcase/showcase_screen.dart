@@ -23,11 +23,8 @@ class ShowcaseScreen extends StatelessWidget {
       selectedIndex: Destinations.indexOf(const Key(name), context),
       onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs(context),
-      appBar: AppBar(
+      appBar: DmAppBar(
         title: const Text('Widget Showcase'),
-        centerTitle: true,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: (context) {
         return SafeArea(

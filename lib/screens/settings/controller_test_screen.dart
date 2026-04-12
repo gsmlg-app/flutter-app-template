@@ -240,12 +240,11 @@ class _ControllerTestScreenState extends State<ControllerTestScreen>
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         Expanded(
-          child: Slider(
+          child: DmSlider(
             value: _deadzone,
             min: 0,
             max: 0.5,
             divisions: 10,
-            label: '${(_deadzone * 100).toInt()}%',
             onChanged: (v) {
               setState(() => _deadzone = v);
               final newConfig =

@@ -170,10 +170,16 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            ElevatedButton.icon(
+            DmButton(
               onPressed: _loadClientInfo,
-              icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.refresh),
+                  SizedBox(width: 8),
+                  Text('Retry'),
+                ],
+              ),
             ),
           ],
         ),
@@ -283,11 +289,10 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
                   icon: const Icon(Icons.copy),
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: rawData));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Copied to clipboard'),
-                        duration: Duration(seconds: 2),
-                      ),
+                    showDmSnackbar(
+                      context: context,
+                      message: const Text('Copied to clipboard'),
+                      duration: const Duration(seconds: 2),
                     );
                   },
                   tooltip: 'Copy to clipboard',

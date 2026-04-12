@@ -1,4 +1,5 @@
 import 'package:app_locale/app_locale.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/screens/app/splash_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -38,7 +39,7 @@ class ErrorScreen extends StatelessWidget {
             ),
             Container(
               margin: const EdgeInsets.only(top: 32),
-              child: ElevatedButton(
+              child: DmButton(
                 onPressed: () {
                   context.go(SplashScreen.path);
                 },

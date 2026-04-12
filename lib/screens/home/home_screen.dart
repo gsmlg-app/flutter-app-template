@@ -21,11 +21,8 @@ class HomeScreen extends StatelessWidget {
       selectedIndex: Destinations.indexOf(const Key(HomeScreen.name), context),
       onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs(context),
-      appBar: AppBar(
+      appBar: DmAppBar(
         title: Text(context.l10n.appName),
-        centerTitle: true,
-        foregroundColor: colorScheme.onPrimary,
-        backgroundColor: colorScheme.primary,
       ),
       body: (context) => SafeArea(
         child: CustomScrollView(

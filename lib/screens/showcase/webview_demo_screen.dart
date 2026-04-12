@@ -205,7 +205,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
         return SafeArea(
           child: Column(
             children: [
-              AppBar(
+              DmAppBar(
                 title: Text(WebViewDemoScreen.name),
                 actions: [
                   IconButton(
@@ -251,7 +251,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
             const SizedBox(height: 16),
             Text('Error: $_error'),
             const SizedBox(height: 16),
-            ElevatedButton(
+            DmButton(
               onPressed: _createSampleHtmlFile,
               child: const Text('Retry'),
             ),

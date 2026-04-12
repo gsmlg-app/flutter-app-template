@@ -123,27 +123,22 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
   }
 
   Future<void> _deleteAllSecrets() async {
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showDmDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete All Secrets?'),
-        content: const Text(
-          'This will permanently delete all stored secrets. This action cannot be undone.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: FilledButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ),
-            child: const Text('Delete All'),
-          ),
-        ],
+      title: const Text('Delete All Secrets?'),
+      content: const Text(
+        'This will permanently delete all stored secrets. This action cannot be undone.',
       ),
+      actions: [
+        DmDialogAction(
+          onPressed: (ctx) => Navigator.pop(ctx, false),
+          child: const Text('Cancel'),
+        ),
+        DmDialogAction(
+          onPressed: (ctx) => Navigator.pop(ctx, true),
+          child: const Text('Delete All'),
+        ),
+      ],
     );
 
     if (confirmed != true) return;
@@ -367,16 +362,23 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
-                child: FilledButton.icon(
+                child: DmButton(
                   onPressed: _isLoading ? null : _writeSecret,
-                  icon: _isLoading
-                      ? const SizedBox(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (_isLoading)
+                        const SizedBox(
                           width: 16,
                           height: 16,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Icon(Icons.save),
-                  label: const Text('Save Secret'),
+                      else
+                        const Icon(Icons.save),
+                      const SizedBox(width: 8),
+                      const Text('Save Secret'),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -545,11 +547,10 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
             icon: const Icon(Icons.copy),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: value));
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Copied "$key" to clipboard'),
-                  duration: const Duration(seconds: 2),
-                ),
+              showDmSnackbar(
+                context: context,
+                message: Text('Copied "$key" to clipboard'),
+                duration: const Duration(seconds: 2),
               );
             },
             tooltip: 'Copy value',

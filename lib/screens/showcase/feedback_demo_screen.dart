@@ -131,7 +131,7 @@ class FeedbackDemoScreen extends StatelessWidget {
   }) {
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton(onPressed: onPressed, child: Text(label)),
+      child: DmButton(onPressed: onPressed, child: Text(label)),
     );
   }
 
