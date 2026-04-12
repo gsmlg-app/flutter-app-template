@@ -13,7 +13,7 @@ class {{name.pascalCase()}}Screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    {{#has_adaptive_scaffold}}return DmScaffold(
+    {{#has_adaptive_scaffold}}return DmAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(const Key(name), context),
       onSelectedIndexChange: (idx) => Destinations.changeHandler(
         idx,

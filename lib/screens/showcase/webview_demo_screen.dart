@@ -194,7 +194,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return DmScaffold(
+    return DmAdaptiveScaffold(
       selectedIndex: Destinations.indexOf(
         const Key(ShowcaseScreen.name),
         context,
