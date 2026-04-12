@@ -39,7 +39,7 @@ void main() {
       expect(content, contains('class TestHomeScreen extends StatelessWidget'));
       expect(content, contains("static const name = 'Test Home'"));
       expect(content, contains("static const path = '/test-home'"));
-      expect(content, contains('AppAdaptiveScaffold'));
+      expect(content, contains('DmAdaptiveScaffold'));
       expect(content, contains('SliverAppBar'));
     });
 

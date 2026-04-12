@@ -1,4 +1,4 @@
-import 'package:form_bloc/form_bloc.dart';
+import 'package:duskmoon_form/duskmoon_form.dart';
 
 /// {@template {{name.snakeCase()}}_form_state_extensions}
 /// Extensions and additional state management for {{name.pascalCase()}}FormBloc.

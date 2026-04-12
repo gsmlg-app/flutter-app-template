@@ -72,6 +72,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  test: any
 
   build_runner: ^2.4.15
 

@@ -16,7 +16,8 @@ class ErrorDisplay {
           message: Text(message),
           duration: const Duration(seconds: 2),
           actionLabel: onRetry != null ? 'RETRY' : 'DISMISS',
-          onActionPressed: onRetry ??
+          onActionPressed:
+              onRetry ??
               () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
         );
         break;
@@ -26,7 +27,8 @@ class ErrorDisplay {
           message: Text(message),
           duration: const Duration(seconds: 4),
           actionLabel: onRetry != null ? 'RETRY' : 'DISMISS',
-          onActionPressed: onRetry ??
+          onActionPressed:
+              onRetry ??
               () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
         );
         break;

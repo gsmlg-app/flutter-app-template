@@ -69,8 +69,7 @@ void main() {
       expect(pubspecContent, contains('name: test_form_form_bloc'));
 
       // Check dependencies
-      expect(pubspecContent, contains('bloc:'));
-      expect(pubspecContent, contains('equatable:'));
+      expect(pubspecContent, contains('duskmoon_form:'));
 
       // Check dev dependencies
       expect(pubspecContent, contains('bloc_test:'));

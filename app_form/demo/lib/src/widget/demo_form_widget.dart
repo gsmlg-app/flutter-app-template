@@ -112,9 +112,8 @@ class DemoFormWidget extends StatelessWidget {
                   const SizedBox(height: 8),
                   DmChoiceChipFieldBlocBuilder<String>(
                     selectFieldBloc: formBloc.priority,
-                    itemBuilder: (context, value) => ChipFieldItem(
-                      label: Text(value),
-                    ),
+                    itemBuilder: (context, value) =>
+                        ChipFieldItem(label: Text(value)),
                   ),
 
                   const SizedBox(height: 24),
@@ -136,7 +135,9 @@ class DemoFormWidget extends StatelessWidget {
                   _buildSectionHeader(context, 'Checkbox Group (multi-select)'),
                   const SizedBox(height: 8),
                   _buildDescription(
-                      context, 'Select your interests (optional)'),
+                    context,
+                    'Select your interests (optional)',
+                  ),
                   const SizedBox(height: 8),
                   DmCheckboxGroupFieldBlocBuilder<String>(
                     multiSelectFieldBloc: formBloc.interests,
@@ -153,9 +154,8 @@ class DemoFormWidget extends StatelessWidget {
                   const SizedBox(height: 8),
                   DmFilterChipFieldBlocBuilder<String>(
                     multiSelectFieldBloc: formBloc.skills,
-                    itemBuilder: (context, value) => ChipFieldItem(
-                      label: Text(value),
-                    ),
+                    itemBuilder: (context, value) =>
+                        ChipFieldItem(label: Text(value)),
                   ),
 
                   const SizedBox(height: 24),
@@ -242,9 +242,7 @@ class DemoFormWidget extends StatelessWidget {
                   const SizedBox(height: 12),
                   DmMarkdownFieldBlocBuilder(
                     markdownFieldBloc: formBloc.bio,
-                    decoration: const InputDecoration(
-                      labelText: 'Bio',
-                    ),
+                    decoration: const InputDecoration(labelText: 'Bio'),
                     showLineNumbers: true,
                     minLines: 8,
                   ),
@@ -303,9 +301,9 @@ class DemoFormWidget extends StatelessWidget {
     return Text(
       title,
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+        fontWeight: FontWeight.bold,
+        color: Theme.of(context).colorScheme.primary,
+      ),
     );
   }
 
@@ -313,8 +311,8 @@ class DemoFormWidget extends StatelessWidget {
     return Text(
       text,
       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
     );
   }
 
