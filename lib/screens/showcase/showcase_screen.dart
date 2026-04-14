@@ -20,6 +20,7 @@ class ShowcaseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DmAdaptiveScaffold(
+      internalAnimations: false,
       selectedIndex: Destinations.indexOf(const Key(name), context),
       onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs(context),
@@ -27,6 +28,7 @@ class ShowcaseScreen extends StatelessWidget {
         title: const Text('Widget Showcase'),
       ),
       body: (context) {
+        final colorScheme = Theme.of(context).colorScheme;
         return SafeArea(
           child: ListView(
             padding: const EdgeInsets.all(16),
@@ -45,7 +47,7 @@ class ShowcaseScreen extends StatelessWidget {
                 description:
                     'Dialogs, Snackbars, Toasts, Bottom Sheets, Fullscreen Dialogs',
                 icon: Icons.notifications_active,
-                color: Colors.orange,
+                color: colorScheme.secondary,
                 onTap: () => context.goNamed(FeedbackDemoScreen.name),
               ),
               const SizedBox(height: 12),
@@ -55,7 +57,7 @@ class ShowcaseScreen extends StatelessWidget {
                 subtitle: 'duskmoon_widgets',
                 description: 'Responsive action lists, adaptive scaffolds',
                 icon: Icons.devices,
-                color: Colors.blue,
+                color: colorScheme.primary,
                 onTap: () => context.goNamed(AdaptiveDemoScreen.name),
               ),
               const SizedBox(height: 12),
@@ -65,7 +67,7 @@ class ShowcaseScreen extends StatelessWidget {
                 subtitle: 'app_artwork',
                 description: 'Lottie animations, custom logos',
                 icon: Icons.palette,
-                color: Colors.purple,
+                color: colorScheme.tertiary,
                 onTap: () => context.goNamed(ArtworkDemoScreen.name),
               ),
               const SizedBox(height: 12),
@@ -76,7 +78,7 @@ class ShowcaseScreen extends StatelessWidget {
                 description:
                     'Line, bar, and pie charts with data_visualization',
                 icon: Icons.bar_chart,
-                color: Colors.cyan,
+                color: colorScheme.secondary,
                 onTap: () => context.goNamed(ChartDemoScreen.name),
               ),
               const SizedBox(height: 12),
@@ -86,7 +88,7 @@ class ShowcaseScreen extends StatelessWidget {
                 subtitle: 'app_web_view',
                 description: 'Local HTML viewer with retry logic',
                 icon: Icons.web,
-                color: Colors.green,
+                color: colorScheme.tertiary,
                 onTap: () => context.goNamed(WebViewDemoScreen.name),
               ),
               const SizedBox(height: 12),
@@ -96,7 +98,7 @@ class ShowcaseScreen extends StatelessWidget {
                 subtitle: 'app_client_info',
                 description: 'Platform info from native federated plugin',
                 icon: Icons.phone_android,
-                color: Colors.indigo,
+                color: colorScheme.primary,
                 onTap: () => context.goNamed(ClientInfoScreen.name),
               ),
               const SizedBox(height: 12),
@@ -106,7 +108,7 @@ class ShowcaseScreen extends StatelessWidget {
                 subtitle: 'demo_form',
                 description: 'FormBloc state management with validation',
                 icon: Icons.edit_document,
-                color: Colors.teal,
+                color: colorScheme.tertiary,
                 onTap: () => context.goNamed(FormDemoScreen.name),
               ),
               const SizedBox(height: 12),
@@ -116,7 +118,7 @@ class ShowcaseScreen extends StatelessWidget {
                 subtitle: 'app_secure_storage',
                 description: 'Platform-native secure storage for secrets',
                 icon: Icons.security,
-                color: Colors.amber,
+                color: colorScheme.secondary,
                 onTap: () => context.goNamed(VaultDemoScreen.name),
               ),
             ],

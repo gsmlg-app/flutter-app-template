@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import 'controller_input_state.dart';
+import 'gamepad_visualizer.dart';
 
 /// CustomPainter that draws a top-down Xbox controller schematic.
 ///
@@ -590,16 +591,16 @@ class XboxControllerPainter extends CustomPainter {
 
     // A (bottom)
     _drawCircleButton(canvas, Offset(cx, cy + sp), r, ButtonId.a,
-        activeColor: Colors.green);
+        activeColor: kFaceButtonA);
     // B (right)
     _drawCircleButton(canvas, Offset(cx + sp, cy), r, ButtonId.b,
-        activeColor: Colors.red);
+        activeColor: kFaceButtonB);
     // X (left)
     _drawCircleButton(canvas, Offset(cx - sp, cy), r, ButtonId.x,
-        activeColor: Colors.blue);
+        activeColor: kFaceButtonX);
     // Y (top)
     _drawCircleButton(canvas, Offset(cx, cy - sp), r, ButtonId.y,
-        activeColor: Colors.amber);
+        activeColor: kFaceButtonY);
   }
 
   void _drawCircleButton(

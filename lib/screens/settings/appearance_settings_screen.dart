@@ -1,5 +1,4 @@
 import 'package:app_locale/app_locale.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
@@ -14,6 +13,7 @@ class AppearanceSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DmAdaptiveScaffold(
+      internalAnimations: false,
       selectedIndex: Destinations.indexOf(
         const Key(SettingsScreen.name),
         context,
@@ -71,8 +71,8 @@ class _AppearancePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final labelColor = isDark ? CupertinoColors.white : CupertinoColors.black;
+    final colorScheme = Theme.of(context).colorScheme;
+    final labelColor = colorScheme.onSurface;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -115,7 +115,7 @@ class _AppearancePicker extends StatelessWidget {
         isLight ? const Color(0xFFF0F0F0) : const Color(0xFF3A3A3A);
     final sidebarColor =
         isLight ? const Color(0xFFF5F5F7) : const Color(0xFF2A2A2A);
-    final accentColor = CupertinoColors.activeBlue;
+    final accentColor = Theme.of(context).colorScheme.primary;
 
     return Container(
       width: 80,
@@ -259,7 +259,7 @@ class _AppearanceOption extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color: isSelected
-                    ? CupertinoColors.activeBlue
+                    ? Theme.of(context).colorScheme.primary
                     : Colors.transparent,
                 width: 2,
               ),

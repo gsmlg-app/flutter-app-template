@@ -18,6 +18,7 @@ class HomeScreen extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return DmAdaptiveScaffold(
+      internalAnimations: false,
       selectedIndex: Destinations.indexOf(const Key(HomeScreen.name), context),
       onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs(context),
@@ -80,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                       child: _QuickNavCard(
                         icon: Icons.widgets,
                         label: 'Showcase',
-                        color: Colors.blue,
+                        color: colorScheme.primary,
                         onTap: () => context.goNamed(ShowcaseScreen.name),
                       ),
                     ),
@@ -89,7 +90,7 @@ class HomeScreen extends StatelessWidget {
                       child: _QuickNavCard(
                         icon: Icons.settings,
                         label: 'Settings',
-                        color: Colors.grey,
+                        color: colorScheme.outline,
                         onTap: () => context.goNamed(SettingsScreen.name),
                       ),
                     ),
@@ -183,7 +184,7 @@ class HomeScreen extends StatelessWidget {
                     description:
                         'State management with events, states, '
                         'and reactive streams',
-                    color: Colors.teal,
+                    color: colorScheme.primary,
                   ),
                   _FeatureTile(
                     icon: Icons.storage,
@@ -191,7 +192,7 @@ class HomeScreen extends StatelessWidget {
                     description:
                         'Drift database, SharedPreferences, '
                         'and platform-native secure storage',
-                    color: Colors.orange,
+                    color: colorScheme.secondary,
                   ),
                   _FeatureTile(
                     icon: Icons.translate,
@@ -199,7 +200,7 @@ class HomeScreen extends StatelessWidget {
                     description:
                         'Multi-language support with ARB files '
                         'and generated l10n',
-                    color: Colors.indigo,
+                    color: colorScheme.tertiary,
                   ),
                   _FeatureTile(
                     icon: Icons.devices,
@@ -207,7 +208,7 @@ class HomeScreen extends StatelessWidget {
                     description:
                         'Android, iOS, macOS, Linux, Windows, '
                         'and Web from a single codebase',
-                    color: Colors.green,
+                    color: colorScheme.tertiary,
                   ),
                   _FeatureTile(
                     icon: Icons.gamepad,
@@ -215,7 +216,7 @@ class HomeScreen extends StatelessWidget {
                     description:
                         'Controller input handling with '
                         'configurable button mapping',
-                    color: Colors.purple,
+                    color: colorScheme.secondary,
                   ),
                 ]),
               ),

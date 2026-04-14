@@ -34,7 +34,7 @@ class SplashScreen extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.surface,
             ),
             child: Center(child: LogoGSMLGDEV()),
           ),

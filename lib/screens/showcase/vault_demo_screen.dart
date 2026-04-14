@@ -163,6 +163,7 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
   @override
   Widget build(BuildContext context) {
     return DmAdaptiveScaffold(
+      internalAnimations: false,
       selectedIndex: Destinations.indexOf(
         const Key(ShowcaseScreen.name),
         context,
@@ -177,13 +178,13 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
                 title: const Text(VaultDemoScreen.name),
                 actions: [
                   IconButton(
-                    icon: const Icon(Icons.refresh),
+                    icon: const Icon(Icons.refresh, semanticLabel: 'Refresh secrets'),
                     onPressed: _isLoading ? null : _loadAllSecrets,
                     tooltip: 'Refresh',
                   ),
                   if (_storedSecrets.isNotEmpty)
                     IconButton(
-                      icon: const Icon(Icons.delete_sweep),
+                      icon: const Icon(Icons.delete_sweep, semanticLabel: 'Delete all secrets'),
                       onPressed: _isLoading ? null : _deleteAllSecrets,
                       tooltip: 'Delete All',
                     ),
@@ -230,12 +231,12 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.amber.withValues(alpha: 0.1),
+                    color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.info_outline,
-                    color: Colors.amber,
+                    color: Theme.of(context).colorScheme.secondary,
                     size: 24,
                   ),
                 ),
@@ -308,12 +309,12 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.blue.withValues(alpha: 0.1),
+                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.add_circle,
-                      color: Colors.blue,
+                      color: Theme.of(context).colorScheme.primary,
                       size: 24,
                     ),
                   ),
@@ -415,7 +416,7 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.close),
+              icon: const Icon(Icons.close, semanticLabel: 'Dismiss result'),
               onPressed: () => setState(() => _lastResult = null),
               iconSize: 18,
             ),
@@ -438,12 +439,12 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.green.withValues(alpha: 0.1),
+                    color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.folder_special,
-                    color: Colors.green,
+                    color: Theme.of(context).colorScheme.tertiary,
                     size: 24,
                   ),
                 ),
@@ -539,12 +540,12 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            icon: const Icon(Icons.visibility),
+            icon: const Icon(Icons.visibility, semanticLabel: 'View secret value'),
             onPressed: () => _readSecret(key),
             tooltip: 'View value',
           ),
           IconButton(
-            icon: const Icon(Icons.copy),
+            icon: const Icon(Icons.copy, semanticLabel: 'Copy secret value'),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: value));
               showDmSnackbar(
@@ -558,6 +559,7 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
           IconButton(
             icon: Icon(
               Icons.delete,
+              semanticLabel: 'Delete secret',
               color: Theme.of(context).colorScheme.error,
             ),
             onPressed: () => _deleteSecret(key),

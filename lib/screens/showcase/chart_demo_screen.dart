@@ -127,17 +127,18 @@ class _ChartDemoScreenState extends State<ChartDemoScreen> {
     DmVizNetworkEdge(source: 'provider', target: 'dart'),
   ];
 
-  final Map<String, Color> networkGroupColors = {
-    'framework': Colors.blue,
-    'language': Colors.teal,
-    'state': Colors.orange,
-    'backend': Colors.purple,
-    'ui': Colors.green,
+  Map<String, Color> _networkGroupColors(ColorScheme cs) => {
+    'framework': cs.primary,
+    'language': cs.tertiary,
+    'state': cs.secondary,
+    'backend': cs.tertiary,
+    'ui': cs.primary,
   };
 
   @override
   Widget build(BuildContext context) {
     return DmAdaptiveScaffold(
+      internalAnimations: false,
       selectedIndex: Destinations.indexOf(
         const Key(ShowcaseScreen.name),
         context,
@@ -321,7 +322,7 @@ class _ChartDemoScreenState extends State<ChartDemoScreen> {
                             showLinkLabels: false,
                             enableZoomPan: true,
                             draggableNodes: true,
-                            groupColors: networkGroupColors,
+                            groupColors: _networkGroupColors(Theme.of(context).colorScheme),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -336,7 +337,7 @@ class _ChartDemoScreenState extends State<ChartDemoScreen> {
                             showNodeLabels: true,
                             nodeShape: DmVizNetworkNodeShape.hexagon,
                             linkStyle: DmVizNetworkLinkStyle.dashed,
-                            groupColors: networkGroupColors,
+                            groupColors: _networkGroupColors(Theme.of(context).colorScheme),
                           ),
                         ),
                       ],

@@ -1,5 +1,12 @@
 import 'package:app_gamepad/app_gamepad.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
+
+/// Industry-standard controller face button colors.
+const kFaceButtonA = Colors.green;
+const kFaceButtonB = Colors.red;
+const kFaceButtonX = Colors.blue;
+const kFaceButtonY = Colors.amber;
 
 /// A visual representation of a gamepad controller for debugging input
 class GamepadVisualizer extends StatefulWidget {
@@ -186,10 +193,17 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  TextButton.icon(
+                  DmButton(
+                    variant: DmButtonVariant.text,
                     onPressed: () => setState(() => _eventLog.clear()),
-                    icon: const Icon(Icons.clear_all, size: 16),
-                    label: const Text('Clear'),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.clear_all, size: 16),
+                        const SizedBox(width: 4),
+                        Text('Clear'),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -227,6 +241,7 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
                                     style: theme.textTheme.bodySmall?.copyWith(
                                       fontFamily: 'monospace',
                                       fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -285,19 +300,20 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
   }
 
   Widget _buildShoulderButton(String label, List<String> keys) {
+    final colorScheme = Theme.of(context).colorScheme;
     final isPressed = _isButtonPressed(keys);
     return Container(
       width: 60,
       height: 24,
       decoration: BoxDecoration(
-        color: isPressed ? Colors.green : Colors.grey.shade700,
+        color: isPressed ? colorScheme.primary : colorScheme.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Center(
         child: Text(
           label,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: isPressed ? colorScheme.onPrimary : colorScheme.onSurface,
             fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
@@ -307,6 +323,7 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
   }
 
   Widget _buildAnalogStick(String label, double x, double y) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
         Text(label, style: const TextStyle(fontSize: 10)),
@@ -315,9 +332,9 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
           width: 60,
           height: 60,
           decoration: BoxDecoration(
-            color: Colors.grey.shade800,
+            color: colorScheme.surfaceContainerHighest,
             shape: BoxShape.circle,
-            border: Border.all(color: Colors.grey.shade600, width: 2),
+            border: Border.all(color: colorScheme.outline, width: 2),
           ),
           child: Stack(
             children: [
@@ -330,8 +347,8 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
                   height: 16,
                   decoration: BoxDecoration(
                     color: (x.abs() > 0.1 || y.abs() > 0.1)
-                        ? Colors.green
-                        : Colors.grey,
+                        ? colorScheme.primary
+                        : colorScheme.outline,
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -400,15 +417,20 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
   }
 
   Widget _buildDpadButton(IconData icon, List<String> keys) {
+    final colorScheme = Theme.of(context).colorScheme;
     final isPressed = _isButtonPressed(keys);
     return Container(
       width: 26,
       height: 26,
       decoration: BoxDecoration(
-        color: isPressed ? Colors.green : Colors.grey.shade700,
+        color: isPressed ? colorScheme.primary : colorScheme.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(4),
       ),
-      child: Icon(icon, color: Colors.white, size: 20),
+      child: Icon(
+        icon,
+        color: isPressed ? colorScheme.onPrimary : colorScheme.onSurface,
+        size: 20,
+      ),
     );
   }
 
@@ -422,7 +444,7 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
           Positioned(
             left: 22,
             top: 0,
-            child: _buildFaceButton('Y', Colors.amber, [
+            child: _buildFaceButton('Y', kFaceButtonY, [
               'y',
               'button 3',
               'button3',
@@ -432,7 +454,7 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
           Positioned(
             left: 22,
             bottom: 0,
-            child: _buildFaceButton('A', Colors.green, [
+            child: _buildFaceButton('A', kFaceButtonA, [
               'a',
               'button 0',
               'button0',
@@ -442,7 +464,7 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
           Positioned(
             left: 0,
             top: 22,
-            child: _buildFaceButton('X', Colors.blue, [
+            child: _buildFaceButton('X', kFaceButtonX, [
               'x',
               'button 2',
               'button2',
@@ -452,7 +474,7 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
           Positioned(
             right: 0,
             top: 22,
-            child: _buildFaceButton('B', Colors.red, [
+            child: _buildFaceButton('B', kFaceButtonB, [
               'b',
               'button 1',
               'button1',
@@ -464,20 +486,21 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
   }
 
   Widget _buildFaceButton(String label, Color color, List<String> keys) {
+    final colorScheme = Theme.of(context).colorScheme;
     final isPressed = _isButtonPressed(keys);
     return Container(
       width: 26,
       height: 26,
       decoration: BoxDecoration(
-        color: isPressed ? color : Colors.grey.shade700,
+        color: isPressed ? color : colorScheme.surfaceContainerHigh,
         shape: BoxShape.circle,
         border: Border.all(color: color, width: 2),
       ),
       child: Center(
         child: Text(
           label,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: isPressed ? colorScheme.onPrimary : colorScheme.onSurface,
             fontSize: 11,
             fontWeight: FontWeight.bold,
           ),
@@ -487,17 +510,18 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
   }
 
   Widget _buildSmallButton(String label, List<String> keys) {
+    final colorScheme = Theme.of(context).colorScheme;
     final isPressed = _isButtonPressed(keys);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: isPressed ? Colors.green : Colors.grey.shade700,
+        color: isPressed ? colorScheme.primary : colorScheme.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
         label,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: isPressed ? colorScheme.onPrimary : colorScheme.onSurface,
           fontSize: 10,
           fontWeight: FontWeight.bold,
         ),

@@ -54,6 +54,7 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return DmAdaptiveScaffold(
+      internalAnimations: false,
       selectedIndex: Destinations.indexOf(
         const Key(ShowcaseScreen.name),
         context,
@@ -68,7 +69,7 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
                 title: const Text(ClientInfoScreen.name),
                 actions: [
                   IconButton(
-                    icon: const Icon(Icons.refresh),
+                    icon: const Icon(Icons.refresh, semanticLabel: 'Refresh client info'),
                     onPressed: _isLoading ? null : _refreshClientInfo,
                     tooltip: 'Refresh',
                   ),
@@ -110,7 +111,7 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
           context,
           title: 'Platform',
           icon: Icons.devices,
-          color: Colors.blue,
+          color: Theme.of(context).colorScheme.primary,
           children: [
             _buildInfoRow(context, 'Platform', _clientInfo!.platform),
             _buildInfoRow(
@@ -126,7 +127,7 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
             context,
             title: 'Additional Data',
             icon: Icons.info_outline,
-            color: Colors.teal,
+            color: Theme.of(context).colorScheme.tertiary,
             children: _clientInfo!.additionalData.entries.map((entry) {
               return _buildInfoRow(
                 context,
@@ -152,7 +153,7 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
             Icon(
               Icons.error_outline,
               size: 48,
-              color: Theme.of(context).colorScheme.error,
+              color: Theme.of(context).colorScheme.onErrorContainer,
             ),
             const SizedBox(height: 16),
             Text(
@@ -271,10 +272,10 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.grey.withValues(alpha: 0.1),
+                    color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(Icons.code, color: Colors.grey, size: 24),
+                  child: Icon(Icons.code, color: Theme.of(context).colorScheme.outline, size: 24),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -286,7 +287,7 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.copy),
+                  icon: const Icon(Icons.copy, semanticLabel: 'Copy raw data'),
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: rawData));
                     showDmSnackbar(

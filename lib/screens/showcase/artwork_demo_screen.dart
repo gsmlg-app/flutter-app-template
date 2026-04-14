@@ -48,6 +48,7 @@ class _ArtworkDemoScreenState extends State<ArtworkDemoScreen>
   @override
   Widget build(BuildContext context) {
     return DmAdaptiveScaffold(
+      internalAnimations: false,
       selectedIndex: Destinations.indexOf(
         const Key(ShowcaseScreen.name),
         context,

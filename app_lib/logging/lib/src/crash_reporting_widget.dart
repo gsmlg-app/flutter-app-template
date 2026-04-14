@@ -85,21 +85,22 @@ class ErrorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.red[50],
+      backgroundColor: colorScheme.errorContainer,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.error_outline, size: 64, color: Colors.red[700]),
+              Icon(Icons.error_outline, size: 64, color: colorScheme.onErrorContainer),
               const SizedBox(height: 24),
               Text(
                 'Oops! Something went wrong',
                 style: Theme.of(
                   context,
-                ).textTheme.headlineSmall?.copyWith(color: Colors.red[700]),
+                ).textTheme.headlineSmall?.copyWith(color: colorScheme.onErrorContainer),
               ),
               const SizedBox(height: 16),
               Text(
@@ -111,7 +112,7 @@ class ErrorScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
+                  DmButton(
                     onPressed:
                         onRetry ??
                         () {
@@ -120,7 +121,8 @@ class ErrorScreen extends StatelessWidget {
                     child: const Text('Retry'),
                   ),
                   const SizedBox(width: 16),
-                  OutlinedButton(
+                  DmButton(
+                    variant: DmButtonVariant.outlined,
                     onPressed:
                         onReport ??
                         () {
@@ -152,7 +154,7 @@ class ErrorScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(

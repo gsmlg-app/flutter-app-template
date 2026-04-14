@@ -195,6 +195,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
   @override
   Widget build(BuildContext context) {
     return DmAdaptiveScaffold(
+      internalAnimations: false,
       selectedIndex: Destinations.indexOf(
         const Key(ShowcaseScreen.name),
         context,
@@ -209,12 +210,12 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
                 title: Text(WebViewDemoScreen.name),
                 actions: [
                   IconButton(
-                    icon: const Icon(Icons.refresh),
+                    icon: const Icon(Icons.refresh, semanticLabel: 'Reload HTML'),
                     onPressed: _createSampleHtmlFile,
                     tooltip: 'Reload HTML',
                   ),
                   IconButton(
-                    icon: const Icon(Icons.info_outline),
+                    icon: const Icon(Icons.info_outline, semanticLabel: 'About LocalHtmlViewer'),
                     onPressed: () => _showInfo(context),
                     tooltip: 'About LocalHtmlViewer',
                   ),
@@ -247,7 +248,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            Icon(Icons.error_outline, size: 48, color: Theme.of(context).colorScheme.error),
             const SizedBox(height: 16),
             Text('Error: $_error'),
             const SizedBox(height: 16),

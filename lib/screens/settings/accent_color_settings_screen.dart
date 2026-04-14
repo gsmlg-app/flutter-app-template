@@ -14,6 +14,7 @@ class AccentColorSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DmAdaptiveScaffold(
+      internalAnimations: false,
       selectedIndex: Destinations.indexOf(
         const Key(SettingsScreen.name),
         context,
@@ -80,8 +81,7 @@ class _AccentColorPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final labelColor = isDark ? CupertinoColors.white : CupertinoColors.black;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -111,7 +111,7 @@ class _AccentColorPicker extends StatelessWidget {
             currentTheme.name,
             style: TextStyle(
               fontSize: 13,
-              color: labelColor.withValues(alpha: 0.7),
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
         ],

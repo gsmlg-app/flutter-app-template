@@ -29,6 +29,7 @@ class _ControllerSettingsScreenState extends State<ControllerSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return DmAdaptiveScaffold(
+      internalAnimations: false,
       selectedIndex: Destinations.indexOf(
         const Key(SettingsScreen.name),
         context,
@@ -210,7 +211,7 @@ class _ControllerSettingsScreenState extends State<ControllerSettingsScreen> {
             final button = GamepadButton.values[index];
             return ListTile(
               leading: button == currentButton
-                  ? const Icon(Icons.check, color: Colors.green)
+                  ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary)
                   : const SizedBox(width: 24),
               title: Text(button.displayName),
               onTap: () {

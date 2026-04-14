@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   duskmoon_feedback: any
   duskmoon_form: any
+  duskmoon_widgets: any
 
 dev_dependencies:
   flutter_test:

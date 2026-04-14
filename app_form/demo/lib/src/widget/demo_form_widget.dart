@@ -1,4 +1,5 @@
 import 'package:duskmoon_feedback/duskmoon_feedback.dart';
+import 'package:duskmoon_widgets/duskmoon_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:duskmoon_form/duskmoon_form.dart';
 
@@ -265,15 +266,15 @@ class DemoFormWidget extends StatelessWidget {
                   BlocBuilder<DemoFormBloc, FormBlocState>(
                     builder: (context, state) {
                       final isSubmitting = state is FormBlocSubmitting;
-                      return FilledButton(
+                      return DmButton(
                         onPressed: isSubmitting ? null : formBloc.submit,
                         child: isSubmitting
-                            ? const SizedBox(
+                            ? SizedBox(
                                 height: 20,
                                 width: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: Colors.white,
+                                  color: Theme.of(context).colorScheme.onPrimary,
                                 ),
                               )
                             : const Text('Submit Form'),
@@ -284,7 +285,8 @@ class DemoFormWidget extends StatelessWidget {
                   const SizedBox(height: 12),
 
                   // Clear Button
-                  OutlinedButton(
+                  DmButton(
+                    variant: DmButtonVariant.outlined,
                     onPressed: formBloc.clear,
                     child: const Text('Clear Form'),
                   ),
@@ -328,7 +330,7 @@ class DemoFormWidget extends StatelessWidget {
         children: [
           Icon(
             isError ? Icons.error_outline : Icons.check_circle_outline,
-            color: isError ? Theme.of(context).colorScheme.error : Colors.green,
+            color: isError ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.primary,
           ),
           const SizedBox(width: 8),
           Text(title),
