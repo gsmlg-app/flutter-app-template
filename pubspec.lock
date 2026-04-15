@@ -1570,6 +1570,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0+eol"
+  sqlite_vector:
+    dependency: transitive
+    description:
+      name: sqlite_vector
+      sha256: bba7568ae80e78ef982b43f5dac5f4687ca92721d857f27b37cccba70f5d1110
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.95"
   sqlparser:
     dependency: transitive
     description:

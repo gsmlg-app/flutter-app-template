@@ -1,0 +1,17 @@
+name: vector_store
+description: Local vector search using sqlite_vector extension
+version: 1.0.0
+publish_to: "none"
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+resolution: workspace
+
+dependencies:
+  sqlite3: any
+  sqlite_vector: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

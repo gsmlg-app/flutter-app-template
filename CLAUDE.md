@@ -22,7 +22,7 @@ Flutter monorepo template with modular architecture, BLoC state management, and 
 ```
 
 **Workspace packages** (defined in root `pubspec.yaml` `workspace:` section—there is no separate melos.yaml):
-- `app_lib/`: database, gamepad, locale, provider, logging, secure_storage
+- `app_lib/`: database, gamepad, locale, provider, logging, secure_storage, vector_store
 - `app_bloc/`: gamepad, navigation
 - `app_widget/`: artwork, chart, web_view
 - `app_form/`: demo

@@ -14,6 +14,7 @@ workspace:
   - app_lib/provider
   - app_lib/logging
   - app_lib/secure_storage
+  - app_lib/vector_store
   - app_bloc/gamepad
   - app_bloc/navigation
   - app_widget/artwork
