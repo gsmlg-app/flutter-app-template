@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "client_info_plugin.h"
 
 #include <flutter/method_channel.h>
@@ -10,6 +12,7 @@
 #include <string>
 #include <chrono>
 #include <iomanip>
+#include <ctime>
 
 namespace client_info_windows {
 
@@ -60,8 +63,14 @@ ClientInfoPlugin::~ClientInfoPlugin() {}
 std::string ClientInfoPlugin::GetCurrentTimestamp() {
   auto now = std::chrono::system_clock::now();
   auto itt = std::chrono::system_clock::to_time_t(now);
+  struct tm gmt;
+#if defined(_WIN32)
+  gmtime_s(&gmt, &itt);
+#else
+  gmtime_r(&itt, &gmt);
+#endif
   std::ostringstream ss;
-  ss << std::put_time(gmtime(&itt), "%FT%TZ");
+  ss << std::put_time(&gmt, "%FT%TZ");
   return ss.str();
 }
 
@@ -73,7 +82,10 @@ flutter::EncodableMap ClientInfoPlugin::GetData() {
   OSVERSIONINFOW osvi;
   ZeroMemory(&osvi, sizeof(OSVERSIONINFOW));
   osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOW);
+#pragma warning(push)
+#pragma warning(disable: 4996)
   GetVersionExW(&osvi);
+#pragma warning(pop)
 
   SYSTEM_INFO siSysInfo;
   GetSystemInfo(&siSysInfo);
