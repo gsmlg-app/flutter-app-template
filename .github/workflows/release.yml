@@ -3,29 +3,29 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      platform:
-        description: 'Platform to build'
-        required: true
-        default: 'all'
-        type: choice
-        options:
-          - 'android'
-          - 'ios'
-          - 'linux'
-          - 'macos'
-          - 'all'
       build-name:
         required: true
         description: 'Version number (x.y.z)'
         default: '0.1.0'
+      build-number:
+        required: true
+        description: 'Build number (e.g. 1)'
+        default: '1'
       release-notes:
         required: false
         description: 'Release notes (leave empty to auto-generate from commits)'
         default: ''
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
 jobs:
-  test:
-    name: Run Tests
+  validate-and-test:
+    name: Format, Analyze & Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -47,74 +47,21 @@ jobs:
       - name: Prepare project
         run: melos run prepare
 
+      - name: Invariant check
+        run: dart run bin/verify_template.dart
+
       - name: Run analyze
         run: melos run analyze
 
       - name: Run tests
         run: melos run test
 
-  create-release:
-    name: Create Release
-    needs: test
-    runs-on: ubuntu-latest
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-      release_id: ${{ steps.create_release.outputs.id }}
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Create tag
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "v${{ inputs.build-name }}" -m "Release v${{ inputs.build-name }}"
-          git push origin "v${{ inputs.build-name }}"
-
-      - name: Generate release notes
-        id: release_notes
-        run: |
-          if [ -n "${{ inputs.release-notes }}" ]; then
-            echo "notes<<EOF" >> $GITHUB_OUTPUT
-            echo "${{ inputs.release-notes }}" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-          else
-            # Auto-generate from recent commits
-            PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
-            if [ -n "$PREV_TAG" ]; then
-              COMMITS=$(git log ${PREV_TAG}..HEAD --pretty=format:"- %s" --no-merges)
-            else
-              COMMITS=$(git log --pretty=format:"- %s" --no-merges -10)
-            fi
-            echo "notes<<EOF" >> $GITHUB_OUTPUT
-            echo "## What's Changed" >> $GITHUB_OUTPUT
-            echo "" >> $GITHUB_OUTPUT
-            echo "$COMMITS" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ inputs.build-name }}
-          release_name: Release v${{ inputs.build-name }}
-          body: ${{ steps.release_notes.outputs.notes }}
-          draft: false
-          prerelease: false
-
   build-android:
-    if: inputs.platform == 'android' || inputs.platform == 'all'
     name: Build Android
-    needs: create-release
+    needs: validate-and-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-        with:
-          ref: v${{ inputs.build-name }}
 
       - uses: flutter-actions/setup-flutter@v4
 
@@ -139,27 +86,21 @@ jobs:
       - name: Prepare project
         run: melos run prepare
 
-      - name: Build APK
-        run: flutter build apk --build-name=${{ inputs.build-name }} --release
+      - name: Build Android APK
+        run: flutter build apk --build-name=${{ inputs.build-name }} --build-number=${{ inputs.build-number }} --release
 
-      - name: Upload APK to Release
-        uses: svenstaro/upload-release-action@v2
+      - name: Upload Android Artifact
+        uses: actions/upload-artifact@v4
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          tag: v${{ inputs.build-name }}
-          file: build/app/outputs/flutter-apk/app-release.apk
-          asset_name: app-${{ inputs.build-name }}-android.apk
-          overwrite: true
+          name: release-android
+          path: build/app/outputs/flutter-apk/app-release.apk
 
   build-ios:
-    if: inputs.platform == 'ios' || inputs.platform == 'all'
     name: Build iOS
-    needs: create-release
+    needs: validate-and-test
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v6
-        with:
-          ref: v${{ inputs.build-name }}
 
       - uses: flutter-actions/setup-flutter@v4
 
@@ -178,10 +119,10 @@ jobs:
       - name: Prepare project
         run: melos run prepare
 
-      - name: Build iOS (no codesign)
-        run: flutter build ios --build-name=${{ inputs.build-name }} --release --no-codesign
+      - name: Build iOS
+        run: flutter build ios --build-name=${{ inputs.build-name }} --build-number=${{ inputs.build-number }} --release --no-codesign
 
-      - name: Create IPA
+      - name: Package IPA
         run: |
           mkdir -p build/ios/ipa
           cd build/ios/iphoneos
@@ -189,31 +130,25 @@ jobs:
           cp -r Runner.app Payload/
           zip -r ../ipa/app-${{ inputs.build-name }}-ios.ipa Payload
 
-      - name: Upload IPA to Release
-        uses: svenstaro/upload-release-action@v2
+      - name: Upload iOS Artifact
+        uses: actions/upload-artifact@v4
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          tag: v${{ inputs.build-name }}
-          file: build/ios/ipa/app-${{ inputs.build-name }}-ios.ipa
-          asset_name: app-${{ inputs.build-name }}-ios.ipa
-          overwrite: true
+          name: release-ios
+          path: build/ios/ipa/app-${{ inputs.build-name }}-ios.ipa
 
   build-linux:
-    if: inputs.platform == 'linux' || inputs.platform == 'all'
     name: Build Linux
-    needs: create-release
+    needs: validate-and-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-        with:
-          ref: v${{ inputs.build-name }}
 
       - uses: flutter-actions/setup-flutter@v4
 
       - name: Install Linux build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev libsecret-1-dev
 
       - name: Cache dependencies
         uses: actions/cache@v5
@@ -233,29 +168,23 @@ jobs:
       - name: Build Linux
         run: flutter build linux --build-name=${{ inputs.build-name }} --release
 
-      - name: Package Linux build
+      - name: Package Linux
         run: |
           cd build/linux/x64/release/bundle
           tar -czvf ../../../../../app-${{ inputs.build-name }}-linux.tar.gz .
 
-      - name: Upload Linux to Release
-        uses: svenstaro/upload-release-action@v2
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v4
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          tag: v${{ inputs.build-name }}
-          file: app-${{ inputs.build-name }}-linux.tar.gz
-          asset_name: app-${{ inputs.build-name }}-linux.tar.gz
-          overwrite: true
+          name: release-linux
+          path: app-${{ inputs.build-name }}-linux.tar.gz
 
   build-macos:
-    if: inputs.platform == 'macos' || inputs.platform == 'all'
     name: Build macOS
-    needs: create-release
+    needs: validate-and-test
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v6
-        with:
-          ref: v${{ inputs.build-name }}
 
       - uses: flutter-actions/setup-flutter@v4
 
@@ -277,16 +206,116 @@ jobs:
       - name: Build macOS
         run: flutter build macos --build-name=${{ inputs.build-name }} --release
 
-      - name: Package macOS build
+      - name: Package macOS
         run: |
           cd build/macos/Build/Products/Release
           zip -r ../../../../../app-${{ inputs.build-name }}-macos.zip *.app
 
-      - name: Upload macOS to Release
-        uses: svenstaro/upload-release-action@v2
+      - name: Upload macOS Artifact
+        uses: actions/upload-artifact@v4
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          tag: v${{ inputs.build-name }}
-          file: app-${{ inputs.build-name }}-macos.zip
-          asset_name: app-${{ inputs.build-name }}-macos.zip
-          overwrite: true
+          name: release-macos
+          path: app-${{ inputs.build-name }}-macos.zip
+
+  build-windows:
+    name: Build Windows
+    needs: validate-and-test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: flutter-actions/setup-flutter@v4
+
+      - name: Cache dependencies
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Install tools
+        run: dart pub global activate melos
+
+      - name: Prepare project
+        run: melos run prepare
+
+      - name: Build Windows
+        run: flutter build windows --build-name=${{ inputs.build-name }} --release
+
+      - name: Package Windows
+        shell: pwsh
+        run: |
+          Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath app-${{ inputs.build-name }}-windows.zip
+
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-windows
+          path: app-${{ inputs.build-name }}-windows.zip
+
+  publish-release:
+    name: Publish GitHub Release
+    needs: [build-android, build-ios, build-linux, build-macos, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: Organize artifacts & generate checksums
+        run: |
+          mkdir -p dist
+          cp release-artifacts/release-android/app-release.apk dist/app-${{ inputs.build-name }}-android.apk
+          cp release-artifacts/release-ios/app-${{ inputs.build-name }}-ios.ipa dist/app-${{ inputs.build-name }}-ios.ipa
+          cp release-artifacts/release-linux/app-${{ inputs.build-name }}-linux.tar.gz dist/app-${{ inputs.build-name }}-linux.tar.gz
+          cp release-artifacts/release-macos/app-${{ inputs.build-name }}-macos.zip dist/app-${{ inputs.build-name }}-macos.zip
+          cp release-artifacts/release-windows/app-${{ inputs.build-name }}-windows.zip dist/app-${{ inputs.build-name }}-windows.zip
+          cd dist
+          sha256sum * > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Create tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v${{ inputs.build-name }}" -m "Release v${{ inputs.build-name }}"
+          git push origin "v${{ inputs.build-name }}"
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          if [ -n "${{ inputs.release-notes }}" ]; then
+            echo "notes<<EOF" >> $GITHUB_OUTPUT
+            echo "${{ inputs.release-notes }}" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+            if [ -n "$PREV_TAG" ]; then
+              COMMITS=$(git log ${PREV_TAG}..HEAD --pretty=format:"- %s" --no-merges)
+            else
+              COMMITS=$(git log --pretty=format:"- %s" --no-merges -10)
+            fi
+            echo "notes<<EOF" >> $GITHUB_OUTPUT
+            echo "## What's Changed" >> $GITHUB_OUTPUT
+            echo "" >> $GITHUB_OUTPUT
+            echo "$COMMITS" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ inputs.build-name }}
+          name: Release v${{ inputs.build-name }}
+          body: ${{ steps.release_notes.outputs.notes }}
+          files: dist/*
+          draft: false
+          prerelease: false
+

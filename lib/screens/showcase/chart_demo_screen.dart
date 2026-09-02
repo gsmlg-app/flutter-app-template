@@ -158,7 +158,8 @@ class _ChartDemoScreenState extends State<ChartDemoScreen> {
                     _buildSection(
                       context,
                       title: 'DmVizLineChart',
-                      description: 'Smooth line charts with optional comparison',
+                      description:
+                          'Smooth line charts with optional comparison',
                       children: [
                         _buildChartCard(
                           context,
@@ -220,10 +221,7 @@ class _ChartDemoScreenState extends State<ChartDemoScreen> {
                           context,
                           title: 'Bar Chart (sharp corners)',
                           height: 250,
-                          child: DmVizBarChart(
-                            data: barData,
-                            cornerRadius: 0,
-                          ),
+                          child: DmVizBarChart(data: barData, cornerRadius: 0),
                         ),
                       ],
                     ),
@@ -322,7 +320,9 @@ class _ChartDemoScreenState extends State<ChartDemoScreen> {
                             showLinkLabels: false,
                             enableZoomPan: true,
                             draggableNodes: true,
-                            groupColors: _networkGroupColors(Theme.of(context).colorScheme),
+                            groupColors: _networkGroupColors(
+                              Theme.of(context).colorScheme,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -337,7 +337,9 @@ class _ChartDemoScreenState extends State<ChartDemoScreen> {
                             showNodeLabels: true,
                             nodeShape: DmVizNetworkNodeShape.hexagon,
                             linkStyle: DmVizNetworkLinkStyle.dashed,
-                            groupColors: _networkGroupColors(Theme.of(context).colorScheme),
+                            groupColors: _networkGroupColors(
+                              Theme.of(context).colorScheme,
+                            ),
                           ),
                         ),
                       ],
@@ -367,8 +369,8 @@ class _ChartDemoScreenState extends State<ChartDemoScreen> {
         Text(
           description,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
         const SizedBox(height: 16),
         ...children,
@@ -391,8 +393,8 @@ class _ChartDemoScreenState extends State<ChartDemoScreen> {
             Text(
               title,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: 8),
             SizedBox(height: height, child: child),

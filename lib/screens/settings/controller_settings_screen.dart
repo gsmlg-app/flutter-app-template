@@ -6,6 +6,7 @@ import 'package:flutter_app_template/screens/settings/controller_test_screen.dar
 import 'package:flutter_app_template/screens/settings/settings_screen.dart';
 import 'package:gamepad_bloc/gamepad_bloc.dart';
 import 'package:go_router/go_router.dart';
+
 class ControllerSettingsScreen extends StatefulWidget {
   static const name = 'Controller Settings';
   static const path = 'controller';
@@ -40,9 +41,7 @@ class _ControllerSettingsScreenState extends State<ControllerSettingsScreen> {
         return SafeArea(
           child: CustomScrollView(
             slivers: <Widget>[
-              SliverAppBar(
-                title: Text(context.l10n.controllerSettingsTitle),
-              ),
+              SliverAppBar(title: Text(context.l10n.controllerSettingsTitle)),
               SliverFillRemaining(
                 child: BlocBuilder<GamepadBloc, GamepadState>(
                   builder: (context, state) {
@@ -211,7 +210,10 @@ class _ControllerSettingsScreenState extends State<ControllerSettingsScreen> {
             final button = GamepadButton.values[index];
             return ListTile(
               leading: button == currentButton
-                  ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary)
+                  ? Icon(
+                      Icons.check,
+                      color: Theme.of(context).colorScheme.primary,
+                    )
                   : const SizedBox(width: 24),
               title: Text(button.displayName),
               onTap: () {

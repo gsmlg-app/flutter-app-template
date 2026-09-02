@@ -241,7 +241,9 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
                                     style: theme.textTheme.bodySmall?.copyWith(
                                       fontFamily: 'monospace',
                                       fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onPrimaryContainer,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -306,7 +308,9 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
       width: 60,
       height: 24,
       decoration: BoxDecoration(
-        color: isPressed ? colorScheme.primary : colorScheme.surfaceContainerHigh,
+        color: isPressed
+            ? colorScheme.primary
+            : colorScheme.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Center(
@@ -423,7 +427,9 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
       width: 26,
       height: 26,
       decoration: BoxDecoration(
-        color: isPressed ? colorScheme.primary : colorScheme.surfaceContainerHigh,
+        color: isPressed
+            ? colorScheme.primary
+            : colorScheme.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Icon(
@@ -515,7 +521,9 @@ class _GamepadVisualizerState extends State<GamepadVisualizer> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: isPressed ? colorScheme.primary : colorScheme.surfaceContainerHigh,
+        color: isPressed
+            ? colorScheme.primary
+            : colorScheme.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(

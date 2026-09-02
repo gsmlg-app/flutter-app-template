@@ -21,7 +21,7 @@ void main() {
       final brick = Brick.path(path.join('bricks', 'simple_bloc'));
 
       final generator = await MasonGenerator.fromBrick(brick);
-      final files = await generator.generate(
+      await generator.generate(
         DirectoryGeneratorTarget(tempDir),
         vars: {'name': 'counter'},
       );

@@ -69,7 +69,10 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
                 title: const Text(ClientInfoScreen.name),
                 actions: [
                   IconButton(
-                    icon: const Icon(Icons.refresh, semanticLabel: 'Refresh client info'),
+                    icon: const Icon(
+                      Icons.refresh,
+                      semanticLabel: 'Refresh client info',
+                    ),
                     onPressed: _isLoading ? null : _refreshClientInfo,
                     tooltip: 'Refresh',
                   ),
@@ -272,10 +275,16 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.outline.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(Icons.code, color: Theme.of(context).colorScheme.outline, size: 24),
+                  child: Icon(
+                    Icons.code,
+                    color: Theme.of(context).colorScheme.outline,
+                    size: 24,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(

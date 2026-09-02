@@ -222,7 +222,7 @@ class Mock{{model_name.pascalCase()}}RemoteDataSource extends {{model_name.pasca
       (u) => u.id == id,
       orElse: () => throw {{model_name.pascalCase()}}NotFoundException(id),
     );
-    return {{name.camelCase}};
+    return {{name.camelCase()}};
   }
 
   @override
@@ -231,8 +231,8 @@ class Mock{{model_name.pascalCase()}}RemoteDataSource extends {{model_name.pasca
   }
 
   @override
-  Future<{{model_name.pascalCase()}}Model> create{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase}}) async {
-    final new{{model_name.pascalCase()}} = {{name.camelCase}}.copyWith(
+  Future<{{model_name.pascalCase()}}Model> create{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase()}}) async {
+    final new{{model_name.pascalCase()}} = {{name.camelCase()}}.copyWith(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       createdAt: DateTime.now(),
     );
@@ -241,12 +241,12 @@ class Mock{{model_name.pascalCase()}}RemoteDataSource extends {{model_name.pasca
   }
 
   @override
-  Future<{{model_name.pascalCase()}}Model> update{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase}}) async {
-    final index = _mockData.indexWhere((u) => u.id == {{name.camelCase}}.id);
+  Future<{{model_name.pascalCase()}}Model> update{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase()}}) async {
+    final index = _mockData.indexWhere((u) => u.id == {{name.camelCase()}}.id);
     if (index == -1) {
-      throw {{model_name.pascalCase()}}NotFoundException({{name.camelCase}}.id);
+      throw {{model_name.pascalCase()}}NotFoundException({{name.camelCase()}}.id);
     }
-    final updated{{model_name.pascalCase()}} = {{name.camelCase}}.copyWith(updatedAt: DateTime.now());
+    final updated{{model_name.pascalCase()}} = {{name.camelCase()}}.copyWith(updatedAt: DateTime.now());
     _mockData[index] = updated{{model_name.pascalCase()}};
     return updated{{model_name.pascalCase()}};
   }
@@ -261,8 +261,8 @@ class Mock{{model_name.pascalCase()}}RemoteDataSource extends {{model_name.pasca
   }
 
   // Helper method for tests
-  void addMockData({{model_name.pascalCase()}}Model {{name.camelCase}}) {
-    _mockData.add({{name.camelCase}});
+  void addMockData({{model_name.pascalCase()}}Model {{name.camelCase()}}) {
+    _mockData.add({{name.camelCase()}});
   }
 
   // Helper method to clear mock data

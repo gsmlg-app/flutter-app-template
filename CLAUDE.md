@@ -23,10 +23,12 @@ Flutter monorepo template with modular architecture, BLoC state management, and 
 
 **Workspace packages** (defined in root `pubspec.yaml` `workspace:` section—there is no separate melos.yaml):
 - `app_lib/`: database, gamepad, locale, provider, logging, secure_storage, vector_store
-- `app_bloc/`: gamepad, navigation
+- `app_bloc/`: error_handler, gamepad, navigation
 - `app_widget/`: artwork, chart, web_view
 - `app_form/`: demo
 - `app_plugin/`: client_info/ (nested federated plugin containing: client_info, client_info_platform_interface, client_info_android, client_info_ios, client_info_linux, client_info_macos, client_info_windows)
+
+**Supported Platforms**: Strictly **Android, iOS, macOS, Windows, Linux** (Web is explicitly not supported).
 
 **External UI packages** (from pub.dev, pinned in root pubspec.yaml):
 - `duskmoon_ui` (^1.4.2) — umbrella re-exporting all duskmoon packages below
@@ -67,6 +69,16 @@ melos run format           # Format all packages
 melos run format-check     # Check formatting (CI uses this, exits non-zero if changes needed)
 melos run fix              # Apply dart fix --apply
 melos run test             # Run all tests (flutter + dart)
+```
+
+### Capability Management & Subtractive Pruning
+```bash
+# Verify template integrity
+dart run bin/verify_template.dart
+
+# Subtractive capability removal (e.g. prune gamepad and web_view)
+dart run bin/remove_capability.dart gamepad web_view --dry-run
+dart run bin/remove_capability.dart gamepad web_view
 ```
 
 ### Individual Package Operations
@@ -195,14 +207,16 @@ Uses Nix/Devenv for reproducible environment. Auto-loads via direnv (`.envrc`). 
 ## Running the App
 
 ```bash
-flutter run                # Default device
-flutter run -d chrome      # Web
 flutter run -d macos       # macOS
+flutter run -d android     # Android
+flutter run -d ios         # iOS
+flutter run -d windows     # Windows
 flutter run -d linux       # Linux
 ```
 
 ## CI Workflows
 
 - `ci.yml` - Format check, analyze, test, and build (skips for docs/config changes)
-- `brick-test.yml` - Tests Mason bricks (only runs when brick files change)
-- `release.yml` - Manual workflow for creating releases with platform builds
+- `brick-test.yml` - Tests all 9 Mason bricks
+- `release.yml` - 5-platform release build matrix with pre-release gate and checksum generation
+- `deploy.yml` - Promotion and deployment of release artifacts with SHA256 checksum verification

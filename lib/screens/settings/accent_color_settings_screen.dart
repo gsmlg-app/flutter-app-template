@@ -109,10 +109,7 @@ class _AccentColorPicker extends StatelessWidget {
           // Current theme name
           Text(
             currentTheme.name,
-            style: TextStyle(
-              fontSize: 13,
-              color: colorScheme.onSurfaceVariant,
-            ),
+            style: TextStyle(fontSize: 13, color: colorScheme.onSurfaceVariant),
           ),
         ],
       ),
@@ -142,10 +139,7 @@ class _ColorOption extends StatelessWidget {
           color: color,
           shape: BoxShape.circle,
           border: isSelected
-              ? Border.all(
-                  color: CupertinoColors.white,
-                  width: 2,
-                )
+              ? Border.all(color: CupertinoColors.white, width: 2)
               : null,
           boxShadow: isSelected
               ? [

@@ -5,17 +5,17 @@ import 'package:test/test.dart';
 
 /// Default variables for list_bloc brick tests.
 Map<String, dynamic> defaultVars(String name, {String itemType = 'Item'}) => {
-      'name': name,
-      'item_type': itemType,
-      'has_pagination': true,
-      'has_search': true,
-      'has_filters': true,
-      'has_reorder': false,
-      'has_crud': true,
-      'filter_types': ['category', 'status'],
-      'sort_options': ['name', 'date'],
-      'output_directory': 'app_bloc',
-    };
+  'name': name,
+  'item_type': itemType,
+  'has_pagination': true,
+  'has_search': true,
+  'has_filters': true,
+  'has_reorder': false,
+  'has_crud': true,
+  'filter_types': ['category', 'status'],
+  'sort_options': ['name', 'date'],
+  'output_directory': 'app_bloc',
+};
 
 void main() {
   group('List BLoC Brick Tests', () {
@@ -113,7 +113,9 @@ void main() {
         vars: defaultVars('tasks', itemType: 'Task'),
       );
 
-      final eventFile = File(path.join(tempDir.path, 'lib', 'src', 'event.dart'));
+      final eventFile = File(
+        path.join(tempDir.path, 'lib', 'src', 'event.dart'),
+      );
       expect(await eventFile.exists(), isTrue);
 
       final eventContent = await eventFile.readAsString();
@@ -129,7 +131,9 @@ void main() {
         vars: defaultVars('comments', itemType: 'Comment'),
       );
 
-      final stateFile = File(path.join(tempDir.path, 'lib', 'src', 'state.dart'));
+      final stateFile = File(
+        path.join(tempDir.path, 'lib', 'src', 'state.dart'),
+      );
       expect(await stateFile.exists(), isTrue);
 
       final stateContent = await stateFile.readAsString();
@@ -146,7 +150,9 @@ void main() {
         vars: defaultVars('notifications', itemType: 'Notification'),
       );
 
-      final mainFile = File(path.join(tempDir.path, 'lib', 'notifications_list_bloc.dart'));
+      final mainFile = File(
+        path.join(tempDir.path, 'lib', 'notifications_list_bloc.dart'),
+      );
       expect(await mainFile.exists(), isTrue);
 
       final mainContent = await mainFile.readAsString();
@@ -162,11 +168,16 @@ void main() {
         vars: defaultVars('documents', itemType: 'Document'),
       );
 
-      final testFile = File(path.join(tempDir.path, 'test', 'documents_list_bloc_test.dart'));
+      final testFile = File(
+        path.join(tempDir.path, 'test', 'documents_list_bloc_test.dart'),
+      );
       expect(await testFile.exists(), isTrue);
 
       final testContent = await testFile.readAsString();
-      expect(testContent, contains("import 'package:bloc_test/bloc_test.dart'"));
+      expect(
+        testContent,
+        contains("import 'package:bloc_test/bloc_test.dart'"),
+      );
       expect(testContent, contains('DocumentsListBloc'));
     });
 

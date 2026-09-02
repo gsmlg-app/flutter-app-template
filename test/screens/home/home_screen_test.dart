@@ -18,10 +18,10 @@ void main() {
 
       expect(find.byType(HomeScreen), findsOneWidget);
       expect(find.byType(SafeArea), findsAtLeastNWidgets(1));
-      expect(find.byType(Column), findsAtLeastNWidgets(1));
+      expect(find.text('Flutter App Template'), findsOneWidget);
     });
 
-    testWidgets('displays throw error button', (WidgetTester tester) async {
+    testWidgets('displays quick navigation cards', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: AppLocale.localizationsDelegates,
@@ -30,36 +30,13 @@ void main() {
         ),
       );
 
-      expect(find.byType(TextButton), findsOneWidget);
-      expect(find.text('Throw Error'), findsOneWidget);
+      expect(find.text('Showcase'), findsAtLeastNWidgets(1));
+      expect(find.text('Settings'), findsAtLeastNWidgets(1));
     });
 
-    testWidgets('throw error button has correct styling', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocale.localizationsDelegates,
-          supportedLocales: AppLocale.supportedLocales,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.blue,
-              error: Colors.red,
-            ),
-          ),
-          home: const HomeScreen(),
-        ),
-      );
+    testWidgets('displays architecture packages', (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 1200));
 
-      final textButton = tester.widget<TextButton>(find.byType(TextButton));
-      final textWidget = textButton.child as Text;
-
-      expect(textWidget.style?.color, equals(Colors.red));
-    });
-
-    testWidgets('throws exception when throw error button is pressed', (
-      WidgetTester tester,
-    ) async {
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: AppLocale.localizationsDelegates,
@@ -68,18 +45,17 @@ void main() {
         ),
       );
 
-      final button = find.byType(TextButton);
-      expect(button, findsOneWidget);
+      expect(find.text('Architecture'), findsOneWidget);
+      expect(find.text('app_bloc'), findsOneWidget);
+      expect(find.text('app_lib'), findsOneWidget);
+      expect(find.text('app_widget'), findsOneWidget);
 
-      await tester.tap(button);
-      await tester.pump();
-
-      expect(tester.takeException(), isA<Exception>());
+      await tester.binding.setSurfaceSize(null);
     });
 
-    testWidgets('uses correct screen dimensions for container', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('displays tech stack chips', (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 1600));
+
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: AppLocale.localizationsDelegates,
@@ -88,8 +64,11 @@ void main() {
         ),
       );
 
-      // Find the main container (should be at least one)
-      expect(find.byType(Container), findsAtLeastNWidgets(1));
+      expect(find.text('Tech Stack'), findsOneWidget);
+      expect(find.text('Flutter 3.8+'), findsOneWidget);
+      expect(find.text('BLoC / Cubit'), findsOneWidget);
+
+      await tester.binding.setSurfaceSize(null);
     });
 
     testWidgets('handles landscape orientation correctly', (
@@ -108,35 +87,6 @@ void main() {
       expect(find.byType(HomeScreen), findsOneWidget);
 
       await tester.binding.setSurfaceSize(null);
-    });
-
-    testWidgets('container has correct decoration', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocale.localizationsDelegates,
-          supportedLocales: AppLocale.supportedLocales,
-          home: const HomeScreen(),
-        ),
-      );
-
-      // Find containers and check if any have decoration
-      final containers = find.byType(Container);
-      expect(containers, findsAtLeastNWidgets(1));
-    });
-
-    testWidgets('displays logo correctly', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocale.localizationsDelegates,
-          supportedLocales: AppLocale.supportedLocales,
-          home: const HomeScreen(),
-        ),
-      );
-
-      // Check for any logo-related widgets
-      expect(find.byType(HomeScreen), findsOneWidget);
     });
   });
 }

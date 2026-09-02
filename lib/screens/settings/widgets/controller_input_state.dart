@@ -42,14 +42,14 @@ class ControllerInputState {
 
   @override
   int get hashCode => Object.hash(
-        leftStickX,
-        leftStickY,
-        rightStickX,
-        rightStickY,
-        leftTrigger,
-        rightTrigger,
-        Object.hashAll(pressedButtons.toList()..sort()),
-      );
+    leftStickX,
+    leftStickY,
+    rightStickX,
+    rightStickY,
+    leftTrigger,
+    rightTrigger,
+    Object.hashAll(pressedButtons.toList()..sort()),
+  );
 
   ControllerInputState copyWith({
     double? leftStickX,
@@ -166,50 +166,84 @@ String? identifyButton(String rawKey) {
   // ── Generic / Web / Desktop names ──
 
   // Face buttons
-  if (k == 'a' || k == 'button a' || k == 'button 0' || k == 'button0' ||
-      k == 'buttona' || k == 'cross') {
+  if (k == 'a' ||
+      k == 'button a' ||
+      k == 'button 0' ||
+      k == 'button0' ||
+      k == 'buttona' ||
+      k == 'cross') {
     return ButtonId.a;
   }
-  if (k == 'b' || k == 'button b' || k == 'button 1' || k == 'button1' ||
-      k == 'buttonb' || k == 'circle') {
+  if (k == 'b' ||
+      k == 'button b' ||
+      k == 'button 1' ||
+      k == 'button1' ||
+      k == 'buttonb' ||
+      k == 'circle') {
     return ButtonId.b;
   }
-  if (k == 'x' || k == 'button x' || k == 'button 2' || k == 'button2' ||
-      k == 'buttonx' || k == 'square') {
+  if (k == 'x' ||
+      k == 'button x' ||
+      k == 'button 2' ||
+      k == 'button2' ||
+      k == 'buttonx' ||
+      k == 'square') {
     return ButtonId.x;
   }
-  if (k == 'y' || k == 'button y' || k == 'button 3' || k == 'button3' ||
-      k == 'buttony' || k == 'triangle') {
+  if (k == 'y' ||
+      k == 'button y' ||
+      k == 'button 3' ||
+      k == 'button3' ||
+      k == 'buttony' ||
+      k == 'triangle') {
     return ButtonId.y;
   }
 
   // Shoulders
-  if (k == 'l1' || k == 'lb' || k == 'leftshoulder' || k == 'button 4' ||
+  if (k == 'l1' ||
+      k == 'lb' ||
+      k == 'leftshoulder' ||
+      k == 'button 4' ||
       k == 'button4') {
     return ButtonId.lb;
   }
-  if (k == 'r1' || k == 'rb' || k == 'rightshoulder' || k == 'button 5' ||
+  if (k == 'r1' ||
+      k == 'rb' ||
+      k == 'rightshoulder' ||
+      k == 'button 5' ||
       k == 'button5') {
     return ButtonId.rb;
   }
 
   // Triggers (digital press – analog handled separately)
-  if (k == 'l2' || k == 'lt' || k == 'lefttrigger' || k == 'button 6' ||
+  if (k == 'l2' ||
+      k == 'lt' ||
+      k == 'lefttrigger' ||
+      k == 'button 6' ||
       k == 'button6') {
     return ButtonId.lt;
   }
-  if (k == 'r2' || k == 'rt' || k == 'righttrigger' || k == 'button 7' ||
+  if (k == 'r2' ||
+      k == 'rt' ||
+      k == 'righttrigger' ||
+      k == 'button 7' ||
       k == 'button7') {
     return ButtonId.rt;
   }
 
   // Stick press
-  if (k == 'l3' || k == 'leftstick' || k == 'leftstickbutton' ||
-      k == 'button 10' || k == 'button10') {
+  if (k == 'l3' ||
+      k == 'leftstick' ||
+      k == 'leftstickbutton' ||
+      k == 'button 10' ||
+      k == 'button10') {
     return ButtonId.ls;
   }
-  if (k == 'r3' || k == 'rightstick' || k == 'rightstickbutton' ||
-      k == 'button 11' || k == 'button11') {
+  if (k == 'r3' ||
+      k == 'rightstick' ||
+      k == 'rightstickbutton' ||
+      k == 'button 11' ||
+      k == 'button11') {
     return ButtonId.rs;
   }
 
@@ -243,12 +277,19 @@ String? identifyButton(String rawKey) {
   if (k == 'start' || k == 'options' || k == 'button 9' || k == 'button9') {
     return ButtonId.start;
   }
-  if (k == 'select' || k == 'back' || k == 'share' || k == 'button 8' ||
+  if (k == 'select' ||
+      k == 'back' ||
+      k == 'share' ||
+      k == 'button 8' ||
       k == 'button8') {
     return ButtonId.back;
   }
-  if (k == 'guide' || k == 'home' || k == 'xbox' || k == 'ps' ||
-      k == 'button 16' || k == 'button16') {
+  if (k == 'guide' ||
+      k == 'home' ||
+      k == 'xbox' ||
+      k == 'ps' ||
+      k == 'button 16' ||
+      k == 'button16') {
     return ButtonId.guide;
   }
 
@@ -421,10 +462,7 @@ ControllerInputState accumulateRawEvent(
 }
 
 /// Returns the label for a button based on controller type.
-String buttonLabel(
-  String buttonId,
-  ControllerType controllerType,
-) {
+String buttonLabel(String buttonId, ControllerType controllerType) {
   final ps = controllerType == ControllerType.playstation;
   switch (buttonId) {
     case ButtonId.a:

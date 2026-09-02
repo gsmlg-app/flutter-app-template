@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_app_template/screens/app/splash_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 // Test version of SplashScreen that doesn't use Timer
@@ -54,8 +51,10 @@ void main() {
     testWidgets('uses correct screen dimensions for logo container', (
       WidgetTester tester,
     ) async {
-      tester.binding.window.physicalSizeTestValue = const Size(800, 600);
-      tester.binding.window.devicePixelRatioTestValue = 1.0;
+      tester.view.physicalSize = const Size(800, 600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
 
       await tester.pumpWidget(MaterialApp(home: const TestSplashScreen()));
 
@@ -69,8 +68,10 @@ void main() {
     testWidgets('handles landscape orientation correctly', (
       WidgetTester tester,
     ) async {
-      tester.binding.window.physicalSizeTestValue = const Size(1200, 800);
-      tester.binding.window.devicePixelRatioTestValue = 1.0;
+      tester.view.physicalSize = const Size(1200, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
 
       await tester.pumpWidget(MaterialApp(home: const TestSplashScreen()));
 

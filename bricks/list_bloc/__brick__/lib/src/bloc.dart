@@ -34,7 +34,7 @@ abstract class {{name.pascalCase()}}ListRepository {
 
   /// Delete an item
   Future<void> deleteItem(String id);
-  {{/has_pagination}}
+  {{/has_crud}}
 
   /// Fetch the schema configuration
   Future<{{name.pascalCase()}}ListSchema> fetchSchema();

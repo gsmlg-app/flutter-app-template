@@ -274,7 +274,9 @@ class DemoFormWidget extends StatelessWidget {
                                 width: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: Theme.of(context).colorScheme.onPrimary,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
                                 ),
                               )
                             : const Text('Submit Form'),
@@ -330,7 +332,9 @@ class DemoFormWidget extends StatelessWidget {
         children: [
           Icon(
             isError ? Icons.error_outline : Icons.check_circle_outline,
-            color: isError ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.primary,
+            color: isError
+                ? Theme.of(context).colorScheme.error
+                : Theme.of(context).colorScheme.primary,
           ),
           const SizedBox(width: 8),
           Text(title),

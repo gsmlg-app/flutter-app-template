@@ -94,13 +94,17 @@ class ErrorScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.error_outline, size: 64, color: colorScheme.onErrorContainer),
+              Icon(
+                Icons.error_outline,
+                size: 64,
+                color: colorScheme.onErrorContainer,
+              ),
               const SizedBox(height: 24),
               Text(
                 'Oops! Something went wrong',
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineSmall?.copyWith(color: colorScheme.onErrorContainer),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: colorScheme.onErrorContainer,
+                ),
               ),
               const SizedBox(height: 16),
               Text(

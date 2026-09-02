@@ -29,7 +29,7 @@ void main() {
       final expectedFiles = [
         'pubspec.yaml',
         'lib/test_api.dart',
-        'lib/openapi.yaml',
+        'openapi.yaml',
         'swagger_parser.yaml',
         'test/test_api_test.dart',
       ];
@@ -59,7 +59,7 @@ void main() {
       final pubspecContent = await pubspecFile.readAsString();
 
       // Check package name
-      expect(pubspecContent, contains('name: test_api'));
+      expect(pubspecContent, contains('name: "test_api"'));
 
       // Check dependencies
       expect(pubspecContent, contains('dio:'));
@@ -84,7 +84,7 @@ void main() {
       expect(await libFile.exists(), isTrue);
 
       final libContent = await libFile.readAsString();
-      expect(libContent, contains('library test_api;'));
+      expect(libContent, contains("export 'src/dio_client.dart';"));
     });
 
     test('generates OpenAPI template file', () async {
@@ -96,12 +96,12 @@ void main() {
         vars: {'package_name': 'test_api'},
       );
 
-      final openapiFile = File(path.join(tempDir.path, 'lib/openapi.yaml'));
+      final openapiFile = File(path.join(tempDir.path, 'openapi.yaml'));
       expect(await openapiFile.exists(), isTrue);
 
       final openapiContent = await openapiFile.readAsString();
-      expect(openapiContent, contains('openapi: 3.0.0'));
-      expect(openapiContent, contains('title: API Specification'));
+      expect(openapiContent, contains('openapi: 3.1.0'));
+      expect(openapiContent, contains('title: API'));
     });
 
     test('generates swagger_parser configuration', () async {
@@ -117,9 +117,9 @@ void main() {
       expect(await swaggerFile.exists(), isTrue);
 
       final swaggerContent = await swaggerFile.readAsString();
-      expect(swaggerContent, contains('schema_path: ./lib/openapi.yaml'));
+      expect(swaggerContent, contains('schema_path: ./openapi.yaml'));
       expect(swaggerContent, contains('output_directory: lib/src'));
-      expect(swaggerContent, contains('name: TestApi'));
+      expect(swaggerContent, contains('root_client_name: "TestApi"'));
     });
 
     test('generates test file with correct structure', () async {
@@ -151,7 +151,7 @@ void main() {
 
       final pubspecFile = File(path.join(tempDir.path, 'pubspec.yaml'));
       final pubspecContent = await pubspecFile.readAsString();
-      expect(pubspecContent, contains('name: user_service_api'));
+      expect(pubspecContent, contains('name: "user_service_api"'));
 
       final libFile = File(
         path.join(tempDir.path, 'lib/user_service_api.dart'),

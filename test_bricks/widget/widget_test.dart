@@ -26,16 +26,19 @@ void main() {
         vars: {
           'name': 'CustomButton',
           'type': 'stateless',
-          'folder': 'buttons',
           'has_platform_adaptive': true,
         },
       );
 
-      final widgetDir = Directory(path.join(tempDir.path, 'app_widget', 'buttons', 'custom_button_widget'));
-      expect(await widgetDir.exists(), isTrue);
-
-      final libFile = File(path.join(widgetDir.path, 'lib', 'custom_button_widget.dart'));
+      final libFile = File(
+        path.join(tempDir.path, 'lib', 'custom_button_widget.dart'),
+      );
       expect(await libFile.exists(), isTrue);
+
+      final srcFile = File(
+        path.join(tempDir.path, 'lib', 'src', 'custom_button_widget.dart'),
+      );
+      expect(await srcFile.exists(), isTrue);
     });
 
     test('generates stateful widget', () async {
@@ -47,15 +50,13 @@ void main() {
         vars: {
           'name': 'LoadingSpinner',
           'type': 'stateful',
-          'folder': '',
           'has_platform_adaptive': false,
         },
       );
 
-      final widgetDir = Directory(path.join(tempDir.path, 'app_widget', 'loading_spinner_widget'));
-      expect(await widgetDir.exists(), isTrue);
-
-      final srcFile = File(path.join(widgetDir.path, 'lib', 'src', 'loading_spinner_widget.dart'));
+      final srcFile = File(
+        path.join(tempDir.path, 'lib', 'src', 'loading_spinner_widget.dart'),
+      );
       expect(await srcFile.exists(), isTrue);
 
       final content = await srcFile.readAsString();
@@ -71,21 +72,36 @@ void main() {
         vars: {
           'name': 'TestCard',
           'type': 'stateless',
-          'folder': 'cards',
           'has_platform_adaptive': true,
         },
       );
 
-      final basePath = path.join(tempDir.path, 'app_widget', 'cards', 'test_card_widget');
-
       // Check main structure
-      expect(await File(path.join(basePath, 'lib', 'src', 'test_card_widget.dart')).exists(), isTrue);
-      expect(await File(path.join(basePath, 'lib', 'test_card_widget.dart')).exists(), isTrue);
-      expect(await File(path.join(basePath, 'test', 'test_card_widget_test.dart')).exists(), isTrue);
+      expect(
+        await File(
+          path.join(tempDir.path, 'lib', 'src', 'test_card_widget.dart'),
+        ).exists(),
+        isTrue,
+      );
+      expect(
+        await File(
+          path.join(tempDir.path, 'lib', 'test_card_widget.dart'),
+        ).exists(),
+        isTrue,
+      );
+      expect(
+        await File(
+          path.join(tempDir.path, 'test', 'test_card_widget_test.dart'),
+        ).exists(),
+        isTrue,
+      );
 
       // Check package files
-      expect(await File(path.join(basePath, 'pubspec.yaml')).exists(), isTrue);
-      expect(await File(path.join(basePath, 'README.md')).exists(), isTrue);
+      expect(
+        await File(path.join(tempDir.path, 'pubspec.yaml')).exists(),
+        isTrue,
+      );
+      expect(await File(path.join(tempDir.path, 'README.md')).exists(), isTrue);
     });
 
     test('generates proper export file', () async {
@@ -97,13 +113,12 @@ void main() {
         vars: {
           'name': 'TestWidget',
           'type': 'stateless',
-          'folder': '',
           'has_platform_adaptive': false,
         },
       );
 
       final exportFile = File(
-        path.join(tempDir.path, 'app_widget', 'test_widget_widget', 'lib', 'test_widget_widget.dart'),
+        path.join(tempDir.path, 'lib', 'test_widget_widget.dart'),
       );
       expect(await exportFile.exists(), isTrue);
 
@@ -120,18 +135,20 @@ void main() {
         vars: {
           'name': 'TestComponent',
           'type': 'stateful',
-          'folder': 'components',
           'has_platform_adaptive': true,
         },
       );
 
       final testFile = File(
-        path.join(tempDir.path, 'app_widget', 'components', 'test_component_widget', 'test', 'test_component_widget_test.dart'),
+        path.join(tempDir.path, 'test', 'test_component_widget_test.dart'),
       );
       expect(await testFile.exists(), isTrue);
 
       final content = await testFile.readAsString();
-      expect(content, contains("import 'package:flutter_test/flutter_test.dart'"));
+      expect(
+        content,
+        contains("import 'package:flutter_test/flutter_test.dart'"),
+      );
     });
 
     test('handles camelCase to snakeCase conversion', () async {
@@ -143,15 +160,14 @@ void main() {
         vars: {
           'name': 'MyCustomWidget',
           'type': 'stateless',
-          'folder': 'custom',
           'has_platform_adaptive': false,
         },
       );
 
-      final widgetDir = Directory(
-        path.join(tempDir.path, 'app_widget', 'custom', 'my_custom_widget_widget'),
+      final libFile = File(
+        path.join(tempDir.path, 'lib', 'src', 'my_custom_widget_widget.dart'),
       );
-      expect(await widgetDir.exists(), isTrue);
+      expect(await libFile.exists(), isTrue);
     });
 
     test('creates proper pubspec.yaml with dependencies', () async {
@@ -163,14 +179,11 @@ void main() {
         vars: {
           'name': 'TestWidget',
           'type': 'stateless',
-          'folder': '',
           'has_platform_adaptive': true,
         },
       );
 
-      final pubspecFile = File(
-        path.join(tempDir.path, 'app_widget', 'test_widget_widget', 'pubspec.yaml'),
-      );
+      final pubspecFile = File(path.join(tempDir.path, 'pubspec.yaml'));
       expect(await pubspecFile.exists(), isTrue);
 
       final content = await pubspecFile.readAsString();

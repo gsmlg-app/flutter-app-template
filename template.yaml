@@ -1,0 +1,191 @@
+schema_version: 1
+name: flutter_app_template
+display_name: Flutter App Template
+description: A production-grade Flutter application template for Android, iOS, macOS, Windows, and Linux.
+organization: app.gsmlg
+release_channel: stable
+logging_namespace: flutter_app_template
+database_name: app_database
+
+platforms:
+  android:
+    enabled: true
+    namespace: app.gsmlg.flutterapptemplate
+    application_id: app.gsmlg.flutterapptemplate
+  ios:
+    enabled: true
+    bundle_identifier: app.gsmlg.flutterAppTemplate
+    display_name: Flutter App Template
+  macos:
+    enabled: true
+    bundle_identifier: app.gsmlg.flutterAppTemplate
+    display_name: Flutter App Template
+  windows:
+    enabled: true
+    application_identity: flutter_app_template
+    product_name: flutter_app_template
+    executable_name: flutter_app_template
+  linux:
+    enabled: true
+    application_id: app.gsmlg.flutterapptemplate
+    binary_name: flutter_app_template
+
+capabilities:
+  database:
+    description: Drift SQLite persistence layer
+    packages:
+      - app_lib/database
+    dependencies:
+      - app_database
+    screens: []
+    routes: []
+    providers:
+      - AppDatabase
+
+  secure_storage:
+    description: Platform-native secure key-value vault
+    packages:
+      - app_lib/secure_storage
+    dependencies:
+      - app_secure_storage
+    screens:
+      - lib/screens/showcase/vault_demo_screen.dart
+    routes:
+      - /showcase/vault
+    providers:
+      - SecureStorageVaultRepository
+
+  gamepad:
+    description: Gamepad/controller integration and visualizer
+    packages:
+      - app_lib/gamepad
+      - app_bloc/gamepad
+    dependencies:
+      - app_gamepad
+      - gamepad_bloc
+    screens:
+      - lib/screens/settings/controller_settings_screen.dart
+      - lib/screens/settings/controller_test_screen.dart
+      - lib/screens/settings/widgets/gamepad_visualizer.dart
+      - lib/screens/settings/widgets/controller_input_state.dart
+      - lib/screens/settings/widgets/stick_visualizer.dart
+      - lib/screens/settings/widgets/trigger_bar.dart
+      - lib/screens/settings/widgets/xbox_controller_painter.dart
+    routes:
+      - /settings/controller
+      - /settings/controller/test
+
+  web_view:
+    description: Embedded WebView component
+    packages:
+      - app_widget/web_view
+    dependencies:
+      - app_web_view
+    screens:
+      - lib/screens/showcase/webview_demo_screen.dart
+    routes:
+      - /showcase/webview
+
+  chart:
+    description: Data visualization charts
+    packages:
+      - app_widget/chart
+    dependencies:
+      - app_chart
+    screens:
+      - lib/screens/showcase/chart_demo_screen.dart
+    routes:
+      - /showcase/chart
+
+  client_info:
+    description: Federated native device & client info plugin
+    packages:
+      - app_plugin/client_info/client_info
+      - app_plugin/client_info/client_info_platform_interface
+      - app_plugin/client_info/client_info_android
+      - app_plugin/client_info/client_info_ios
+      - app_plugin/client_info/client_info_linux
+      - app_plugin/client_info/client_info_macos
+      - app_plugin/client_info/client_info_windows
+    dependencies:
+      - app_client_info
+    screens:
+      - lib/screens/showcase/client_info_screen.dart
+    routes:
+      - /showcase/client-info
+
+  vector_store:
+    description: Local vector store & TF-IDF/embeddings with SQLite
+    packages:
+      - app_lib/vector_store
+    dependencies:
+      - vector_store
+    screens: []
+    routes: []
+
+  form:
+    description: Form validation and FormBloc integration
+    packages:
+      - app_form/demo
+    dependencies:
+      - demo_form
+    screens:
+      - lib/screens/showcase/form_demo_screen.dart
+    routes:
+      - /showcase/form
+
+  artwork:
+    description: Vector icons, animations, and image assets
+    packages:
+      - app_widget/artwork
+    dependencies:
+      - app_artwork
+    screens:
+      - lib/screens/showcase/artwork_demo_screen.dart
+    routes:
+      - /showcase/artwork
+
+  locale:
+    description: Localization and internationalization
+    packages:
+      - app_lib/locale
+    dependencies:
+      - app_locale
+    screens: []
+    routes: []
+
+  logging:
+    description: Multi-level persistent file logging
+    packages:
+      - app_lib/logging
+    dependencies:
+      - app_logging
+    screens: []
+    routes: []
+
+  provider:
+    description: Dependency injection and core providers
+    packages:
+      - app_lib/provider
+    dependencies:
+      - app_provider
+    screens: []
+    routes: []
+
+  navigation:
+    description: Navigation state management BLoC
+    packages:
+      - app_bloc/navigation
+    dependencies:
+      - nav_bloc
+    screens: []
+    routes: []
+
+  error_handler:
+    description: Error handling and crash reporting BLoC
+    packages:
+      - app_bloc/error_handler
+    dependencies:
+      - error_handler_bloc
+    screens: []
+    routes: []

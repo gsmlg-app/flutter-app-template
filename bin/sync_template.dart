@@ -1,4 +1,5 @@
 #!/usr/bin/env dart
+
 // ignore_for_file: avoid_print
 
 import 'dart:io';
@@ -34,12 +35,17 @@ void main(List<String> args) async {
   // Get current project name from pubspec.yaml
   final pubspecFile = File('pubspec.yaml');
   if (!pubspecFile.existsSync()) {
-    print('Error: pubspec.yaml not found. Run this script from the project root.');
+    print(
+      'Error: pubspec.yaml not found. Run this script from the project root.',
+    );
     exit(1);
   }
 
   final pubspecContent = pubspecFile.readAsStringSync();
-  final nameMatch = RegExp(r'^name:\s*(\S+)', multiLine: true).firstMatch(pubspecContent);
+  final nameMatch = RegExp(
+    r'^name:\s*(\S+)',
+    multiLine: true,
+  ).firstMatch(pubspecContent);
   final currentName = nameMatch?.group(1);
 
   if (currentName == null) {
@@ -103,11 +109,12 @@ void main(List<String> args) async {
       'mason.yaml',
     ];
 
-    result = Process.runSync(
-      'git',
-      ['sparse-checkout', 'set', '--no-cone', ...sparsePatterns],
-      workingDirectory: tempDir,
-    );
+    result = Process.runSync('git', [
+      'sparse-checkout',
+      'set',
+      '--no-cone',
+      ...sparsePatterns,
+    ], workingDirectory: tempDir);
 
     if (result.exitCode != 0) {
       print('Error setting sparse checkout:');
@@ -252,10 +259,10 @@ SyncResult _syncDirectory({
   // Get list of local items
   final localItems = localDirectory.existsSync()
       ? localDirectory
-          .listSync()
-          .whereType<Directory>()
-          .map((d) => d.path.split('/').last)
-          .toSet()
+            .listSync()
+            .whereType<Directory>()
+            .map((d) => d.path.split('/').last)
+            .toSet()
       : <String>{};
 
   var syncedCount = 0;
@@ -328,11 +335,11 @@ SyncResult _syncDirectoryWithPrefix({
   // Get list of local items matching prefix
   final localItems = localDirectory.existsSync()
       ? localDirectory
-          .listSync()
-          .whereType<Directory>()
-          .map((d) => d.path.split('/').last)
-          .where((name) => name.startsWith(prefix))
-          .toSet()
+            .listSync()
+            .whereType<Directory>()
+            .map((d) => d.path.split('/').last)
+            .where((name) => name.startsWith(prefix))
+            .toSet()
       : <String>{};
 
   var syncedCount = 0;
@@ -403,10 +410,10 @@ SyncResult _syncFiles({
   // Get list of local files
   final localFiles = localDirectory.existsSync()
       ? localDirectory
-          .listSync()
-          .whereType<File>()
-          .map((f) => f.path.split('/').last)
-          .toSet()
+            .listSync()
+            .whereType<File>()
+            .map((f) => f.path.split('/').last)
+            .toSet()
       : <String>{};
 
   var syncedCount = 0;

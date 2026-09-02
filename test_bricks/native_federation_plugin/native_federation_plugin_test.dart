@@ -18,9 +18,7 @@ void main() {
     });
 
     test('generates federated plugin with all platforms', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_federation_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_federation_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -41,7 +39,12 @@ void main() {
 
       // Check main plugin package (nested structure)
       final mainPubspec = File(
-        path.join(tempDir.path, 'battery_monitor', 'battery_monitor', 'pubspec.yaml'),
+        path.join(
+          tempDir.path,
+          'battery_monitor',
+          'battery_monitor',
+          'pubspec.yaml',
+        ),
       );
       expect(await mainPubspec.exists(), isTrue);
 
@@ -60,7 +63,12 @@ void main() {
       final platforms = ['android', 'ios', 'linux', 'macos', 'windows'];
       for (final platform in platforms) {
         final platformPubspec = File(
-          path.join(tempDir.path, 'battery_monitor', 'battery_monitor_$platform', 'pubspec.yaml'),
+          path.join(
+            tempDir.path,
+            'battery_monitor',
+            'battery_monitor_$platform',
+            'pubspec.yaml',
+          ),
         );
         expect(
           await platformPubspec.exists(),
@@ -71,9 +79,7 @@ void main() {
     });
 
     test('generates correct main plugin structure', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_federation_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_federation_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -94,27 +100,45 @@ void main() {
 
       // Check main export file (nested structure)
       final mainExport = File(
-        path.join(tempDir.path, 'device_info', 'device_info', 'lib', 'my_device_info.dart'),
+        path.join(
+          tempDir.path,
+          'device_info',
+          'device_info',
+          'lib',
+          'my_device_info.dart',
+        ),
       );
       expect(await mainExport.exists(), isTrue);
 
       // Check source files
       final srcFile = File(
-        path.join(tempDir.path, 'device_info', 'device_info', 'lib', 'src', 'device_info.dart'),
+        path.join(
+          tempDir.path,
+          'device_info',
+          'device_info',
+          'lib',
+          'src',
+          'device_info.dart',
+        ),
       );
       expect(await srcFile.exists(), isTrue);
 
       // Check models
       final modelsDir = Directory(
-        path.join(tempDir.path, 'device_info', 'device_info', 'lib', 'src', 'models'),
+        path.join(
+          tempDir.path,
+          'device_info',
+          'device_info',
+          'lib',
+          'src',
+          'models',
+        ),
       );
       expect(await modelsDir.exists(), isTrue);
     });
 
     test('generates platform interface with correct structure', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_federation_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_federation_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -133,7 +157,11 @@ void main() {
         },
       );
 
-      final interfaceDir = path.join(tempDir.path, 'sensor', 'sensor_platform_interface');
+      final interfaceDir = path.join(
+        tempDir.path,
+        'sensor',
+        'sensor_platform_interface',
+      );
 
       // Check main export
       final mainExport = File(
@@ -155,9 +183,7 @@ void main() {
     });
 
     test('generates Android implementation with Kotlin code', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_federation_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_federation_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -206,9 +232,7 @@ void main() {
     });
 
     test('generates iOS implementation with Swift code', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_federation_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_federation_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -240,16 +264,12 @@ void main() {
       expect(swiftContent, contains('FlutterPlugin'));
 
       // Check podspec
-      final podspec = File(
-        path.join(iosDir, 'ios', 'camera_ios.podspec'),
-      );
+      final podspec = File(path.join(iosDir, 'ios', 'camera_ios.podspec'));
       expect(await podspec.exists(), isTrue);
     });
 
     test('generates Linux implementation with C++ code', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_federation_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_federation_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -268,7 +288,11 @@ void main() {
         },
       );
 
-      final linuxDir = path.join(tempDir.path, 'file_picker', 'file_picker_linux');
+      final linuxDir = path.join(
+        tempDir.path,
+        'file_picker',
+        'file_picker_linux',
+      );
 
       // Check C++ plugin file
       final cppFile = File(
@@ -294,9 +318,7 @@ void main() {
     });
 
     test('generates Windows implementation with C++ code', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_federation_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_federation_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -315,7 +337,11 @@ void main() {
         },
       );
 
-      final windowsDir = path.join(tempDir.path, 'clipboard', 'clipboard_windows');
+      final windowsDir = path.join(
+        tempDir.path,
+        'clipboard',
+        'clipboard_windows',
+      );
 
       // Check C++ plugin files
       final cppFile = File(
@@ -334,9 +360,7 @@ void main() {
     });
 
     test('handles different package prefixes correctly', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_federation_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_federation_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -357,7 +381,13 @@ void main() {
 
       // Check main export uses custom prefix (nested structure)
       final mainExport = File(
-        path.join(tempDir.path, 'network', 'network', 'lib', 'my_company_network.dart'),
+        path.join(
+          tempDir.path,
+          'network',
+          'network',
+          'lib',
+          'my_company_network.dart',
+        ),
       );
       expect(await mainExport.exists(), isTrue);
 
@@ -375,9 +405,7 @@ void main() {
     });
 
     test('generates README documentation', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_federation_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_federation_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(

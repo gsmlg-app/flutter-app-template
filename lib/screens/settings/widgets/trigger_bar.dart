@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Horizontal fill bar showing trigger analog value (0–100%).
 class TriggerBar extends StatelessWidget {
-  const TriggerBar({
-    super.key,
-    required this.value,
-    required this.label,
-  });
+  const TriggerBar({super.key, required this.value, required this.label});
 
   /// 0.0 – 1.0
   final double value;
@@ -22,9 +18,9 @@ class TriggerBar extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
         SizedBox(

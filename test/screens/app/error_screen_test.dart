@@ -3,6 +3,7 @@ import 'package:flutter_app_template/screens/app/error_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app_locale/app_locale.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 
 // Test version of SplashScreen that doesn't use Timer
 class TestSplashScreen extends StatelessWidget {
@@ -42,8 +43,6 @@ void main() {
     testWidgets('ErrorScreen renders correctly with error message', (
       WidgetTester tester,
     ) async {
-      const errorMessage = 'Test error message';
-
       await tester.pumpWidget(
         MaterialApp.router(
           routerConfig: router,
@@ -56,7 +55,7 @@ void main() {
 
       expect(find.byType(ErrorScreen), findsOneWidget);
       expect(find.byType(Column), findsOneWidget);
-      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byType(DmButton), findsOneWidget);
     });
 
     testWidgets('ErrorScreen button navigates to splash screen', (
@@ -72,7 +71,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      final button = find.byType(ElevatedButton);
+      final button = find.byType(DmButton);
       expect(button, findsOneWidget);
 
       await tester.tap(button);

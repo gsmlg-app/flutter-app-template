@@ -1,29 +1,19 @@
-# Lock files - treat as binary to avoid merge conflicts
-*.lock binary
-*-lock.json binary
-*.lock.hcl binary
+# Git configuration
 
-# Common lock file patterns
-pubspec.lock binary
-Podfile.lock binary
-Gemfile.lock binary
-package-lock.json binary
-pnpm-lock.yaml binary
-yarn.lock binary
-composer.lock binary
-Cargo.lock binary
-flake.lock binary
-# Images - track with Git LFS
-*.png filter=lfs diff=lfs merge=lfs -text
-*.jpg filter=lfs diff=lfs merge=lfs -text
-*.jpeg filter=lfs diff=lfs merge=lfs -text
-*.gif filter=lfs diff=lfs merge=lfs -text
-*.webp filter=lfs diff=lfs merge=lfs -text
-*.bmp filter=lfs diff=lfs merge=lfs -text
-*.tiff filter=lfs diff=lfs merge=lfs -text
-*.tif filter=lfs diff=lfs merge=lfs -text
-*.ico filter=lfs diff=lfs merge=lfs -text
-*.icns filter=lfs diff=lfs merge=lfs -text
-*.svg filter=lfs diff=lfs merge=lfs -text
+# Text files
+*.yaml text
+*.yml text
+*.json text
+*.dart text
+*.md text
+*.arb text
+
+# Lock files - allow standard text diffs
+pubspec.lock text
+Podfile.lock text
+Gemfile.lock text
+
+# Images and binaries - Git LFS for large media
 *.psd filter=lfs diff=lfs merge=lfs -text
 *.ai filter=lfs diff=lfs merge=lfs -text
+

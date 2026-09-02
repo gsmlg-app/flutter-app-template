@@ -22,9 +22,7 @@ class HomeScreen extends StatelessWidget {
       selectedIndex: Destinations.indexOf(const Key(HomeScreen.name), context),
       onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs(context),
-      appBar: DmAppBar(
-        title: Text(context.l10n.appName),
-      ),
+      appBar: DmAppBar(title: Text(context.l10n.appName)),
       body: (context) => SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -114,8 +112,7 @@ class HomeScreen extends StatelessWidget {
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
               sliver: SliverGrid.count(
-                crossAxisCount:
-                    MediaQuery.of(context).size.width > 600 ? 3 : 2,
+                crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
                 mainAxisSpacing: 8,
                 crossAxisSpacing: 8,
                 childAspectRatio: 2.2,
@@ -206,8 +203,8 @@ class HomeScreen extends StatelessWidget {
                     icon: Icons.devices,
                     title: 'Multi-Platform',
                     description:
-                        'Android, iOS, macOS, Linux, Windows, '
-                        'and Web from a single codebase',
+                        'Android, iOS, macOS, Windows, '
+                        'and Linux from a single codebase',
                     color: colorScheme.tertiary,
                   ),
                   _FeatureTile(
@@ -289,9 +286,9 @@ class _QuickNavCard extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 label,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -330,16 +327,16 @@ class _PackageTile extends StatelessWidget {
                   Text(
                     label,
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          fontFamily: 'monospace',
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontFamily: 'monospace',
+                      fontWeight: FontWeight.bold,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     detail,
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
+                      color: colorScheme.onSurfaceVariant,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
@@ -375,8 +372,8 @@ class _FeatureTile extends StatelessWidget {
         subtitle: Text(
           description,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
       ),
     );

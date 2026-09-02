@@ -178,13 +178,19 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
                 title: const Text(VaultDemoScreen.name),
                 actions: [
                   IconButton(
-                    icon: const Icon(Icons.refresh, semanticLabel: 'Refresh secrets'),
+                    icon: const Icon(
+                      Icons.refresh,
+                      semanticLabel: 'Refresh secrets',
+                    ),
                     onPressed: _isLoading ? null : _loadAllSecrets,
                     tooltip: 'Refresh',
                   ),
                   if (_storedSecrets.isNotEmpty)
                     IconButton(
-                      icon: const Icon(Icons.delete_sweep, semanticLabel: 'Delete all secrets'),
+                      icon: const Icon(
+                        Icons.delete_sweep,
+                        semanticLabel: 'Delete all secrets',
+                      ),
                       onPressed: _isLoading ? null : _deleteAllSecrets,
                       tooltip: 'Delete All',
                     ),
@@ -231,7 +237,9 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.secondary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -309,7 +317,9 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
@@ -439,7 +449,9 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.1),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.tertiary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -540,7 +552,10 @@ class _VaultDemoScreenState extends State<VaultDemoScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            icon: const Icon(Icons.visibility, semanticLabel: 'View secret value'),
+            icon: const Icon(
+              Icons.visibility,
+              semanticLabel: 'View secret value',
+            ),
             onPressed: () => _readSecret(key),
             tooltip: 'View value',
           ),

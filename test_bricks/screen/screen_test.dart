@@ -62,7 +62,10 @@ void main() {
       expect(await screenFile.exists(), isTrue);
 
       final content = await screenFile.readAsString();
-      expect(content, contains('class TestLoginScreen extends StatelessWidget'));
+      expect(
+        content,
+        contains('class TestLoginScreen extends StatelessWidget'),
+      );
       expect(content, contains('return Scaffold('));
       expect(content, contains('appBar: AppBar('));
     });
@@ -86,7 +89,10 @@ void main() {
       expect(await screenFile.exists(), isTrue);
 
       final content = await screenFile.readAsString();
-      expect(content, contains('class TestSplashScreen extends StatelessWidget'));
+      expect(
+        content,
+        contains('class TestSplashScreen extends StatelessWidget'),
+      );
       expect(content, contains('return Scaffold('));
       expect(content, isNot(contains('appBar:')));
     });
@@ -110,7 +116,10 @@ void main() {
       expect(await screenFile.exists(), isTrue);
 
       final content = await screenFile.readAsString();
-      expect(content, contains('class UserProfileScreen extends StatelessWidget'));
+      expect(
+        content,
+        contains('class UserProfileScreen extends StatelessWidget'),
+      );
       expect(content, contains("static const name = 'User Profile'"));
       expect(content, contains("static const path = '/user-profile'"));
     });

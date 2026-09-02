@@ -29,13 +29,13 @@ abstract class {{model_name.pascalCase()}}Repository {
   /// Gets all {{name.sentenceCase()}}s
   Future<List<{{model_name.pascalCase()}}Model>> getAll{{model_name.pascalCase()}}s();
 
-  /// Creates a new {{name.sentenceCase}}
-  Future<{{model_name.pascalCase()}}Model> create{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase}});
+  /// Creates a new {{name.sentenceCase()}}
+  Future<{{model_name.pascalCase()}}Model> create{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase()}});
 
-  /// Updates an existing {{name.sentenceCase}}
-  Future<{{model_name.pascalCase()}}Model> update{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase}});
+  /// Updates an existing {{name.sentenceCase()}}
+  Future<{{model_name.pascalCase()}}Model> update{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase()}});
 
-  /// Deletes a {{name.sentenceCase}}
+  /// Deletes a {{name.sentenceCase()}}
   Future<void> delete{{model_name.pascalCase()}}(String id);
 
   /// Syncs local data with remote
@@ -124,13 +124,13 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
   Future<{{model_name.pascalCase()}}Model> _get{{model_name.pascalCase()}}NetworkFirst(String id) async {
 {{#has_remote_data_source}}
     try {
-      final {{name.camelCase}} = await remoteDataSource.get{{model_name.pascalCase()}}(id);
+      final {{name.camelCase()}} = await remoteDataSource.get{{model_name.pascalCase()}}(id);
 {{#has_local_data_source}}
       if (enableCache) {
-        await localDataSource.cache{{model_name.pascalCase()}}({{name.camelCase}});
+        await localDataSource.cache{{model_name.pascalCase()}}({{name.camelCase()}});
       }
 {{/has_local_data_source}}
-      return {{name.camelCase}};
+      return {{name.camelCase()}};
     } catch (e) {
 {{#has_local_data_source}}
       if (enableCache) {
@@ -169,13 +169,13 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
 {{/has_local_data_source}}
 
 {{#has_remote_data_source}}
-    final {{name.camelCase}} = await remoteDataSource.get{{model_name.pascalCase()}}(id);
+    final {{name.camelCase()}} = await remoteDataSource.get{{model_name.pascalCase()}}(id);
 {{#has_local_data_source}}
     if (enableCache) {
-      await localDataSource.cache{{model_name.pascalCase()}}({{name.camelCase}});
+      await localDataSource.cache{{model_name.pascalCase()}}({{name.camelCase()}});
     }
 {{/has_local_data_source}}
-    return {{name.camelCase}};
+    return {{name.camelCase()}};
 {{/has_remote_data_source}}
 {{^has_remote_data_source}}
     throw {{model_name.pascalCase()}}NotFoundException(id);
@@ -209,13 +209,13 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
   Future<List<{{model_name.pascalCase()}}Model>> getAll{{model_name.pascalCase()}}s() async {
     try {
 {{#has_remote_data_source}}
-      final {{name.camelCase}}s = await remoteDataSource.getAll{{model_name.pascalCase()}}s();
+      final {{name.camelCase()}}s = await remoteDataSource.getAll{{model_name.pascalCase()}}s();
 {{#has_local_data_source}}
       if (enableCache) {
-        await localDataSource.cache{{model_name.pascalCase()}}s({{name.camelCase}}s);
+        await localDataSource.cache{{model_name.pascalCase()}}s({{name.camelCase()}}s);
       }
 {{/has_local_data_source}}
-      return {{name.camelCase}}s;
+      return {{name.camelCase()}}s;
 {{/has_remote_data_source}}
 {{^has_remote_data_source}}
 {{#has_local_data_source}}
@@ -247,7 +247,7 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
         rethrow;
       } else {
         throw {{model_name.pascalCase()}}NetworkException(
-          'Failed to get {{name.sentenceCase}}s: ${e.toString()}',
+          'Failed to get {{name.sentenceCase()}}s: ${e.toString()}',
           e,
         );
       }
@@ -255,15 +255,15 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
   }
 
   @override
-  Future<{{model_name.pascalCase()}}Model> create{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase}}) async {
+  Future<{{model_name.pascalCase()}}Model> create{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase()}}) async {
     try {
       // Validate input
-      if ({{name.camelCase}}.id.isEmpty) {
+      if ({{name.camelCase()}}.id.isEmpty) {
         throw {{model_name.pascalCase()}}ValidationException('{{model_name.pascalCase()}} ID cannot be empty');
       }
 
 {{#has_remote_data_source}}
-      final created{{model_name.pascalCase()}} = await remoteDataSource.create{{model_name.pascalCase()}}({{name.camelCase}});
+      final created{{model_name.pascalCase()}} = await remoteDataSource.create{{model_name.pascalCase()}}({{name.camelCase()}});
 {{#has_local_data_source}}
       if (enableCache) {
         await localDataSource.cache{{model_name.pascalCase()}}(created{{model_name.pascalCase()}});
@@ -273,8 +273,8 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
 {{/has_remote_data_source}}
 {{^has_remote_data_source}}
 {{#has_local_data_source}}
-      await localDataSource.cache{{model_name.pascalCase()}}({{name.camelCase}});
-      return {{name.camelCase}};
+      await localDataSource.cache{{model_name.pascalCase()}}({{name.camelCase()}});
+      return {{name.camelCase()}};
 {{/has_local_data_source}}
 {{^has_local_data_source}}
       throw {{model_name.pascalCase()}}NetworkException('No data sources available');
@@ -285,7 +285,7 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
         rethrow;
       } else {
         throw {{model_name.pascalCase()}}NetworkException(
-          'Failed to create {{name.sentenceCase}}: ${e.toString()}',
+          'Failed to create {{name.sentenceCase()}}: ${e.toString()}',
           e,
         );
       }
@@ -293,15 +293,15 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
   }
 
   @override
-  Future<{{model_name.pascalCase()}}Model> update{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase}}) async {
+  Future<{{model_name.pascalCase()}}Model> update{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase()}}) async {
     try {
       // Validate input
-      if ({{name.camelCase}}.id.isEmpty) {
+      if ({{name.camelCase()}}.id.isEmpty) {
         throw {{model_name.pascalCase()}}ValidationException('{{model_name.pascalCase()}} ID cannot be empty');
       }
 
 {{#has_remote_data_source}}
-      final updated{{model_name.pascalCase()}} = await remoteDataSource.update{{model_name.pascalCase()}}({{name.camelCase}});
+      final updated{{model_name.pascalCase()}} = await remoteDataSource.update{{model_name.pascalCase()}}({{name.camelCase()}});
 {{#has_local_data_source}}
       if (enableCache) {
         await localDataSource.cache{{model_name.pascalCase()}}(updated{{model_name.pascalCase()}});
@@ -311,8 +311,8 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
 {{/has_remote_data_source}}
 {{^has_remote_data_source}}
 {{#has_local_data_source}}
-      await localDataSource.cache{{model_name.pascalCase()}}({{name.camelCase}});
-      return {{name.camelCase}};
+      await localDataSource.cache{{model_name.pascalCase()}}({{name.camelCase()}});
+      return {{name.camelCase()}};
 {{/has_local_data_source}}
 {{^has_local_data_source}}
       throw {{model_name.pascalCase()}}NetworkException('No data sources available');
@@ -323,7 +323,7 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
         rethrow;
       } else {
         throw {{model_name.pascalCase()}}NetworkException(
-          'Failed to update {{name.sentenceCase}}: ${e.toString()}',
+          'Failed to update {{name.sentenceCase()}}: ${e.toString()}',
           e,
         );
       }
@@ -350,7 +350,7 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
         rethrow;
       } else {
         throw {{model_name.pascalCase()}}NetworkException(
-          'Failed to delete {{name.sentenceCase}}: ${e.toString()}',
+          'Failed to delete {{name.sentenceCase()}}: ${e.toString()}',
           e,
         );
       }
@@ -371,7 +371,7 @@ class {{model_name.pascalCase()}}RepositoryImpl extends {{model_name.pascalCase(
       await localDataSource.cache{{model_name.pascalCase()}}s(remote{{model_name.pascalCase()}}s);
     } catch (e) {
       // Sync failed, but don't throw - just log
-      _logger.w('Failed to sync {{name.sentenceCase}}s: $e', e);
+      _logger.w('Failed to sync {{name.sentenceCase()}}s: $e', e);
     }
 {{/has_local_data_source}}
 {{^has_local_data_source}}

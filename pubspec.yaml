@@ -15,6 +15,7 @@ workspace:
   - app_lib/logging
   - app_lib/secure_storage
   - app_lib/vector_store
+  - app_bloc/error_handler
   - app_bloc/gamepad
   - app_bloc/navigation
   - app_widget/artwork
@@ -59,6 +60,7 @@ dependencies:
   app_gamepad: any
   app_locale: any
   app_provider: any
+  error_handler_bloc: any
   gamepad_bloc: any
   nav_bloc: any
   app_artwork: any
@@ -127,7 +129,7 @@ melos:
       run: dart run build_runner build --delete-conflicting-outputs
       exec:
         orderDependents: true
-      description: Run `dart/flutter analyze` for all packages.
+      description: Run `build_runner` for all packages.
 
     analyze:
       description: Run `dart/flutter analyze` for all packages.
@@ -145,7 +147,7 @@ melos:
       description: Run `dart analyze` for non-Flutter packages.
 
     analyze:flutter:
-      run: flutter analyze --fatal-warnings
+      run: flutter analyze --fatal-warnings --no-pub
       exec:
         concurrency: 1
         orderDependents: true
@@ -166,16 +168,16 @@ melos:
       description: Run `dart fix` in dry-run mode for all packages.
 
     format:
-      run: dart format .
-      exec:
-        orderDependents: true
-      description: Run `dart format` for all packages.
+      description: Run `dart format` for all packages and root files.
+      steps:
+        - melos exec -- dart format .
+        - dart format lib test bin test_bricks tool
 
     format-check:
-      run: dart format . --set-exit-if-changed
-      exec:
-        orderDependents: true
-      description: Run `dart format` checks for all packages.
+      description: Run `dart format` checks for all packages and root files.
+      steps:
+        - melos exec -- dart format . --output none --set-exit-if-changed
+        - dart format lib test bin test_bricks tool --output none --set-exit-if-changed
 
     upgrade:
       run: dart pub upgrade --major-versions
@@ -194,8 +196,7 @@ melos:
       description: Run `dart run dependency_validator` check dependencies usage.
 
     test:
-      run: melos exec --order-dependents --fail-fast flutter test || true
-      description: Run Flutter tests for all packages (ignores packages without tests).
+      description: Run tests for all packages and root application.
       steps:
         - melos run test:dart
         - melos run test:flutter

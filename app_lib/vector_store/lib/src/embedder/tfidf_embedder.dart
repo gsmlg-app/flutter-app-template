@@ -68,29 +68,39 @@ class TfIdfEmbedder implements TextEmbedder {
     }
   }
 
-  void _saveVocabulary() {
-    _db.execute('DELETE FROM $vocabTable');
-    final stmt = _db.prepare(
-      'INSERT INTO $vocabTable (token, slot, doc_freq) VALUES (?, ?, ?)',
-    );
-    for (final entry in _vocab.entries) {
-      stmt.execute([entry.key, entry.value, _docFreq[entry.key] ?? 0]);
-    }
-    stmt.close();
+  static final _tokenPattern = RegExp(
+    r'[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]|[a-zA-Z0-9]+',
+    unicode: true,
+  );
 
-    _db.execute("DELETE FROM ${vocabTable}_meta WHERE key = 'doc_count'");
-    _db.execute(
-      "INSERT INTO ${vocabTable}_meta (key, value) VALUES ('doc_count', $_docCount)",
-    );
+  void _saveVocabulary() {
+    _db.execute('BEGIN TRANSACTION');
+    try {
+      _db.execute('DELETE FROM $vocabTable');
+      final stmt = _db.prepare(
+        'INSERT INTO $vocabTable (token, slot, doc_freq) VALUES (?, ?, ?)',
+      );
+      for (final entry in _vocab.entries) {
+        stmt.execute([entry.key, entry.value, _docFreq[entry.key] ?? 0]);
+      }
+      stmt.close();
+
+      _db.execute("DELETE FROM ${vocabTable}_meta WHERE key = 'doc_count'");
+      _db.execute(
+        "INSERT INTO ${vocabTable}_meta (key, value) VALUES ('doc_count', $_docCount)",
+      );
+      _db.execute('COMMIT');
+    } catch (e) {
+      _db.execute('ROLLBACK');
+      rethrow;
+    }
   }
 
-  /// Tokenizes text: lowercase, split on non-alphanumeric.
+  /// Tokenizes text: lowercase, extracts alphanumeric words and individual CJK characters.
   static List<String> tokenize(String text) {
-    return text
-        .toLowerCase()
-        .split(RegExp(r'[^a-z0-9]+'))
-        .where((t) => t.length > 1)
-        .toList();
+    if (text.isEmpty) return const [];
+    final matches = _tokenPattern.allMatches(text.toLowerCase());
+    return matches.map((m) => m.group(0)!).where((t) => t.isNotEmpty).toList();
   }
 
   /// Updates the vocabulary with tokens from a new document.
@@ -98,6 +108,7 @@ class TfIdfEmbedder implements TextEmbedder {
   /// Call this when indexing documents so the IDF weights stay current.
   void learn(String text) {
     final tokens = tokenize(text);
+    if (tokens.isEmpty) return;
     final uniqueTokens = tokens.toSet();
     _docCount++;
 
@@ -113,6 +124,7 @@ class TfIdfEmbedder implements TextEmbedder {
   /// Removes a document's contribution to term frequencies.
   void unlearn(String text) {
     final tokens = tokenize(text);
+    if (tokens.isEmpty) return;
     final uniqueTokens = tokens.toSet();
     if (_docCount > 0) _docCount--;
 

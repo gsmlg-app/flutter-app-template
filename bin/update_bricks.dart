@@ -1,4 +1,5 @@
 #!/usr/bin/env dart
+
 // ignore_for_file: avoid_print
 
 import 'dart:io';
@@ -21,12 +22,17 @@ void main(List<String> args) async {
   // Get current project name from pubspec.yaml
   final pubspecFile = File('pubspec.yaml');
   if (!pubspecFile.existsSync()) {
-    print('Error: pubspec.yaml not found. Run this script from the project root.');
+    print(
+      'Error: pubspec.yaml not found. Run this script from the project root.',
+    );
     exit(1);
   }
 
   final pubspecContent = pubspecFile.readAsStringSync();
-  final nameMatch = RegExp(r'^name:\s*(\S+)', multiLine: true).firstMatch(pubspecContent);
+  final nameMatch = RegExp(
+    r'^name:\s*(\S+)',
+    multiLine: true,
+  ).firstMatch(pubspecContent);
   final currentName = nameMatch?.group(1);
 
   if (currentName == null) {
@@ -77,11 +83,13 @@ void main(List<String> args) async {
 
     // Set sparse checkout to only include bricks and mason.yaml
     // Use --no-cone mode to allow file patterns (mason.yaml is a file, not directory)
-    result = Process.runSync(
-      'git',
-      ['sparse-checkout', 'set', '--no-cone', 'bricks/', 'mason.yaml'],
-      workingDirectory: tempDir,
-    );
+    result = Process.runSync('git', [
+      'sparse-checkout',
+      'set',
+      '--no-cone',
+      'bricks/',
+      'mason.yaml',
+    ], workingDirectory: tempDir);
 
     if (result.exitCode != 0) {
       print('Error setting sparse checkout:');

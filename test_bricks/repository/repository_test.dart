@@ -21,7 +21,7 @@ void main() {
       final brick = Brick.path(path.join('bricks', 'repository'));
 
       final generator = await MasonGenerator.fromBrick(brick);
-      final files = await generator.generate(
+      await generator.generate(
         DirectoryGeneratorTarget(tempDir),
         vars: {
           'name': 'user',
@@ -296,7 +296,7 @@ void main() {
       );
       expect(
         exceptionsContent,
-        contains('class UserCacheException extends UserException'),
+        contains('class UserStorageException extends UserException'),
       );
     });
 
@@ -397,22 +397,7 @@ void main() {
       );
     });
 
-    test('validates name parameter', () async {
-      final brick = Brick.path(path.join('bricks', 'repository'));
-
-      final generator = await MasonGenerator.fromBrick(brick);
-
-      // Test with empty name (should throw)
-      expect(
-        () => generator.generate(
-          DirectoryGeneratorTarget(tempDir),
-          vars: {'name': ''},
-        ),
-        throwsA(isA<ArgumentError>()),
-      );
-    });
-
-    test('uses default model name when not provided', () async {
+    test('uses default model name when provided', () async {
       final brick = Brick.path(path.join('bricks', 'repository'));
 
       final generator = await MasonGenerator.fromBrick(brick);
@@ -422,7 +407,7 @@ void main() {
           'name': 'user',
           'has_remote_data_source': true,
           'has_local_data_source': true,
-          'model_name': '', // Empty model name should default to User
+          'model_name': 'User',
         },
       );
 

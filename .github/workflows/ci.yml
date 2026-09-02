@@ -35,8 +35,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  validate-invariants:
+    name: Validate Invariants
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: flutter-actions/setup-flutter@v4
+
+      - name: Cache dependencies
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Check Web Disallowed
+        run: |
+          if [ -d "web" ]; then
+            echo "::error::Web platform directory 'web/' is strictly disallowed in this template."
+            exit 1
+          fi
+
+      - name: Install tools
+        run: dart pub global activate melos
+
+      - name: Prepare project
+        run: melos run prepare
+
+      - name: Verify Template Invariants
+        run: dart run bin/verify_template.dart
+
   format-check:
     name: Format Check
+    needs: validate-invariants
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -63,6 +97,7 @@ jobs:
 
   analyze:
     name: Analyze
+    needs: validate-invariants
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -89,6 +124,7 @@ jobs:
 
   test:
     name: Test
+    needs: [format-check, analyze]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -113,8 +149,42 @@ jobs:
       - name: Run tests
         run: melos run test
 
-  build:
-    name: Build Linux
+  build-android:
+    name: Build Android Smoke
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: flutter-actions/setup-flutter@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache dependencies
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Install tools
+        run: dart pub global activate melos
+
+      - name: Prepare project
+        run: melos run prepare
+
+      - name: Build Android Debug APK
+        run: flutter build apk --debug
+
+  build-linux:
+    name: Build Linux Smoke
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -141,5 +211,86 @@ jobs:
       - name: Prepare project
         run: melos run prepare
 
-      - name: Build Linux
-        run: flutter build linux --release
+      - name: Build Linux Debug Bundle
+        run: flutter build linux --debug
+
+  build-windows:
+    name: Build Windows Smoke
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: flutter-actions/setup-flutter@v4
+
+      - name: Cache dependencies
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Install tools
+        run: dart pub global activate melos
+
+      - name: Prepare project
+        run: melos run prepare
+
+      - name: Build Windows Debug Bundle
+        run: flutter build windows --debug
+
+  build-macos:
+    name: Build macOS Smoke
+    needs: test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: flutter-actions/setup-flutter@v4
+
+      - name: Cache dependencies
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Install tools
+        run: dart pub global activate melos
+
+      - name: Prepare project
+        run: melos run prepare
+
+      - name: Build macOS Debug App
+        run: flutter build macos --debug
+
+  build-ios:
+    name: Build iOS Smoke
+    needs: test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: flutter-actions/setup-flutter@v4
+
+      - name: Cache dependencies
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Install tools
+        run: dart pub global activate melos
+
+      - name: Prepare project
+        run: melos run prepare
+
+      - name: Build iOS Smoke (--no-codesign)
+        run: flutter build ios --no-codesign --debug

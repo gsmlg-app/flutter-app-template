@@ -111,10 +111,12 @@ class _AppearancePicker extends StatelessWidget {
     final isLight = brightness == Brightness.light;
     final bgColor = isLight ? const Color(0xFFE8E8ED) : const Color(0xFF2D2D2D);
     final windowBg = isLight ? Colors.white : const Color(0xFF1E1E1E);
-    final titleBarColor =
-        isLight ? const Color(0xFFF0F0F0) : const Color(0xFF3A3A3A);
-    final sidebarColor =
-        isLight ? const Color(0xFFF5F5F7) : const Color(0xFF2A2A2A);
+    final titleBarColor = isLight
+        ? const Color(0xFFF0F0F0)
+        : const Color(0xFF3A3A3A);
+    final sidebarColor = isLight
+        ? const Color(0xFFF5F5F7)
+        : const Color(0xFF2A2A2A);
     final accentColor = Theme.of(context).colorScheme.primary;
 
     return Container(
@@ -144,8 +146,9 @@ class _AppearancePicker extends StatelessWidget {
               height: 10,
               decoration: BoxDecoration(
                 color: titleBarColor,
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(4)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(4),
+                ),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 3),
               child: Row(
@@ -188,11 +191,7 @@ class _AppearancePicker extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      color: windowBg,
-                    ),
-                  ),
+                  Expanded(child: Container(color: windowBg)),
                 ],
               ),
             ),
@@ -207,9 +206,7 @@ class _AppearancePicker extends StatelessWidget {
     return Container(
       width: 80,
       height: 56,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
       clipBehavior: Clip.antiAlias,
       child: Row(
         children: [
@@ -224,10 +221,7 @@ class _AppearancePicker extends StatelessWidget {
     return Container(
       width: 4,
       height: 4,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
 }

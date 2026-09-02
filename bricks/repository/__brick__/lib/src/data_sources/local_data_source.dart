@@ -14,13 +14,13 @@ abstract class {{model_name.pascalCase()}}LocalDataSource {
   const {{model_name.pascalCase()}}LocalDataSource();
 
   /// Caches {{name.sentenceCase()}} locally
-  Future<void> cache{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase}});
+  Future<void> cache{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase()}});
 
-  /// Gets cached {{name.sentenceCase}}
+  /// Gets cached {{name.sentenceCase()}}
   Future<{{model_name.pascalCase()}}Model?> getCached{{model_name.pascalCase()}}(String id);
 
   /// Caches list of {{name.sentenceCase()}}s
-  Future<void> cache{{model_name.pascalCase()}}s(List<{{model_name.pascalCase()}}Model> {{name.camelCase}}s);
+  Future<void> cache{{model_name.pascalCase()}}s(List<{{model_name.pascalCase()}}Model> {{name.camelCase()}}s);
 
   /// Gets cached {{name.sentenceCase()}}s
   Future<List<{{model_name.pascalCase()}}Model>?> getCached{{model_name.pascalCase()}}s();
@@ -55,10 +55,10 @@ class {{model_name.pascalCase()}}LocalDataSourceImpl extends {{model_name.pascal
   static const String _cacheTimestampKey = '${_cacheKeyPrefix}timestamp';
 
   @override
-  Future<void> cache{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase}}) async {
+  Future<void> cache{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase()}}) async {
     try {
-      final key = '${_cacheKeyPrefix}{{name.camelCase}}_${{name.camelCase}}.id';
-      final jsonData = jsonEncode({{name.camelCase}}.toJson());
+      final key = '${_cacheKeyPrefix}{{name.camelCase()}}_${{name.camelCase()}}.id';
+      final jsonData = jsonEncode({{name.camelCase()}}.toJson());
 
       await sharedPreferences.setString(key, jsonData);
       await sharedPreferences.setString(_cacheTimestampKey, DateTime.now().toIso8601String());
@@ -77,7 +77,7 @@ class {{model_name.pascalCase()}}LocalDataSourceImpl extends {{model_name.pascal
         return null;
       }
 
-      final key = '${_cacheKeyPrefix}{{name.camelCase}}_$id';
+      final key = '${_cacheKeyPrefix}{{name.camelCase()}}_$id';
       final jsonData = sharedPreferences.getString(key);
 
       if (jsonData == null) {
@@ -95,19 +95,19 @@ class {{model_name.pascalCase()}}LocalDataSourceImpl extends {{model_name.pascal
   }
 
   @override
-  Future<void> cache{{model_name.pascalCase()}}s(List<{{model_name.pascalCase()}}Model> {{name.camelCase}}s) async {
+  Future<void> cache{{model_name.pascalCase()}}s(List<{{model_name.pascalCase()}}Model> {{name.camelCase()}}s) async {
     try {
       // Clear existing cache first
       await clearCache();
 
-      // Cache each {{name.sentenceCase}} individually
-      for (final {{name.camelCase}} in {{name.camelCase}}s) {
-        await cache{{model_name.pascalCase()}}({{name.camelCase}});
+      // Cache each {{name.sentenceCase()}} individually
+      for (final {{name.camelCase()}} in {{name.camelCase()}}s) {
+        await cache{{model_name.pascalCase()}}({{name.camelCase()}});
       }
 
       // Cache the list metadata
       final listKey = '${_cacheKeyPrefix}list';
-      final listData = jsonEncode({{name.camelCase}}s.map((u) => u.toJson()).toList());
+      final listData = jsonEncode({{name.camelCase()}}s.map((u) => u.toJson()).toList());
       await sharedPreferences.setString(listKey, listData);
     } catch (e) {
       throw {{model_name.pascalCase()}}StorageException(
@@ -187,8 +187,8 @@ class Mock{{model_name.pascalCase()}}LocalDataSource extends {{model_name.pascal
   DateTime? _cacheTimestamp;
 
   @override
-  Future<void> cache{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase}}) async {
-    _cache[{{name.camelCase}}.id] = {{name.camelCase}};
+  Future<void> cache{{model_name.pascalCase()}}({{model_name.pascalCase()}}Model {{name.camelCase()}}) async {
+    _cache[{{name.camelCase()}}.id] = {{name.camelCase()}};
     _cacheTimestamp = DateTime.now();
   }
 
@@ -201,10 +201,10 @@ class Mock{{model_name.pascalCase()}}LocalDataSource extends {{model_name.pascal
   }
 
   @override
-  Future<void> cache{{model_name.pascalCase()}}s(List<{{model_name.pascalCase()}}Model> {{name.camelCase}}s) async {
-    _listCache['list'] = List.from({{name.camelCase}}s);
-    for (final {{name.camelCase}} in {{name.camelCase}}s) {
-      await cache{{model_name.pascalCase()}}({{name.camelCase}});
+  Future<void> cache{{model_name.pascalCase()}}s(List<{{model_name.pascalCase()}}Model> {{name.camelCase()}}s) async {
+    _listCache['list'] = List.from({{name.camelCase()}}s);
+    for (final {{name.camelCase()}} in {{name.camelCase()}}s) {
+      await cache{{model_name.pascalCase()}}({{name.camelCase()}});
     }
     _cacheTimestamp = DateTime.now();
   }
@@ -239,8 +239,8 @@ class Mock{{model_name.pascalCase()}}LocalDataSource extends {{model_name.pascal
     _cacheTimestamp = timestamp;
   }
 
-  void addMockData({{model_name.pascalCase()}}Model {{name.camelCase}}) {
-    _cache[{{name.camelCase}}.id] = {{name.camelCase}};
+  void addMockData({{model_name.pascalCase()}}Model {{name.camelCase()}}) {
+    _cache[{{name.camelCase()}}.id] = {{name.camelCase()}};
   }
 
   void clearMockData() {

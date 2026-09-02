@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/screens/app/error_screen.dart';
 import 'package:flutter_app_template/screens/app/splash_screen.dart';
@@ -26,7 +27,7 @@ class AppRouter {
 
   static GoRouter router = GoRouter(
     navigatorKey: key,
-    debugLogDiagnostics: true,
+    debugLogDiagnostics: kDebugMode,
     initialLocation: SplashScreen.path,
     routes: routes,
     errorBuilder: (context, state) {

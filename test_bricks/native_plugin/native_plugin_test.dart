@@ -18,9 +18,7 @@ void main() {
     });
 
     test('generates plugin with all platforms', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -47,7 +45,12 @@ void main() {
 
       // Check main Dart file
       final mainDart = File(
-        path.join(tempDir.path, 'battery_monitor', 'lib', 'app_battery_monitor.dart'),
+        path.join(
+          tempDir.path,
+          'battery_monitor',
+          'lib',
+          'app_battery_monitor.dart',
+        ),
       );
       expect(await mainDart.exists(), isTrue);
 
@@ -70,33 +73,53 @@ void main() {
 
       // Check iOS platform
       final iosPlugin = File(
-        path.join(tempDir.path, 'battery_monitor', 'ios', 'Classes', 'BatteryMonitorPlugin.swift'),
+        path.join(
+          tempDir.path,
+          'battery_monitor',
+          'ios',
+          'Classes',
+          'BatteryMonitorPlugin.swift',
+        ),
       );
       expect(await iosPlugin.exists(), isTrue);
 
       // Check Linux platform
       final linuxPlugin = File(
-        path.join(tempDir.path, 'battery_monitor', 'linux', 'battery_monitor_plugin.cc'),
+        path.join(
+          tempDir.path,
+          'battery_monitor',
+          'linux',
+          'battery_monitor_plugin.cc',
+        ),
       );
       expect(await linuxPlugin.exists(), isTrue);
 
       // Check macOS platform
       final macosPlugin = File(
-        path.join(tempDir.path, 'battery_monitor', 'macos', 'Classes', 'BatteryMonitorPlugin.swift'),
+        path.join(
+          tempDir.path,
+          'battery_monitor',
+          'macos',
+          'Classes',
+          'BatteryMonitorPlugin.swift',
+        ),
       );
       expect(await macosPlugin.exists(), isTrue);
 
       // Check Windows platform
       final windowsPlugin = File(
-        path.join(tempDir.path, 'battery_monitor', 'windows', 'battery_monitor_plugin.cpp'),
+        path.join(
+          tempDir.path,
+          'battery_monitor',
+          'windows',
+          'battery_monitor_plugin.cpp',
+        ),
       );
       expect(await windowsPlugin.exists(), isTrue);
     });
 
     test('generates correct Dart structure', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -123,7 +146,13 @@ void main() {
 
       // Check source files
       final srcFile = File(
-        path.join(tempDir.path, 'device_info', 'lib', 'src', 'device_info.dart'),
+        path.join(
+          tempDir.path,
+          'device_info',
+          'lib',
+          'src',
+          'device_info.dart',
+        ),
       );
       expect(await srcFile.exists(), isTrue);
 
@@ -135,9 +164,7 @@ void main() {
     });
 
     test('generates Android implementation with Kotlin code', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -186,9 +213,7 @@ void main() {
     });
 
     test('generates iOS implementation with Swift code', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -209,7 +234,13 @@ void main() {
 
       // Check Swift plugin file
       final swiftFile = File(
-        path.join(tempDir.path, 'camera', 'ios', 'Classes', 'CameraPlugin.swift'),
+        path.join(
+          tempDir.path,
+          'camera',
+          'ios',
+          'Classes',
+          'CameraPlugin.swift',
+        ),
       );
       expect(await swiftFile.exists(), isTrue);
 
@@ -225,9 +256,7 @@ void main() {
     });
 
     test('handles different package prefixes correctly', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
@@ -253,17 +282,13 @@ void main() {
       expect(await mainExport.exists(), isTrue);
 
       // Check pubspec has correct name
-      final pubspec = File(
-        path.join(tempDir.path, 'network', 'pubspec.yaml'),
-      );
+      final pubspec = File(path.join(tempDir.path, 'network', 'pubspec.yaml'));
       final pubspecContent = await pubspec.readAsString();
       expect(pubspecContent, contains('name: my_company_network'));
     });
 
     test('generates README documentation', () async {
-      final brick = Brick.path(
-        path.join('bricks', 'native_plugin'),
-      );
+      final brick = Brick.path(path.join('bricks', 'native_plugin'));
 
       final generator = await MasonGenerator.fromBrick(brick);
       await generator.generate(
