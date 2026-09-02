@@ -39,9 +39,7 @@ void main() {
       db = sqlite3.openInMemory();
       embedder = TfIdfEmbedder(db: db, dimension: config.dimension);
       repository = VectorRepository(config: config, embedder: embedder);
-      if (hasExtension) {
-        repository.initialize(db);
-      }
+      repository.initialize(db);
     });
 
     tearDown(() {
