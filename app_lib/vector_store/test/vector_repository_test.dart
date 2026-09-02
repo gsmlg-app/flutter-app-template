@@ -1,29 +1,8 @@
 import 'package:sqlite3/sqlite3.dart';
-import 'package:sqlite_vector/sqlite_vector.dart';
 import 'package:test/test.dart';
 import 'package:vector_store/vector_store.dart';
 
-/// Returns true if the sqlite_vector native extension is available.
-bool _extensionAvailable() {
-  try {
-    final db = sqlite3.openInMemory();
-    try {
-      sqlite3.loadSqliteVectorExtension();
-      db.select('SELECT vector_version()');
-      return true;
-    } catch (_) {
-      return false;
-    } finally {
-      db.close();
-    }
-  } catch (_) {
-    return false;
-  }
-}
-
 void main() {
-  final hasExtension = _extensionAvailable();
-
   const config = VectorStoreConfig(
     tableName: 'documents',
     dimension: 128,
