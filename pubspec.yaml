@@ -42,7 +42,7 @@ dependencies:
   bloc: ^9.0.0
   flutter_bloc: ^9.0.0
   provider: ^6.1.5
-  equatable: ^2.0.7
+  equatable: ^3.0.0
 
   shared_preferences: ^2.3.5
   path_provider: ^2.1.5
@@ -53,10 +53,8 @@ dependencies:
   lottie: ^3.3.1
   google_fonts: ^9.0.0
 
-  # TODO(upstream): duskmoon-dev/flutter-duskmoon-ui#30
-  # Adopt 2.x after native asset dependencies resolve with sqlite_vector.
-  duskmoon_ui: ^1.4.2
-  duskmoon_theme_bloc: ^1.4.2
+  duskmoon_ui: ^2.2.7
+  duskmoon_theme_bloc: ^2.2.7
 
   # workspace packages
   app_database: any
@@ -84,7 +82,7 @@ dev_dependencies:
 
   melos: ^8.10.0
   mason: ^0.1.1
-  mason_cli: ^0.1.1
+  # Mason CLI is installed globally by the setup instructions.
   dependency_validator: ^5.0.2
 
 flutter:

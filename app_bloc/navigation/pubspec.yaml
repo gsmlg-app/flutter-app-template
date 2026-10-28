@@ -8,7 +8,7 @@ resolution: workspace
 
 dependencies:
   bloc: ^9.0.0
-  equatable: ^2.0.7
+  equatable: ^3.0.0
   flutter:
     sdk: flutter
   go_router: any
