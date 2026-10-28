@@ -42,8 +42,8 @@ All capabilities are included in the workspace and wired into the demo UI by def
 
 ### Prerequisites
 
-- Flutter SDK `>=3.8.0`
-- Dart SDK `>=3.8.0`
+- Flutter SDK `>=3.44.0`
+- Dart SDK `>=3.12.0`
 - Git & Git LFS
 
 ### Installation & Initialization
