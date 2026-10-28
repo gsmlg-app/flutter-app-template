@@ -21,6 +21,9 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<NavigateNext>(_onNavigateNext);
     on<NavigatePrevious>(_onNavigatePrevious);
     on<NavigateBack>(_onNavigateBack);
+    on<SetNavigationExtended>((event, emit) {
+      emit(state.copyWith(isNavigationExtended: event.extended));
+    });
   }
 
   /// The navigator key for accessing the navigator context

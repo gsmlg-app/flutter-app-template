@@ -1,3 +1,4 @@
+import 'package:flutter_app_template/widgets/app_adaptive_scaffold.dart';
 import 'dart:io';
 
 import 'package:duskmoon_ui/duskmoon_ui.dart';
@@ -194,7 +195,7 @@ class _WebViewDemoScreenState extends State<WebViewDemoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return DmAdaptiveScaffold(
+    return AppAdaptiveScaffold(
       internalAnimations: false,
       selectedIndex: Destinations.indexOf(
         const Key(ShowcaseScreen.name),

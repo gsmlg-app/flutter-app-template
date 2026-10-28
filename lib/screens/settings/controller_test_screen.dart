@@ -1,3 +1,4 @@
+import 'package:flutter_app_template/widgets/app_adaptive_scaffold.dart';
 import 'package:app_gamepad/app_gamepad.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:app_locale/app_locale.dart';
@@ -91,7 +92,7 @@ class _ControllerTestScreenState extends State<ControllerTestScreen>
 
   @override
   Widget build(BuildContext context) {
-    return DmAdaptiveScaffold(
+    return AppAdaptiveScaffold(
       internalAnimations: false,
       selectedIndex: Destinations.indexOf(
         const Key(SettingsScreen.name),

@@ -3,6 +3,7 @@ import 'package:app_provider/app_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:duskmoon_theme_bloc/duskmoon_theme_bloc.dart';
+import 'package:nav_bloc/nav_bloc.dart';
 
 import 'destination.dart';
 import 'router.dart';
@@ -43,6 +44,13 @@ class _AppContent extends StatelessWidget {
         key: const Key('app'),
         debugShowCheckedModeBanner: false,
         routerConfig: router,
+        builder: (context, child) => BlocProvider<NavigationBloc>(
+          create: (context) => NavigationBloc(
+            navigatorKey: AppRouter.key,
+            destinations: Destinations.navs(context),
+          ),
+          child: child!,
+        ),
         onGenerateTitle: (context) => context.l10n.appName,
         theme: themeState.entry.light,
         darkTheme: themeState.entry.dark,

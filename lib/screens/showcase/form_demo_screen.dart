@@ -1,5 +1,5 @@
+import 'package:flutter_app_template/widgets/app_adaptive_scaffold.dart';
 import 'package:demo_form/demo_form.dart';
-import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
 import 'package:flutter_app_template/screens/showcase/showcase_screen.dart';
@@ -12,7 +12,7 @@ class FormDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DmAdaptiveScaffold(
+    return AppAdaptiveScaffold(
       internalAnimations: false,
       selectedIndex: Destinations.indexOf(
         const Key(ShowcaseScreen.name),

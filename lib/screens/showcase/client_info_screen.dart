@@ -1,3 +1,4 @@
+import 'package:flutter_app_template/widgets/app_adaptive_scaffold.dart';
 import 'package:app_client_info/app_client_info.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,7 @@ class _ClientInfoScreenState extends State<ClientInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return DmAdaptiveScaffold(
+    return AppAdaptiveScaffold(
       internalAnimations: false,
       selectedIndex: Destinations.indexOf(
         const Key(ShowcaseScreen.name),

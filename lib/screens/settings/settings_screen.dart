@@ -1,3 +1,4 @@
+import 'package:flutter_app_template/widgets/app_adaptive_scaffold.dart';
 import 'package:app_locale/app_locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_template/destination.dart';
@@ -17,7 +18,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DmAdaptiveScaffold(
+    return AppAdaptiveScaffold(
       internalAnimations: false,
       selectedIndex: Destinations.indexOf(const Key(name), context),
       onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),

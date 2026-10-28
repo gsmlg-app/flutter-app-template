@@ -33,3 +33,10 @@ final class NavigatePrevious extends NavigationEvent {
 final class NavigateBack extends NavigationEvent {
   const NavigateBack();
 }
+
+/// Sets the shared desktop navigation rail expansion preference.
+final class SetNavigationExtended extends NavigationEvent {
+  const SetNavigationExtended(this.extended);
+
+  final bool extended;
+}
