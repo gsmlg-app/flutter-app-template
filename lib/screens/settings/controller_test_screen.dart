@@ -8,7 +8,7 @@ import 'package:flutter_app_template/screens/settings/settings_screen.dart';
 import 'package:flutter_app_template/screens/settings/widgets/controller_input_state.dart';
 import 'package:flutter_app_template/screens/settings/widgets/stick_visualizer.dart';
 import 'package:flutter_app_template/screens/settings/widgets/trigger_bar.dart';
-import 'package:flutter_app_template/screens/settings/widgets/xbox_controller_painter.dart';
+import 'package:flutter_app_template/screens/settings/widgets/controller_input_view.dart';
 import 'package:gamepad_bloc/gamepad_bloc.dart';
 
 class ControllerTestScreen extends StatefulWidget {
@@ -107,10 +107,11 @@ class _ControllerTestScreenState extends State<ControllerTestScreen>
             builder: (context, gamepadState) {
               final hasController = gamepadState.hasController;
               final controllerType = _controllerTypeFrom(gamepadState);
-              final isPS = controllerType == ControllerType.playstation;
-              final labelType = isPS
-                  ? ControllerType.playstation
-                  : ControllerType.xbox;
+              final labelType =
+                  controllerType == ControllerType.unknown ||
+                      controllerType == ControllerType.generic
+                  ? ControllerType.xbox
+                  : controllerType;
 
               return CustomScrollView(
                 slivers: [
@@ -121,7 +122,7 @@ class _ControllerTestScreenState extends State<ControllerTestScreen>
                       delegate: SliverChildListDelegate([
                         const SizedBox(height: 8),
                         // ── Controller Schematic ──
-                        _buildSchematic(hasController, isPS),
+                        _buildSchematic(hasController, controllerType),
 
                         const SizedBox(height: 16),
 
@@ -186,20 +187,15 @@ class _ControllerTestScreenState extends State<ControllerTestScreen>
     );
   }
 
-  Widget _buildSchematic(bool hasController, bool isPS) {
+  Widget _buildSchematic(bool hasController, ControllerType controllerType) {
     return Stack(
       alignment: Alignment.center,
       children: [
-        AspectRatio(
-          aspectRatio: 1.4,
-          child: CustomPaint(
-            painter: XboxControllerPainter(
-              inputState: _displayState,
-              colorScheme: Theme.of(context).colorScheme,
-              isPlayStation: isPS,
-              dimmed: !hasController,
-            ),
-            size: Size.infinite,
+        Opacity(
+          opacity: hasController ? 1 : 0.4,
+          child: ControllerInputView(
+            inputState: _displayState,
+            controllerType: controllerType,
           ),
         ),
         if (!hasController)

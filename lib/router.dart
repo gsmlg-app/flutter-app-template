@@ -13,6 +13,7 @@ import 'package:flutter_app_template/screens/showcase/adaptive_demo_screen.dart'
 import 'package:flutter_app_template/screens/showcase/artwork_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/chart_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/client_info_screen.dart';
+import 'package:flutter_app_template/screens/showcase/controller_view_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/feedback_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/form_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/showcase_screen.dart';
@@ -69,6 +70,17 @@ class AppRouter {
         );
       },
       routes: [
+        GoRoute(
+          name: ControllerViewDemoScreen.name,
+          path: ControllerViewDemoScreen.path,
+          pageBuilder: (context, state) {
+            return NoTransitionPage<void>(
+              key: state.pageKey,
+              restorationId: state.pageKey.value,
+              child: const ControllerViewDemoScreen(),
+            );
+          },
+        ),
         GoRoute(
           name: FeedbackDemoScreen.name,
           path: FeedbackDemoScreen.path,

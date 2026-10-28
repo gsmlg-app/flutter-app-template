@@ -70,10 +70,19 @@ capabilities:
       - lib/screens/settings/widgets/controller_input_state.dart
       - lib/screens/settings/widgets/stick_visualizer.dart
       - lib/screens/settings/widgets/trigger_bar.dart
-      - lib/screens/settings/widgets/xbox_controller_painter.dart
+      - lib/screens/settings/widgets/controller_input_view.dart
     routes:
       - /settings/controller
       - /settings/controller/test
+
+  controller_view:
+    description: Interactive Xbox, PS5, and Switch Pro controller views
+    packages: []
+    dependencies: []
+    screens:
+      - lib/screens/showcase/controller_view_demo_screen.dart
+    routes:
+      - /showcase/controller-view
 
   web_view:
     description: Embedded WebView component

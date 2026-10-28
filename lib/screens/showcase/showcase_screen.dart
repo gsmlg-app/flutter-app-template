@@ -5,6 +5,7 @@ import 'package:flutter_app_template/screens/showcase/adaptive_demo_screen.dart'
 import 'package:flutter_app_template/screens/showcase/artwork_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/chart_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/client_info_screen.dart';
+import 'package:flutter_app_template/screens/showcase/controller_view_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/feedback_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/form_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/vault_demo_screen.dart';
@@ -38,6 +39,17 @@ class ShowcaseScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
+              _buildDemoCard(
+                context,
+                title: 'Controller Views',
+                subtitle: 'duskmoon_widgets',
+                description:
+                    'Interactive Xbox, PS5, and Switch Pro controllers',
+                icon: Icons.sports_esports,
+                color: colorScheme.secondary,
+                onTap: () => context.goNamed(ControllerViewDemoScreen.name),
+              ),
+              const SizedBox(height: 12),
               _buildDemoCard(
                 context,
                 title: 'Feedback Widgets',

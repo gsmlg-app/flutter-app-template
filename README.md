@@ -26,6 +26,7 @@ All capabilities are included in the workspace and wired into the demo UI by def
 - 🗄️ **App Database (`app_lib/database`)** — Relational database with Drift (SQLite) for structured local storage.
 - 🔐 **Secure Storage (`app_lib/secure_storage`)** — Platform-native secure key-value store (Keychain on macOS/iOS, EncryptedSharedPreferences on Android).
 - 🎮 **Gamepad & Input (`app_lib/gamepad`, `app_bloc/gamepad`)** — Game controller input handling with cross-platform GamepadBloc.
+- 🎮 **Controller Views (`duskmoon_widgets`)** — Xbox, PS5, and Switch Pro views from Duskmoon, with analog sticks, trigger travel, and external hardware state.
 - 🌐 **Web View (`app_widget/web_view`)** — Platform-adaptive embedded web browser widget.
 - 📊 **Charts & Visualization (`app_widget/chart`)** — Line, bar, and pie charts with responsive canvas rendering.
 - 🔍 **Vector Store (`app_lib/vector_store`)** — Local vector search and TF-IDF embedding engine with multilingual CJK support.
