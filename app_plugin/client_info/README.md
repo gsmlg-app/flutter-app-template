@@ -67,6 +67,12 @@ This plugin uses a federated plugin architecture:
 
 ## Development
 
+### Apple dependency managers
+
+iOS and macOS support both Swift Package Manager and CocoaPods. Each platform
+keeps its Swift sources under `<platform>/<package>/Sources/<package>/`; both
+the `Package.swift` manifest and podspec compile those same files.
+
 ### Running Tests
 
 ```bash

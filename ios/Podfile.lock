@@ -1,33 +1,15 @@
 PODS:
-  - app_client_info_ios (0.1.0):
-    - Flutter
   - Flutter (1.0.0)
-  - flutter_keyboard_visibility (0.0.1):
-    - Flutter
-  - gamepads_ios (0.1.1):
-    - Flutter
 
 DEPENDENCIES:
-  - app_client_info_ios (from `.symlinks/plugins/app_client_info_ios/ios`)
   - Flutter (from `Flutter`)
-  - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
-  - gamepads_ios (from `.symlinks/plugins/gamepads_ios/ios`)
 
 EXTERNAL SOURCES:
-  app_client_info_ios:
-    :path: ".symlinks/plugins/app_client_info_ios/ios"
   Flutter:
     :path: Flutter
-  flutter_keyboard_visibility:
-    :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
-  gamepads_ios:
-    :path: ".symlinks/plugins/gamepads_ios/ios"
 
 SPEC CHECKSUMS:
-  app_client_info_ios: 762dbe294a7a88be2344930b4c9c0a7be980905b
   Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
-  flutter_keyboard_visibility: 4625131e43015dbbe759d9b20daaf77e0e3f6619
-  gamepads_ios: c75c6d31377d275b0effb9174c619e2705678c09
 
 PODFILE CHECKSUM: 79b4ceb8d016eb2bbb022d91e8235d6a1afcbba6
 

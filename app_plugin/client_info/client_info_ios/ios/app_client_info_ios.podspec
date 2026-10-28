@@ -9,7 +9,7 @@ iOS implementation of app_client_info plugin.
   s.license          = { :type => 'MIT', :file => '../LICENSE' }
   s.author           = { 'GSMLG Team' => 'email@example.com' }
   s.source           = { :path => '.' }
-  s.source_files     = 'Classes/**/*'
+  s.source_files     = 'app_client_info_ios/Sources/app_client_info_ios/**/*'
   s.dependency 'Flutter'
   s.platform = :ios, '12.0'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }

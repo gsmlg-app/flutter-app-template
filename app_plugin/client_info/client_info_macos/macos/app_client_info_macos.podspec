@@ -9,7 +9,7 @@ macOS implementation of app_client_info plugin.
   s.license          = { :type => 'MIT', :file => '../LICENSE' }
   s.author           = { 'GSMLG Team' => 'email@example.com' }
   s.source           = { :path => '.' }
-  s.source_files     = 'Classes/**/*'
+  s.source_files     = 'app_client_info_macos/Sources/app_client_info_macos/**/*'
   s.dependency 'FlutterMacOS'
   s.platform = :osx, '10.14'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
