@@ -241,11 +241,17 @@ class DemoFormWidget extends StatelessWidget {
                   // ── Markdown Editor ──
                   _buildSectionHeader(context, 'Markdown Editor'),
                   const SizedBox(height: 12),
-                  DmMarkdownFieldBlocBuilder(
-                    markdownFieldBloc: formBloc.bio,
-                    decoration: const InputDecoration(labelText: 'Bio'),
-                    showLineNumbers: true,
-                    minLines: 8,
+                  // TODO(upstream): duskmoon-dev/flutter-duskmoon-ui#31
+                  // Remove the fixed height after upstream supports scroll layouts.
+                  // WORKAROUND(upstream): duskmoon-dev/flutter-duskmoon-ui#31
+                  SizedBox(
+                    height: 400,
+                    child: DmMarkdownFieldBlocBuilder(
+                      markdownFieldBloc: formBloc.bio,
+                      decoration: const InputDecoration(labelText: 'Bio'),
+                      showLineNumbers: true,
+                      minLines: 8,
+                    ),
                   ),
 
                   const SizedBox(height: 24),
@@ -253,11 +259,17 @@ class DemoFormWidget extends StatelessWidget {
                   // ── Code Editor ──
                   _buildSectionHeader(context, 'Code Editor'),
                   const SizedBox(height: 12),
-                  DmCodeEditorFieldBlocBuilder(
-                    codeEditorFieldBloc: formBloc.codeSnippet,
-                    lineNumbers: true,
-                    highlightActiveLine: true,
-                    minHeight: 200,
+                  // TODO(upstream): duskmoon-dev/flutter-duskmoon-ui#31
+                  // Remove the fixed height after upstream supports scroll layouts.
+                  // WORKAROUND(upstream): duskmoon-dev/flutter-duskmoon-ui#31
+                  SizedBox(
+                    height: 400,
+                    child: DmCodeEditorFieldBlocBuilder(
+                      codeEditorFieldBloc: formBloc.codeSnippet,
+                      lineNumbers: true,
+                      highlightActiveLine: true,
+                      minHeight: 200,
+                    ),
                   ),
 
                   const SizedBox(height: 32),
