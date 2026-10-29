@@ -16,6 +16,7 @@ import 'package:flutter_app_template/screens/showcase/client_info_screen.dart';
 import 'package:flutter_app_template/screens/showcase/controller_view_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/feedback_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/form_demo_screen.dart';
+import 'package:flutter_app_template/screens/showcase/pelican_bicycle_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/showcase_screen.dart';
 import 'package:flutter_app_template/screens/showcase/vault_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/webview_demo_screen.dart';
@@ -111,6 +112,17 @@ class AppRouter {
               key: state.pageKey,
               restorationId: state.pageKey.value,
               child: const ArtworkDemoScreen(),
+            );
+          },
+        ),
+        GoRoute(
+          name: PelicanBicycleDemoScreen.name,
+          path: PelicanBicycleDemoScreen.path,
+          pageBuilder: (context, state) {
+            return NoTransitionPage<void>(
+              key: state.pageKey,
+              restorationId: state.pageKey.value,
+              child: const PelicanBicycleDemoScreen(),
             );
           },
         ),

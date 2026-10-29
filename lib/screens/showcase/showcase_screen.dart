@@ -9,6 +9,7 @@ import 'package:flutter_app_template/screens/showcase/client_info_screen.dart';
 import 'package:flutter_app_template/screens/showcase/controller_view_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/feedback_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/form_demo_screen.dart';
+import 'package:flutter_app_template/screens/showcase/pelican_bicycle_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/vault_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/webview_demo_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -80,6 +81,17 @@ class ShowcaseScreen extends StatelessWidget {
                 icon: Icons.palette,
                 color: colorScheme.tertiary,
                 onTap: () => context.goNamed(ArtworkDemoScreen.name),
+              ),
+              const SizedBox(height: 12),
+              _buildDemoCard(
+                context,
+                title: 'Pelican Bicycle',
+                subtitle: 'pelican_ride_animation',
+                description:
+                    'Kinematic pedaling animation with CustomPainter & physics',
+                icon: Icons.directions_bike,
+                color: colorScheme.primary,
+                onTap: () => context.goNamed(PelicanBicycleDemoScreen.name),
               ),
               const SizedBox(height: 12),
               _buildDemoCard(
