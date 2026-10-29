@@ -13,7 +13,13 @@ pubspec.lock text
 Podfile.lock text
 Gemfile.lock text
 
-# Images and binaries - Git LFS for large media
+# Standard binary formats (no LFS)
+*.png binary
+*.ico binary
+*.jpg binary
+*.jpeg binary
+
+# Large media files - Git LFS
 *.psd filter=lfs diff=lfs merge=lfs -text
 *.ai filter=lfs diff=lfs merge=lfs -text
 
