@@ -81,8 +81,8 @@ await clientInfo.refresh();
 
 ### iOS (Swift)
 - Access to `UIDevice` for device information
-- Podspec configured for iOS 12.0+
-- Location: `app_plugin/client_info_ios/ios/Classes/`
+- Swift Package Manager configured for iOS 12.0+
+- Location: `app_plugin/client_info/client_info_ios/ios/app_client_info_ios/Sources/app_client_info_ios/`
 
 ### Linux (C++)
 - GTK-based Flutter Linux plugin
@@ -91,8 +91,8 @@ await clientInfo.refresh();
 
 ### macOS (Swift)
 - Uses `ProcessInfo` for system data
-- Podspec configured for macOS 10.14+
-- Location: `app_plugin/client_info_macos/macos/Classes/`
+- Swift Package Manager configured for macOS 10.14+
+- Location: `app_plugin/client_info/client_info_macos/macos/app_client_info_macos/Sources/app_client_info_macos/`
 
 ### Windows (C++)
 - Windows API integration

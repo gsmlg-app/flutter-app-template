@@ -1,7 +1,7 @@
 name: native_federation_plugin
 description: Generate a complete native federation plugin with platform-specific implementations for Android, iOS, Linux, macOS, and Windows.
 
-version: 0.1.0+1
+version: 0.1.0+2
 
 environment:
   mason: ^0.1.1

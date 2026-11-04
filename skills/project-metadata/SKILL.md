@@ -204,9 +204,11 @@ After updating metadata:
    flutter clean && flutter pub get
    ```
 
-2. **iOS**: Reinstall pods and regenerate
+2. **iOS/macOS**: Regenerate Flutter configuration and resolve Swift packages
    ```bash
-   cd ios && rm -rf Pods Podfile.lock && pod install
+   flutter pub get
+   flutter build ios --config-only --no-codesign
+   flutter build macos --config-only
    ```
 
 3. **iOS/macOS Signing**: If bundle ID changed, regenerate certificates

@@ -46,6 +46,8 @@ All capabilities are included in the workspace and wired into the demo UI by def
 - Flutter SDK `>=3.44.0`
 - Dart SDK `>=3.12.0`
 - Git & Git LFS
+- Xcode with Swift Package Manager for iOS and macOS builds. Apple plugins must
+  provide `Package.swift`; CocoaPods is not used.
 
 ### Installation & Initialization
 

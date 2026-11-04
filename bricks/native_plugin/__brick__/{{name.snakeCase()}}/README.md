@@ -89,3 +89,9 @@ MIT License - see LICENSE file for details.
 ## Author
 
 {{author}}
+
+## Apple Dependencies
+
+iOS and macOS implementations use Swift Package Manager. Their `Package.swift`
+manifests and `Sources/` directories are nested under the full Dart package name
+in each Apple platform directory.

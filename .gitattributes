@@ -10,7 +10,6 @@
 
 # Lock files - allow standard text diffs
 pubspec.lock text
-Podfile.lock text
 Gemfile.lock text
 
 # Standard binary formats (no LFS)

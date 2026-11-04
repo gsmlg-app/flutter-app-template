@@ -86,6 +86,8 @@ dev_dependencies:
   dependency_validator: ^5.0.2
 
 flutter:
+  config:
+    enable-swift-package-manager: true
   uses-material-design: true
 
 # generate icon with :

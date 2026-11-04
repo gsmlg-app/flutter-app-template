@@ -76,6 +76,44 @@ void main() {
           reason: '$platform platform pubspec should exist',
         );
       }
+      for (final platform in ['ios', 'macos']) {
+        final packageName = 'app_battery_monitor_$platform';
+        final packageDir = path.join(
+          tempDir.path,
+          'battery_monitor',
+          'battery_monitor_$platform',
+          platform,
+          packageName,
+        );
+        final manifest = await File(
+          path.join(packageDir, 'Package.swift'),
+        ).readAsString();
+        expect(manifest, contains('name: "$packageName"'));
+        expect(
+          manifest,
+          contains('.library(name: "app-battery-monitor-$platform"'),
+        );
+        expect(manifest, contains('targets: ["$packageName"]'));
+        expect(manifest, contains('package: "FlutterFramework"'));
+        expect(
+          await File(
+            path.join(
+              packageDir,
+              'Sources',
+              packageName,
+              'BatteryMonitorPlugin.swift',
+            ),
+          ).exists(),
+          isTrue,
+        );
+      }
+      expect(
+        tempDir
+            .listSync(recursive: true)
+            .whereType<File>()
+            .where((file) => file.path.endsWith('.podspec')),
+        isEmpty,
+      );
     });
 
     test('generates correct main plugin structure', () async {
@@ -255,7 +293,14 @@ void main() {
 
       // Check Swift plugin file
       final swiftFile = File(
-        path.join(iosDir, 'ios', 'Classes', 'CameraPlugin.swift'),
+        path.join(
+          iosDir,
+          'ios',
+          'app_camera_ios',
+          'Sources',
+          'app_camera_ios',
+          'CameraPlugin.swift',
+        ),
       );
       expect(await swiftFile.exists(), isTrue);
 
@@ -263,9 +308,10 @@ void main() {
       expect(swiftContent, contains('CameraPlugin'));
       expect(swiftContent, contains('FlutterPlugin'));
 
-      // Check podspec
-      final podspec = File(path.join(iosDir, 'ios', 'camera_ios.podspec'));
-      expect(await podspec.exists(), isTrue);
+      final manifest = File(
+        path.join(iosDir, 'ios', 'app_camera_ios', 'Package.swift'),
+      );
+      expect(await manifest.readAsString(), contains('name: "app_camera_ios"'));
     });
 
     test('generates Linux implementation with C++ code', () async {
@@ -371,9 +417,9 @@ void main() {
           'package_prefix': 'my_company',
           'author': 'My Company',
           'support_android': true,
-          'support_ios': false,
+          'support_ios': true,
           'support_linux': false,
-          'support_macos': false,
+          'support_macos': true,
           'support_windows': false,
           'support_web': false,
         },
@@ -402,6 +448,25 @@ void main() {
         ),
       );
       expect(await interfaceExport.exists(), isTrue);
+      for (final platform in ['ios', 'macos']) {
+        final packageName = 'my_company_network_$platform';
+        final manifest = File(
+          path.join(
+            tempDir.path,
+            'network',
+            'network_$platform',
+            platform,
+            packageName,
+            'Package.swift',
+          ),
+        );
+        final content = await manifest.readAsString();
+        expect(content, contains('name: "$packageName"'));
+        expect(
+          content,
+          contains('.library(name: "my-company-network-$platform"'),
+        );
+      }
     });
 
     test('generates README documentation', () async {

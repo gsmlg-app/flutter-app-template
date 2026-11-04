@@ -684,9 +684,10 @@ mason make native_federation_plugin -c config.json -o app_plugin
 
 {name}_ios/                                # iOS implementation
 ├── ios/
-│   ├── {name}_ios.podspec
-│   └── Classes/
-│       └── {Name}Plugin.swift            # Swift native code
+│   └── {package_prefix}_{name}_ios/
+│       ├── Package.swift
+│       └── Sources/{package_prefix}_{name}_ios/
+│           └── {Name}Plugin.swift            # Swift native code
 ├── lib/
 │   └── {package_prefix}_{name}_ios.dart
 └── pubspec.yaml
@@ -703,9 +704,10 @@ mason make native_federation_plugin -c config.json -o app_plugin
 
 {name}_macos/                              # macOS implementation
 ├── macos/
-│   ├── {name}_macos.podspec
-│   └── Classes/
-│       └── {Name}Plugin.swift            # Swift native code
+│   └── {package_prefix}_{name}_macos/
+│       ├── Package.swift
+│       └── Sources/{package_prefix}_{name}_macos/
+│           └── {Name}Plugin.swift            # Swift native code
 ├── lib/
 │   └── {package_prefix}_{name}_macos.dart
 └── pubspec.yaml
@@ -775,7 +777,7 @@ dependencies:
 **iOS (Swift):**
 - Uses `FlutterPlugin` protocol
 - Access to `UIDevice` for device information
-- Podspec configured for iOS 12.0+
+- Swift Package Manager configured for iOS 12.0+
 - Automatic platform registration
 
 **Linux (C++):**
@@ -786,7 +788,7 @@ dependencies:
 
 **macOS (Swift):**
 - Uses `ProcessInfo` for system data
-- Podspec configured for macOS 10.14+
+- Swift Package Manager configured for macOS 10.14+
 - Native Swift implementation
 - Access to macOS-specific APIs
 
