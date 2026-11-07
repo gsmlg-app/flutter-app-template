@@ -9,6 +9,7 @@ import 'package:flutter_app_template/screens/showcase/client_info_screen.dart';
 import 'package:flutter_app_template/screens/showcase/controller_view_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/feedback_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/form_demo_screen.dart';
+import 'package:flutter_app_template/screens/showcase/isolate_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/pelican_bicycle_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/vault_demo_screen.dart';
 import 'package:flutter_app_template/screens/showcase/webview_demo_screen.dart';
@@ -143,6 +144,17 @@ class ShowcaseScreen extends StatelessWidget {
                 icon: Icons.security,
                 color: colorScheme.secondary,
                 onTap: () => context.goNamed(VaultDemoScreen.name),
+              ),
+              const SizedBox(height: 12),
+              _buildDemoCard(
+                context,
+                title: 'Isolate Orchestrator',
+                subtitle: 'isolate_orchestrator',
+                description:
+                    'OTP supervision tree, service groups, P2P call/cast & Poolboy charts',
+                icon: Icons.hub,
+                color: colorScheme.primary,
+                onTap: () => context.goNamed(IsolateDemoScreen.name),
               ),
             ],
           ),

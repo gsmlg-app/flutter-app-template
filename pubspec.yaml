@@ -60,6 +60,7 @@ dependencies:
   # workspace packages
   app_database: any
   app_gamepad: any
+  isolate_orchestrator: any
   app_locale: any
   app_provider: any
   error_handler_bloc: any

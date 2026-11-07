@@ -195,6 +195,7 @@ void _pruneCapability(
 
     case 'isolate_orchestrator':
       directoriesToDelete.add('app_lib/isolate_orchestrator');
+      filesToDelete.add('lib/screens/showcase/isolate_demo_screen.dart');
       break;
 
     case 'form':
@@ -388,6 +389,12 @@ void _updateRouter(List<String> caps, bool dryRun, Map<String, String> backup) {
     ]);
     updated = _removeRouteBlock(updated, 'ArtworkDemoScreen');
   }
+  if (caps.contains('isolate_orchestrator')) {
+    updated = _removeImports(updated, [
+      'screens/showcase/isolate_demo_screen.dart',
+    ]);
+    updated = _removeRouteBlock(updated, 'IsolateDemoScreen');
+  }
 
   if (dryRun) {
     print('  [DRY RUN] Would update lib/router.dart');
@@ -445,6 +452,12 @@ void _updateShowcaseScreen(
       'screens/showcase/artwork_demo_screen.dart',
     ]);
     updated = _removeShowcaseCard(updated, 'ArtworkDemoScreen');
+  }
+  if (caps.contains('isolate_orchestrator')) {
+    updated = _removeImports(updated, [
+      'screens/showcase/isolate_demo_screen.dart',
+    ]);
+    updated = _removeShowcaseCard(updated, 'IsolateDemoScreen');
   }
 
   if (dryRun) {

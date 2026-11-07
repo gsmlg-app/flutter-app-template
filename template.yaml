@@ -138,8 +138,10 @@ capabilities:
       - app_lib/isolate_orchestrator
     dependencies:
       - isolate_orchestrator
-    screens: []
-    routes: []
+    screens:
+      - lib/screens/showcase/isolate_demo_screen.dart
+    routes:
+      - /showcase/isolate
 
   form:
     description: Form validation and FormBloc integration
