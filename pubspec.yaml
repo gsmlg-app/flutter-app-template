@@ -11,6 +11,7 @@ environment:
 workspace:
   - app_lib/database
   - app_lib/gamepad
+  - app_lib/isolate_orchestrator
   - app_lib/locale
   - app_lib/provider
   - app_lib/logging

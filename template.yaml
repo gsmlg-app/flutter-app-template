@@ -132,6 +132,15 @@ capabilities:
     screens: []
     routes: []
 
+  isolate_orchestrator:
+    description: Managed pool of long-running isolates with health monitoring and automatic restart
+    packages:
+      - app_lib/isolate_orchestrator
+    dependencies:
+      - isolate_orchestrator
+    screens: []
+    routes: []
+
   form:
     description: Form validation and FormBloc integration
     packages:

@@ -44,6 +44,7 @@ void main(List<String> args) async {
       '  - client_info    (app_plugin/client_info federated plugin, client info screen)',
     );
     print('  - vector_store   (app_lib/vector_store)');
+    print('  - isolate_orchestrator (app_lib/isolate_orchestrator)');
     print('  - form           (app_form/demo, form demo screen)');
     print('  - secure_storage (app_lib/secure_storage, vault demo screen)');
     print('  - database       (app_lib/database, drift sqlite layer)');
@@ -192,6 +193,10 @@ void _pruneCapability(
       directoriesToDelete.add('app_lib/vector_store');
       break;
 
+    case 'isolate_orchestrator':
+      directoriesToDelete.add('app_lib/isolate_orchestrator');
+      break;
+
     case 'form':
       directoriesToDelete.add('app_form/demo');
       filesToDelete.add('lib/screens/showcase/form_demo_screen.dart');
@@ -263,6 +268,12 @@ void _updatePubspec(
         updated = _removeLinesMatching(updated, [
           r'-\s+app_lib/vector_store',
           r'vector_store:',
+        ]);
+        break;
+      case 'isolate_orchestrator':
+        updated = _removeLinesMatching(updated, [
+          r'-\s+app_lib/isolate_orchestrator',
+          r'isolate_orchestrator:',
         ]);
         break;
       case 'form':
