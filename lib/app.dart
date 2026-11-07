@@ -44,13 +44,16 @@ class _AppContent extends StatelessWidget {
         key: const Key('app'),
         debugShowCheckedModeBanner: false,
         routerConfig: router,
-        builder: (context, child) => BlocProvider<NavigationBloc>(
-          create: (context) => NavigationBloc(
-            navigatorKey: AppRouter.key,
-            destinations: Destinations.navs(context),
-          ),
-          child: child!,
-        ),
+        builder: (context, child) {
+          final destinations = Destinations.navs(context);
+          return BlocProvider<NavigationBloc>(
+            create: (_) => NavigationBloc(
+              navigatorKey: AppRouter.key,
+              destinations: destinations,
+            ),
+            child: child!,
+          );
+        },
         onGenerateTitle: (context) => context.l10n.appName,
         theme: themeState.entry.light,
         darkTheme: themeState.entry.dark,

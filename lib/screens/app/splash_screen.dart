@@ -21,7 +21,9 @@ class SplashScreen extends StatelessWidget {
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Timer(const Duration(milliseconds: 1_000), () {
-        context.goNamed(HomeScreen.name);
+        if (context.mounted) {
+          context.goNamed(HomeScreen.name);
+        }
       });
     });
 
