@@ -127,6 +127,14 @@ class LifecycleManager {
     tracker?.cancel();
   }
 
+  /// Transfer tracker state from an old isolate ID to a newly respawned isolate ID.
+  void transferTracker(String fromIsolateId, String toIsolateId) {
+    final tracker = _trackers.remove(fromIsolateId);
+    if (tracker != null) {
+      _trackers[toIsolateId] = tracker;
+    }
+  }
+
   /// Reset tracker on successful recovery.
   void resetTracker(String isolateId) {
     _trackers[isolateId]?.reset();

@@ -44,12 +44,12 @@ class SpawnResult {
 
 /// Spawns and initializes isolates.
 class IsolateSpawner {
-  final SendPort hubPort;
+  final SendPort? hubPort;
   final MessageIdGenerator idGenerator;
 
   int _spawnCounter = 0;
 
-  IsolateSpawner({required this.hubPort, required this.idGenerator});
+  IsolateSpawner({this.hubPort, required this.idGenerator});
 
   /// Spawn a new isolate with the given configuration.
   Future<IsolateEntry> spawn(SpawnConfig config) async {
@@ -69,6 +69,12 @@ class IsolateSpawner {
     subscription = broadcastStream.listen((message) {
       if (message is Envelope && message.payload is Register) {
         final reg = message.payload as Register;
+        final capabilities = reg.capabilities.isNotEmpty
+            ? reg.capabilities
+            : config.capabilities;
+        final subscribesTo = reg.subscribesTo.isNotEmpty
+            ? reg.subscribesTo
+            : config.subscribesTo;
 
         final entry = IsolateEntry(
           id: id,
@@ -78,8 +84,8 @@ class IsolateSpawner {
           sendPort: reg.port,
           controlPort: controlPort,
           broadcastStream: broadcastStream,
-          capabilities: reg.capabilities,
-          subscribesTo: reg.subscribesTo,
+          capabilities: capabilities,
+          subscribesTo: subscribesTo,
         );
 
         entry.state = IsolateState.starting;
@@ -97,6 +103,8 @@ class IsolateSpawner {
         id: id,
         name: config.name,
         role: config.role,
+        capabilities: config.capabilities,
+        subscribesTo: config.subscribesTo,
       ),
       debugName: config.name,
     );
@@ -181,6 +189,8 @@ class _SpawnData {
   final String id;
   final String name;
   final String role;
+  final List<String> capabilities;
+  final List<String> subscribesTo;
 
   _SpawnData({
     required this.entryPoint,
@@ -188,10 +198,23 @@ class _SpawnData {
     required this.id,
     required this.name,
     required this.role,
+    this.capabilities = const [],
+    this.subscribesTo = const [],
   });
 }
 
 /// Wrapper entry point that sets up communication.
 void _isolateEntryWrapper(_SpawnData data) {
-  data.entryPoint(data.hubPort);
+  runZoned(
+    () => data.entryPoint(data.hubPort),
+    zoneValues: {
+      #isolateSpawnMeta: <String, Object>{
+        'id': data.id,
+        'name': data.name,
+        'role': data.role,
+        'capabilities': data.capabilities,
+        'subscribesTo': data.subscribesTo,
+      },
+    },
+  );
 }

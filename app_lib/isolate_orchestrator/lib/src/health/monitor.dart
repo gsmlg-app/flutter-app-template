@@ -59,10 +59,15 @@ class HealthMonitor {
     final pending = _pendingPings[entry.id];
     if (pending != null) {
       final elapsed = DateTime.now().difference(pending.sentAt);
-      if (elapsed > config.healthCheckTimeout) {
+      if (elapsed >= config.healthCheckTimeout) {
         // Ping timed out
         _pendingPings.remove(entry.id);
         _handleHealthCheckFailed(entry);
+        if (entry.state != IsolateState.running) {
+          return;
+        }
+      } else {
+        // Current ping is still in-flight; do not overwrite its timestamp
         return;
       }
     }
@@ -101,9 +106,16 @@ class HealthMonitor {
     final wasHealthy = entry.isHealthy;
     entry.recordHealthCheck(true);
 
-    // Check if health status changed
-    if (!wasHealthy && entry.consecutiveSuccesses >= config.healthyThreshold) {
-      onHealthChanged(isolateId, true);
+    // Check if health status changed according to threshold
+    if (!wasHealthy) {
+      if (entry.consecutiveSuccesses >= config.healthyThreshold) {
+        entry.isHealthy = true;
+        onHealthChanged(isolateId, true);
+      } else {
+        entry.isHealthy = false;
+      }
+    } else {
+      entry.isHealthy = true;
     }
   }
 
@@ -111,9 +123,16 @@ class HealthMonitor {
     final wasHealthy = entry.isHealthy;
     entry.recordHealthCheck(false);
 
-    if (wasHealthy && entry.consecutiveFailures >= config.unhealthyThreshold) {
-      onHealthChanged(entry.id, false);
-      onIsolateFailed(entry.id);
+    if (wasHealthy) {
+      if (entry.consecutiveFailures >= config.unhealthyThreshold) {
+        entry.isHealthy = false;
+        onHealthChanged(entry.id, false);
+        onIsolateFailed(entry.id);
+      } else {
+        entry.isHealthy = true;
+      }
+    } else {
+      entry.isHealthy = false;
     }
   }
 }

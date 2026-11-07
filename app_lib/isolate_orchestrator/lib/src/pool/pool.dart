@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:isolate';
 
+import '../exception.dart';
 import '../hub/hub.dart';
 import '../message/envelope.dart';
 import '../message/id_generator.dart';
 import '../message/protocol.dart';
 import '../request/manager.dart';
 import 'router.dart';
+
+export '../exception.dart' show TaskException;
 
 /// Pool configuration.
 class WorkerPoolConfig {
@@ -122,6 +125,10 @@ abstract class WorkerPool<TData> {
   /// Get all worker handles.
   List<IsolateHandle> get workers;
 
+  /// Scale the pool to [targetWorkers], clamped between [WorkerPoolConfig.minWorkers]
+  /// and [WorkerPoolConfig.maxWorkers].
+  Future<void> scale(int targetWorkers);
+
   /// Stream of pool events.
   Stream<PoolEvent> get events;
 }
@@ -140,6 +147,8 @@ class WorkerPoolImpl<TData> implements WorkerPool<TData> {
 
   late final RequestManager<TData> _requestManager;
   final List<IsolateHandle> _workers = [];
+  final Set<String> _managedWorkerNames = {};
+  final Set<String> _restartingWorkerIds = {};
   final ReceivePort _replyPort = ReceivePort();
 
   int _workerCounter = 0;
@@ -201,41 +210,92 @@ class WorkerPoolImpl<TData> implements WorkerPool<TData> {
   @override
   Future<void> stop({Duration? timeout}) async {
     if (!_started) return;
+    _started = false;
 
-    // Cancel pending requests
-    _requestManager.cancelAll();
-
-    // Stop listening to hub events
+    // Stop listening to hub events first so we don't respawn during shutdown
     await _hubSubscription?.cancel();
+    _hubSubscription = null;
+
+    // Cancel pending requests and stop timer wheel
+    _requestManager.dispose();
 
     // Kill all workers
     for (final worker in _workers.toList()) {
+      _managedWorkerNames.remove(worker.name);
       await worker.kill(graceful: true);
       _workers.remove(worker);
-      _eventController.add(WorkerRemoved(worker.id));
+      if (!_eventController.isClosed) {
+        _eventController.add(WorkerRemoved(worker.id));
+      }
     }
 
+    _restartingWorkerIds.clear();
     _replyPort.close();
     await _eventController.close();
+  }
 
-    _started = false;
+  @override
+  Future<void> scale(int targetWorkers) async {
+    if (!_started) throw StateError('Pool not started');
+
+    final desired = targetWorkers.clamp(config.minWorkers, config.maxWorkers);
+    final oldSize = _workers.length;
+    if (desired == oldSize) return;
+
+    if (desired > oldSize) {
+      final toAdd = desired - oldSize;
+      for (var i = 0; i < toAdd; i++) {
+        await _spawnWorker();
+      }
+    } else {
+      final toRemove = oldSize - desired;
+      for (var i = 0; i < toRemove && _workers.isNotEmpty; i++) {
+        final worker = _workers.removeLast();
+        _managedWorkerNames.remove(worker.name);
+        await worker.kill(graceful: true);
+        if (!_eventController.isClosed) {
+          _eventController.add(WorkerRemoved(worker.id));
+        }
+      }
+      _updateRouter();
+    }
+
+    if (!_eventController.isClosed) {
+      _eventController.add(PoolScaled(oldSize, _workers.length));
+    }
   }
 
   Future<void> _spawnWorker() async {
+    if (!_started) return;
     _workerCounter++;
     final name = 'worker-$_workerCounter';
+    _managedWorkerNames.add(name);
 
-    final worker = await hub.spawn(
-      role: 'worker',
-      name: name,
-      entryPoint: workerEntryPoint,
-      config: config.workerConfig,
-      subscribesTo: [],
-    );
+    try {
+      final worker = await hub.spawn(
+        role: 'worker',
+        name: name,
+        entryPoint: workerEntryPoint,
+        config: config.workerConfig,
+        subscribesTo: [],
+      );
 
-    _workers.add(worker);
-    _eventController.add(WorkerAdded(worker));
-    _updateRouter();
+      if (!_started) {
+        await worker.kill(graceful: false);
+        return;
+      }
+
+      if (!_workers.any((w) => w.id == worker.id)) {
+        _workers.add(worker);
+        if (!_eventController.isClosed) {
+          _eventController.add(WorkerAdded(worker));
+        }
+        _updateRouter();
+      }
+    } catch (_) {
+      _managedWorkerNames.remove(name);
+      rethrow;
+    }
   }
 
   void _updateRouter() {
@@ -251,21 +311,47 @@ class WorkerPoolImpl<TData> implements WorkerPool<TData> {
   }
 
   void _handleHubEvent(HubEvent event) {
+    if (!_started) return;
+
     switch (event) {
       case HealthChanged healthChanged:
         if (_workers.any((w) => w.id == healthChanged.id)) {
-          _eventController.add(
-            WorkerHealthChanged(healthChanged.id, healthChanged.healthy),
-          );
+          router.setWorkerHealth(healthChanged.id, healthChanged.healthy);
+          if (!_eventController.isClosed) {
+            _eventController.add(
+              WorkerHealthChanged(healthChanged.id, healthChanged.healthy),
+            );
+          }
+        }
+      case IsolateRestarting restarting:
+        if (_workers.any((w) => w.id == restarting.id)) {
+          _restartingWorkerIds.add(restarting.id);
+        }
+      case IsolateReady ready:
+        if (_managedWorkerNames.contains(ready.handle.name) &&
+            !_workers.any((w) => w.id == ready.handle.id)) {
+          _workers.add(ready.handle);
+          if (!_eventController.isClosed) {
+            _eventController.add(WorkerAdded(ready.handle));
+          }
+          _updateRouter();
         }
       case IsolateStopped stopped:
+        final wasManaged = _workers.any((w) => w.id == stopped.id);
+        if (!wasManaged) return;
+
         _workers.removeWhere((w) => w.id == stopped.id);
-        _eventController.add(WorkerRemoved(stopped.id));
+        if (!_eventController.isClosed) {
+          _eventController.add(WorkerRemoved(stopped.id));
+        }
         _updateRouter();
 
-        // Ensure minimum workers
-        if (_workers.length < config.minWorkers) {
-          _spawnWorker();
+        final isHubRestarting = _restartingWorkerIds.remove(stopped.id);
+        // Ensure minimum workers if Hub is not already restarting this worker
+        if (!isHubRestarting &&
+            _started &&
+            _workers.length < config.minWorkers) {
+          unawaited(_spawnWorker().catchError((_) {}));
         }
       default:
         break;
@@ -302,10 +388,21 @@ class WorkerPoolImpl<TData> implements WorkerPool<TData> {
       return result;
     } on TaskError catch (e) {
       _failedCount++;
-      throw TaskException(e.code, e.message, e.details);
+      throw TaskException(e.code, e.message, e.details, e.stackTrace);
+    } on TaskTimeoutException catch (e) {
+      _failedCount++;
+      if (!_eventController.isClosed) {
+        _eventController.add(RequestTimeout(e.taskId));
+      }
+      rethrow;
     } on TimeoutException {
       _failedCount++;
-      _eventController.add(RequestTimeout(_idGenerator.next()));
+      if (!_eventController.isClosed) {
+        _eventController.add(RequestTimeout(_idGenerator.next()));
+      }
+      rethrow;
+    } catch (_) {
+      _failedCount++;
       rethrow;
     }
   }
@@ -323,7 +420,20 @@ class WorkerPoolImpl<TData> implements WorkerPool<TData> {
         return TaskSuccess<TData>(result);
       } on TaskException catch (e) {
         return TaskFailure<TData>(
-          TaskError(code: e.code, message: e.message, details: e.details),
+          TaskError(
+            code: e.code,
+            message: e.message,
+            details: e.details,
+            stackTrace: e.stackTrace,
+          ),
+        );
+      } on TaskTimeoutException catch (e) {
+        return TaskFailure<TData>(
+          TaskError(
+            code: 'TIMEOUT',
+            message: e.message,
+            details: {'taskId': e.taskId, 'retryCount': e.retryCount},
+          ),
         );
       } on TimeoutException {
         return TaskFailure<TData>(
@@ -340,16 +450,4 @@ class WorkerPoolImpl<TData> implements WorkerPool<TData> {
     final results = await Future.wait(futures);
     return TaskBatchResult<TData>(results.toList());
   }
-}
-
-/// Exception thrown when a task fails.
-class TaskException implements Exception {
-  final String code;
-  final String message;
-  final dynamic details;
-
-  TaskException(this.code, this.message, [this.details]);
-
-  @override
-  String toString() => 'TaskException($code): $message';
 }

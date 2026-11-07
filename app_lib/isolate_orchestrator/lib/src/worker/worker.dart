@@ -40,26 +40,42 @@ abstract class Worker<TData> {
 /// Use this function to create a properly configured worker isolate.
 void runWorker<TData>(
   SendPort hubPort,
-  Worker<TData> Function(WorkerContext context) createWorker,
-) {
+  Worker<TData> Function(WorkerContext context) createWorker, {
+  String? name,
+  String? role,
+  List<String>? capabilities,
+  List<String>? subscribesTo,
+}) {
   final receivePort = ReceivePort();
   final idGenerator = MessageIdGenerator('worker');
+  final spawnMeta = Zone.current[#isolateSpawnMeta] as Map<String, Object>?;
 
   Worker<TData>? worker;
-  late WorkerContext context;
-  String? workerId;
-  String? workerName;
-  String? workerRole;
+  WorkerContext? context;
+  String? workerId = spawnMeta?['id'] as String?;
+  String? workerName = name ?? (spawnMeta?['name'] as String?);
+  String? workerRole = role ?? (spawnMeta?['role'] as String?);
+  final regCapabilities =
+      capabilities ??
+      (spawnMeta?['capabilities'] as List<String>?) ??
+      const <String>[];
+  final regSubscribesTo =
+      subscribesTo ??
+      (spawnMeta?['subscribesTo'] as List<String>?) ??
+      const <String>[];
+  final dependencyPorts = <String, List<PortInfo>>{};
 
   // Send registration
   final regEnvelope = Envelope.create(
     id: idGenerator.next(),
-    source: IsolateAddress.of('worker', 'pending'),
+    source: IsolateAddress.of(workerRole ?? 'worker', workerId ?? 'pending'),
     target: IsolateAddress.hub,
     payload: Register(
-      name: 'worker',
-      role: 'worker',
+      name: workerName ?? 'worker',
+      role: workerRole ?? 'worker',
       port: receivePort.sendPort,
+      capabilities: regCapabilities,
+      subscribesTo: regSubscribesTo,
     ),
   );
   hubPort.send(regEnvelope);
@@ -74,12 +90,13 @@ void runWorker<TData>(
       case Init init:
         // Extract worker info from target address
         workerId = envelope.target.id;
-        workerName = workerId;
+        workerName ??= workerId;
         workerRole = envelope.target.role;
 
         // Build dependencies map
         final dependencies = <String, List<SendPort>>{};
         for (final entry in init.dependencies.entries) {
+          dependencyPorts[entry.key] = List<PortInfo>.from(entry.value);
           dependencies[entry.key] = entry.value.map((p) => p.port).toList();
         }
 
@@ -100,7 +117,7 @@ void runWorker<TData>(
 
         // Create and initialize worker
         try {
-          worker = createWorker(context);
+          worker = createWorker(context!);
           await worker!.onInit(init.config);
 
           // Send ready
@@ -204,7 +221,7 @@ void runWorker<TData>(
           await worker?.onShutdown();
         } finally {
           // Dispose context to clean up log bridge and other resources
-          context.dispose();
+          context?.dispose();
 
           final ackEnvelope = Envelope.create(
             id: idGenerator.next(),
@@ -220,8 +237,23 @@ void runWorker<TData>(
         }
 
       case PortUpdate update:
-        // Handle port updates for dependencies
-        // Could be used for worker-to-worker communication
+        if (context != null) {
+          final currentInfos = dependencyPorts.putIfAbsent(
+            update.role,
+            () => <PortInfo>[],
+          );
+          if (update.removed.isNotEmpty) {
+            currentInfos.removeWhere((p) => update.removed.contains(p.id));
+          }
+          for (final added in update.added) {
+            currentInfos.removeWhere((p) => p.id == added.id);
+            currentInfos.add(added);
+          }
+          context!.dependencies[update.role] = currentInfos
+              .map((p) => p.port)
+              .toList();
+        }
+
         final ackEnvelope = Envelope.create(
           id: idGenerator.next(),
           source: IsolateAddress.of(
@@ -245,7 +277,7 @@ mixin WorkerMetricsMixin<TData> on Worker<TData> {
   int _processedCount = 0;
   int _errorCount = 0;
   int _totalLatencyUs = 0;
-  late DateTime _startTime;
+  DateTime _startTime = DateTime.now();
 
   /// Initialize metrics tracking.
   void initMetrics() {

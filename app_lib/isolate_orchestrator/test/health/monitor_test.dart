@@ -305,5 +305,103 @@ void main() {
       // Should not have sent any pings since isolate is not running
       expect(messages, isEmpty);
     });
+
+    test(
+      'multi-failure threshold (>1) only triggers onIsolateFailed at threshold',
+      () async {
+        final thresholdMonitor = HealthMonitor(
+          registry: registry,
+          config: const HubConfig(
+            healthCheckInterval: Duration(milliseconds: 30),
+            healthCheckTimeout: Duration(milliseconds: 15),
+            healthyThreshold: 3,
+            unhealthyThreshold: 3,
+          ),
+          idGenerator: idGenerator,
+          onHealthChanged: (id, healthy) {
+            healthChangedEvents.add('$id:$healthy');
+          },
+          onIsolateFailed: (id) {
+            isolateFailedEvents.add(id);
+          },
+        );
+
+        final entry = createMockEntry('worker-1');
+        entry.state = IsolateState.running;
+        registry.register(entry);
+
+        mockPort.listen((_) {}); // consume pings without replying
+
+        thresholdMonitor.start();
+
+        // Wait enough for 1 failure (~65ms), should still be healthy
+        await Future.delayed(const Duration(milliseconds: 70));
+        expect(entry.consecutiveFailures, lessThan(3));
+        expect(entry.isHealthy, isTrue);
+        expect(isolateFailedEvents, isEmpty);
+
+        // Wait for 3 consecutive failures (~150ms total)
+        await Future.delayed(const Duration(milliseconds: 120));
+        thresholdMonitor.stop();
+
+        expect(entry.consecutiveFailures, greaterThanOrEqualTo(3));
+        expect(entry.isHealthy, isFalse);
+        expect(healthChangedEvents, contains('worker-1:false'));
+        expect(isolateFailedEvents, contains('worker-1'));
+      },
+    );
+
+    test(
+      'multi-success threshold (>1) only marks healthy after reaching threshold',
+      () async {
+        final thresholdMonitor = HealthMonitor(
+          registry: registry,
+          config: const HubConfig(
+            healthCheckInterval: Duration(milliseconds: 30),
+            healthCheckTimeout: Duration(milliseconds: 25),
+            healthyThreshold: 3,
+            unhealthyThreshold: 2,
+          ),
+          idGenerator: idGenerator,
+          onHealthChanged: (id, healthy) {
+            healthChangedEvents.add('$id:$healthy');
+          },
+          onIsolateFailed: (id) {
+            isolateFailedEvents.add(id);
+          },
+        );
+
+        final entry = createMockEntry('worker-1');
+        entry.state = IsolateState.running;
+        entry.recordHealthCheck(false);
+        entry.isHealthy = false;
+        registry.register(entry);
+
+        // Automatically reply Pong to every Ping up to 3 times
+        var pongCount = 0;
+        mockPort.listen((message) {
+          if (message is Envelope && message.payload is Ping) {
+            final ping = message.payload as Ping;
+            pongCount++;
+            thresholdMonitor.handlePong(
+              'worker-1',
+              Pong(seq: ping.seq, metrics: IsolateMetrics.empty()),
+            );
+            if (pongCount < 3) {
+              expect(entry.isHealthy, isFalse);
+              expect(healthChangedEvents, isEmpty);
+            }
+          }
+        });
+
+        thresholdMonitor.start();
+        await Future.delayed(const Duration(milliseconds: 130));
+        thresholdMonitor.stop();
+
+        expect(pongCount, greaterThanOrEqualTo(3));
+        expect(entry.isHealthy, isTrue);
+        expect(healthChangedEvents, equals(['worker-1:true']));
+      },
+    );
   });
 }

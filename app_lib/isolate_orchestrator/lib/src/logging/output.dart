@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -63,7 +64,7 @@ class FileLogOutput extends LogOutput {
   /// Maximum number of rotated files to keep.
   final int maxFiles;
 
-  IOSink? _sink;
+  RandomAccessFile? _raf;
   int _currentSize = 0;
 
   FileLogOutput({
@@ -75,9 +76,9 @@ class FileLogOutput extends LogOutput {
   @override
   void write(SerializableLogRecord record, String formatted) {
     _ensureOpen();
-    final line = '$formatted\n';
-    _sink!.write(line);
-    _currentSize += line.length;
+    final bytes = utf8.encode('$formatted\n');
+    _raf!.writeFromSync(bytes);
+    _currentSize += bytes.length;
 
     if (_currentSize >= maxSizeBytes) {
       _rotate();
@@ -85,22 +86,20 @@ class FileLogOutput extends LogOutput {
   }
 
   void _ensureOpen() {
-    if (_sink == null) {
+    if (_raf == null) {
       final file = File(path);
       // Create parent directories if needed
       file.parent.createSync(recursive: true);
-      _sink = file.openWrite(mode: FileMode.append);
-
-      // Get current file size
-      if (file.existsSync()) {
-        _currentSize = file.lengthSync();
-      }
+      final initialSize = file.existsSync() ? file.lengthSync() : 0;
+      _raf = file.openSync(mode: FileMode.append);
+      _currentSize = initialSize;
     }
   }
 
   void _rotate() {
-    _sink?.close();
-    _sink = null;
+    _raf?.flushSync();
+    _raf?.closeSync();
+    _raf = null;
     _currentSize = 0;
 
     // Rotate files: log.4 -> delete, log.3 -> log.4, etc.
@@ -118,13 +117,14 @@ class FileLogOutput extends LogOutput {
 
   @override
   Future<void> flush() async {
-    await _sink?.flush();
+    _raf?.flushSync();
   }
 
   @override
   Future<void> close() async {
-    await _sink?.close();
-    _sink = null;
+    _raf?.flushSync();
+    _raf?.closeSync();
+    _raf = null;
   }
 }
 
@@ -215,6 +215,7 @@ class BufferedLogOutput extends LogOutput {
 
   final List<_BufferedRecord> _buffer = [];
   DateTime? _lastFlush;
+  Timer? _flushTimer;
 
   BufferedLogOutput(
     this.inner, {
@@ -232,10 +233,16 @@ class BufferedLogOutput extends LogOutput {
     if (_buffer.length >= maxBufferSize ||
         now.difference(_lastFlush!) >= maxBufferTime) {
       _flushBuffer();
+    } else if (_flushTimer == null && maxBufferTime > Duration.zero) {
+      _flushTimer = Timer(maxBufferTime, _flushBuffer);
     }
   }
 
   void _flushBuffer() {
+    _flushTimer?.cancel();
+    _flushTimer = null;
+    if (_buffer.isEmpty) return;
+
     for (final item in _buffer) {
       inner.write(item.record, item.formatted);
     }
@@ -251,6 +258,8 @@ class BufferedLogOutput extends LogOutput {
 
   @override
   Future<void> close() async {
+    _flushTimer?.cancel();
+    _flushTimer = null;
     _flushBuffer();
     await inner.close();
   }

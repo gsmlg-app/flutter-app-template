@@ -24,6 +24,7 @@ class IsolateEntry {
   int restartCount = 0;
   int consecutiveFailures = 0;
   int consecutiveSuccesses = 0;
+  bool? _healthy;
 
   IsolateEntry({
     required this.id,
@@ -37,9 +38,13 @@ class IsolateEntry {
     this.subscribesTo = const [],
   });
 
-  /// Check if isolate is healthy based on consecutive successes/failures.
+  /// Check if isolate is healthy based on consecutive successes/failures
+  /// and threshold state managed by [HealthMonitor].
   bool get isHealthy =>
-      state == IsolateState.running && consecutiveFailures == 0;
+      state == IsolateState.running && (_healthy ?? (consecutiveFailures == 0));
+
+  /// Explicitly set the threshold-evaluated health status.
+  set isHealthy(bool value) => _healthy = value;
 
   /// Update health check result.
   void recordHealthCheck(bool success) {

@@ -136,6 +136,28 @@ void main() {
       router.updateWorkers(createPortInfos());
       expect(router.workers.length, equals(3));
     });
+
+    test('recordSuccess and recordFailure ignore removed workers safely', () {
+      router.updateWorkers(createPortInfos());
+      router.updateWorkers([
+        PortInfo(id: 'w1', port: ports[0].sendPort, capabilities: []),
+      ]);
+
+      expect(
+        () => router.recordSuccess('w2', const Duration(milliseconds: 10)),
+        returnsNormally,
+      );
+      expect(() => router.recordFailure('w3'), returnsNormally);
+    });
+
+    test('setWorkerHealth updates worker health status', () {
+      router.updateWorkers(createPortInfos());
+      router.setWorkerHealth('w1', false);
+      expect(router.workers.firstWhere((w) => w.id == 'w1').healthy, isFalse);
+
+      router.setWorkerHealth('w1', true);
+      expect(router.workers.firstWhere((w) => w.id == 'w1').healthy, isTrue);
+    });
   });
 
   group('LeastConnectionsRouter', () {
@@ -223,6 +245,38 @@ void main() {
         router.recordSuccess('w3', Duration(milliseconds: 10));
       }
     });
+
+    test(
+      'fallback selection increments pendingCount and never goes negative',
+      () {
+        router.updateWorkers(createPortInfos());
+        // Mark all workers unhealthy without pending requests
+        router.setWorkerHealth('w1', false);
+        router.setWorkerHealth('w2', false);
+        router.setWorkerHealth('w3', false);
+
+        final selected = router.select('request');
+        expect(selected, isNotNull);
+        expect(
+          router.workers.firstWhere((w) => w.id == selected!.id).pendingCount,
+          equals(1),
+        );
+
+        router.recordFailure(selected!.id);
+        expect(
+          router.workers.firstWhere((w) => w.id == selected.id).pendingCount,
+          equals(0),
+        );
+
+        // Extra recordFailure for unknown or zero-pending worker never goes negative
+        router.recordFailure(selected.id);
+        expect(
+          router.workers.firstWhere((w) => w.id == selected.id).pendingCount,
+          equals(0),
+        );
+        expect(() => router.recordFailure('removed-worker'), returnsNormally);
+      },
+    );
   });
 
   group('ConsistentHashRouter', () {

@@ -107,6 +107,7 @@ abstract class IsolateHub {
     required String name,
     required void Function(SendPort) entryPoint,
     Map<String, dynamic>? config,
+    List<String>? capabilities,
     List<String>? subscribesTo,
   });
 
@@ -137,10 +138,11 @@ class IsolateHubImpl implements IsolateHub {
   final StreamController<HubEvent> _eventController =
       StreamController<HubEvent>.broadcast();
   final Map<String, StreamSubscription> _isolateSubscriptions = {};
+  final Map<String, SpawnConfig> _spawnConfigs = {};
+  final Map<String, ReceivePort> _exitPorts = {};
 
   late final IsolateSpawner _spawner;
   late final HealthMonitor _healthMonitor;
-  late final ReceivePort _hubPort;
 
   HubState _state = HubState.created;
 
@@ -162,14 +164,8 @@ class IsolateHubImpl implements IsolateHub {
 
     _state = HubState.starting;
 
-    // Create hub port
-    _hubPort = ReceivePort();
-
     // Initialize spawner
-    _spawner = IsolateSpawner(
-      hubPort: _hubPort.sendPort,
-      idGenerator: _idGenerator,
-    );
+    _spawner = IsolateSpawner(idGenerator: _idGenerator);
 
     // Initialize health monitor
     _healthMonitor = HealthMonitor(
@@ -179,9 +175,6 @@ class IsolateHubImpl implements IsolateHub {
       onHealthChanged: _onHealthChanged,
       onIsolateFailed: _onIsolateFailed,
     );
-
-    // Listen for messages from isolates
-    _hubPort.listen(_handleMessage);
 
     // Start health monitoring
     _healthMonitor.start();
@@ -211,8 +204,12 @@ class IsolateHubImpl implements IsolateHub {
 
     await Future.wait(futures);
 
-    // Close hub port
-    _hubPort.close();
+    // Close any remaining exit ports
+    for (final exitPort in _exitPorts.values) {
+      exitPort.close();
+    }
+    _exitPorts.clear();
+    _spawnConfigs.clear();
 
     // Clear registry
     _registry.clear();
@@ -228,6 +225,9 @@ class IsolateHubImpl implements IsolateHub {
     if (entry.state == IsolateState.stopped) return;
 
     entry.state = IsolateState.stopping;
+    _lifecycle.removeTracker(entry.id);
+    _spawnConfigs.remove(entry.id);
+    _exitPorts.remove(entry.id)?.close();
 
     final completer = Completer<void>();
 
@@ -236,7 +236,9 @@ class IsolateHubImpl implements IsolateHub {
     subscription = entry.broadcastStream.listen((message) {
       if (message is Envelope && message.payload is ShutdownAck) {
         subscription.cancel();
-        completer.complete();
+        if (!completer.isCompleted) {
+          completer.complete();
+        }
       }
     });
 
@@ -256,14 +258,16 @@ class IsolateHubImpl implements IsolateHub {
       // Force kill
       entry.isolate.kill(priority: Isolate.immediate);
     } finally {
-      subscription.cancel();
+      await subscription.cancel();
       entry.controlPort.close();
       entry.state = IsolateState.stopped;
       _healthMonitor.removePendingPing(entry.id);
-      _isolateSubscriptions[entry.id]?.cancel();
-      _isolateSubscriptions.remove(entry.id);
+      await _isolateSubscriptions.remove(entry.id)?.cancel();
       _registry.unregister(entry.id);
-      _eventController.add(IsolateStopped(entry.id));
+      _notifyPortRemoved(entry);
+      if (!_eventController.isClosed) {
+        _eventController.add(IsolateStopped(entry.id));
+      }
     }
   }
 
@@ -273,19 +277,26 @@ class IsolateHubImpl implements IsolateHub {
     required String name,
     required void Function(SendPort) entryPoint,
     Map<String, dynamic>? config,
+    List<String>? capabilities,
     List<String>? subscribesTo,
   }) async {
+    if (_state != HubState.running) {
+      throw StateError('Hub is not running');
+    }
+
     final spawnConfig = SpawnConfig(
       role: role,
       name: name,
       entryPoint: entryPoint,
       config: config,
-      subscribesTo: subscribesTo ?? [],
+      capabilities: capabilities ?? const [],
+      subscribesTo: subscribesTo ?? const [],
     );
 
     // Spawn isolate
     final entry = await _spawner.spawn(spawnConfig);
     _registry.register(entry);
+    _spawnConfigs[entry.id] = spawnConfig;
 
     // Set up permanent listener for messages from this isolate
     _isolateSubscriptions[entry.id] = entry.broadcastStream.listen(
@@ -293,22 +304,48 @@ class IsolateHubImpl implements IsolateHub {
     );
 
     final handle = _IsolateHandleImpl(entry, this);
-    _eventController.add(IsolateSpawned(handle));
+    if (!_eventController.isClosed) {
+      _eventController.add(IsolateSpawned(handle));
+    }
 
     // Gather dependencies
     final dependencies = <String, List<PortInfo>>{};
-    for (final role in entry.subscribesTo) {
-      dependencies[role] = _registry.getPortsForRole(role);
+    for (final depRole in entry.subscribesTo) {
+      dependencies[depRole] = _registry.getPortsForRole(depRole);
     }
 
     // Initialize
-    await _spawner.initialize(
-      entry,
-      config: config,
-      dependencies: dependencies,
-    );
+    try {
+      await _spawner.initialize(
+        entry,
+        config: config,
+        dependencies: dependencies,
+      );
+    } catch (e) {
+      entry.state = IsolateState.failed;
+      entry.isolate.kill(priority: Isolate.immediate);
+      entry.controlPort.close();
+      await _isolateSubscriptions.remove(entry.id)?.cancel();
+      _spawnConfigs.remove(entry.id);
+      _registry.unregister(entry.id);
+      rethrow;
+    }
 
-    _eventController.add(IsolateReady(handle));
+    // Monitor unexpected isolate exit
+    final exitPort = ReceivePort();
+    _exitPorts[entry.id] = exitPort;
+    entry.isolate.addOnExitListener(exitPort.sendPort);
+    exitPort.listen((_) {
+      exitPort.close();
+      _exitPorts.remove(entry.id);
+      if (_state == HubState.running && entry.state == IsolateState.running) {
+        _onIsolateFailed(entry.id);
+      }
+    });
+
+    if (!_eventController.isClosed) {
+      _eventController.add(IsolateReady(handle));
+    }
 
     // Notify subscribers about new port
     _notifyPortUpdate(entry);
@@ -324,7 +361,7 @@ class IsolateHubImpl implements IsolateHub {
     );
 
     final update = PortUpdate(
-      version: DateTime.now().millisecondsSinceEpoch,
+      version: DateTime.now().microsecondsSinceEpoch,
       role: newEntry.role,
       added: [portInfo],
     );
@@ -333,6 +370,27 @@ class IsolateHubImpl implements IsolateHub {
     for (final entry in _registry.all) {
       if (entry.id == newEntry.id) continue;
       if (entry.subscribesTo.contains(newEntry.role)) {
+        final envelope = Envelope.create(
+          id: _idGenerator.next(),
+          source: IsolateAddress.hub,
+          target: IsolateAddress.of(entry.role, entry.id),
+          payload: update,
+        );
+        entry.sendPort.send(envelope);
+      }
+    }
+  }
+
+  void _notifyPortRemoved(IsolateEntry removedEntry) {
+    final update = PortUpdate(
+      version: DateTime.now().microsecondsSinceEpoch,
+      role: removedEntry.role,
+      removed: [removedEntry.id],
+    );
+
+    for (final entry in _registry.all) {
+      if (entry.id == removedEntry.id) continue;
+      if (entry.subscribesTo.contains(removedEntry.role)) {
         final envelope = Envelope.create(
           id: _idGenerator.next(),
           source: IsolateAddress.hub,
@@ -403,45 +461,78 @@ class IsolateHubImpl implements IsolateHub {
   }
 
   void _onHealthChanged(String isolateId, bool healthy) {
-    _eventController.add(HealthChanged(isolateId, healthy));
+    if (healthy) {
+      _lifecycle.resetTracker(isolateId);
+    }
+    if (!_eventController.isClosed) {
+      _eventController.add(HealthChanged(isolateId, healthy));
+    }
   }
 
   void _onIsolateFailed(String isolateId) {
     final entry = _registry.get(isolateId);
-    if (entry == null) return;
+    if (entry == null ||
+        entry.state == IsolateState.failed ||
+        entry.state == IsolateState.stopped) {
+      return;
+    }
 
     entry.state = IsolateState.failed;
     final handle = _IsolateHandleImpl(entry, this);
-    _eventController.add(IsolateFailed(handle, 'Health check failed'));
+    if (!_eventController.isClosed) {
+      _eventController.add(IsolateFailed(handle, 'Health check failed'));
+    }
 
     // Attempt restart
     _attemptRestart(entry);
   }
 
   void _attemptRestart(IsolateEntry entry) {
+    final spawnConfig = _spawnConfigs.remove(entry.id);
     final tracker = _lifecycle.getTracker(entry.id);
 
-    if (!tracker.canRetry) {
-      // Max retries exceeded
-      _healthMonitor.removePendingPing(entry.id);
-      _isolateSubscriptions[entry.id]?.cancel();
-      _isolateSubscriptions.remove(entry.id);
-      _registry.unregister(entry.id);
+    // Clean up failed isolate resources
+    entry.isolate.kill(priority: Isolate.immediate);
+    entry.controlPort.close();
+    _exitPorts.remove(entry.id)?.close();
+    _healthMonitor.removePendingPing(entry.id);
+    _isolateSubscriptions.remove(entry.id)?.cancel();
+    _registry.unregister(entry.id);
+    _notifyPortRemoved(entry);
+
+    if (!tracker.canRetry || spawnConfig == null) {
+      // Max retries exceeded or no spawn config available
+      if (!_eventController.isClosed) {
+        _eventController.add(IsolateStopped(entry.id));
+      }
       return;
     }
 
-    _eventController.add(IsolateRestarting(entry.id, tracker.attempts + 1));
+    if (!_eventController.isClosed) {
+      _eventController.add(IsolateRestarting(entry.id, tracker.attempts + 1));
+      _eventController.add(IsolateStopped(entry.id));
+    }
 
     tracker.scheduleRestart(() async {
-      // Re-spawn with same config
-      // Note: This requires storing the original spawn config
-      // For now, we just clean up
-      entry.isolate.kill(priority: Isolate.immediate);
-      entry.controlPort.close();
-      _healthMonitor.removePendingPing(entry.id);
-      _isolateSubscriptions[entry.id]?.cancel();
-      _isolateSubscriptions.remove(entry.id);
-      _registry.unregister(entry.id);
+      if (_state != HubState.running) return;
+
+      try {
+        final newHandle = await spawn(
+          role: spawnConfig.role,
+          name: spawnConfig.name,
+          entryPoint: spawnConfig.entryPoint,
+          config: spawnConfig.config,
+          capabilities: spawnConfig.capabilities,
+          subscribesTo: spawnConfig.subscribesTo,
+        );
+        _lifecycle.transferTracker(entry.id, newHandle.id);
+        final newEntry = _registry.get(newHandle.id);
+        if (newEntry != null) {
+          newEntry.restartCount = entry.restartCount + 1;
+        }
+      } catch (_) {
+        // Respawn failed; tracker retains attempt count
+      }
     });
   }
 }
@@ -484,13 +575,20 @@ class _IsolateHandleImpl implements IsolateHandle {
     if (graceful) {
       await _hub._shutdownIsolate(_entry, const Duration(seconds: 5));
     } else {
+      if (_entry.state == IsolateState.stopped) return;
+      _entry.state = IsolateState.stopped;
+      _hub._lifecycle.removeTracker(id);
+      _hub._spawnConfigs.remove(id);
+      _hub._exitPorts.remove(id)?.close();
       _entry.isolate.kill(priority: Isolate.immediate);
       _entry.controlPort.close();
-      _entry.state = IsolateState.stopped;
       _hub._healthMonitor.removePendingPing(id);
-      _hub._isolateSubscriptions[id]?.cancel();
-      _hub._isolateSubscriptions.remove(id);
+      await _hub._isolateSubscriptions.remove(id)?.cancel();
       _hub._registry.unregister(id);
+      _hub._notifyPortRemoved(_entry);
+      if (!_hub._eventController.isClosed) {
+        _hub._eventController.add(IsolateStopped(id));
+      }
     }
   }
 }

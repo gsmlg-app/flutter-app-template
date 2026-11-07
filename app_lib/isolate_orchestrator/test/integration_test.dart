@@ -4,17 +4,25 @@ import 'dart:isolate';
 import 'package:isolate_orchestrator/isolate_orchestrator.dart';
 import 'package:test/test.dart';
 
-/// Simple data type for testing.
+///Simple data type for testing.
 class TestData {
   final int value;
   final String? error;
+  final int? delayMs;
 
-  TestData(this.value, {this.error});
+  TestData(this.value, {this.error, this.delayMs});
 
-  Map<String, dynamic> toMap() => {'value': value, 'error': error};
+  Map<String, dynamic> toMap() => {
+    'value': value,
+    'error': error,
+    'delayMs': delayMs,
+  };
 
-  factory TestData.fromMap(Map<String, dynamic> map) =>
-      TestData(map['value'] as int, error: map['error'] as String?);
+  factory TestData.fromMap(Map<String, dynamic> map) => TestData(
+    map['value'] as int,
+    error: map['error'] as String?,
+    delayMs: map['delayMs'] as int?,
+  );
 }
 
 /// Test worker implementation.
@@ -29,6 +37,9 @@ class TestWorker extends Worker<TestData> with WorkerMetricsMixin<TestData> {
   @override
   Future<void> onInit(Map<String, dynamic> config) async {
     initMetrics();
+    if (config['failInit'] == true) {
+      throw StateError('Simulated init failure');
+    }
     context.info('TestWorker initialized');
   }
 
@@ -40,8 +51,17 @@ class TestWorker extends Worker<TestData> with WorkerMetricsMixin<TestData> {
   }) async {
     final startTime = DateTime.now();
 
+    if (taskType == 'checkDeps') {
+      final deps = context.getDependency('service');
+      return TestData(deps.length);
+    }
+
+    if (taskType == 'crash') {
+      Isolate.exit();
+    }
+
     // Simulate work
-    await Future.delayed(const Duration(milliseconds: 10));
+    await Future.delayed(Duration(milliseconds: data.delayMs ?? 10));
 
     // Check for simulated errors
     if (data.error != null) {
@@ -155,6 +175,144 @@ void main() {
       // Isolate should be removed from registry
       expect(hub.getById(handle.id), isNull);
     });
+
+    test('non-graceful kill stops isolate and emits IsolateStopped', () async {
+      final stoppedIds = <String>[];
+      final sub = hub.events
+          .where((e) => e is IsolateStopped)
+          .cast<IsolateStopped>()
+          .listen((e) => stoppedIds.add(e.id));
+
+      final handle = await hub.spawn(
+        role: 'testWorker',
+        name: 'test-worker',
+        entryPoint: testWorkerEntryPoint,
+      );
+
+      await handle.kill(graceful: false);
+      await Future.delayed(const Duration(milliseconds: 50));
+      await sub.cancel();
+
+      expect(hub.getById(handle.id), isNull);
+      expect(stoppedIds, contains(handle.id));
+    });
+
+    test('cleans up isolate when initialization fails', () async {
+      await expectLater(
+        hub.spawn(
+          role: 'testWorker',
+          name: 'failing-init-worker',
+          entryPoint: testWorkerEntryPoint,
+          config: {'failInit': true},
+        ),
+        throwsA(isA<InitializationException>()),
+      );
+
+      expect(hub.getByRole('testWorker'), isEmpty);
+    });
+
+    test(
+      'automatically restarts crashed isolate according to RestartPolicy',
+      () async {
+        final restartHub = IsolateHub(
+          config: const HubConfig(
+            healthCheckInterval: Duration(milliseconds: 200),
+            healthCheckTimeout: Duration(milliseconds: 100),
+            restartPolicy: RestartPolicy(
+              maxAttempts: 2,
+              initialDelay: Duration(milliseconds: 50),
+            ),
+          ),
+        );
+        await restartHub.start();
+
+        try {
+          final events = <HubEvent>[];
+          final sub = restartHub.events.listen(events.add);
+
+          final handle = await restartHub.spawn(
+            role: 'testWorker',
+            name: 'crashable-worker',
+            entryPoint: testWorkerEntryPoint,
+          );
+
+          // Send a task that causes the worker isolate to exit unexpectedly
+          final replyPort = ReceivePort();
+          handle.sendPort.send(
+            Envelope.create(
+              id: 'crash-1',
+              source: IsolateAddress.hub,
+              target: IsolateAddress.of('testWorker', handle.id),
+              replyTo: replyPort.sendPort,
+              payload: Task<TestData>(data: TestData(1), taskType: 'crash'),
+            ),
+          );
+
+          // Wait for onExit detection + 50ms restart delay + spawn
+          await Future.delayed(const Duration(milliseconds: 400));
+          replyPort.close();
+          await sub.cancel();
+
+          expect(events.whereType<IsolateFailed>(), isNotEmpty);
+          expect(events.whereType<IsolateRestarting>(), isNotEmpty);
+
+          final activeWorkers = restartHub.getByRole('testWorker');
+          expect(activeWorkers.length, equals(1));
+          expect(activeWorkers.first.name, equals('crashable-worker'));
+          expect(activeWorkers.first.id, isNot(equals(handle.id)));
+        } finally {
+          await restartHub.stop(timeout: const Duration(seconds: 2));
+        }
+      },
+    );
+
+    test(
+      'propagates subscribesTo dependencies and PortUpdate notifications',
+      () async {
+        final subscriber = await hub.spawn(
+          role: 'worker',
+          name: 'subscriber-worker',
+          entryPoint: testWorkerEntryPoint,
+          subscribesTo: ['service'],
+        );
+
+        Future<int> queryServicePortCount() async {
+          final replyPort = ReceivePort();
+          final completer = Completer<int>();
+          replyPort.listen((msg) {
+            if (msg is Envelope && msg.payload is TaskResult) {
+              final res = (msg.payload as TaskResult).data as TestData;
+              completer.complete(res.value);
+              replyPort.close();
+            }
+          });
+          subscriber.sendPort.send(
+            Envelope.create(
+              id: 'check-deps',
+              source: IsolateAddress.hub,
+              target: IsolateAddress.of('worker', subscriber.id),
+              replyTo: replyPort.sendPort,
+              payload: Task<TestData>(data: TestData(0), taskType: 'checkDeps'),
+            ),
+          );
+          return completer.future.timeout(const Duration(seconds: 2));
+        }
+
+        expect(await queryServicePortCount(), equals(0));
+
+        final serviceHandle = await hub.spawn(
+          role: 'service',
+          name: 'service-1',
+          entryPoint: testWorkerEntryPoint,
+        );
+        await Future.delayed(const Duration(milliseconds: 50));
+        expect(await queryServicePortCount(), equals(1));
+
+        await serviceHandle.kill(graceful: true);
+        await Future.delayed(const Duration(milliseconds: 50));
+        expect(await queryServicePortCount(), equals(0));
+      },
+    );
   });
 
   group('WorkerPool Integration', () {
@@ -252,6 +410,61 @@ void main() {
       final afterStatus = pool.status;
       expect(afterStatus.processedRequests, equals(1));
     });
+
+    test(
+      'timeout increments failedRequests, emits RequestTimeout, and maps to TIMEOUT in batch',
+      () async {
+        final timeoutEvents = <RequestTimeout>[];
+        final sub = pool.events
+            .where((e) => e is RequestTimeout)
+            .cast<RequestTimeout>()
+            .listen(timeoutEvents.add);
+
+        await expectLater(
+          pool.submit(
+            TestData(1, delayMs: 500),
+            timeout: const Duration(milliseconds: 100),
+          ),
+          throwsA(isA<TaskTimeoutException>()),
+        );
+
+        await Future.delayed(const Duration(milliseconds: 50));
+        await sub.cancel();
+
+        expect(pool.status.failedRequests, greaterThanOrEqualTo(1));
+        expect(timeoutEvents, isNotEmpty);
+
+        final batchResult = await pool.submitBatch([
+          TestData(1, delayMs: 500),
+        ], timeout: const Duration(milliseconds: 100));
+        expect(batchResult.results.first, isA<TaskFailure<TestData>>());
+        final failure = batchResult.results.first as TaskFailure<TestData>;
+        expect(failure.error.code, equals('TIMEOUT'));
+      },
+    );
+
+    test('scale adjusts worker count and emits PoolScaled event', () async {
+      final scaledEvents = <PoolScaled>[];
+      final sub = pool.events
+          .where((e) => e is PoolScaled)
+          .cast<PoolScaled>()
+          .listen(scaledEvents.add);
+
+      await pool.scale(3);
+      expect(pool.workers.length, equals(3));
+
+      await pool.scale(2);
+      expect(pool.workers.length, equals(2));
+
+      await Future.delayed(const Duration(milliseconds: 50));
+      await sub.cancel();
+
+      expect(scaledEvents.length, equals(2));
+      expect(scaledEvents[0].oldSize, equals(2));
+      expect(scaledEvents[0].newSize, equals(3));
+      expect(scaledEvents[1].oldSize, equals(3));
+      expect(scaledEvents[1].newSize, equals(2));
+    });
   });
 
   group('Health Monitoring Integration', () {
@@ -325,6 +538,7 @@ void main() {
         HubStateException('Invalid hub state'),
         PoolStateException('Invalid pool state'),
         MessageDeliveryException('target-1', 'Delivery failed'),
+        TaskException('ERR_CODE', 'Task failed', {'detail': 1}, 'stack'),
       ];
 
       for (final e in exceptions) {

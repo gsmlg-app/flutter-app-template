@@ -4,6 +4,7 @@ import 'dart:isolate';
 import 'package:logging/logging.dart';
 
 import '../health/metrics.dart';
+import '../hub/hub.dart';
 import '../message/address.dart';
 import '../message/envelope.dart';
 import '../message/protocol.dart';
@@ -231,6 +232,7 @@ void centralLoggerEntryPoint(SendPort hubPort) {
   final receivePort = ReceivePort();
   CentralLogger? logger;
   String? loggerId;
+  final startTime = DateTime.now();
 
   // Register with hub
   final regEnvelope = Envelope.create(
@@ -277,7 +279,7 @@ void centralLoggerEntryPoint(SendPort hubPort) {
             payload: Pong(
               seq: ping.seq,
               metrics: IsolateMetrics(
-                uptimeMs: 0,
+                uptimeMs: DateTime.now().difference(startTime).inMilliseconds,
                 processedCount: logger?.recordsProcessed ?? 0,
                 pendingCount: 0,
                 errorCount: 0,
@@ -316,7 +318,7 @@ void centralLoggerEntryPoint(SendPort hubPort) {
 /// Example:
 /// ```dart
 /// final setup = LoggingSetup(hub: hub);
-/// await setup.start();
+/// await setup.start(config);
 ///
 /// // Use loggerPort when spawning workers
 /// final pool = WorkerPool(...);
@@ -330,12 +332,18 @@ class LoggingSetup {
   CentralLogger? _logger;
 
   /// Logger isolate handle (if running in separate isolate).
+  IsolateHandle? _loggerHandle;
+
+  /// Logger port for workers.
   SendPort? _loggerPort;
+
+  /// Hub used when [useIsolate] is true.
+  final IsolateHub? hub;
 
   /// Whether logging is running in a separate isolate.
   final bool useIsolate;
 
-  LoggingSetup({this.useIsolate = false});
+  LoggingSetup({this.hub, this.useIsolate = false});
 
   /// Get the logger port for workers.
   SendPort? get loggerPort => _loggerPort ?? _logger?.sendPort;
@@ -343,8 +351,24 @@ class LoggingSetup {
   /// Start logging with the given configuration.
   Future<void> start(CentralLoggerConfig config) async {
     if (useIsolate) {
-      // TODO: Spawn logger isolate via hub
-      throw UnimplementedError('Isolate-based logging not yet implemented');
+      if (hub == null) {
+        throw StateError('IsolateHub is required when useIsolate is true');
+      }
+      final loggerLevelsMap = config.loggerLevels?.map(
+        (k, v) => MapEntry(k, v.name),
+      );
+      _loggerHandle = await hub!.spawn(
+        role: 'logger',
+        name: 'central-logger',
+        entryPoint: centralLoggerEntryPoint,
+        capabilities: const ['logging'],
+        config: {
+          'level': config.level.name,
+          'console': config.outputs.any((o) => o is ConsoleLogOutput),
+          'logger_levels': ?loggerLevelsMap,
+        },
+      );
+      _loggerPort = _loggerHandle!.sendPort;
     } else {
       _logger = CentralLogger(config: config);
       _logger!.start();
@@ -354,6 +378,10 @@ class LoggingSetup {
 
   /// Stop logging.
   Future<void> stop() async {
+    if (_loggerHandle != null) {
+      await _loggerHandle!.kill(graceful: true);
+      _loggerHandle = null;
+    }
     if (_logger != null) {
       await _logger!.stop();
       _logger = null;

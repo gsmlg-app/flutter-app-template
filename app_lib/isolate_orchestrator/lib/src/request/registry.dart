@@ -10,6 +10,7 @@ class PendingTask<TData> {
   final Task<TData> task;
   final Completer<TaskResult<TData>> completer;
   final SendPort replyPort;
+  final Duration? timeout;
 
   String sentTo;
   int sentAt;
@@ -26,6 +27,7 @@ class PendingTask<TData> {
     required this.sentTo,
     required this.sentAt,
     required this.timerBucket,
+    this.timeout,
     this.retryCount = 0,
     Set<String>? triedWorkers,
   }) : triedWorkers = triedWorkers ?? {};

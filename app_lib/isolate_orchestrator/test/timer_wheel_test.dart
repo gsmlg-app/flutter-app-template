@@ -230,5 +230,24 @@ void main() {
       wheel.stop();
       expect(wheel.isRunning, isFalse);
     });
+
+    test('supports timeouts longer than a single wheel rotation', () async {
+      // wheelSize = 8, tickDuration = 10ms -> 1 rotation = 80ms
+      // Add a request with 180ms timeout (> 2 full rotations)
+      final timedOut = <String>[];
+      wheel.start(timedOut.add);
+
+      wheel.add('long-req', const Duration(milliseconds: 180));
+
+      // After 100ms (> 1 rotation, < 180ms), should NOT have timed out yet
+      await Future.delayed(const Duration(milliseconds: 100));
+      expect(timedOut, isEmpty);
+      expect(wheel.pendingCount, equals(1));
+
+      // After another 130ms (total ~230ms > 180ms), should have timed out
+      await Future.delayed(const Duration(milliseconds: 130));
+      expect(timedOut, contains('long-req'));
+      expect(wheel.pendingCount, equals(0));
+    });
   });
 }

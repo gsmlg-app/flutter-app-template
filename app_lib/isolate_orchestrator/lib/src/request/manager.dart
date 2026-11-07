@@ -67,6 +67,7 @@ class RequestManager<TData> {
       sentTo: worker.id,
       sentAt: DateTime.now().microsecondsSinceEpoch,
       timerBucket: timerBucket,
+      timeout: effectiveTimeout,
     );
 
     _registry.register(pending);
@@ -166,8 +167,9 @@ class RequestManager<TData> {
     final oldTimerBucket = pending.timerBucket;
     _timerWheel.remove(pending.id, oldTimerBucket);
 
-    // Update pending task with new timer bucket
-    final newTimerBucket = _timerWheel.add(pending.id, defaultTimeout);
+    // Update pending task with new timer bucket using its effective timeout
+    final effectiveTimeout = pending.timeout ?? defaultTimeout;
+    final newTimerBucket = _timerWheel.add(pending.id, effectiveTimeout);
     pending.recordRetry(worker.id, newTimerBucket);
 
     // Resend task

@@ -75,6 +75,18 @@ class TaskCancelledException extends IsolateOrchestratorException {
   TaskCancelledException(this.taskId) : super('Task $taskId was cancelled');
 }
 
+/// Exception thrown when a task fails during worker execution.
+class TaskException extends IsolateOrchestratorException {
+  final String code;
+  final dynamic details;
+  final String? stackTrace;
+
+  TaskException(this.code, super.message, [this.details, this.stackTrace]);
+
+  @override
+  String toString() => 'TaskException($code): $message';
+}
+
 /// Exception thrown when spawn times out.
 class SpawnTimeoutException extends IsolateOrchestratorException {
   final String name;

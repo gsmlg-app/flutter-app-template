@@ -34,6 +34,9 @@ class MockRouter<T> implements Router<T> {
   }
 
   @override
+  void setWorkerHealth(String workerId, bool healthy) {}
+
+  @override
   void updateWorkers(List<PortInfo> workers) {
     _workers.clear();
     for (final w in workers) {
@@ -388,6 +391,68 @@ void main() {
       );
 
       workerReceivePort.close();
+    });
+
+    test('retry preserves per-request custom timeout', () async {
+      final retryManager = RequestManager<int>(
+        defaultTimeout: const Duration(seconds: 10), // Long default timeout
+        maxRetries: 1,
+        router: router,
+        idGenerator: idGenerator,
+        replyPort: replyPort.sendPort,
+        tickDuration: const Duration(milliseconds: 20),
+        wheelSize: 16,
+      );
+
+      final port1 = ReceivePort();
+      final port2 = ReceivePort();
+      router.addWorker(
+        WorkerPort(
+          id: 'worker-1',
+          port: port1.sendPort,
+          healthy: true,
+          pendingCount: 0,
+          avgLatencyUs: 0,
+        ),
+      );
+      router.addWorker(
+        WorkerPort(
+          id: 'worker-2',
+          port: port2.sendPort,
+          healthy: true,
+          pendingCount: 0,
+          avgLatencyUs: 0,
+        ),
+      );
+      router.selectReturns = 'worker-1';
+
+      port1.listen((_) {
+        // When worker-1 receives task, switch mock router to return worker-2 on retry
+        router.selectReturns = 'worker-2';
+      });
+      port2.listen((_) {}); // worker-2 also does not respond
+
+      // Submit with short custom timeout (60ms). Both initial attempt and retry
+      // should use 60ms (total ~150ms), NOT the 10s defaultTimeout.
+      await expectLater(
+        retryManager
+            .submit(
+              Task<int>(data: 42),
+              timeout: const Duration(milliseconds: 60),
+            )
+            .timeout(const Duration(milliseconds: 500)),
+        throwsA(
+          isA<TaskTimeoutException>().having(
+            (e) => e.retryCount,
+            'retryCount',
+            equals(1),
+          ),
+        ),
+      );
+
+      retryManager.dispose();
+      port1.close();
+      port2.close();
     });
   });
 }

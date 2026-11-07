@@ -4,7 +4,7 @@ import 'dart:async';
 class TimerWheel {
   final Duration tickDuration;
   final int wheelSize;
-  final List<Set<String>> _buckets;
+  final List<Map<String, int>> _buckets;
 
   int _currentTick = 0;
   Timer? _timer;
@@ -34,13 +34,22 @@ class TimerWheel {
   }
 
   void _tick() {
-    final expired = _buckets[_currentTick];
-    final expiredIds = expired
-        .toList(); // Copy to avoid concurrent modification
+    final bucket = _buckets[_currentTick];
+    if (bucket.isNotEmpty) {
+      final entries = bucket.entries
+          .toList(); // Copy to avoid concurrent modification
 
-    for (final id in expiredIds) {
-      expired.remove(id);
-      _onTimeout?.call(id);
+      for (final entry in entries) {
+        if (entry.value <= 0) {
+          bucket.remove(entry.key);
+          _onTimeout?.call(entry.key);
+        } else {
+          final currentRounds = bucket[entry.key];
+          if (currentRounds != null && currentRounds > 0) {
+            bucket[entry.key] = currentRounds - 1;
+          }
+        }
+      }
     }
 
     _currentTick = (_currentTick + 1) % wheelSize;
@@ -50,9 +59,10 @@ class TimerWheel {
   /// Returns bucket index for later removal.
   int add(String requestId, Duration timeout) {
     final ticks = timeout.inMilliseconds ~/ tickDuration.inMilliseconds;
-    final clampedTicks = ticks.clamp(1, wheelSize - 1);
-    final bucket = (_currentTick + clampedTicks) % wheelSize;
-    _buckets[bucket].add(requestId);
+    final effectiveTicks = ticks < 1 ? 1 : ticks;
+    final rounds = effectiveTicks ~/ wheelSize;
+    final bucket = (_currentTick + effectiveTicks) % wheelSize;
+    _buckets[bucket][requestId] = rounds;
     return bucket;
   }
 
