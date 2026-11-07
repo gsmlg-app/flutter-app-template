@@ -2,16 +2,16 @@
 
 ## Overview
 
-`isolate_orchestrator` is a generic Dart package that provides a managed pool of long-running isolates with:
+`isolate_orchestrator` is a generic Dart package that provides an Erlang/OTP-inspired supervision tree, service group management, multi-index registry, peer-to-peer communication (`call` / `cast`), and `poolboy`-style worker pools for long-running isolates:
 
-- Centralized Hub for lifecycle management
-- Type-safe message protocol
-- Health monitoring and automatic restart
-- Consistent hashing router
-- Request-response correlation with timeout handling
-- Cross-isolate logging with `logging` package integration
+- **Centralized Hub & OTP Supervision Tree**: Hierarchical tree (`IsolateHub` as root `/`, nested `Supervisor` / `ServiceGroup` nodes, and child `IsolateNode`s) with `oneForOne`, `oneForAll`, and `restForOne` supervision strategies, `permanent` / `transient` / `temporary` child restart types, `RestartIntensity` protection, and parent escalation.
+- **Spec-vs-Runtime Lifecycle**: Service and group specifications (`ChildSpec`, `SupervisorSpec`) remain registered when stopped, allowing convenient `startNode` / `stopNode` / `restartNode` for any individual isolate or entire service group subtree.
+- **Multi-Index Registry & P2P Communication (`call` / `cast`)**: Global lookup by `id`, `name`, hierarchical `path` (`/network/dns`), `role`, or `capability`. Both the main isolate (`hub`) and any child isolate (`WorkerContext`) can invoke `call<TRes>(target, request)` (RPC) and `cast(target, message)` (fire-and-forget) with automatic `ResolveAddress` lookup and `PortUpdate` cache invalidation on restarts.
+- **Erlang `poolboy`-Style Isolate Pool (`WorkerPool` / `IsolatePool`)**: Supports `size` (base workers), `maxOverflow` (dynamic burst workers), `PoolStrategy.lifo` / `PoolStrategy.fifo`, exclusive `checkout` / `tryCheckout` / `checkin` / `transaction`, crash recovery for leased workers, as well as stateless routed `submit` / `submitBatch` with consistent hashing, round-robin, or least-connections routing.
+- **Type-Safe Message Protocol & Timer Wheel**: Request-response correlation with multi-rotation timer wheel timeout handling.
+- **Cross-Isolate Logging**: Seamless integration with the `logging` package and optional dedicated logger isolate.
 
-This package is **not** DNS-specific and can be used for any application requiring parallel processing with isolate pools.
+This package is **not** DNS-specific and can be used for any application requiring structured isolate management, supervision trees, or parallel worker pools.
 
 **Package Name**: `isolate_orchestrator`  
 **License**: MIT  
@@ -27,26 +27,27 @@ isolate_orchestrator/
 │   ├── isolate_orchestrator.dart           # Main export
 │   ├── src/
 │   │   ├── hub/
-│   │   │   ├── hub.dart            # IsolateHub implementation
-│   │   │   ├── registry.dart       # Isolate registry
+│   │   │   ├── hub.dart            # IsolateHub & Root Supervisor implementation
+│   │   │   ├── supervisor.dart     # Supervision Tree, Supervisor / ServiceGroup, NodeSpec
+│   │   │   ├── registry.dart       # Multi-index IsolateRegistry (id, name, path, role, capability)
 │   │   │   ├── spawner.dart        # Isolate spawner
-│   │   │   └── lifecycle.dart      # Lifecycle manager
+│   │   │   └── lifecycle.dart      # Lifecycle manager & RestartPolicy
 │   │   ├── message/
 │   │   │   ├── envelope.dart       # Message envelope
 │   │   │   ├── address.dart        # IsolateAddress
-│   │   │   ├── protocol.dart       # Protocol messages
+│   │   │   ├── protocol.dart       # Protocol messages (Lifecycle, Health, RPC, Task)
 │   │   │   └── id_generator.dart   # Message ID generator
 │   │   ├── pool/
-│   │   │   ├── pool.dart           # WorkerPool implementation
-│   │   │   ├── router.dart         # Consistent hash router
+│   │   │   ├── pool.dart           # WorkerPool / IsolatePool (submit + Poolboy checkout/checkin)
+│   │   │   ├── router.dart         # Consistent hash, round-robin, least-connections routers
 │   │   │   └── hash_ring.dart      # Hash ring implementation
 │   │   ├── worker/
-│   │   │   ├── worker.dart         # Worker base class
-│   │   │   └── context.dart        # WorkerContext
+│   │   │   ├── worker.dart         # Worker base class (onTask, onCall, onCast)
+│   │   │   └── context.dart        # WorkerContext (P2P call/cast, address resolution, logging)
 │   │   ├── request/
 │   │   │   ├── manager.dart        # RequestManager
 │   │   │   ├── registry.dart       # PendingRequest registry
-│   │   │   └── timer_wheel.dart    # Timer wheel for timeouts
+│   │   │   └── timer_wheel.dart    # Multi-rotation timer wheel for timeouts
 │   │   ├── logging/
 │   │   │   ├── bridge.dart         # IsolateLogBridge
 │   │   │   ├── record.dart         # SerializableLogRecord
@@ -2050,6 +2051,219 @@ class IsolateOrchestratorTesting {
   });
 }
 ```
+
+---
+
+## Supervision Tree & Service Groups (OTP Model)
+
+### Architectural Overview
+
+Because each OS `Isolate` in Dart carries ~2–5MB of baseline heap overhead, `Supervisor` (aliased as `ServiceGroup`) nodes are implemented as **logical composite nodes** managed within `IsolateHub`, while leaf `IsolateNode`s run as dedicated OS `Isolate`s monitored via:
+1. `Isolate.addOnExitListener` (unexpected process termination)
+2. `Isolate.addErrorListener` (uncaught top-level exceptions)
+3. `HealthMonitor` (periodic `Ping` / `Pong` health checks)
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                     Composite Supervision Tree                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  IsolateHub (Root Supervisor "/") [strategy: oneForOne]                 │
+│  ├── Supervisor "network" ("/network") [strategy: oneForAll]            │
+│  │   ├── IsolateNode "dns" ("/network/dns") [permanent]                 │
+│  │   └── IsolateNode "proxy" ("/network/proxy") [permanent]             │
+│  ├── Supervisor "storage" ("/storage") [strategy: restForOne]           │
+│  │   ├── IsolateNode "db" ("/storage/db") [permanent]                   │
+│  │   └── IsolateNode "cache" ("/storage/cache") [transient]             │
+│  └── IsolateNode "telemetry" ("/telemetry") [temporary]                 │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Supervision Strategies
+
+```dart
+/// OTP-style supervision strategy for a [Supervisor] / [ServiceGroup].
+enum SupervisionStrategy {
+  /// Only restart the failed child node.
+  oneForOne,
+
+  /// If any child fails, stop all sibling children (in reverse startup order)
+  /// and restart all children (in startup order).
+  oneForAll,
+
+  /// If a child fails, stop any children started after it (in reverse startup
+  /// order), then restart the failed child and those subsequent children (in
+  /// startup order).
+  restForOne,
+}
+
+/// Child restart behavior when an isolate exits or crashes.
+enum ChildRestartType {
+  /// Always restart the child (whether it exited normally or abnormally),
+  /// unless explicitly stopped via `stopNode`.
+  permanent,
+
+  /// Restart the child only if it terminates abnormally (uncaught error,
+  /// unexpected exit, or health check failure). Normal exits are not restarted.
+  transient,
+
+  /// Never restart the child automatically.
+  temporary,
+}
+```
+
+### Restart Intensity & Escalation
+
+To prevent infinite crash loops, each `Supervisor` enforces a sliding-window `RestartIntensity`:
+
+```dart
+class RestartIntensity {
+  /// Maximum number of restarts allowed within [withinDuration].
+  final int maxRestarts;
+
+  /// Sliding time window for counting restarts.
+  final Duration withinDuration;
+
+  /// Backoff delay policy between restarts.
+  final RestartPolicy backoffPolicy;
+
+  const RestartIntensity({
+    this.maxRestarts = 3,
+    this.withinDuration = const Duration(seconds: 5),
+    this.backoffPolicy = const RestartPolicy(
+      initialDelay: Duration(milliseconds: 50),
+      maxDelay: Duration(seconds: 5),
+    ),
+  });
+}
+```
+
+When a child's failure causes its supervisor's restart count within `withinDuration` to exceed `maxRestarts`:
+1. The supervisor emits a `SupervisorEscalated` event.
+2. The supervisor stops all of its children in reverse startup order and marks itself `NodeState.failed`.
+3. The failure escalates to the parent `Supervisor` (if not already at Root `/`), which applies its own `SupervisionStrategy` and `RestartIntensity` to recover the failed child supervisor subtree.
+
+### Spec vs. Runtime Decoupling
+
+Specifications (`ChildSpec` and `SupervisorSpec`) are decoupled from runtime `Isolate` instances:
+- Stopping a node or group via `hub.stopNode('/network')` gracefully shuts down its running isolates in **reverse startup order** while retaining the `Supervisor` and `ChildSpec` definitions in the tree with `NodeState.stopped`.
+- Starting a stopped node or group via `hub.startNode('/network')` spawns fresh isolates in **startup order** and broadcasts `PortUpdate` notifications so dependent isolates automatically refresh their `SendPort` references.
+
+---
+
+## Global Multi-Index Registry & P2P Communication (`call` / `cast`)
+
+### Multi-Index Registry
+
+`IsolateRegistry` indexes every isolate across five dimensions:
+- **`id`**: Unique runtime instance ID (e.g., `dns-1`, `dns-2` after restart)
+- **`name`**: Logical node name (e.g., `dns`)
+- **`path`**: Hierarchical tree path (e.g., `/network/dns`)
+- **`role`**: Functional role (e.g., `resolver`, `worker`)
+- **`capability`**: Declared capabilities (e.g., `['doh', 'dot']`)
+
+### Cross-Isolate `call` and `cast`
+
+Both `IsolateHub` (main isolate) and `WorkerContext` (any child isolate) provide Erlang `gen_server`-style communication primitives:
+
+```dart
+// From Hub (main isolate):
+final response = await hub.call<String>('/network/dns', {'query': 'example.com'});
+hub.cast('telemetry', {'event': 'dns_resolved'});
+
+// From inside any Worker (child isolate via WorkerContext):
+final cached = await context.call<String?>('/storage/cache', 'example.com');
+await context.cast('/telemetry', {'cache_hit': cached != null});
+```
+
+#### Dynamic Address Resolution & Cache Invalidation
+
+1. When Worker A calls `context.call('/storage/cache', req)` for the first time, `WorkerContext` checks its local `SendPort` cache.
+2. On a cache miss, `WorkerContext` sends `ResolveAddress(target: '/storage/cache')` to `IsolateHub` and caches the returned `PortInfo`.
+3. Subsequent `call` and `cast` invocations communicate **directly** from Worker A to `/storage/cache`'s `SendPort` with zero Hub forwarding overhead.
+4. When `/storage/cache` stops or is restarted by its `Supervisor`, `IsolateHub` pushes a `PortUpdate` to subscribers and resolvers, automatically updating or invalidating Worker A's local port cache.
+
+---
+
+## Poolboy-Style Isolate Pool (`WorkerPool` / `IsolatePool`)
+
+In addition to stateless routed task submission (`pool.submit`), `WorkerPool<TData>` (aliased as `IsolatePool<TData>`) implements Erlang `poolboy` semantics for exclusive worker leasing and burst capacity management:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    Poolboy Checkout / Checkin Lifecycle                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  caller ──► checkout(block: true, timeout: 5s)                          │
+│               │                                                         │
+│               ├─► [Idle Worker Available?] ──Yes──► Pop (LIFO / FIFO)   │
+│               │                                                         │
+│               ├─► [Overflow < maxOverflow?] ─Yes──► Spawn Overflow      │
+│               │                                                         │
+│               └─► [At Max Capacity]                                     │
+│                     ├─► block: false ──► throw PoolFullException        │
+│                     └─► block: true  ──► Enqueue Waiter (with timeout)  │
+│                                                                         │
+│  caller ──► checkin(worker)                                             │
+│               │                                                         │
+│               ├─► [Wait Queue Non-Empty?] ──Yes──► Hand off to Waiter   │
+│               │                                                         │
+│               └─► [Wait Queue Empty]                                    │
+│                     ├─► Overflow Worker ──► Dismiss (or idleTimeout)    │
+│                     └─► Base Worker     ──► Return to Available Queue   │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Configuration & API
+
+```dart
+enum PoolStrategy {
+  /// Last-in, first-out (default in Erlang poolboy). Keeps hot workers active
+  /// and lets idle overflow workers expire naturally.
+  lifo,
+
+  /// First-in, first-out. Distributes leases evenly across all workers.
+  fifo,
+}
+
+final pool = WorkerPool<ComputeData>(
+  hub: hub,
+  config: WorkerPoolConfig(
+    size: 4,                                // Base permanent workers
+    maxOverflow: 2,                         // Temporary burst workers
+    strategy: PoolStrategy.lifo,            // LIFO or FIFO checkout order
+    idleTimeout: Duration(seconds: 30),     // Idle TTL for overflow workers
+  ),
+  workerEntryPoint: workerEntryPoint,
+);
+
+// 1. Recommended automatic lease management (`poolboy:transaction/3`):
+final result = await pool.transaction((worker) async {
+  final step1 = await worker.execute(ComputeData(input: 21));
+  return await worker.execute(ComputeData(input: step1.result!));
+});
+
+// 2. Manual checkout / checkin (`poolboy:checkout/3` & `poolboy:checkin/2`):
+final worker = await pool.checkout(block: true, timeout: Duration(seconds: 5));
+try {
+  final res = await worker.execute(ComputeData(input: 10));
+} finally {
+  await pool.checkin(worker);
+}
+
+// 3. Non-blocking checkout:
+final maybeWorker = await pool.tryCheckout(); // Returns null if full
+```
+
+### Crash Recovery During Checkout
+
+If a checked-out worker crashes before `checkin`:
+- The `PoolWorker<TData>` lease is immediately marked invalid (`isValid == false`), and any in-flight `execute` / `call` fails with `WorkerException` / `LeaseInvalidatedException`.
+- Subsequent `checkin(worker)` calls are safe no-ops.
+- If the crashed worker was an overflow worker, the overflow slot is released (and if callers are waiting in the queue, a replacement worker is spawned for the next waiter).
+- If the crashed worker was a base worker, the replacement worker spawned by the pool/supervisor is automatically handed to the next waiting caller or returned to the available pool.
 
 ---
 

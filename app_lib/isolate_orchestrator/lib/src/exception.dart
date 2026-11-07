@@ -95,3 +95,57 @@ class SpawnTimeoutException extends IsolateOrchestratorException {
   SpawnTimeoutException(this.name, this.timeout)
     : super('Isolate "$name" failed to register within ${timeout.inSeconds}s');
 }
+
+/// Exception thrown when a target isolate or supervision tree node cannot be found.
+class NodeNotFoundException extends IsolateOrchestratorException {
+  final String target;
+
+  NodeNotFoundException(this.target)
+    : super('Isolate or node "$target" was not found');
+}
+
+/// Exception thrown when a supervisor exceeds its restart intensity and escalates.
+class SupervisorEscalationException extends IsolateOrchestratorException {
+  final String supervisorPath;
+  final String failedChildPath;
+
+  SupervisorEscalationException(
+    this.supervisorPath,
+    this.failedChildPath,
+    String reason,
+  ) : super(
+        'Supervisor "$supervisorPath" escalated failure of "$failedChildPath": $reason',
+      );
+}
+
+/// Exception thrown when a non-blocking pool checkout is attempted while the pool is full.
+class PoolFullException extends IsolateOrchestratorException {
+  final int size;
+  final int maxOverflow;
+
+  PoolFullException(this.size, this.maxOverflow)
+    : super(
+        'Worker pool is full (size: $size, maxOverflow: $maxOverflow) and block is false',
+      );
+}
+
+/// Exception thrown when waiting for a pool worker checkout times out.
+class CheckoutTimeoutException extends IsolateOrchestratorException {
+  final Duration timeout;
+
+  CheckoutTimeoutException(this.timeout)
+    : super(
+        'Timed out waiting for an available worker after ${timeout.inMilliseconds}ms',
+      );
+}
+
+/// Exception thrown when operating on a checked-out worker lease that is no longer valid.
+class LeaseInvalidatedException extends IsolateOrchestratorException {
+  final String workerId;
+
+  LeaseInvalidatedException(this.workerId, [String? reason])
+    : super(
+        'Worker lease for "$workerId" is no longer valid'
+        '${reason != null ? ": $reason" : ""}',
+      );
+}

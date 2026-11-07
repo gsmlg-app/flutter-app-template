@@ -4,15 +4,17 @@ A generic Dart package for managing pools of long-running isolates with health m
 
 ## Features
 
+- **OTP Supervision Tree & Service Groups** - Hierarchical `Supervisor` / `ServiceGroup` tree with `oneForOne`, `oneForAll`, and `restForOne` strategies, `permanent` / `transient` / `temporary` restart types, `RestartIntensity`, and escalation
+- **Spec-vs-Runtime Lifecycle** - Convenient `startNode` / `stopNode` / `restartNode` for any individual isolate or entire service group subtree
+- **Multi-Index Registry & P2P `call` / `cast`** - Lookup and communicate by `path`, `name`, `id`, `role`, or `capability` from both `IsolateHub` and any child `WorkerContext`
+- **Erlang `poolboy`-Style Isolate Pool** - Exclusive worker leasing (`checkout`, `tryCheckout`, `checkin`, `transaction`) with `size`, `maxOverflow` burst workers, `PoolStrategy.lifo` / `fifo`, and crash recovery
 - **Centralized Hub** - Lifecycle management for all isolates
 - **Type-safe Protocol** - Sealed class message hierarchy
 - **Health Monitoring** - Automatic health checks with configurable thresholds
-- **Automatic Restart** - Exponential backoff restart policy for failed isolates
 - **Multiple Routers** - Round-robin, consistent hash, and least-connections routing
-- **Timeout Handling** - Efficient timer wheel with automatic retries
+- **Timeout Handling** - Efficient multi-rotation timer wheel with automatic retries
 - **Concurrent Batch Processing** - Parallel task execution with `Future.wait`
 - **Cross-isolate Logging** - Integrated logging with `logging` package support
-- **Comprehensive Test Suite** - 197 tests covering unit, integration, and edge cases
 
 ## Installation
 
@@ -122,6 +124,68 @@ void main() async {
   // Cleanup
   await pool.stop();
   await hub.stop();
+}
+```
+
+## Supervision Tree, Service Groups & P2P `call` / `cast`
+
+```dart
+// Create a service group with OTP oneForAll supervision strategy
+final networkGroup = await hub.createGroup(
+  name: 'network',
+  strategy: SupervisionStrategy.oneForAll,
+  intensity: const RestartIntensity(
+    maxRestarts: 3,
+    withinDuration: Duration(seconds: 5),
+  ),
+);
+
+await networkGroup.registerService(
+  const ChildSpec(
+    name: 'dns',
+    role: 'resolver',
+    capabilities: ['doh'],
+    restartType: ChildRestartType.permanent,
+    entryPoint: dnsWorkerEntryPoint,
+  ),
+);
+
+// Call or cast by path, name, id, role, or capability (from Hub or WorkerContext)
+final ip = await hub.call<String>('/network/dns', 'example.com');
+hub.cast('dns', {'event': 'cache_warm'});
+
+// Stop or restart an entire service group subtree (or individual node)
+await hub.stopNode('/network');
+await hub.startNode('/network');
+```
+
+## Poolboy-Style Worker Checkout & Burst Overflow
+
+```dart
+final pool = IsolatePool<ComputeData>(
+  hub: hub,
+  config: const IsolatePoolConfig(
+    size: 4,                                // Base permanent workers
+    maxOverflow: 2,                         // Temporary burst workers
+    strategy: PoolStrategy.lifo,            // LIFO (default) or FIFO
+    idleTimeout: Duration(seconds: 30),     // Overflow idle TTL
+  ),
+  workerEntryPoint: workerEntryPoint,
+);
+await pool.start();
+
+// Recommended: automatic checkout + guaranteed checkin via transaction()
+final result = await pool.transaction((worker) async {
+  final step1 = await worker.execute(ComputeData(input: 21));
+  return await worker.execute(ComputeData(input: step1.result!));
+});
+
+// Manual checkout / checkin
+final worker = await pool.checkout(block: true, timeout: Duration(seconds: 5));
+try {
+  await worker.execute(ComputeData(input: 10));
+} finally {
+  await pool.checkin(worker);
 }
 ```
 

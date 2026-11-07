@@ -34,16 +34,22 @@ class Init extends ProtocolMessage {
   Init({this.config = const {}, this.dependencies = const {}});
 }
 
-/// Port information for dependency injection.
+/// Port information for dependency injection and address resolution.
 class PortInfo {
   final String id;
   final SendPort port;
   final List<String> capabilities;
+  final String? name;
+  final String? path;
+  final String? role;
 
   const PortInfo({
     required this.id,
     required this.port,
     this.capabilities = const [],
+    this.name,
+    this.path,
+    this.role,
   });
 }
 
@@ -115,11 +121,19 @@ class PortUpdate extends ProtocolMessage {
   /// Removed isolate IDs.
   final List<String> removed;
 
+  /// Removed isolate names.
+  final List<String> removedNames;
+
+  /// Removed isolate tree paths.
+  final List<String> removedPaths;
+
   PortUpdate({
     required this.version,
     required this.role,
     this.added = const [],
     this.removed = const [],
+    this.removedNames = const [],
+    this.removedPaths = const [],
   });
 }
 
@@ -128,6 +142,73 @@ class PortUpdateAck extends ProtocolMessage {
   final int version;
 
   PortUpdateAck({required this.version});
+}
+
+/// Child → Hub: Dynamic address resolution request.
+class ResolveAddress extends ProtocolMessage {
+  /// Target path, name, id, or role to resolve.
+  final String target;
+
+  ResolveAddress({required this.target});
+}
+
+/// Hub → Child: Dynamic address resolution result.
+class ResolveAddressResult extends ProtocolMessage {
+  final String target;
+  final PortInfo? portInfo;
+  final List<PortInfo> ports;
+
+  ResolveAddressResult({
+    required this.target,
+    this.portInfo,
+    this.ports = const [],
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Direct P2P / RPC Messages (call / cast)
+// ═══════════════════════════════════════════════════════════════════
+
+/// Caller → Target Isolate: Synchronous RPC call request.
+class RpcRequest extends ProtocolMessage {
+  final Object? request;
+  final Map<String, dynamic>? metadata;
+
+  RpcRequest({required this.request, this.metadata});
+}
+
+/// Target Isolate → Caller: Synchronous RPC call response.
+class RpcResponse extends ProtocolMessage {
+  final Object? result;
+  final Map<String, dynamic>? metadata;
+
+  RpcResponse({required this.result, this.metadata});
+}
+
+/// Target Isolate → Caller: Synchronous RPC call error.
+class RpcError extends ProtocolMessage {
+  final String code;
+  final String message;
+  final dynamic details;
+  final String? stackTrace;
+
+  RpcError({
+    required this.code,
+    required this.message,
+    this.details,
+    this.stackTrace,
+  });
+
+  @override
+  String toString() => 'RpcError($code: $message)';
+}
+
+/// Caller → Target Isolate: Asynchronous fire-and-forget message.
+class CastMessage extends ProtocolMessage {
+  final Object? message;
+  final Map<String, dynamic>? metadata;
+
+  CastMessage({required this.message, this.metadata});
 }
 
 // ═══════════════════════════════════════════════════════════════════

@@ -28,6 +28,37 @@ abstract class Worker<TData> {
     Map<String, dynamic>? metadata,
   });
 
+  /// Handle a synchronous RPC `call` request from the Hub or another isolate.
+  ///
+  /// By default, if [request] is [TData], delegates to [onTask].
+  /// Override this method to handle custom RPC message types.
+  Future<Object?> onCall(
+    Object? request, {
+    required IsolateAddress sender,
+    Map<String, dynamic>? metadata,
+  }) async {
+    if (request is TData) {
+      return await onTask(request, metadata: metadata);
+    }
+    throw UnsupportedError(
+      '$runtimeType does not implement onCall for ${request.runtimeType}',
+    );
+  }
+
+  /// Handle an asynchronous fire-and-forget `cast` message from the Hub or another isolate.
+  ///
+  /// By default, if [message] is [TData], delegates to [onTask] and ignores the return value.
+  /// Override this method to handle custom cast message types.
+  Future<void> onCast(
+    Object? message, {
+    required IsolateAddress sender,
+    Map<String, dynamic>? metadata,
+  }) async {
+    if (message is TData) {
+      await onTask(message, metadata: metadata);
+    }
+  }
+
   /// Get current metrics.
   IsolateMetrics onHealthCheck();
 
@@ -55,6 +86,8 @@ void runWorker<TData>(
   String? workerId = spawnMeta?['id'] as String?;
   String? workerName = name ?? (spawnMeta?['name'] as String?);
   String? workerRole = role ?? (spawnMeta?['role'] as String?);
+  final workerPath =
+      (spawnMeta?['path'] as String?) ?? '/${workerName ?? 'worker'}';
   final regCapabilities =
       capabilities ??
       (spawnMeta?['capabilities'] as List<String>?) ??
@@ -108,12 +141,32 @@ void runWorker<TData>(
           id: workerId!,
           name: workerName!,
           role: workerRole!,
+          path: workerPath,
           hubPort: hubPort,
           loggerPort: loggerPort,
           dependencies: dependencies,
           idGenerator: idGenerator,
           config: init.config,
+          onSelfStop: () {
+            unawaited(() async {
+              try {
+                await worker?.onShutdown();
+              } finally {
+                context?.dispose();
+                receivePort.close();
+              }
+            }());
+          },
         );
+
+        // Seed P2P cache with initial dependency ports
+        for (final entry in init.dependencies.entries) {
+          if (entry.value.isNotEmpty) {
+            context!.applyPortUpdate(
+              PortUpdate(version: 0, role: entry.key, added: entry.value),
+            );
+          }
+        }
 
         // Create and initialize worker
         try {
@@ -216,6 +269,45 @@ void runWorker<TData>(
         );
         envelope.replyTo?.send(batchResultEnvelope);
 
+      case RpcRequest rpcReq:
+        if (worker == null) return;
+
+        try {
+          final result = await worker!.onCall(
+            rpcReq.request,
+            sender: envelope.source,
+            metadata: rpcReq.metadata,
+          );
+          final responseEnvelope = envelope.reply(
+            RpcResponse(result: result),
+            id: idGenerator.next(),
+          );
+          envelope.replyTo?.send(responseEnvelope);
+        } catch (e, stackTrace) {
+          final errorEnvelope = envelope.reply(
+            RpcError(
+              code: e.runtimeType.toString(),
+              message: e.toString(),
+              stackTrace: stackTrace.toString(),
+            ),
+            id: idGenerator.next(),
+          );
+          envelope.replyTo?.send(errorEnvelope);
+        }
+
+      case CastMessage castMsg:
+        if (worker == null) return;
+
+        try {
+          await worker!.onCast(
+            castMsg.message,
+            sender: envelope.source,
+            metadata: castMsg.metadata,
+          );
+        } catch (e, stackTrace) {
+          context?.severe('Error handling cast message', e, stackTrace);
+        }
+
       case Shutdown():
         try {
           await worker?.onShutdown();
@@ -252,6 +344,7 @@ void runWorker<TData>(
           context!.dependencies[update.role] = currentInfos
               .map((p) => p.port)
               .toList();
+          context!.applyPortUpdate(update);
         }
 
         final ackEnvelope = Envelope.create(

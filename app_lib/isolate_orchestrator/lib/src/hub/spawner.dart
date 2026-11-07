@@ -12,6 +12,7 @@ import 'registry.dart';
 class SpawnConfig {
   final String role;
   final String name;
+  final String? path;
   final void Function(SendPort) entryPoint;
   final Map<String, dynamic>? config;
   final List<String> capabilities;
@@ -21,6 +22,7 @@ class SpawnConfig {
   const SpawnConfig({
     required this.role,
     required this.name,
+    this.path,
     required this.entryPoint,
     this.config,
     this.capabilities = const [],
@@ -80,6 +82,7 @@ class IsolateSpawner {
           id: id,
           name: config.name,
           role: config.role,
+          path: config.path,
           isolate: Isolate.current, // Will be replaced
           sendPort: reg.port,
           controlPort: controlPort,
@@ -103,6 +106,7 @@ class IsolateSpawner {
         id: id,
         name: config.name,
         role: config.role,
+        path: config.path ?? '/${config.name}',
         capabilities: config.capabilities,
         subscribesTo: config.subscribesTo,
       ),
@@ -118,6 +122,7 @@ class IsolateSpawner {
         id: entry.id,
         name: entry.name,
         role: entry.role,
+        path: entry.path,
         isolate: isolate,
         sendPort: entry.sendPort,
         controlPort: entry.controlPort,
@@ -189,6 +194,7 @@ class _SpawnData {
   final String id;
   final String name;
   final String role;
+  final String path;
   final List<String> capabilities;
   final List<String> subscribesTo;
 
@@ -198,6 +204,7 @@ class _SpawnData {
     required this.id,
     required this.name,
     required this.role,
+    required this.path,
     this.capabilities = const [],
     this.subscribesTo = const [],
   });
@@ -212,6 +219,7 @@ void _isolateEntryWrapper(_SpawnData data) {
         'id': data.id,
         'name': data.name,
         'role': data.role,
+        'path': data.path,
         'capabilities': data.capabilities,
         'subscribesTo': data.subscribesTo,
       },

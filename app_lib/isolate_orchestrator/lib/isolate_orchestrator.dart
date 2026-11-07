@@ -63,6 +63,7 @@ export 'src/hub/hub.dart';
 export 'src/hub/lifecycle.dart';
 export 'src/hub/registry.dart';
 export 'src/hub/spawner.dart';
+export 'src/hub/supervisor.dart';
 
 // Message
 export 'src/message/address.dart';
